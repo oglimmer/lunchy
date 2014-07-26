@@ -1,0 +1,127 @@
+/* http://www.colorsontheweb.com/colorwizard.asp#73BD38 */
+
+body,html {
+  font-family: Athelas;
+  font-size: 20px;
+  padding:0px;
+  margin:0px;
+  background-color:#DEF1CF;
+}
+
+a {
+	color: #7A7A7A;
+	text-decoration: none;
+}
+
+#topbar {
+  border-bottom:4px solid #436E20;
+  background-color: #131F09;
+  color:#7A7A7A;
+  padding:10px;
+}
+
+#topbarLeft {
+	float:left;
+}
+
+#topbarRight {
+	float:right;
+}
+
+#topbarLeft span {
+  padding-right:50px;
+}
+
+#topbarRight span {
+  padding-left:50px;
+}
+
+#topbar input {
+  width:80px;
+}
+
+
+#content div {
+  padding:10px;
+}
+
+#content {
+  margin:10px;
+  background-color: #436E20;
+  border-radius: 10px;
+  padding:10px;
+}
+
+#content div {
+  border-bottom:3px solid black;
+  border-radius: 10px;
+  display: inline-block;
+  background-color:#131F09;
+  color:#7A7A7A;
+  padding-top:3px;
+  padding-bottom:3px;
+}
+
+#loginForm {
+	display:inline;
+}
+
+.simpleButton {
+	border:0px;
+	font: inherit;
+	background: none;
+	color:inherit;
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	outline: none;
+	outline-offset: 0;
+}
+
+hr {
+	clear:both;
+	visibility:hidden;
+	margin:0px;
+}
+
+#registerFrame {
+	top:0;
+	left:0;
+	position: absolute;
+	width:100%;
+	height:100%;
+	background-color:rgba(0, 0, 0, 0.5);
+}
+
+#registerDialog {
+	margin:80px auto;
+	width:415px;
+	height:200px;
+	padding:30px;
+	border:2px solid black;
+	background-color:white;
+}
+
+#registerForm label {
+	width:200px;
+	display: inline-block;
+	text-align:right;
+}
+
+#registerForm .buttonPane {
+	text-align:right;
+	padding:14px 28px;
+}
+
+#registerDialog .header {
+	text-align:center;
+	padding:5px 0px 20px;
+}
+
+#registerForm span {
+	padding:20px;
+}
+
+.errorInfo {
+	font-size:0.7em;
+}
