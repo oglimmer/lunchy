@@ -1,9 +1,19 @@
 // defines the app
-var lunchyApp = angular.module('LunchyApp', ['ngResource', 'ui.validate']);
+var lunchyApp = angular.module('LunchyApp', ['ngResource', 'ui.validate', 'ui.bootstrap']);
 
 lunchyApp.config(function($logProvider){
 	$logProvider.debugEnabled(true);
 });
+
+lunchyApp.config(['$tooltipProvider', function($tooltipProvider){
+    $tooltipProvider.setTriggers({
+        'mouseenter': 'mouseleave',
+        'click': 'click',
+        'focus': 'blur',
+        'never': 'mouseleave',
+        'show': 'hide'
+    });
+}]);
 
 lunchyApp.factory('ILogin', ['$resource', function($resource) {
 	return $resource('/lunchy/rest/login', null, {
@@ -36,12 +46,14 @@ lunchyApp.directive('unique', ['IUser', function (IUser){
    return {
       require: 'ngModel',
       link: function(scope, elem, attr, ngModel) {
-          var fieldName = attr.blacklist;
+          var fieldName = attr.unique;
+          if(fieldName!="email") {
+        	  console.log("unique needs to be email"); return;
+          }
           
           function checkAgainstServer(value) {
         	  if(typeof(value)!='undefined' && value != ""){
 	        	  IUser.lookup({email:value}, function(result) {
-	        		  console.log(result.success);
 	        		  ngModel.$setValidity('unique', !result.success);
 	        	  });
         	  }
@@ -64,12 +76,31 @@ lunchyApp.directive('unique', ['IUser', function (IUser){
    };
 }]);
 
-//add a controller
-lunchyApp.controller('LunchyControllerMain', ['$scope', 'ILogin', 'IUser', 'IUpdates', LunchyControllerMain ]);
-lunchyApp.controller('LunchyControllerLogin', ['$scope', 'ILogin', 'IUser', LunchyControllerLogin ]);
-lunchyApp.controller('LunchyControllerRegister', ['$scope', 'ILogin', 'IUser', LunchyControllerRegister ]);
 
-function LunchyControllerMain($scope, ILogin, IUser, IUpdates) {
+// Common directive for Focus
+lunchyApp.directive('focus', function($timeout) {
+	return {
+		scope : {
+			trigger : '@focus'
+		},
+		link : function(scope, element) {
+			scope.$watch('trigger', function(value) {
+				if (value === "true") {
+					$timeout(function() {
+						element[0].focus();
+					});
+				}
+			});
+		}
+	};
+}); 
+
+// add a controller
+lunchyApp.controller('LunchyControllerMain', ['$scope', 'ILogin', 'IUser', 'IUpdates', '$modal', LunchyControllerMain ]);
+lunchyApp.controller('LunchyControllerLogin', ['$scope', 'ILogin', 'IUser', '$timeout', LunchyControllerLogin ]);
+lunchyApp.controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'ILogin', 'IUser', LunchyControllerRegister ]);
+
+function LunchyControllerMain($scope, ILogin, IUser, IUpdates, $modal) {
 	
 	$scope.userLoggedIn = false;
 	$scope.showRegisterFrame = false;
@@ -83,7 +114,17 @@ function LunchyControllerMain($scope, ILogin, IUser, IUpdates) {
 	};
 	
 	$scope.showRegister = function() {
-		$scope.showRegisterFrame = true;
+		var modalInstance = $modal.open({
+		  templateUrl: 'myModalContent.html',
+		  controller: LunchyControllerRegister		  
+		});
+		modalInstance.result.then(function (result) {
+			if(result) {
+				$scope.userLoggedIn = true;
+			}
+		}, function () {
+			console.log('Modal dismissed at: ' + new Date());
+		});
 	}
 	
 	ILogin.check(function(data) {
@@ -91,42 +132,43 @@ function LunchyControllerMain($scope, ILogin, IUser, IUpdates) {
 	});
 };
 
-function LunchyControllerLogin($scope, ILogin, IUser) {
+function LunchyControllerLogin($scope, ILogin, IUser, $timeout) {
 	
-	$scope.submitLogin = function() {
+	$scope.submitLogin = function() {				
 		ILogin.login({email:$scope.email, password:$scope.password}, function(data) {
 			if(data.success) {
 				$scope.$parent.userLoggedIn = true;
 			} else {
-				alert(data.errorMsg);
+				$scope.errorMsg = data.errorMsg;
+				$timeout(function() {$('#LoginError').trigger('show');}, 1);
+				$timeout(function() {$('#LoginError').trigger('hide');}, 3000);				
 			}
 		});		
 	}
 	
 };
 
-function LunchyControllerRegister($scope, ILogin, IUser) {
 
-	function reset() {
-		$scope.password = "";
-		$scope.confirm_password = "";
-		$scope.nickname = "";
-		$scope.email = "";
-	}
+function LunchyControllerRegister($scope, $modalInstance, ILogin, IUser) {
+	
+	$scope.newUser = {};
+	$scope.alerts = [];
 	
 	$scope.cancelRegister = function() {
-		reset();
-		$scope.$parent.showRegisterFrame = false;
+		$modalInstance.dismiss('cancel');
 	}
 	
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
+	
 	$scope.submitRegister = function() {
-		IUser.create({email:$scope.email},{password:$scope.password, displayname:$scope.nickname}, function(data) {
+		console.log($scope.newUser);
+		IUser.create({email:$scope.newUser.email},{password:$scope.newUser.password, displayname:$scope.newUser.nickname}, function(data) {
 			if(data.success) {
-				$scope.$parent.userLoggedIn = true;
-				reset();
-				$scope.$parent.showRegisterFrame = false;
+				$modalInstance.close(true);				
 			} else {
-				alert(data.errorMsg);
+				$scope.alerts.push({type:'danger',msg:data.errorMsg});
 			}
 		});		
 	}

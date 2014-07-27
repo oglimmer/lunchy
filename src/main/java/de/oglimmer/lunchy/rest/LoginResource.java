@@ -32,6 +32,8 @@ public class LoginResource {
 	 * http://localhost:8080/lunchy/rest/login
 	 */
 
+	private static final String USER_PASS_WRONG = "Email unkown or password incorrect!";
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResultParam who(@Context HttpServletRequest request) {
@@ -54,7 +56,7 @@ public class LoginResource {
 		UsersRecord user = UserDao.INSTANCE.getUserByEmail(input.getEmail());
 		if (user != null) {
 			if (!BCrypt.checkpw(input.getPassword(), user.getPassword())) {
-				result.setErrorMsg("User/pass wrong");
+				result.setErrorMsg(USER_PASS_WRONG);
 			} else {
 				request.getSession(true).setAttribute("userId", user.getId());
 				result.setSuccess(true);
@@ -62,7 +64,7 @@ public class LoginResource {
 				UserDao.INSTANCE.store(user);
 			}
 		} else {
-			result.setErrorMsg("User/pass wrong");
+			result.setErrorMsg(USER_PASS_WRONG);
 		}
 		return result;
 	}

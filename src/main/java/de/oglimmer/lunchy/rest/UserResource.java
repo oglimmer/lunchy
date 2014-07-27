@@ -42,8 +42,8 @@ public class UserResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ResultParam create(@Context HttpServletRequest request,
 			@PathParam("email") String email, InputParam input) {
-
 		ResultParam result = new ResultParam();
+
 		try {
 			UsersRecord user = new UsersRecord();
 			user.setDisplayname(input.getDisplayname());
