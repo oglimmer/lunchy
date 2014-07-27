@@ -18,7 +18,43 @@
 		<script src="js/cookie.js"></script>
 		<script src="js/app.js"></script>
 	</head>
-	<body>
+	<body ng-controller="LunchyControllerMain">
+
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Lunchy</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li ng-class="getClass('/updates')"><a href="#">Latest updates</a></li>
+						<li ng-class="getClass('/browse')"><a href="#">Browse</a></li>
+						
+						<li ng-show="userLoggedIn" ng-class="getClass('/add')"><a href="#/add">Add</a></li>
+		
+						<li ng-show="userLoggedIn"><a href="" ng-click="">Settings</a></li>
+						<li ng-show="userLoggedIn"><a href="" ng-click="logout()">Log out</a></li>
+					</ul>
+					<span ng-hide="userLoggedIn">
+						<form class="navbar-form navbar-right" role="form" ng-submit="submitLogin()" ng-controller="LunchyControllerLogin">
+							<div class="form-group">
+								<input type="text" placeholder="Email" class="form-control" ng-model="email">
+							</div>
+							<div class="form-group">
+								<input type="password" placeholder="Password" class="form-control" ng-model="password">
+							</div>
+							<button type="submit" class="btn btn-success" id="LoginError" popover-trigger="show" popover-placement="bottom" popover="{{errorMsg}}">Sign in</button>
+							<button type="button" class="btn btn-default" ng-click="showRegister()">Register</button>
+						</form>
+					</span>
+				</div>
+				<!--/.navbar-collapse -->
+			</div>
+		</div>	
+	
 	   <div ng-view></div>
 	</body>
 </html>

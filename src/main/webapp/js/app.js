@@ -19,6 +19,9 @@ lunchyApp.config([ '$routeProvider', function($routeProvider) {
 	$routeProvider.when('/updates', {
 		templateUrl : 'partials/updates.html',
 		controller : 'LunchyControllerMain'
+	}).when('/add', {
+		templateUrl : 'partials/add-location.html',
+		controller : 'LunchyControllerMain'
 	}).otherwise({
 		redirectTo : '/updates'
 	});
@@ -124,11 +127,11 @@ lunchyApp.filter('partition', function() {
 });
 
 // add a controller
-lunchyApp.controller('LunchyControllerMain', ['$scope', 'ILogin', 'IUser', 'IUpdates', '$modal', LunchyControllerMain ]);
+lunchyApp.controller('LunchyControllerMain', ['$scope', 'ILogin', 'IUser', 'IUpdates', '$modal', '$location', LunchyControllerMain ]);
 lunchyApp.controller('LunchyControllerLogin', ['$scope', 'ILogin', 'IUser', '$timeout', LunchyControllerLogin ]);
 lunchyApp.controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'ILogin', 'IUser', LunchyControllerRegister ]);
 
-function LunchyControllerMain($scope, ILogin, IUser, IUpdates, $modal) {
+function LunchyControllerMain($scope, ILogin, IUser, IUpdates, $modal, $location) {
 	
 	$scope.userLoggedIn = false;
 	$scope.showRegisterFrame = false;
@@ -141,7 +144,7 @@ function LunchyControllerMain($scope, ILogin, IUser, IUpdates, $modal) {
 	
 	$scope.showRegister = function() {
 		var modalInstance = $modal.open({
-		  templateUrl: 'myModalContent.html',
+		  templateUrl: 'partials/register.html',
 		  controller: LunchyControllerRegister		  
 		});
 		modalInstance.result.then(function (result) {
@@ -151,6 +154,14 @@ function LunchyControllerMain($scope, ILogin, IUser, IUpdates, $modal) {
 		}, function () {
 			console.log('Modal dismissed at: ' + new Date());
 		});
+	}
+	
+	$scope.getClass = function(path) {
+	    if ($location.path().substr(0, path.length) == path) {
+	      return "active"
+	    } else {
+	      return ""
+	    }
 	}
 	
 	ILogin.check(function(data) {
