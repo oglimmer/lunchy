@@ -1,5 +1,5 @@
 // defines the app
-var lunchyApp = angular.module('LunchyApp', ['ngResource', 'ui.validate', 'ui.bootstrap']);
+var lunchyApp = angular.module('LunchyApp', ['ngResource', 'ngRoute', 'ui.validate', 'ui.bootstrap']);
 
 lunchyApp.config(function($logProvider){
 	$logProvider.debugEnabled(true);
@@ -14,6 +14,15 @@ lunchyApp.config(['$tooltipProvider', function($tooltipProvider){
         'show': 'hide'
     });
 }]);
+
+lunchyApp.config([ '$routeProvider', function($routeProvider) {
+	$routeProvider.when('/updates', {
+		templateUrl : 'partials/updates.html',
+		controller : 'LunchyControllerMain'
+	}).otherwise({
+		redirectTo : '/updates'
+	});
+} ]);
 
 lunchyApp.factory('ILogin', ['$resource', function($resource) {
 	return $resource('/lunchy/rest/login', null, {
@@ -95,6 +104,25 @@ lunchyApp.directive('focus', function($timeout) {
 	};
 }); 
 
+lunchyApp.filter('partition', function() {
+  var cache = {};
+  var filter = function(arr, size) {
+    if (!arr) { return; }
+    var newArr = [];
+    for (var i=0; i<arr.length; i+=size) {
+      newArr.push(arr.slice(i, i+size));
+    }
+    var arrString = JSON.stringify(arr);
+    var fromCache = cache[arrString+size];
+    if (JSON.stringify(fromCache) === JSON.stringify(newArr)) {
+      return fromCache;
+    }
+    cache[arrString+size] = newArr;
+    return newArr;
+  };
+  return filter;
+});
+
 // add a controller
 lunchyApp.controller('LunchyControllerMain', ['$scope', 'ILogin', 'IUser', 'IUpdates', '$modal', LunchyControllerMain ]);
 lunchyApp.controller('LunchyControllerLogin', ['$scope', 'ILogin', 'IUser', '$timeout', LunchyControllerLogin ]);
@@ -105,9 +133,7 @@ function LunchyControllerMain($scope, ILogin, IUser, IUpdates, $modal) {
 	$scope.userLoggedIn = false;
 	$scope.showRegisterFrame = false;
 	$scope.latestUpdates = IUpdates.query();
-	
-	console.log($scope.latestUpdates);
-	
+		
 	$scope.logout = function() {
 		ILogin.logout();	
 		$scope.userLoggedIn = false;
