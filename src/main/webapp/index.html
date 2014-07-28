@@ -29,12 +29,12 @@
 					<li ng-class="getClass('/updates')"><a href="#">Latest updates</a></li>
 					<li ng-class="getClass('/browse')"><a href="#">Browse</a></li>
 
-					<li ng-show="userLoggedIn" ng-class="getClass('/add')"><a href="#/add">Add</a></li>
+					<li ng-class="getClass('/add')"><a href="#/add">Add</a></li>
 
-					<li ng-show="userLoggedIn"><a href="" ng-click="">Settings</a></li>
-					<li ng-show="userLoggedIn"><a href="" ng-click="logout()">Log out</a></li>
+					<li ng-show="Authetication.loggedIn"><a href="" ng-click="">Settings</a></li>
+					<li ng-show="Authetication.loggedIn"><a href="" ng-click="logout()">Log out</a></li>
 				</ul>
-				<span ng-hide="userLoggedIn">
+				<span ng-hide="Authetication.loggedIn">
 					<form class="navbar-form navbar-right" role="form" ng-submit="submitLogin()" ng-controller="LunchyControllerLogin">
 						<div class="form-group">
 							<input type="text" placeholder="Email" class="form-control" ng-model="email">

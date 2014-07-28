@@ -15,7 +15,16 @@ config(['$routeProvider', function($routeProvider) {
 		controller : 'LunchyControllerMain'
 	}).when('/add', {
 		templateUrl : 'partials/add-location.html',
-		controller : 'LunchyControllerMain'
+		controller : 'LunchyControllerMain',
+		resolve: {
+		    auth: ["$q", "Authetication", function($q, Authetication) {
+		      if (Authetication.loggedIn) {
+		        return $q.when(Authetication);
+		      } else {
+		        return $q.reject({ authenticated: false });
+		      }
+		    }]
+		  }
 	}).otherwise({
 		redirectTo : '/updates'
 	});
@@ -57,7 +66,36 @@ factory('IUser', ['$resource', function($resource) {
 }]).
 factory('IUpdates', ['$resource', function($resource) {
 	return $resource('/lunchy/rest/updates');
-}]);
+}]).
+factory('Authetication', ['$modal', function($modal) {
+	return {
+		loggedIn:false,
+		showRegister: function() {
+			var thiz = this;
+			var modalInstance = $modal.open({
+			  templateUrl: 'partials/register.html',
+			  controller: 'LunchyControllerRegister'		  
+			});
+			modalInstance.result.then(function (result) {
+				if(result) {
+					thiz.Authetication.loggedIn = true;
+				}
+			}, function () {
+				console.log('Modal dismissed at: ' + new Date());
+			});
+		}
+	};
+}]).
+run(['$rootScope', '$location', 'Authetication',	function($rootScope, $location, Authetication) {
+	$rootScope.$on("$routeChangeSuccess", function(userInfo) {
+		//console.log(userInfo);
+	});
 
-
+	$rootScope.$on("$routeChangeError", function(event, current, previous, eventObj) {
+		if (eventObj.authenticated === false) {
+			$location.path("/");
+			Authetication.showRegister();
+		}
+	});
+} ]);
 

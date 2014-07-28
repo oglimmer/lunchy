@@ -3,29 +3,21 @@
 /* Controllers */
 
 angular.module('LunchyApp.controllers', []).
-controller('LunchyControllerMain', ['$scope', 'ILogin', 'IUser', 'IUpdates', '$modal', '$location', function($scope, ILogin, IUser, IUpdates, $modal, $location) {
+controller('LunchyControllerMain', [
+	'$scope', 'ILogin', 'IUser', 'IUpdates', '$location', 'Authetication', 
+	function($scope, ILogin, IUser, IUpdates, $location, Authetication) {
 	
-	$scope.userLoggedIn = false;
-	$scope.showRegisterFrame = false;
+	$scope.Authetication = Authetication;
 	$scope.latestUpdates = IUpdates.query();
 		
 	$scope.logout = function() {
 		ILogin.logout();	
-		$scope.userLoggedIn = false;
+		$scope.Authetication.loggedIn = false;
+		$location.path("/");
 	};
 	
 	$scope.showRegister = function() {
-		var modalInstance = $modal.open({
-		  templateUrl: 'partials/register.html',
-		  controller: 'LunchyControllerRegister'		  
-		});
-		modalInstance.result.then(function (result) {
-			if(result) {
-				$scope.userLoggedIn = true;
-			}
-		}, function () {
-			console.log('Modal dismissed at: ' + new Date());
-		});
+		$scope.Authetication.showRegister();
 	}
 	
 	$scope.getClass = function(path) {
@@ -37,15 +29,16 @@ controller('LunchyControllerMain', ['$scope', 'ILogin', 'IUser', 'IUpdates', '$m
 	}
 	
 	ILogin.check(function(data) {
-		$scope.userLoggedIn = data.success;
+		$scope.Authetication.loggedIn = data.success;
 	});
 }]).
-controller('LunchyControllerLogin', ['$scope', 'ILogin', '$timeout', function ($scope, ILogin, $timeout) {
+controller('LunchyControllerLogin', ['$scope', 'ILogin', '$timeout', 'Authetication', function ($scope, ILogin, $timeout, Authetication) {
 	
 	$scope.submitLogin = function() {				
 		ILogin.login({email:$scope.email, password:$scope.password}, function(data) {
 			if(data.success) {
-				$scope.$parent.userLoggedIn = true;
+				$scope.Authetication.loggedIn = true;
+				$scope.password = "";
 			} else {
 				$scope.errorMsg = data.errorMsg;
 				$timeout(function() {$('#LoginError').trigger('show');}, 1);
