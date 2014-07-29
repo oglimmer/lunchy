@@ -100,7 +100,7 @@
 				<configuration>
 					<jdbc>
 						<driver>com.mysql.jdbc.Driver</driver>
-						<url>jdbc:mysql://localhost</url>
+						<url>jdbc:mysql://127.0.0.1</url>
 						<user>root</user>
 						<password></password>
 					</jdbc>
@@ -233,12 +233,12 @@
 			<artifactId>jbcrypt</artifactId>
 			<version>0.3m</version>
 		</dependency>
-		<!-- 
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>jquery</artifactId>
 			<version>2.1.1</version>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>jquery-ui</artifactId>
@@ -255,10 +255,17 @@
 			<artifactId>angular-ui-utils</artifactId>
 			<version>0.1.1</version>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>angular-ui</artifactId>
 			<version>0.4.0-3</version>
+		</dependency>
+		-->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>angular-ui-router</artifactId>
+			<version>0.2.10-1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>

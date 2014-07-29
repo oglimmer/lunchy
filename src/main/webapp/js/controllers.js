@@ -72,5 +72,20 @@ controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'IUser', fun
 		});		
 	}
 	
+}]).
+controller('LunchyControllerAdd', ['$scope', '$location', 'ILocations', function ($scope, $location, ILocations) {
+	
+	$scope.submitAdd = function() {
+		
+		$location.path("/view/1");
+	}
+	
+}]).
+controller('LunchyControllerView', ['$scope', '$stateParams', 'ILocations', function ($scope, $stateParams, ILocations) {
+	
+	console.log($stateParams.locationId);
+	
+	$scope.data = ILocations.get({ "id": $stateParams.locationId } );
+	
 }]);
 

@@ -3,31 +3,40 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('LunchyApp', [
-  'ngResource', 'ngRoute', 'ui.validate', 'ui.bootstrap',
+  'ngResource', 'ui.router', 'ui.validate', 'ui.bootstrap',
   'LunchyApp.filters',
   'LunchyApp.services',
   'LunchyApp.directives',
   'LunchyApp.controllers'
 ]).
-config(['$routeProvider', function($routeProvider) {
-	$routeProvider.when('/updates', {
-		templateUrl : 'partials/updates.html',
-		controller : 'LunchyControllerMain'
-	}).when('/add', {
-		templateUrl : 'partials/add-location.html',
-		controller : 'LunchyControllerMain',
-		resolve: {
-		    auth: ["$q", "Authetication", function($q, Authetication) {
-		      if (Authetication.loggedIn) {
-		        return $q.when(Authetication);
-		      } else {
-		        return $q.reject({ authenticated: false });
-		      }
-		    }]
-		  }
-	}).otherwise({
-		redirectTo : '/updates'
-	});
+config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+	$stateProvider.
+	state('updates', {
+	      url: '/updates',
+	      templateUrl: 'partials/updates.html',
+	      controller : 'LunchyControllerMain'
+	    }).
+		state('view', {
+	      url: '/view/:locationId',
+	      templateUrl: 'partials/view-location.html',
+	      controller : 'LunchyControllerView'
+		}).
+	    state('add', {
+	      url: '/add',
+	      templateUrl: 'partials/add-location.html',
+	      controller : 'LunchyControllerAdd',
+	      resolve: {
+			    auth: ["$q", "Authetication", function($q, Authetication) {			    	
+			      if (Authetication.loggedIn) {
+			        return $q.when(Authetication);
+			      } else {
+			        return $q.reject({ authenticated: false });
+			      }
+			    }]
+			  }
+	    });
+    $urlRouterProvider.otherwise('/updates');
+    
 }]).
 config(function($logProvider){
 	$logProvider.debugEnabled(true);
@@ -67,6 +76,9 @@ factory('IUser', ['$resource', function($resource) {
 factory('IUpdates', ['$resource', function($resource) {
 	return $resource('/lunchy/rest/updates');
 }]).
+factory('ILocations', ['$resource', function($resource) {
+	return $resource('/lunchy/rest/locations/:id');
+}]).
 factory('Authetication', ['$modal', function($modal) {
 	return {
 		loggedIn:false,
@@ -86,16 +98,11 @@ factory('Authetication', ['$modal', function($modal) {
 		}
 	};
 }]).
-run(['$rootScope', '$location', 'Authetication',	function($rootScope, $location, Authetication) {
-	$rootScope.$on("$routeChangeSuccess", function(userInfo) {
-		//console.log(userInfo);
-	});
-
-	$rootScope.$on("$routeChangeError", function(event, current, previous, eventObj) {
+run(['$rootScope', '$location', 'Authetication', function($rootScope, $location, Authetication) {	
+	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, eventObj) {
 		if (eventObj.authenticated === false) {
 			$location.path("/");
 			Authetication.showRegister();
 		}
 	});
-} ]);
-
+}]);
