@@ -2,11 +2,12 @@ package de.oglimmer.lunchy.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.SneakyThrows;
 
 import org.jooq.DSLContext;
-import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -23,16 +24,30 @@ public enum LocationDao {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			Result<? extends Record> result = create.select()
-					.from(Location.LOCATION)
-					.where(Location.LOCATION.ID.equal(new Integer(id))).fetch();
-
-			for (LocationRecord rec : (Result<LocationRecord>) result) {
-				rec.attach(null);
-				return rec;
-			}
+			LocationRecord rec = create.fetchOne(Location.LOCATION,
+					Location.LOCATION.ID.equal(id));
+			rec.attach(null);
+			return rec;
 		}
-		return null;
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public List<LocationRecord> getList() {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+
+			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+			Result<? extends LocationRecord> result = (Result<? extends LocationRecord>) create
+					.select().from(Location.LOCATION).fetch();
+
+			List<LocationRecord> resultList = new ArrayList<LocationRecord>();
+			for (LocationRecord rec : result) {
+				rec.attach(null);
+				resultList.add(rec);
+			}
+
+			return resultList;
+		}
 	}
 
 	@SneakyThrows(value = SQLException.class)
@@ -42,6 +57,18 @@ public enum LocationDao {
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 			location.attach(create.configuration());
 			location.store();
+		}
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public void delete(int id) {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+
+			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+			LocationRecord rec = create.fetchOne(Location.LOCATION,
+					Location.LOCATION.ID.equal(id));
+			rec.delete();
 		}
 	}
 

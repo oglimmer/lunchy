@@ -1,61 +1,81 @@
 package de.oglimmer.lunchy.rest;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.dozer.DozerBeanMapper;
+
 import de.oglimmer.lunchy.database.LocationDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
+import de.oglimmer.lunchy.rest.dto.Location;
 
-@Path("locations/{id}")
+@Path("locations")
 public class LocationResource {
+
+	private DozerBeanMapper dbm = new DozerBeanMapper();
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public InputParam check(@PathParam("id") int id) {
-		return new InputParam(LocationDao.INSTANCE.getById(id));
-	}
-
-	@Data
-	@NoArgsConstructor
-	@AllArgsConstructor
-	public static class InputParam {
-
-		private Integer id;
-		private String officialname;
-		private String streetname;
-		private String address;
-		private String city;
-		private String zip;
-		private String country;
-		private String comment;
-		private Integer turnAroundTime;
-		private Timestamp createdOn;
-		private Timestamp lastUpdate;
-		private Integer fkUser;
-
-		public InputParam(LocationRecord rec) {
-			if (rec != null) {
-				this.id = rec.getId();
-				this.officialname = rec.getOfficialname();
-				this.streetname = rec.getStreetname();
-				this.address = rec.getAddress();
-				this.city = rec.getCity();
-				this.zip = rec.getZip();
-				this.country = rec.getCountry();
-				this.comment = rec.getComment();
-				this.turnAroundTime = rec.getTurnaroundtime();
-				this.createdOn = rec.getCreatedon();
-				this.lastUpdate = rec.getLastupdate();
-				this.fkUser = rec.getFkuser();
-			}
+	public List<Location> query() {
+		List<Location> resultList = new ArrayList<Location>();
+		for (LocationRecord locationRec : LocationDao.INSTANCE.getList()) {
+			Location locationDto = new Location();
+			dbm.map(locationRec, locationDto);
+			resultList.add(locationDto);
 		}
+		return resultList;
 	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	public Location get(@PathParam("id") int id) {
+		LocationRecord locationRec = LocationDao.INSTANCE.getById(id);
+		Location locationDto = new Location();
+		dbm.map(locationRec, locationDto);
+		return locationDto;
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Location post(@Context HttpServletRequest request,
+			Location locationDto) {
+
+		if (locationDto.getId() == null || locationDto.getId() == 0) {
+			locationDto.setFkuser((Integer) request.getSession(false)
+					.getAttribute("userId"));
+			locationDto.setCreatedon(new Timestamp(new Date().getTime()));
+			locationDto.setLastupdate(new Timestamp(new Date().getTime()));
+		}
+
+		System.out.println(locationDto);
+
+		LocationRecord locationRec = new LocationRecord();
+		dbm.map(locationDto, locationRec);
+		LocationDao.INSTANCE.store(locationRec);
+		Location backLocationDto = new Location();
+		dbm.map(locationRec, backLocationDto);
+		return backLocationDto;
+	}
+
+	@DELETE
+	@Path("{id}")
+	public void delete(@PathParam("id") int id) {
+		LocationDao.INSTANCE.delete(id);
+	}
+
 }

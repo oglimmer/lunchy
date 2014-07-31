@@ -50,7 +50,7 @@ config(['$tooltipProvider', function($tooltipProvider){
         'show': 'hide'
     });
 }]).
-factory('ILogin', ['$resource', function($resource) {
+factory('LoginDao', ['$resource', function($resource) {
 	return $resource('/lunchy/rest/login', null, {
 		'login': {
 			method: 'POST'
@@ -63,7 +63,7 @@ factory('ILogin', ['$resource', function($resource) {
 		}
 	});
 }]).
-factory('IUser', ['$resource', function($resource) {
+factory('UserDao', ['$resource', function($resource) {
 	return $resource('/lunchy/rest/users/:email', null, {
 		'create': {
 			method: 'POST'
@@ -73,11 +73,11 @@ factory('IUser', ['$resource', function($resource) {
 		}
 	});
 }]).
-factory('IUpdates', ['$resource', function($resource) {
+factory('UpdatesDao', ['$resource', function($resource) {
 	return $resource('/lunchy/rest/updates');
 }]).
-factory('ILocations', ['$resource', function($resource) {
-	return $resource('/lunchy/rest/locations/:id');
+factory('LocationsDao', ['$resource', function($resource) {
+	return $resource('/lunchy/rest/locations/:id', {id: '@id'});
 }]).
 factory('Authetication', ['$modal', function($modal) {
 	return {

@@ -3,7 +3,7 @@
 /* Directives */
 
 angular.module('LunchyApp.directives', []).
-directive('unique', ['IUser', function (IUser){ 
+directive('unique', ['UserDao', function (UserDao){ 
    return {
       require: 'ngModel',
       link: function(scope, elem, attr, ngModel) {
@@ -14,7 +14,7 @@ directive('unique', ['IUser', function (IUser){
           
           function checkAgainstServer(value) {
         	  if(typeof(value)!='undefined' && value != ""){
-	        	  IUser.lookup({email:value}, function(result) {
+	        	  UserDao.lookup({email:value}, function(result) {
 	        		  ngModel.$setValidity('unique', !result.success);
 	        	  });
         	  }

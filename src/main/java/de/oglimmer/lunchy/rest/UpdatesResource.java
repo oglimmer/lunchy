@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import de.oglimmer.lunchy.database.UpdatesDao;
 
 @Path("/updates")
-public class LatestUpdatesResource {
+public class UpdatesResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

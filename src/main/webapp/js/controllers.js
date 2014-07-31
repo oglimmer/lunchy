@@ -4,14 +4,14 @@
 
 angular.module('LunchyApp.controllers', []).
 controller('LunchyControllerMain', [
-	'$scope', 'ILogin', 'IUser', 'IUpdates', '$location', 'Authetication', 
-	function($scope, ILogin, IUser, IUpdates, $location, Authetication) {
+	'$scope', 'LoginDao', 'UserDao', 'UpdatesDao', '$location', 'Authetication', 
+	function($scope, LoginDao, UserDao, UpdatesDao, $location, Authetication) {
 	
 	$scope.Authetication = Authetication;
-	$scope.latestUpdates = IUpdates.query();
+	$scope.latestUpdates = UpdatesDao.query();
 		
 	$scope.logout = function() {
-		ILogin.logout();	
+		LoginDao.logout();	
 		$scope.Authetication.loggedIn = false;
 		$location.path("/");
 	};
@@ -28,14 +28,14 @@ controller('LunchyControllerMain', [
 	    }
 	}
 	
-	ILogin.check(function(data) {
+	LoginDao.check(function(data) {
 		$scope.Authetication.loggedIn = data.success;
 	});
 }]).
-controller('LunchyControllerLogin', ['$scope', 'ILogin', '$timeout', 'Authetication', function ($scope, ILogin, $timeout, Authetication) {
+controller('LunchyControllerLogin', ['$scope', 'LoginDao', '$timeout', 'Authetication', function ($scope, LoginDao, $timeout, Authetication) {
 	
 	$scope.submitLogin = function() {				
-		ILogin.login({email:$scope.email, password:$scope.password}, function(data) {
+		LoginDao.login({email:$scope.email, password:$scope.password}, function(data) {
 			if(data.success) {
 				$scope.Authetication.loggedIn = true;
 				$scope.password = "";
@@ -48,7 +48,7 @@ controller('LunchyControllerLogin', ['$scope', 'ILogin', '$timeout', 'Autheticat
 	}
 	
 }]).
-controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'IUser', function ($scope, $modalInstance, IUser) {
+controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', function ($scope, $modalInstance, UserDao) {
 	
 	$scope.newUser = {};
 	$scope.alerts = [];
@@ -63,7 +63,7 @@ controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'IUser', fun
 	
 	$scope.submitRegister = function() {
 		console.log($scope.newUser);
-		IUser.create({email:$scope.newUser.email},{password:$scope.newUser.password, displayname:$scope.newUser.nickname}, function(data) {
+		UserDao.create({email:$scope.newUser.email},{password:$scope.newUser.password, displayname:$scope.newUser.nickname}, function(data) {
 			if(data.success) {
 				$modalInstance.close(true);				
 			} else {
@@ -73,19 +73,20 @@ controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'IUser', fun
 	}
 	
 }]).
-controller('LunchyControllerAdd', ['$scope', '$location', 'ILocations', function ($scope, $location, ILocations) {
-	
-	$scope.submitAdd = function() {
-		
-		$location.path("/view/1");
+controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', function ($scope, $location, LocationsDao) {
+	$scope.submitAdd = function() {		
+		var newLoc = new LocationsDao({officialname:$scope.officialname, streetname:$scope.streetname, address:$scope.address, city:$scope.city, zip:$scope.zip, comment:$scope.comment, turnaroundtime:$scope.turnaroundtime});
+		newLoc.$save(function(result) {
+			$location.path("/view/"+result.id);
+		});			
 	}
 	
 }]).
-controller('LunchyControllerView', ['$scope', '$stateParams', 'ILocations', function ($scope, $stateParams, ILocations) {
+controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', function ($scope, $stateParams, LocationsDao) {
 	
 	console.log($stateParams.locationId);
 	
-	$scope.data = ILocations.get({ "id": $stateParams.locationId } );
+	$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
 	
 }]);
 
