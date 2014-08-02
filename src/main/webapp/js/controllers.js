@@ -74,19 +74,60 @@ controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', f
 	
 }]).
 controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', function ($scope, $location, LocationsDao) {
+	
+	$scope.alerts = [];
+	
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
+	
 	$scope.submitAdd = function() {		
 		var newLoc = new LocationsDao({officialname:$scope.officialname, streetname:$scope.streetname, address:$scope.address, city:$scope.city, zip:$scope.zip, comment:$scope.comment, turnaroundtime:$scope.turnaroundtime});
 		newLoc.$save(function(result) {
 			$location.path("/view/"+result.id);
+		}, function(result) {
+			$scope.alerts.push({type:'danger', msg: 'Error while saving: ' + result.statusText});
 		});			
 	}
 	
 }]).
 controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', function ($scope, $stateParams, LocationsDao) {
 	
-	console.log($stateParams.locationId);
-	
 	$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
 	
-}]);
+}]).
+controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$location', 'LocationsDao', function($scope, $stateParams, $location, LocationsDao) {
 
+	$scope.map = {
+		center : {
+			latitude : 50.032687,
+			longitude : 8.705638
+		},
+		zoom : 13
+	};
+	
+	LocationsDao.query(function (locations) {
+		$scope.markers = [];
+		angular.forEach(locations, function(loc, idx) {			
+			if(loc.geoLat != null && loc.geoLng != null) {			
+				$scope.markers.push({
+				    id:loc.id,
+				    coords: {
+				        latitude: loc.geoLat,
+				        longitude: loc.geoLng
+				    },
+				    title: loc.officialname,
+				    events: {
+				    	click: function (marker, eventName, args) {
+			                console.log('marker clicked:'+loc.officialname+"/"+loc.id);
+			                $scope.$apply(function() {
+			                	$location.path("/view/"+loc.id);
+			                });
+			            }
+			        }
+				});
+			}			
+		});
+	});
+
+}]);

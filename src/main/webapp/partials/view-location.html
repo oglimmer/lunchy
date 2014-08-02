@@ -1,13 +1,59 @@
-<br/><br/><br/><br/>
-<div>{{data.id}}</div>
-<div>{{data.officialname}}</div>
-<div>{{data.streetname}}</div>
-<div>{{data.address}}</div>
-<div>{{data.city}}</div>
-<div>{{data.zip}}</div>
-<div>{{data.country}}</div>
-<div>{{data.comment}}</div>
-<div>{{data.turnAroundTime}}</div>
-<div>{{data.createdOn}}</div>
-<div>{{data.lastUpdate}}</div>
-<div>{{data.fkUser}}</div>
+<br />
+<br /><br /><br />
+<div class="container">
+
+	<div class="row">
+		<div class="col-lg-12">
+			<form class="form-horizontal">
+				<fieldset>
+					<legend>{{data.officialname}}</legend>
+					
+					<div class="form-group">
+						<label for="officialname" class="col-lg-2 control-label">Official name</label>
+						<div class="col-lg-10">
+							{{data.officialname}}
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="streetname" class="col-lg-2 control-label">ADTECH name</label>
+						<div class="col-lg-10">
+							{{data.streetname}}
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="street" class="col-lg-2 control-label">Address</label>
+						<div class="col-lg-4">
+							{{data.address}}
+						</div>
+						<div class="col-lg-3">
+							{{data.zip}}
+						</div>
+						<div class="col-lg-3">
+							{{data.city}}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="comment" class="col-lg-2 control-label">Comment</label>
+						<div class="col-lg-10">
+							{{data.comment}}
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="turnaroundtime" class="col-lg-2 control-label">Turn around time</label>
+						<div class="col-lg-10">
+							{{data.turnaroundtime}} min
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-lg-10 col-lg-offset-2">
+							Created: {{data.createdon}}, last update: {{data.lastupdate}} by {{data.fkuser}}
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</div>

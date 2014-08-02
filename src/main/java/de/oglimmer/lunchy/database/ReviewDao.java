@@ -13,19 +13,19 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
 import de.oglimmer.lunchy.database.connection.DBConn;
-import de.oglimmer.lunchy.database.generated.tables.Location;
-import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
+import de.oglimmer.lunchy.database.generated.tables.Reviews;
+import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 
-public enum LocationDao {
+public enum ReviewDao {
 	INSTANCE;
 
 	@SneakyThrows(value = SQLException.class)
-	public LocationRecord getById(int id) {
+	public ReviewsRecord getById(int id) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			LocationRecord rec = create.fetchOne(Location.LOCATION,
-					Location.LOCATION.ID.equal(id));
+			ReviewsRecord rec = create.fetchOne(Reviews.REVIEWS,
+					Reviews.REVIEWS.ID.equal(id));
 			rec.attach(null);
 			return rec;
 		}
@@ -33,16 +33,16 @@ public enum LocationDao {
 
 	@SuppressWarnings("unchecked")
 	@SneakyThrows(value = SQLException.class)
-	public List<LocationRecord> getList() {
+	public List<ReviewsRecord> getList() {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-			Result<? extends LocationRecord> result = (Result<? extends LocationRecord>) create
-					.select().from(Location.LOCATION).fetch();
+			Result<? extends ReviewsRecord> result = (Result<? extends ReviewsRecord>) create
+					.select().from(Reviews.REVIEWS).fetch();
 
-			List<LocationRecord> resultList = new ArrayList<>();
-			for (LocationRecord rec : result) {
+			List<ReviewsRecord> resultList = new ArrayList<>();
+			for (ReviewsRecord rec : result) {
 				rec.attach(null);
 				resultList.add(rec);
 			}
@@ -52,12 +52,12 @@ public enum LocationDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public void store(LocationRecord location) {
+	public void store(ReviewsRecord review) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			location.attach(create.configuration());
-			location.store();
+			review.attach(create.configuration());
+			review.store();
 		}
 	}
 
@@ -67,8 +67,8 @@ public enum LocationDao {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-			LocationRecord rec = create.fetchOne(Location.LOCATION,
-					Location.LOCATION.ID.equal(id));
+			ReviewsRecord rec = create.fetchOne(Reviews.REVIEWS,
+					Reviews.REVIEWS.ID.equal(id));
 			rec.delete();
 		}
 	}

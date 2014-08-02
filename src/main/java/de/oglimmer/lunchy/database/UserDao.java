@@ -6,8 +6,6 @@ import java.sql.SQLException;
 import lombok.SneakyThrows;
 
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
@@ -23,15 +21,11 @@ public enum UserDao {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			Result<? extends Record> result = create.select().from(Users.USERS)
-					.where(Users.USERS.EMAIL.equalIgnoreCase(email)).fetch();
-
-			for (UsersRecord rec : (Result<UsersRecord>) result) {
-				rec.attach(null);
-				return rec;
-			}
+			UsersRecord rec = create.fetchOne(Users.USERS,
+					Users.USERS.EMAIL.equalIgnoreCase(email));
+			rec.attach(null);
+			return rec;
 		}
-		return null;
 	}
 
 	@SneakyThrows(value = SQLException.class)

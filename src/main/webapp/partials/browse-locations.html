@@ -1,0 +1,16 @@
+<br />
+<br />
+<br />
+<br />
+<div class="container">
+
+	<google-map center="map.center" zoom="map.zoom" draggable="true"> 
+		<marker ng-repeat="marker in markers" idKey='marker.id' coords='marker.coords' events='marker.events'>
+			<marker-label content="marker.title" anchor="0 0" class="marker-labels"/>			
+		</marker>
+		
+		<window ng-repeat="marker in markers" coords='marker.coords' show="false">Foobar</window>
+	</google-map>
+
+</div>
+
