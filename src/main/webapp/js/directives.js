@@ -51,4 +51,36 @@ directive('focus', function($timeout) {
 			});
 		}
 	};
-}); 
+}).
+directive('lyDisabled', function() {
+	return {
+		link: function(scope, element, attrs) {				
+	        scope.$watch(attrs.lyDisabled, function(val) {
+	            if (val) {
+	                element.attr('disabled', 'disabled');
+	                element.removeAttr('placeholder');
+	            } else {
+	                element.removeAttr('disabled');
+	                if(typeof(element.attr('ly-placeholder'))!=='undefined') {
+	                	element.attr('placeholder', element.attr('ly-placeholder'));
+	                }
+	            }
+	        });
+		}
+    };
+}).
+directive('lyDynamicname', function() {
+	return {
+		require: 'ngModel',
+		link: function(scope, element, attrs, ngModel) {
+			var names = attrs.lyDynamicname.split(";");
+	        scope.$watch(attrs.ngModel, function(val) {
+	            if (val) {
+	                element.html(names[1]);
+	            } else {
+	            	element.html(names[0]);
+	            }
+	        });
+		}
+    };
+});

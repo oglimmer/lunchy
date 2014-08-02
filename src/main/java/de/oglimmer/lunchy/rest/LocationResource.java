@@ -55,49 +55,80 @@ public class LocationResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Location post(@Context HttpServletRequest request,
-			Location locationDto) {
-
-		if (locationDto.getId() == null || locationDto.getId() == 0) {
-			locationDto.setFkuser((Integer) request.getSession(false)
-					.getAttribute("userId"));
-			locationDto.setCreatedon(new Timestamp(new Date().getTime()));
-			locationDto.setCountry("Germany");
-		}
-		locationDto.setLastupdate(new Timestamp(new Date().getTime()));
-
-		getGeoData(locationDto);
-
-		LocationRecord locationRec = createRecordInstance(locationDto);
-		LocationDao.INSTANCE.store(locationRec);
-		Location backLocationDto = Location.getInstance(locationRec);
-		return backLocationDto;
+	public Location post(@Context HttpServletRequest request, Location locationDto) {
+		LocationRecord locationRec = convertDtoToRecord(locationDto);
+		addInitialData(request, locationRec);
+		return updateRec(locationRec);
 	}
 
-	private void getGeoData(Location locationDto) {
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	public Location postUpdate(@Context HttpServletRequest request, @PathParam("id") int id, Location locationDto) {
+		if (id != locationDto.getId()) {
+			throw new RuntimeException("wrong id");
+		}
+		LocationRecord locationRec = convertDtoToRecord(locationDto);
+		addInitialData(request, locationRec);
+		return updateRec(locationRec);
+	}
+
+	private void addInitialData(HttpServletRequest request, LocationRecord locationRec) {
+		if (locationRec.getId() == null || locationRec.getId() == 0) {
+			locationRec.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
+			locationRec.setCreatedon(new Timestamp(new Date().getTime()));
+			locationRec.setCountry("Germany");
+		}
+	}
+
+	private LocationRecord convertDtoToRecord(Location locationDto) {
+		LocationRecord locationRec = getEmptyOrUnchangedRecord(locationDto.getId());
+		copyDtoToRecord(locationDto, locationRec);
+		return locationRec;
+	}
+
+	private void copyDtoToRecord(Location locationDto, LocationRecord locationRec) {
+		BeanMappingProvider.INSTANCE.getMapper().map(locationDto, locationRec);
+	}
+
+	private LocationRecord getEmptyOrUnchangedRecord(Integer id) {
+		LocationRecord locationRec;
+		if (id == null || id == 0) {
+			locationRec = new LocationRecord();
+		} else {
+			locationRec = LocationDao.INSTANCE.getById(id);
+		}
+		return locationRec;
+	}
+
+	private Location updateRec(LocationRecord locationRec) {
+		locationRec.setLastupdate(new Timestamp(new Date().getTime()));
+
+		getGeoData(locationRec);
+
+		LocationDao.INSTANCE.store(locationRec);
+		return Location.getInstance(locationRec);
+	}
+
+	private void getGeoData(LocationRecord locationRec) {
 		try {
 
-			String address = locationDto.getAddress()
-					+ ","
-					+ (locationDto.getZip() != null ? locationDto.getZip() : "")
-					+ " " + locationDto.getCity() + ","
-					+ locationDto.getCountry();
+			String address = locationRec.getAddress() + "," + (locationRec.getZip() != null ? locationRec.getZip() : "") + " "
+					+ locationRec.getCity() + "," + locationRec.getCountry();
 
 			final Geocoder geocoder = new Geocoder();
-			GeocoderRequest geocoderRequest = new GeocoderRequestBuilder()
-					.setAddress(address).getGeocoderRequest();
-			GeocodeResponse geocoderResponse = geocoder
-					.geocode(geocoderRequest);
+			GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(address).getGeocoderRequest();
+			GeocodeResponse geocoderResponse = geocoder.geocode(geocoderRequest);
 
 			if (geocoderResponse.getResults().size() != 1) {
-				log.error("Failed to get one result for " + address + " got "
-						+ geocoderResponse.getResults());
+				log.error("Failed to get one result for " + address + " got " + geocoderResponse.getResults());
 			}
 
 			for (GeocoderResult gr : geocoderResponse.getResults()) {
 				LatLng latLng = gr.getGeometry().getLocation();
-				locationDto.setGeoLat(latLng.getLat().doubleValue());
-				locationDto.setGeoLng(latLng.getLng().doubleValue());
+				locationRec.setGeoLat(latLng.getLat().doubleValue());
+				locationRec.setGeoLng(latLng.getLng().doubleValue());
 
 			}
 		} catch (IOException e) {
@@ -111,9 +142,4 @@ public class LocationResource {
 		LocationDao.INSTANCE.delete(id);
 	}
 
-	private LocationRecord createRecordInstance(Location locationDto) {
-		LocationRecord locationRec = new LocationRecord();
-		BeanMappingProvider.INSTANCE.getMapper().map(locationDto, locationRec);
-		return locationRec;
-	}
 }

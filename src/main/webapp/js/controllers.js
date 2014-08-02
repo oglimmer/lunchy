@@ -94,17 +94,50 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', functi
 controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', function ($scope, $stateParams, LocationsDao) {
 	
 	$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
+	$scope.editableButton = 1;
+	$scope.alerts = [];
+	
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
+	
+	$scope.cancelEdit = function() {
+		$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
+		$scope.editableButton = 1;
+	};
+	
+	$scope.saveEdit = function() {		
+		if($scope.editableButton == 0) {
+			LocationsDao.save($scope.data, function(result) {
+				// nothing to do
+			}, function(result) {
+				$scope.alerts.push({type:'danger', msg: 'Error while saving: ' + result.statusText});
+			});		
+		}
+	};
 	
 }]).
-controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$location', 'LocationsDao', function($scope, $stateParams, $location, LocationsDao) {
+controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$location', '$window', 'LocationsDao', 
+                                                function($scope, $stateParams, $location, $window, LocationsDao) {
 
 	$scope.map = {
 		center : {
 			latitude : 50.032687,
 			longitude : 8.705638
 		},
-		zoom : 13
+		zoom : 13,
+		events: {
+			tilesloaded: function (map) {
+                $scope.$apply(function () {
+                    google.maps.event.trigger(map, 'resize');
+                });
+            }
+		}
 	};
+	
+	$scope.$on('$viewContentLoaded', function () {
+		$("#browseMap .angular-google-map-container").height(angular.element($window).height()-75);		
+	});
 	
 	LocationsDao.query(function (locations) {
 		$scope.markers = [];
@@ -123,7 +156,7 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 			                $scope.$apply(function() {
 			                	$location.path("/view/"+loc.id);
 			                });
-			            }
+			            }			            
 			        }
 				});
 			}			

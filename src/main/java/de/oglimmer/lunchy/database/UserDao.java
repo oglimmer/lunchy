@@ -17,13 +17,25 @@ public enum UserDao {
 	INSTANCE;
 
 	@SneakyThrows(value = SQLException.class)
+	public UsersRecord getById(Integer id) {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+
+			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+			UsersRecord rec = create.fetchOne(Users.USERS, Users.USERS.ID.equal(id));
+			rec.attach(null);
+			return rec;
+		}
+	}
+
+	@SneakyThrows(value = SQLException.class)
 	public UsersRecord getUserByEmail(String email) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			UsersRecord rec = create.fetchOne(Users.USERS,
-					Users.USERS.EMAIL.equalIgnoreCase(email));
-			rec.attach(null);
+			UsersRecord rec = create.fetchOne(Users.USERS, Users.USERS.EMAIL.equalIgnoreCase(email));
+			if (rec != null) {
+				rec.attach(null);
+			}
 			return rec;
 		}
 	}
