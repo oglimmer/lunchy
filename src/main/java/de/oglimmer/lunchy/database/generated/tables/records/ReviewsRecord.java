@@ -11,115 +11,115 @@ package de.oglimmer.lunchy.database.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> implements org.jooq.Record8<java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.String, java.sql.Timestamp, java.sql.Timestamp, java.lang.Integer, java.lang.String> {
 
-	private static final long serialVersionUID = -2087421209;
+	private static final long serialVersionUID = 1006013735;
 
 	/**
-	 * Setter for <code>lunchy.reviews.id</code>.
+	 * Setter for <code>oli_lunchy.reviews.id</code>.
 	 */
 	public void setId(java.lang.Integer value) {
 		setValue(0, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.reviews.id</code>.
+	 * Getter for <code>oli_lunchy.reviews.id</code>.
 	 */
 	public java.lang.Integer getId() {
 		return (java.lang.Integer) getValue(0);
 	}
 
 	/**
-	 * Setter for <code>lunchy.reviews.fkUser</code>.
+	 * Setter for <code>oli_lunchy.reviews.fkUser</code>.
 	 */
 	public void setFkuser(java.lang.Integer value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.reviews.fkUser</code>.
+	 * Getter for <code>oli_lunchy.reviews.fkUser</code>.
 	 */
 	public java.lang.Integer getFkuser() {
 		return (java.lang.Integer) getValue(1);
 	}
 
 	/**
-	 * Setter for <code>lunchy.reviews.fkLocation</code>.
+	 * Setter for <code>oli_lunchy.reviews.fkLocation</code>.
 	 */
 	public void setFklocation(java.lang.Integer value) {
 		setValue(2, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.reviews.fkLocation</code>.
+	 * Getter for <code>oli_lunchy.reviews.fkLocation</code>.
 	 */
 	public java.lang.Integer getFklocation() {
 		return (java.lang.Integer) getValue(2);
 	}
 
 	/**
-	 * Setter for <code>lunchy.reviews.comment</code>.
+	 * Setter for <code>oli_lunchy.reviews.comment</code>.
 	 */
 	public void setComment(java.lang.String value) {
 		setValue(3, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.reviews.comment</code>.
+	 * Getter for <code>oli_lunchy.reviews.comment</code>.
 	 */
 	public java.lang.String getComment() {
 		return (java.lang.String) getValue(3);
 	}
 
 	/**
-	 * Setter for <code>lunchy.reviews.createdOn</code>.
+	 * Setter for <code>oli_lunchy.reviews.createdOn</code>.
 	 */
 	public void setCreatedon(java.sql.Timestamp value) {
 		setValue(4, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.reviews.createdOn</code>.
+	 * Getter for <code>oli_lunchy.reviews.createdOn</code>.
 	 */
 	public java.sql.Timestamp getCreatedon() {
 		return (java.sql.Timestamp) getValue(4);
 	}
 
 	/**
-	 * Setter for <code>lunchy.reviews.lastUpdate</code>.
+	 * Setter for <code>oli_lunchy.reviews.lastUpdate</code>.
 	 */
 	public void setLastupdate(java.sql.Timestamp value) {
 		setValue(5, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.reviews.lastUpdate</code>.
+	 * Getter for <code>oli_lunchy.reviews.lastUpdate</code>.
 	 */
 	public java.sql.Timestamp getLastupdate() {
 		return (java.sql.Timestamp) getValue(5);
 	}
 
 	/**
-	 * Setter for <code>lunchy.reviews.rating</code>.
+	 * Setter for <code>oli_lunchy.reviews.rating</code>.
 	 */
 	public void setRating(java.lang.Integer value) {
 		setValue(6, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.reviews.rating</code>.
+	 * Getter for <code>oli_lunchy.reviews.rating</code>.
 	 */
 	public java.lang.Integer getRating() {
 		return (java.lang.Integer) getValue(6);
 	}
 
 	/**
-	 * Setter for <code>lunchy.reviews.favoriteMeal</code>.
+	 * Setter for <code>oli_lunchy.reviews.favoriteMeal</code>.
 	 */
 	public void setFavoritemeal(java.lang.String value) {
 		setValue(7, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.reviews.favoriteMeal</code>.
+	 * Getter for <code>oli_lunchy.reviews.favoriteMeal</code>.
 	 */
 	public java.lang.String getFavoritemeal() {
 		return (java.lang.String) getValue(7);

@@ -11,101 +11,101 @@ package de.oglimmer.lunchy.database.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> implements org.jooq.Record7<java.lang.Integer, java.lang.String, java.lang.String, java.lang.String, java.sql.Timestamp, java.sql.Timestamp, java.lang.Integer> {
 
-	private static final long serialVersionUID = -700225228;
+	private static final long serialVersionUID = -613027174;
 
 	/**
-	 * Setter for <code>lunchy.users.id</code>.
+	 * Setter for <code>oli_lunchy.users.id</code>.
 	 */
 	public void setId(java.lang.Integer value) {
 		setValue(0, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.users.id</code>.
+	 * Getter for <code>oli_lunchy.users.id</code>.
 	 */
 	public java.lang.Integer getId() {
 		return (java.lang.Integer) getValue(0);
 	}
 
 	/**
-	 * Setter for <code>lunchy.users.email</code>.
+	 * Setter for <code>oli_lunchy.users.email</code>.
 	 */
 	public void setEmail(java.lang.String value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.users.email</code>.
+	 * Getter for <code>oli_lunchy.users.email</code>.
 	 */
 	public java.lang.String getEmail() {
 		return (java.lang.String) getValue(1);
 	}
 
 	/**
-	 * Setter for <code>lunchy.users.password</code>.
+	 * Setter for <code>oli_lunchy.users.password</code>.
 	 */
 	public void setPassword(java.lang.String value) {
 		setValue(2, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.users.password</code>.
+	 * Getter for <code>oli_lunchy.users.password</code>.
 	 */
 	public java.lang.String getPassword() {
 		return (java.lang.String) getValue(2);
 	}
 
 	/**
-	 * Setter for <code>lunchy.users.displayname</code>.
+	 * Setter for <code>oli_lunchy.users.displayname</code>.
 	 */
 	public void setDisplayname(java.lang.String value) {
 		setValue(3, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.users.displayname</code>.
+	 * Getter for <code>oli_lunchy.users.displayname</code>.
 	 */
 	public java.lang.String getDisplayname() {
 		return (java.lang.String) getValue(3);
 	}
 
 	/**
-	 * Setter for <code>lunchy.users.createdOn</code>.
+	 * Setter for <code>oli_lunchy.users.createdOn</code>.
 	 */
 	public void setCreatedon(java.sql.Timestamp value) {
 		setValue(4, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.users.createdOn</code>.
+	 * Getter for <code>oli_lunchy.users.createdOn</code>.
 	 */
 	public java.sql.Timestamp getCreatedon() {
 		return (java.sql.Timestamp) getValue(4);
 	}
 
 	/**
-	 * Setter for <code>lunchy.users.lastLogin</code>.
+	 * Setter for <code>oli_lunchy.users.lastLogin</code>.
 	 */
 	public void setLastlogin(java.sql.Timestamp value) {
 		setValue(5, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.users.lastLogin</code>.
+	 * Getter for <code>oli_lunchy.users.lastLogin</code>.
 	 */
 	public java.sql.Timestamp getLastlogin() {
 		return (java.sql.Timestamp) getValue(5);
 	}
 
 	/**
-	 * Setter for <code>lunchy.users.permissions</code>.
+	 * Setter for <code>oli_lunchy.users.permissions</code>.
 	 */
 	public void setPermissions(java.lang.Integer value) {
 		setValue(6, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.users.permissions</code>.
+	 * Getter for <code>oli_lunchy.users.permissions</code>.
 	 */
 	public java.lang.Integer getPermissions() {
 		return (java.lang.Integer) getValue(6);

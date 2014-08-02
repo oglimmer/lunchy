@@ -11,10 +11,10 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> {
 
-	private static final long serialVersionUID = -1387891836;
+	private static final long serialVersionUID = -345402541;
 
 	/**
-	 * The singleton instance of <code>lunchy.users</code>
+	 * The singleton instance of <code>oli_lunchy.users</code>
 	 */
 	public static final de.oglimmer.lunchy.database.generated.tables.Users USERS = new de.oglimmer.lunchy.database.generated.tables.Users();
 
@@ -27,49 +27,49 @@ public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.g
 	}
 
 	/**
-	 * The column <code>lunchy.users.id</code>.
+	 * The column <code>oli_lunchy.users.id</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>lunchy.users.email</code>.
+	 * The column <code>oli_lunchy.users.email</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.String> EMAIL = createField("email", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>lunchy.users.password</code>.
+	 * The column <code>oli_lunchy.users.password</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.String> PASSWORD = createField("password", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>lunchy.users.displayname</code>.
+	 * The column <code>oli_lunchy.users.displayname</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.String> DISPLAYNAME = createField("displayname", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>lunchy.users.createdOn</code>.
+	 * The column <code>oli_lunchy.users.createdOn</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.sql.Timestamp> CREATEDON = createField("createdOn", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>lunchy.users.lastLogin</code>.
+	 * The column <code>oli_lunchy.users.lastLogin</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.sql.Timestamp> LASTLOGIN = createField("lastLogin", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>lunchy.users.permissions</code>.
+	 * The column <code>oli_lunchy.users.permissions</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> PERMISSIONS = createField("permissions", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * Create a <code>lunchy.users</code> table reference
+	 * Create a <code>oli_lunchy.users</code> table reference
 	 */
 	public Users() {
 		this("users", null);
 	}
 
 	/**
-	 * Create an aliased <code>lunchy.users</code> table reference
+	 * Create an aliased <code>oli_lunchy.users</code> table reference
 	 */
 	public Users(java.lang.String alias) {
 		this(alias, de.oglimmer.lunchy.database.generated.tables.Users.USERS);
@@ -80,7 +80,7 @@ public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.g
 	}
 
 	private Users(java.lang.String alias, org.jooq.Table<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> aliased, org.jooq.Field<?>[] parameters) {
-		super(alias, de.oglimmer.lunchy.database.generated.Lunchy.LUNCHY, aliased, parameters, "");
+		super(alias, de.oglimmer.lunchy.database.generated.OliLunchy.OLI_LUNCHY, aliased, parameters, "");
 	}
 
 	/**

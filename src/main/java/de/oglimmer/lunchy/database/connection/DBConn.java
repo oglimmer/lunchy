@@ -19,7 +19,7 @@ public enum DBConn {
 
 	private String userName = "root";
 	private String password = "";
-	private String url = "jdbc:mysql://localhost/lunchy";
+	private String url = "jdbc:mysql://localhost/oli_lunchy";
 
 	@SneakyThrows(value = SQLException.class)
 	public Connection get() {

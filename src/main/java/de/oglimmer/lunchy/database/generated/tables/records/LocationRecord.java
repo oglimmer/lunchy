@@ -11,199 +11,199 @@ package de.oglimmer.lunchy.database.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> implements org.jooq.Record14<java.lang.Integer, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Integer, java.sql.Timestamp, java.sql.Timestamp, java.lang.Integer, java.lang.Double, java.lang.Double> {
 
-	private static final long serialVersionUID = -1702823500;
+	private static final long serialVersionUID = 110791598;
 
 	/**
-	 * Setter for <code>lunchy.location.id</code>.
+	 * Setter for <code>oli_lunchy.location.id</code>.
 	 */
 	public void setId(java.lang.Integer value) {
 		setValue(0, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.id</code>.
+	 * Getter for <code>oli_lunchy.location.id</code>.
 	 */
 	public java.lang.Integer getId() {
 		return (java.lang.Integer) getValue(0);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.officialname</code>.
+	 * Setter for <code>oli_lunchy.location.officialname</code>.
 	 */
 	public void setOfficialname(java.lang.String value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.officialname</code>.
+	 * Getter for <code>oli_lunchy.location.officialname</code>.
 	 */
 	public java.lang.String getOfficialname() {
 		return (java.lang.String) getValue(1);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.streetname</code>.
+	 * Setter for <code>oli_lunchy.location.streetname</code>.
 	 */
 	public void setStreetname(java.lang.String value) {
 		setValue(2, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.streetname</code>.
+	 * Getter for <code>oli_lunchy.location.streetname</code>.
 	 */
 	public java.lang.String getStreetname() {
 		return (java.lang.String) getValue(2);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.address</code>.
+	 * Setter for <code>oli_lunchy.location.address</code>.
 	 */
 	public void setAddress(java.lang.String value) {
 		setValue(3, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.address</code>.
+	 * Getter for <code>oli_lunchy.location.address</code>.
 	 */
 	public java.lang.String getAddress() {
 		return (java.lang.String) getValue(3);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.city</code>.
+	 * Setter for <code>oli_lunchy.location.city</code>.
 	 */
 	public void setCity(java.lang.String value) {
 		setValue(4, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.city</code>.
+	 * Getter for <code>oli_lunchy.location.city</code>.
 	 */
 	public java.lang.String getCity() {
 		return (java.lang.String) getValue(4);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.zip</code>.
+	 * Setter for <code>oli_lunchy.location.zip</code>.
 	 */
 	public void setZip(java.lang.String value) {
 		setValue(5, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.zip</code>.
+	 * Getter for <code>oli_lunchy.location.zip</code>.
 	 */
 	public java.lang.String getZip() {
 		return (java.lang.String) getValue(5);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.country</code>.
+	 * Setter for <code>oli_lunchy.location.country</code>.
 	 */
 	public void setCountry(java.lang.String value) {
 		setValue(6, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.country</code>.
+	 * Getter for <code>oli_lunchy.location.country</code>.
 	 */
 	public java.lang.String getCountry() {
 		return (java.lang.String) getValue(6);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.comment</code>.
+	 * Setter for <code>oli_lunchy.location.comment</code>.
 	 */
 	public void setComment(java.lang.String value) {
 		setValue(7, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.comment</code>.
+	 * Getter for <code>oli_lunchy.location.comment</code>.
 	 */
 	public java.lang.String getComment() {
 		return (java.lang.String) getValue(7);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.turnAroundTime</code>.
+	 * Setter for <code>oli_lunchy.location.turnAroundTime</code>.
 	 */
 	public void setTurnaroundtime(java.lang.Integer value) {
 		setValue(8, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.turnAroundTime</code>.
+	 * Getter for <code>oli_lunchy.location.turnAroundTime</code>.
 	 */
 	public java.lang.Integer getTurnaroundtime() {
 		return (java.lang.Integer) getValue(8);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.createdOn</code>.
+	 * Setter for <code>oli_lunchy.location.createdOn</code>.
 	 */
 	public void setCreatedon(java.sql.Timestamp value) {
 		setValue(9, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.createdOn</code>.
+	 * Getter for <code>oli_lunchy.location.createdOn</code>.
 	 */
 	public java.sql.Timestamp getCreatedon() {
 		return (java.sql.Timestamp) getValue(9);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.lastUpdate</code>.
+	 * Setter for <code>oli_lunchy.location.lastUpdate</code>.
 	 */
 	public void setLastupdate(java.sql.Timestamp value) {
 		setValue(10, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.lastUpdate</code>.
+	 * Getter for <code>oli_lunchy.location.lastUpdate</code>.
 	 */
 	public java.sql.Timestamp getLastupdate() {
 		return (java.sql.Timestamp) getValue(10);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.fkUser</code>.
+	 * Setter for <code>oli_lunchy.location.fkUser</code>.
 	 */
 	public void setFkuser(java.lang.Integer value) {
 		setValue(11, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.fkUser</code>.
+	 * Getter for <code>oli_lunchy.location.fkUser</code>.
 	 */
 	public java.lang.Integer getFkuser() {
 		return (java.lang.Integer) getValue(11);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.geo_lat</code>.
+	 * Setter for <code>oli_lunchy.location.geo_lat</code>.
 	 */
 	public void setGeoLat(java.lang.Double value) {
 		setValue(12, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.geo_lat</code>.
+	 * Getter for <code>oli_lunchy.location.geo_lat</code>.
 	 */
 	public java.lang.Double getGeoLat() {
 		return (java.lang.Double) getValue(12);
 	}
 
 	/**
-	 * Setter for <code>lunchy.location.geo_lng</code>.
+	 * Setter for <code>oli_lunchy.location.geo_lng</code>.
 	 */
 	public void setGeoLng(java.lang.Double value) {
 		setValue(13, value);
 	}
 
 	/**
-	 * Getter for <code>lunchy.location.geo_lng</code>.
+	 * Getter for <code>oli_lunchy.location.geo_lng</code>.
 	 */
 	public java.lang.Double getGeoLng() {
 		return (java.lang.Double) getValue(13);

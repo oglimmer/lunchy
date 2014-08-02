@@ -110,7 +110,7 @@
 							<name>org.jooq.util.mysql.MySQLDatabase</name>
 							<includes>.*</includes>
 							<excludes></excludes>
-							<inputSchema>lunchy</inputSchema>
+							<inputSchema>oli_lunchy</inputSchema>
 						</database>
 						<target>
 							<packageName>de.oglimmer.lunchy.database.generated</packageName>

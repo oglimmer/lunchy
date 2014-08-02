@@ -11,10 +11,10 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> {
 
-	private static final long serialVersionUID = 2103562079;
+	private static final long serialVersionUID = 374435177;
 
 	/**
-	 * The singleton instance of <code>lunchy.reviews</code>
+	 * The singleton instance of <code>oli_lunchy.reviews</code>
 	 */
 	public static final de.oglimmer.lunchy.database.generated.tables.Reviews REVIEWS = new de.oglimmer.lunchy.database.generated.tables.Reviews();
 
@@ -27,54 +27,54 @@ public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	}
 
 	/**
-	 * The column <code>lunchy.reviews.id</code>.
+	 * The column <code>oli_lunchy.reviews.id</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>lunchy.reviews.fkUser</code>.
+	 * The column <code>oli_lunchy.reviews.fkUser</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> FKUSER = createField("fkUser", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>lunchy.reviews.fkLocation</code>.
+	 * The column <code>oli_lunchy.reviews.fkLocation</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> FKLOCATION = createField("fkLocation", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>lunchy.reviews.comment</code>.
+	 * The column <code>oli_lunchy.reviews.comment</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.String> COMMENT = createField("comment", org.jooq.impl.SQLDataType.CLOB.length(65535), this, "");
 
 	/**
-	 * The column <code>lunchy.reviews.createdOn</code>.
+	 * The column <code>oli_lunchy.reviews.createdOn</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.sql.Timestamp> CREATEDON = createField("createdOn", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>lunchy.reviews.lastUpdate</code>.
+	 * The column <code>oli_lunchy.reviews.lastUpdate</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.sql.Timestamp> LASTUPDATE = createField("lastUpdate", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>lunchy.reviews.rating</code>.
+	 * The column <code>oli_lunchy.reviews.rating</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> RATING = createField("rating", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
 	/**
-	 * The column <code>lunchy.reviews.favoriteMeal</code>.
+	 * The column <code>oli_lunchy.reviews.favoriteMeal</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.String> FAVORITEMEAL = createField("favoriteMeal", org.jooq.impl.SQLDataType.CLOB.length(65535), this, "");
 
 	/**
-	 * Create a <code>lunchy.reviews</code> table reference
+	 * Create a <code>oli_lunchy.reviews</code> table reference
 	 */
 	public Reviews() {
 		this("reviews", null);
 	}
 
 	/**
-	 * Create an aliased <code>lunchy.reviews</code> table reference
+	 * Create an aliased <code>oli_lunchy.reviews</code> table reference
 	 */
 	public Reviews(java.lang.String alias) {
 		this(alias, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS);
@@ -85,7 +85,7 @@ public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	}
 
 	private Reviews(java.lang.String alias, org.jooq.Table<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> aliased, org.jooq.Field<?>[] parameters) {
-		super(alias, de.oglimmer.lunchy.database.generated.Lunchy.LUNCHY, aliased, parameters, "");
+		super(alias, de.oglimmer.lunchy.database.generated.OliLunchy.OLI_LUNCHY, aliased, parameters, "");
 	}
 
 	/**
