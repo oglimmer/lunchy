@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.SneakyThrows;
 
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -24,25 +25,23 @@ public enum ReviewDao {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			ReviewsRecord rec = create.fetchOne(Reviews.REVIEWS,
-					Reviews.REVIEWS.ID.equal(id));
+			ReviewsRecord rec = create.fetchOne(Reviews.REVIEWS, Reviews.REVIEWS.ID.equal(id));
 			rec.attach(null);
 			return rec;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@SneakyThrows(value = SQLException.class)
 	public List<ReviewsRecord> getList() {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-			Result<? extends ReviewsRecord> result = (Result<? extends ReviewsRecord>) create
-					.select().from(Reviews.REVIEWS).fetch();
+			Result<Record> result = create.select().from(Reviews.REVIEWS).fetch();
 
 			List<ReviewsRecord> resultList = new ArrayList<>();
-			for (ReviewsRecord rec : result) {
+			for (Record rawRec : result) {
+				ReviewsRecord rec = (ReviewsRecord) rawRec;
 				rec.attach(null);
 				resultList.add(rec);
 			}
@@ -67,8 +66,7 @@ public enum ReviewDao {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-			ReviewsRecord rec = create.fetchOne(Reviews.REVIEWS,
-					Reviews.REVIEWS.ID.equal(id));
+			ReviewsRecord rec = create.fetchOne(Reviews.REVIEWS, Reviews.REVIEWS.ID.equal(id));
 			rec.delete();
 		}
 	}

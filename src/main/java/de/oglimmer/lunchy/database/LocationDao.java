@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.SneakyThrows;
 
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -24,25 +25,23 @@ public enum LocationDao {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			LocationRecord rec = create.fetchOne(Location.LOCATION,
-					Location.LOCATION.ID.equal(id));
+			LocationRecord rec = create.fetchOne(Location.LOCATION, Location.LOCATION.ID.equal(id));
 			rec.attach(null);
 			return rec;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@SneakyThrows(value = SQLException.class)
 	public List<LocationRecord> getList() {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-			Result<? extends LocationRecord> result = (Result<? extends LocationRecord>) create
-					.select().from(Location.LOCATION).fetch();
+			Result<Record> result = create.select().from(Location.LOCATION).fetch();
 
 			List<LocationRecord> resultList = new ArrayList<>();
-			for (LocationRecord rec : result) {
+			for (Record rawRec : result) {
+				LocationRecord rec = (LocationRecord) rawRec;
 				rec.attach(null);
 				resultList.add(rec);
 			}
@@ -67,8 +66,7 @@ public enum LocationDao {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-			LocationRecord rec = create.fetchOne(Location.LOCATION,
-					Location.LOCATION.ID.equal(id));
+			LocationRecord rec = create.fetchOne(Location.LOCATION, Location.LOCATION.ID.equal(id));
 			rec.delete();
 		}
 	}
