@@ -52,7 +52,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<shortRevisionLength>40</shortRevisionLength>
+					<shortRevisionLength>7</shortRevisionLength>
 					<doCheck>false</doCheck>
 					<doUpdate>false</doUpdate>
 				</configuration>

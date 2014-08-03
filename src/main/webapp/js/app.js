@@ -31,14 +31,10 @@ config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRou
 	      templateUrl: 'partials/add-location.html',
 	      controller : 'LunchyControllerAdd',
 	      resolve: {
-			    auth: ["$q", "Authetication", function($q, Authetication) {			    	
-			      if (Authetication.loggedIn) {
-			        return $q.when(Authetication);
-			      } else {
-			        return $q.reject({ authenticated: false });
-			      }
-			    }]
-			  }
+	    	  auth: ["Authetication", function(Authetication) {			    	
+			      return Authetication.checkLoggedIn();
+			  }]
+	      }
 	    });
     $urlRouterProvider.otherwise('/updates');
     
@@ -55,18 +51,21 @@ config(['$tooltipProvider', function($tooltipProvider){
         'show': 'hide'
     });
 }]).
-factory('LoginDao', ['$resource', function($resource) {
-	return $resource('/lunchy/rest/login', null, {
+factory('LoginDao', ['$resource', '$http', function($resource, $http) {
+	var ENDPOINT = '/lunchy/rest/login';
+	var LoginDao = $resource(ENDPOINT, null, {
 		'login': {
 			method: 'POST'
 		},
 		'logout': {
 			method: 'DELETE'
-		},
-		'check': {
-			method: 'GET'
 		}
-	});
+	});	
+	// check needs to return a promise
+	LoginDao.prototype.check = function() {
+		return $http.get(ENDPOINT);
+	}
+	return LoginDao;
 }]).
 factory('UserDao', ['$resource', function($resource) {
 	return $resource('/lunchy/rest/users/:email', null, {
@@ -84,9 +83,23 @@ factory('UpdatesDao', ['$resource', function($resource) {
 factory('LocationsDao', ['$resource', function($resource) {
 	return $resource('/lunchy/rest/locations/:id', {id: '@id'});
 }]).
-factory('Authetication', ['$modal', function($modal) {
+factory('Authetication', ['$modal', '$q', 'LoginDao', function($modal, $q, LoginDao) {
 	return {
-		loggedIn:false,
+		loggedIn: false,
+		checkLoggedIn: function() {
+			var thiz = this;
+			return new LoginDao().check()
+				.then(function(successResp) {
+					if(successResp.data.success) {
+						thiz.loggedIn = true 
+						return $q.when(thiz);
+					} else {
+						return $q.reject({ authenticated: false });
+					}					
+				}, function(errorResp) {
+					return $q.reject({ authenticated: false });
+				});						
+		},
 		showRegister: function() {
 			var thiz = this;
 			var modalInstance = $modal.open({
@@ -103,11 +116,12 @@ factory('Authetication', ['$modal', function($modal) {
 		}
 	};
 }]).
-run(['$rootScope', '$location', 'Authetication', function($rootScope, $location, Authetication) {	
+run(['$rootScope', '$location', 'Authetication', 'LoginDao', function($rootScope, $location, Authetication) {	
 	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, eventObj) {
 		if (eventObj.authenticated === false) {
 			$location.path("/");
 			Authetication.showRegister();
 		}
 	});
+	Authetication.checkLoggedIn();
 }]);

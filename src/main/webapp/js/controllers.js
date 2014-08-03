@@ -27,10 +27,7 @@ controller('LunchyControllerMain', [
 	      return ""
 	    }
 	}
-	
-	LoginDao.check(function(data) {
-		$scope.Authetication.loggedIn = data.success;
-	});
+		
 }]).
 controller('LunchyControllerLogin', ['$scope', 'LoginDao', '$timeout', 'Authetication', function ($scope, LoginDao, $timeout, Authetication) {
 	

@@ -13,7 +13,7 @@
 		<div ng-repeat="update in rows" class="col-md-6">
 			<h2>{{update.text}}</h2>			
 			<p>
-				<a class="btn btn-default" href="#/{{update.ref}}" role="button">View details &raquo;</a>
+				<a ng-show="{{update.ref != ''}}" class="btn btn-default" href="#/{{update.ref}}" role="button">View details &raquo;</a>
 			</p>
 		</div>
 	</div>

@@ -23,8 +23,7 @@ public class UpdatesResource {
 	@SneakyThrows(value = JSONException.class)
 	public String query(@Context HttpServletRequest request) {
 		JSONArray arr = new JSONArray();
-		for (de.oglimmer.lunchy.database.UpdatesDao.ResultParam o : UpdatesDao.INSTANCE
-				.get(3)) {
+		for (de.oglimmer.lunchy.database.UpdatesDao.ResultParam o : UpdatesDao.INSTANCE.get(3)) {
 			JSONObject jsonObj = new JSONObject();
 			jsonObj.put("text", o.getText());
 			jsonObj.put("ref", o.getRef());
