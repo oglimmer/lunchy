@@ -24,7 +24,7 @@ public enum DBConn {
 		return DriverManager.getConnection("jdbc:apache:commons:dbcp:lunchyDataStore");
 	}
 
-	@SneakyThrows
+	@SneakyThrows(value = { IllegalAccessException.class, InstantiationException.class, SQLException.class, ClassNotFoundException.class })
 	public void setupDriver() {
 
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -46,7 +46,7 @@ public enum DBConn {
 
 	}
 
-	@SneakyThrows
+	@SneakyThrows(value = SQLException.class)
 	public void printDriverStats() {
 		PoolingDriver driver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
 		ObjectPool<? extends Connection> connectionPool = driver.getConnectionPool("lunchyDataStore");
@@ -55,7 +55,7 @@ public enum DBConn {
 		System.out.println("NumIdle: " + connectionPool.getNumIdle());
 	}
 
-	@SneakyThrows
+	@SneakyThrows(value = SQLException.class)
 	public void shutdownDriver() {
 		PoolingDriver driver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
 		driver.closePool("lunchyDataStore");
