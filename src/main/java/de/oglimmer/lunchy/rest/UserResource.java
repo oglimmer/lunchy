@@ -27,8 +27,7 @@ public class UserResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResultParam check(@Context HttpServletRequest request,
-			@PathParam("email") String email) {
+	public ResultParam check(@Context HttpServletRequest request, @PathParam("email") String email) {
 		ResultParam result = new ResultParam();
 		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email);
 		if (user != null) {
@@ -40,17 +39,16 @@ public class UserResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ResultParam create(@Context HttpServletRequest request,
-			@PathParam("email") String email, InputParam input) {
+	public ResultParam create(@Context HttpServletRequest request, @PathParam("email") String email, InputParam input) {
 		ResultParam result = new ResultParam();
 
 		try {
 			UsersRecord user = new UsersRecord();
 			user.setDisplayname(input.getDisplayname());
 			user.setEmail(email);
-			user.setPassword(BCrypt.hashpw(input.getPassword(),
-					BCrypt.gensalt()));
+			user.setPassword(BCrypt.hashpw(input.getPassword(), BCrypt.gensalt()));
 			user.setCreatedon(new Timestamp(new Date().getTime()));
+			user.setLastlogin(new Timestamp(new Date().getTime()));
 			user.setPermissions(0);
 			UserDao.INSTANCE.store(user);
 			result.setSuccess(true);
