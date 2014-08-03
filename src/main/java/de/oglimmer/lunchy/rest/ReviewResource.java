@@ -1,9 +1,7 @@
 package de.oglimmer.lunchy.rest;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -25,16 +23,6 @@ public class ReviewResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Review> query() {
-		List<Review> resultList = new ArrayList<>();
-		for (ReviewsRecord reviewRec : ReviewDao.INSTANCE.getList()) {
-			resultList.add(Review.getInstance(reviewRec));
-		}
-		return resultList;
-	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Review get(@PathParam("id") int id) {
 		ReviewsRecord reviewRec = ReviewDao.INSTANCE.getById(id);
@@ -47,8 +35,7 @@ public class ReviewResource {
 	public Review post(@Context HttpServletRequest request, Review reviewDto) {
 
 		if (reviewDto.getId() == null || reviewDto.getId() == 0) {
-			reviewDto.setFkuser((Integer) request.getSession(false)
-					.getAttribute("userId"));
+			reviewDto.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
 			reviewDto.setCreatedon(new Timestamp(new Date().getTime()));
 		}
 		reviewDto.setLastupdate(new Timestamp(new Date().getTime()));

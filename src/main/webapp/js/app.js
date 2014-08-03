@@ -81,7 +81,16 @@ factory('UpdatesDao', ['$resource', function($resource) {
 	return $resource('/lunchy/rest/updates');
 }]).
 factory('LocationsDao', ['$resource', function($resource) {
-	return $resource('/lunchy/rest/locations/:id', {id: '@id'});
+	return $resource('/lunchy/rest/locations/:id', {id: '@id'}, {
+		'queryReviews': {
+			method: 'GET',
+			url: '/lunchy/rest/locations/:id/reviews',
+			isArray: true
+		}
+	});
+}]).
+factory('ReviewDao', ['$resource', function($resource) {
+	return $resource('/lunchy/rest/reviews/:id', {id: '@id'});
 }]).
 factory('Authetication', ['$modal', '$q', 'LoginDao', function($modal, $q, LoginDao) {
 	return {

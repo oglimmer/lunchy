@@ -88,11 +88,54 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', functi
 	}
 	
 }]).
-controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', function ($scope, $stateParams, LocationsDao) {
+controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', function ($scope, $stateParams, LocationsDao, ReviewDao) {
 	
 	$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
+	LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
+		$scope.reviews = reviews;
+	});	
 	$scope.editableButton = 1;
+	$scope.addReviewButton = 0;
 	$scope.alerts = [];
+	$scope.newReview = {
+			fklocation:$stateParams.locationId,
+			comment:'',
+			favoritemeal:'',
+			rating:1,
+			ratingExplained:'none'
+	};
+	
+	function setRatingExplained(val) {
+		switch(val) {
+		case 1:
+			$scope.newReview.ratingExplained = "I will never go there again!";
+			break;
+		case 2:
+			$scope.newReview.ratingExplained = "Not amongst my favorites, but I would eventually join.";
+			break;
+		case 3:
+			$scope.newReview.ratingExplained = "Liked it - somehow. Go there again.";
+			break;
+		case 4:
+			$scope.newReview.ratingExplained = "Nice place, happy to do it again";
+			break;
+		case 5:
+			$scope.newReview.ratingExplained = "One of my favorites! Couldn't get enough!";
+			break;
+		}
+	}
+	
+	$scope.$watch('newReview.rating', function() {
+		setRatingExplained($scope.newReview.rating);
+	});
+	
+	$scope.hoveringOver = function(val) {
+		setRatingExplained(val);
+	}
+	
+	$scope.hoveringOut = function() {
+		setRatingExplained($scope.newReview.rating);
+	}
 	
 	$scope.closeAlert = function(index) {
 		$scope.alerts.splice(index, 1);
@@ -101,6 +144,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', fu
 	$scope.cancelEdit = function() {
 		$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
 		$scope.editableButton = 1;
+		$scope.addReviewButton = 0;
 	};
 	
 	$scope.saveEdit = function() {		
@@ -108,10 +152,31 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', fu
 			LocationsDao.save($scope.data, function(result) {
 				// nothing to do
 			}, function(result) {
-				$scope.alerts.push({type:'danger', msg: 'Error while saving: ' + result.statusText});
+				$scope.alerts.push({type:'danger', msg: 'Error while saving location: ' + result.statusText});
 			});		
 		}
 	};
+	
+	$scope.addReview = function() {
+		if($scope.addReviewButton == 1) {
+			var newReview = new ReviewDao($scope.newReview);
+			newReview.$save(function(result) {
+				// nothing to do
+				$scope.reviews.push(result);
+			}, function(result) {
+				$scope.alerts.push({type:'danger', msg: 'Error while saving review: ' + result.statusText});
+			});			
+
+			/*
+			ReviewDao.save($scope.newReview, function(result) {
+				// nothing to do
+				console.log(result);
+			}, function(result) {
+				$scope.alerts.push({type:'danger', msg: 'Error while saving review: ' + result.statusText});
+			});
+			*/		
+		}
+	}
 	
 }]).
 controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$location', '$window', 'LocationsDao', 

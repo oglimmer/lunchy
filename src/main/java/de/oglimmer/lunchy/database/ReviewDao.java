@@ -32,12 +32,12 @@ public enum ReviewDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public List<ReviewsRecord> getList() {
+	public List<ReviewsRecord> getList(int fklocation) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-			Result<Record> result = create.select().from(Reviews.REVIEWS).fetch();
+			Result<Record> result = create.select().from(Reviews.REVIEWS).where(Reviews.REVIEWS.FKLOCATION.equal(fklocation)).fetch();
 
 			List<ReviewsRecord> resultList = new ArrayList<>();
 			for (Record rawRec : result) {
