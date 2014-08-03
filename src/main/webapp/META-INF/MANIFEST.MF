@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-SCG-Version: 0.1-SNAPSHOT
-Build-Jdk: 1.7.0_15
-Built-By: oli
-SVN-Revision-No: 5f7a7d30b6f18ee377e5b1e1632b633de1e87e29
-Creation-Date: 1407022913732
-Created-By: Apache Maven 3.2.2
-
