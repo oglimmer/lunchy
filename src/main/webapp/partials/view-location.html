@@ -56,11 +56,11 @@
 							Created: {{data.createdon | date :'short'}}, last update: {{data.lastupdate | date :'short'}} by {{data.creationUser}}
 						</div>
 					</div>
-
+					
 					<div class="form-group">
 						<div class="col-lg-10 col-lg-offset-2">
 							<button ng-hide="editableButton" class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
-							<button type="button" class="btn btn-primary" ng-model="editableButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="Save;Edit" ng-click="saveEdit()"/>
+							<button ng-show="Authetication.loggedIn" type="button" class="btn btn-primary" ng-model="editableButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="Save;Edit" ng-click="saveEdit()"/>
 						</div>
 					</div>
 				</fieldset>
