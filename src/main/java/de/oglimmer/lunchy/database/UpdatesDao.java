@@ -29,7 +29,7 @@ public enum UpdatesDao {
 			Result<Record> result = create
 					.fetch("select concat(if (createdOn=lastUpdate , 'New location ' , 'Updated location '),officialName,' in ', city), concat('view/',id), lastUpdate from location "
 							+ "union "
-							+ "select concat(if (reviews.createdOn=reviews.lastUpdate , 'New location ' , 'Updated location '),officialName,' in ', city,' from ',displayname), concat('view/',reviews.id), reviews.lastUpdate from reviews join location on location.id=reviews.fklocation join users on reviews.fkuser=users.id "
+							+ "select concat(if (reviews.createdOn=reviews.lastUpdate , 'New review ' , 'Updated review '),officialName,' in ', city,' from ',displayname), concat('view/',location.id), reviews.lastUpdate from reviews join location on location.id=reviews.fklocation join users on reviews.fkuser=users.id "
 							+ "union "
 							+ "select concat('New user ',displayname), '', createdOn from users "
 							+ "order by 3 desc " + "limit " + numberOfItems);
