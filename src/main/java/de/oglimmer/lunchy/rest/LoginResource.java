@@ -27,9 +27,7 @@ import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 public class LoginResource {
 
 	/*
-	 * curl -H "Content-Type: application/json" -d
-	 * '{"email":"oli@zimpasser.de","password":"foo"}'
-	 * http://localhost:8080/lunchy/rest/login
+	 * curl -H "Content-Type: application/json" -d '{"email":"oli@zimpasser.de","password":"foo"}' http://localhost:8080/lunchy/rest/login
 	 */
 
 	private static final String USER_PASS_WRONG = "Email unkown or password incorrect!";
@@ -40,8 +38,7 @@ public class LoginResource {
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			Object userId = session.getAttribute("userId");
-			return userId != null ? new ResultParam(true, userId.toString())
-					: new ResultParam(false, null);
+			return userId != null ? new ResultParam(true, userId.toString()) : new ResultParam(false, null);
 		} else {
 			return new ResultParam(false, null);
 		}
@@ -50,8 +47,7 @@ public class LoginResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ResultParam login(@Context HttpServletRequest request,
-			InputParam input) {
+	public ResultParam login(@Context HttpServletRequest request, InputParam input) {
 		ResultParam result = new ResultParam();
 		UsersRecord user = UserDao.INSTANCE.getUserByEmail(input.getEmail());
 		if (user != null) {

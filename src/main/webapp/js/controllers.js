@@ -58,13 +58,13 @@ controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', f
 		$scope.alerts.splice(index, 1);
 	};
 	
-	$scope.submitRegister = function() {
-		console.log($scope.newUser);
-		UserDao.create({email:$scope.newUser.email},{password:$scope.newUser.password, displayname:$scope.newUser.nickname}, function(data) {
-			if(data.success) {
+	$scope.submitRegister = function() {		
+		var newUser = new UserDao({email:$scope.newUser.email, password:$scope.newUser.password, displayname:$scope.newUser.nickname});
+		newUser.$save(function(result) {
+			if(result.success) {
 				$modalInstance.close(true);				
 			} else {
-				$scope.alerts.push({type:'danger',msg:data.errorMsg});
+				$scope.alerts.push({type:'danger',msg:result.errorMsg});
 			}
 		});		
 	}
@@ -225,4 +225,28 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 		});
 	});
 
+}]).
+controller('LunchyControllerSettings', [ '$scope', 'UserDao', function($scope, UserDao) {
+	$scope.data = UserDao.current();
+	$scope.alerts = [];
+	
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
+	
+	$scope.saveEdit = function() {
+		UserDao.save($scope.data, function(result) {
+			if(!result.success) {
+				$scope.alerts = [];
+				$scope.alerts.push({type:'danger', msg: 'Error while saving user: ' + result.errorMsg});
+			} else {
+				$scope.alerts = [ {type:'success', msg: 'Settings saved.'} ];
+				$scope.data.currentpassword = '';
+				$scope.data.password = '';
+				$scope.data.newpasswordverification = '';
+			}
+		}, function(result) {
+			$scope.alerts.push({type:'danger', msg: 'Error while saving user: ' + result.statusText});
+		});		
+	}
 }]);

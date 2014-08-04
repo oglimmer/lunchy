@@ -14,7 +14,7 @@ directive('unique', ['UserDao', function (UserDao){
           
           function checkAgainstServer(value) {
         	  if(typeof(value)!='undefined' && value != ""){
-	        	  UserDao.lookup({email:value}, function(result) {
+	        	  UserDao.lookup({id:value}, function(result) {	        		  
 	        		  ngModel.$setValidity('unique', !result.success);
 	        	  });
         	  }

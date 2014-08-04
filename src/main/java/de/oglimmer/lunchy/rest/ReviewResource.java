@@ -33,14 +33,14 @@ public class ReviewResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Review post(@Context HttpServletRequest request, Review reviewDto) {
-
-		if (reviewDto.getId() == null || reviewDto.getId() == 0) {
-			reviewDto.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
-			reviewDto.setCreatedon(new Timestamp(new Date().getTime()));
-		}
-		reviewDto.setLastupdate(new Timestamp(new Date().getTime()));
-
 		ReviewsRecord reviewRec = createRecordInstance(reviewDto);
+
+		if (reviewRec.getId() == null || reviewRec.getId() == 0) {
+			reviewRec.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
+			reviewRec.setCreatedon(new Timestamp(new Date().getTime()));
+		}
+		reviewRec.setLastupdate(new Timestamp(new Date().getTime()));
+
 		ReviewDao.INSTANCE.store(reviewRec);
 		Review backLocationDto = Review.getInstance(reviewRec);
 		return backLocationDto;

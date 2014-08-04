@@ -35,6 +35,16 @@ config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRou
 			      return Authetication.checkLoggedIn();
 			  }]
 	      }
+	    }).
+	    state('settings', {
+	      url: '/settings',
+	      templateUrl: 'partials/settings.html',
+	      controller : 'LunchyControllerSettings',
+	      resolve: {
+	    	  auth: ["Authetication", function(Authetication) {			    	
+			      return Authetication.checkLoggedIn();
+			  }]
+	      }
 	    });
     $urlRouterProvider.otherwise('/updates');
     
@@ -68,12 +78,13 @@ factory('LoginDao', ['$resource', '$http', function($resource, $http) {
 	return LoginDao;
 }]).
 factory('UserDao', ['$resource', function($resource) {
-	return $resource('/lunchy/rest/users/:email', null, {
-		'create': {
-			method: 'POST'
-		},
+	return $resource('/lunchy/rest/users/:id', {id: '@id'}, {
 		'lookup': {
-			method: 'GET'
+			method: 'OPTIONS'
+		},
+		'current': {
+			method: 'GET',
+			url: '/lunchy/rest/users/current'
 		}
 	});
 }]).
@@ -117,7 +128,7 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', function($modal, $q, Login
 			});
 			modalInstance.result.then(function (result) {
 				if(result) {
-					thiz.Authetication.loggedIn = true;
+					thiz.loggedIn = true
 				}
 			}, function () {
 				console.log('Modal dismissed at: ' + new Date());
