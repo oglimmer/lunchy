@@ -97,6 +97,10 @@ factory('LocationsDao', ['$resource', function($resource) {
 			method: 'GET',
 			url: 'rest/locations/:id/reviews',
 			isArray: true
+		},
+		'userHasReview': {
+			method: 'GET',
+			url: 'rest/locations/:id/userHasReview'
 		}
 	});
 }]).

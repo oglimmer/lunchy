@@ -50,6 +50,19 @@ public class LocationResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/userHasReview")
+	public ResultParam checkUserHasReview(@Context HttpServletRequest request, @PathParam("id") int id) {
+		Integer reviewId = ReviewDao.INSTANCE.hasUserReview(id, (Integer) request.getSession(false).getAttribute("userId"));
+		ResultParam result = new ResultParam();
+		if (reviewId != null) {
+			result.setSuccess(true);
+			result.setErrorMsg(reviewId.toString());
+		}
+		return result;
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	public List<Location> query() {
 		List<Location> resultList = new ArrayList<>();
 		for (LocationRecord locationRec : LocationDao.INSTANCE.getList()) {

@@ -96,12 +96,20 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', functi
 	}
 	
 }]).
-controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', function ($scope, $stateParams, LocationsDao, ReviewDao) {
+controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication) {
 	
 	$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );	
 	LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
 		$scope.reviews = reviews;
-	});	
+	});
+	$scope.usersReview = { available: false, id:null };
+	if(Authetication.loggedIn) {
+		LocationsDao.userHasReview({"id": $stateParams.locationId }, function (result) {
+			if(result.success) {
+				$scope.usersReview = { available: true, id:result.errorMsg };
+			}
+		});		 
+	};
 	$scope.editableButton = 1;
 	$scope.addReviewButton = 0;
 	$scope.alerts = [];
@@ -171,6 +179,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 			newReview.$save(function(result) {
 				// nothing to do
 				$scope.reviews.push(result);
+				$scope.usersReview = { available: true, id:result.id };;
 			}, function(result) {
 				$scope.alerts.push({type:'danger', msg: 'Error while saving review: ' + result.statusText});
 			});			

@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Record1;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -68,6 +69,19 @@ public enum ReviewDao {
 
 			ReviewsRecord rec = create.fetchOne(Reviews.REVIEWS, Reviews.REVIEWS.ID.equal(id));
 			rec.delete();
+		}
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public Integer hasUserReview(Integer fklocation, Integer fkUser) {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+
+			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
+			Record1<Integer> result = create.select(Reviews.REVIEWS.ID).from(Reviews.REVIEWS)
+					.where(Reviews.REVIEWS.FKLOCATION.equal(fklocation).and(Reviews.REVIEWS.FKUSER.equal(fkUser))).fetchOne();
+
+			return result != null ? result.value1() : null;
 		}
 	}
 
