@@ -62,7 +62,7 @@ config(['$tooltipProvider', function($tooltipProvider){
     });
 }]).
 factory('LoginDao', ['$resource', '$http', function($resource, $http) {
-	var ENDPOINT = '/lunchy/rest/login';
+	var ENDPOINT = 'rest/login';
 	var LoginDao = $resource(ENDPOINT, null, {
 		'login': {
 			method: 'POST'
@@ -78,30 +78,30 @@ factory('LoginDao', ['$resource', '$http', function($resource, $http) {
 	return LoginDao;
 }]).
 factory('UserDao', ['$resource', function($resource) {
-	return $resource('/lunchy/rest/users/:id', {id: '@id'}, {
+	return $resource('rest/users/:id', {id: '@id'}, {
 		'lookup': {
 			method: 'OPTIONS'
 		},
 		'current': {
 			method: 'GET',
-			url: '/lunchy/rest/users/current'
+			url: 'rest/users/current'
 		}
 	});
 }]).
 factory('UpdatesDao', ['$resource', function($resource) {
-	return $resource('/lunchy/rest/updates');
+	return $resource('rest/updates');
 }]).
 factory('LocationsDao', ['$resource', function($resource) {
-	return $resource('/lunchy/rest/locations/:id', {id: '@id'}, {
+	return $resource('rest/locations/:id', {id: '@id'}, {
 		'queryReviews': {
 			method: 'GET',
-			url: '/lunchy/rest/locations/:id/reviews',
+			url: 'rest/locations/:id/reviews',
 			isArray: true
 		}
 	});
 }]).
 factory('ReviewDao', ['$resource', function($resource) {
-	return $resource('/lunchy/rest/reviews/:id', {id: '@id'});
+	return $resource('rest/reviews/:id', {id: '@id'});
 }]).
 factory('Authetication', ['$modal', '$q', 'LoginDao', function($modal, $q, LoginDao) {
 	return {

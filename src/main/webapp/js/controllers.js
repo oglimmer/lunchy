@@ -42,7 +42,14 @@ controller('LunchyControllerLogin', ['$scope', 'LoginDao', '$timeout', 'Authetic
 				$timeout(function() {$('#LoginError').trigger('hide');}, 3000);				
 			}
 		});		
-	}
+	};
+
+	// Firefox password manager sets user/pass and angularJS is not informed.
+	$scope.init = function() {
+		$timeout(function() {
+			$('input[ng-model]').trigger('input');
+		}, 100);
+	};
 	
 }]).
 controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', function ($scope, $modalInstance, UserDao) {

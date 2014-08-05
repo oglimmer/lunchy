@@ -17,7 +17,7 @@
 				<li ng-show="Authetication.loggedIn"><a href="" ng-click="logout()">Log out</a></li>
 			</ul>
 			<span ng-hide="Authetication.loggedIn">
-				<form class="navbar-form navbar-right" role="form" ng-submit="submitLogin()" ng-controller="LunchyControllerLogin">
+				<form class="navbar-form navbar-right" role="form" ng-submit="submitLogin()" ng-controller="LunchyControllerLogin" ng-init="init()">
 					<div class="form-group">
 						<input type="text" placeholder="Email" class="form-control" ng-model="email">
 					</div>
