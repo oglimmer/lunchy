@@ -102,16 +102,6 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
 		$scope.reviews = reviews;
 	});
-	$scope.usersReview = { available: false, id:null };
-	Authetication.checkLoggedIn().then(function(data) {
-		if(data.loggedIn){
-			LocationsDao.userHasReview({"id": $stateParams.locationId }, function (result) {
-				if(result.success) {
-					$scope.usersReview = { available: true, id:result.errorMsg };
-				}
-			});		 
-		};		
-	});	
 	$scope.editableButton = 1;
 	$scope.addReviewButton = 0;
 	$scope.alerts = [];
@@ -122,6 +112,18 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 			rating:1,
 			ratingExplained:'none'
 	};
+	$scope.usersReview = null;
+	$scope.reviewButton = "Add Review";
+	Authetication.checkLoggedIn().then(function(data) {
+		if(data.loggedIn){
+			LocationsDao.userHasReview({"id": $stateParams.locationId }, function (result) {
+				if(result.success) {
+					$scope.usersReview = result.errorMsg;
+					$scope.reviewButton = "Edit Review";
+				}
+			});		 
+		};		
+	});		
 	
 	function setRatingExplained(val) {
 		switch(val) {
@@ -176,24 +178,34 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	};
 	
 	$scope.addReview = function() {
-		if($scope.addReviewButton == 1) {
+		if($scope.addReviewButton == 0) {
+			angular.forEach($scope.reviews, function(rev, idx) {
+				if(rev.id == $scope.usersReview) {
+					$scope.newReview = angular.copy(rev);
+				}
+			});
+		} else {
 			var newReview = new ReviewDao($scope.newReview);
 			newReview.$save(function(result) {
-				// nothing to do
+				if($scope.usersReview==null) {
+					$scope.reviewButton = "Edit Review";
+				} else {
+					angular.forEach($scope.reviews, function(rev, idx) {
+						if(rev.id == result.id) {
+							$scope.reviews.splice(idx, 1);							
+						}
+					});
+				}
 				$scope.reviews.push(result);
-				$scope.usersReview = { available: true, id:result.id };;
+				$scope.usersReview = result.id;
 			}, function(result) {
-				$scope.alerts.push({type:'danger', msg: 'Error while saving review: ' + result.statusText});
+				if(result.status==409) {
+					$scope.alerts.push({type:'danger', msg: 'Location was already reviewed by this user! Refresh this page!'});
+				} else {
+					$scope.alerts.push({type:'danger', msg: 'Error while saving review: ' + result.statusText});
+				}
 			});			
 
-			/*
-			ReviewDao.save($scope.newReview, function(result) {
-				// nothing to do
-				console.log(result);
-			}, function(result) {
-				$scope.alerts.push({type:'danger', msg: 'Error while saving review: ' + result.statusText});
-			});
-			*/		
 		}
 	}
 	

@@ -13,6 +13,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import de.oglimmer.lunchy.database.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
@@ -32,18 +34,41 @@ public class ReviewResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Review post(@Context HttpServletRequest request, Review reviewDto) {
-		ReviewsRecord reviewRec = createRecordInstance(reviewDto);
+	@Path("{id}")
+	public Review update(@Context HttpServletRequest request, @PathParam("id") int id, Review reviewDto) {
+		ReviewsRecord reviewRec = ReviewDao.INSTANCE.getById(id);
+		BeanMappingProvider.INSTANCE.getMapper().map(reviewDto, reviewRec);
 
-		if (reviewRec.getId() == null || reviewRec.getId() == 0) {
-			reviewRec.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
-			reviewRec.setCreatedon(new Timestamp(new Date().getTime()));
-		}
 		reviewRec.setLastupdate(new Timestamp(new Date().getTime()));
 
 		ReviewDao.INSTANCE.store(reviewRec);
 		Review backLocationDto = Review.getInstance(reviewRec);
 		return backLocationDto;
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response create(@Context HttpServletRequest request, Review reviewDto) {
+		try {
+			ReviewsRecord reviewRec = createRecordInstance(reviewDto);
+
+			if (reviewRec.getId() == null || reviewRec.getId() == 0) {
+				reviewRec.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
+				reviewRec.setCreatedon(new Timestamp(new Date().getTime()));
+			}
+			reviewRec.setLastupdate(new Timestamp(new Date().getTime()));
+
+			ReviewDao.INSTANCE.store(reviewRec);
+			Review backLocationDto = Review.getInstance(reviewRec);
+			return Response.ok(backLocationDto).build();
+		} catch (org.jooq.exception.DataAccessException e) {
+			if (e.getCause() instanceof com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException) {
+				return Response.status(Status.CONFLICT).build();
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	@DELETE

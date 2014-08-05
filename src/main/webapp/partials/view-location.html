@@ -107,7 +107,7 @@
 						<div class="col-lg-10 col-lg-offset-2">
 							<button ng-hide="editableButton && !addReviewButton" class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
 							<button ng-show="Authetication.loggedIn && !addReviewButton" type="button" class="btn btn-primary" ng-model="editableButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="Save;Edit" ng-click="saveEdit()"/>
-							<button ng-show="Authetication.loggedIn && editableButton && !usersReview.available" type="button" class="btn btn-default" ng-model="addReviewButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="Add Review;Save" ng-click="addReview()"/>
+							<button ng-show="Authetication.loggedIn && editableButton" type="button" class="btn btn-default" ng-model="addReviewButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="$reviewButton;Save" ng-click="addReview()"/>
 						</div>
 					</div>
 					
