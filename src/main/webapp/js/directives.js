@@ -69,18 +69,47 @@ directive('lyDisabled', function() {
 		}
     };
 }).
+/*
+ * Static:
+ * Sets the name of the button according to the value of this attribute. Where the attribute needs to have 2 values separated by ;
+ * Example: lyDynamicname="Edit;Add" => If the value of the button is 0 the button has the label "Edit". If value is 1 the button is labeled "Add".
+ * 
+ * Dynamic:
+ * Sets the name of the button according to a scope variable where the name of the variable is defined as a value of this attribute. Where the attribute needs to have 2 values separated by ;
+ * Example: lyDynamicname="$buttonLbl;Add" => If the value of the button is 0 the button has the label $scope.buttonLbl . If value is 1 the button is labeled "Add".
+ * 
+ */
 directive('lyDynamicname', function() {
 	return {
 		require: 'ngModel',
 		link: function(scope, element, attrs, ngModel) {
 			var names = attrs.lyDynamicname.split(";");
+
+			// install a watch on the scope variable referenced by the model
 	        scope.$watch(attrs.ngModel, function(val) {
+	        	var name;
 	            if (val) {
-	                element.html(names[1]);
+	            	name = names[1];
 	            } else {
-	            	element.html(names[0]);
+	            	name = names[0];
 	            }
+	            if(name.indexOf("$") === 0) {
+	            	name = scope[name.substr(1)];
+	            	console.log("up:"+name);
+	            }
+	            element.html(name);
 	        });
+	        
+	        // install a watch on the scope variable referenced by a dynamic var
+	        for(var i = 0 ; i < 2 ; i++) {
+	            if(names[i].indexOf("$") === 0) {
+	            	var scopeVarName = names[i].substr(1);	            	
+	            	scope.$watch(scopeVarName, function(val) {
+	            		console.log("down:"+val);
+	            		element.html(val);
+	            	});
+	            }
+	        }	        
 		}
     };
 });
