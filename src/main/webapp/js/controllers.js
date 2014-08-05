@@ -103,13 +103,15 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 		$scope.reviews = reviews;
 	});
 	$scope.usersReview = { available: false, id:null };
-	if(Authetication.loggedIn) {
-		LocationsDao.userHasReview({"id": $stateParams.locationId }, function (result) {
-			if(result.success) {
-				$scope.usersReview = { available: true, id:result.errorMsg };
-			}
-		});		 
-	};
+	Authetication.checkLoggedIn().then(function(data) {
+		if(data.loggedIn){
+			LocationsDao.userHasReview({"id": $stateParams.locationId }, function (result) {
+				if(result.success) {
+					$scope.usersReview = { available: true, id:result.errorMsg };
+				}
+			});		 
+		};		
+	});	
 	$scope.editableButton = 1;
 	$scope.addReviewButton = 0;
 	$scope.alerts = [];

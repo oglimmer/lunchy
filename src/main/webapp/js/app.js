@@ -112,17 +112,21 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', function($modal, $q, Login
 		loggedIn: false,
 		checkLoggedIn: function() {
 			var thiz = this;
-			return new LoginDao().check()
-				.then(function(successResp) {
-					if(successResp.data.success) {
-						thiz.loggedIn = true 
-						return $q.when(thiz);
-					} else {
+			if(thiz.loggedIn) {
+				return $q.when(thiz);
+			} else {
+				return new LoginDao().check()
+					.then(function(successResp) {
+						if(successResp.data.success) {
+							thiz.loggedIn = true 
+							return $q.when(thiz);
+						} else {
+							return $q.reject({ authenticated: false });
+						}					
+					}, function(errorResp) {
 						return $q.reject({ authenticated: false });
-					}					
-				}, function(errorResp) {
-					return $q.reject({ authenticated: false });
-				});						
+					});		
+			}
 		},
 		showRegister: function() {
 			var thiz = this;
