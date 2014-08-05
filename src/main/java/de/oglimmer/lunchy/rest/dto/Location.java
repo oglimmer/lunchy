@@ -17,6 +17,7 @@ public class Location {
 	private String city;
 	private String zip;
 	private String country;
+	private String url;
 	private String comment;
 	private Integer turnaroundtime;
 	private Timestamp createdon;

@@ -10,43 +10,50 @@
 				<fieldset>
 					<legend>Adding a new location</legend>
 					<div class="form-group">
-						<label for="officialname" class="col-lg-2 control-label">Official name</label>
+						<label for="data.officialname" class="col-lg-2 control-label">Official name</label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="officialname" placeholder="Official name" focus="true">
+							<input type="text" class="form-control" ng-model="data.officialname" placeholder="Official name" focus="true">
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="streetname" class="col-lg-2 control-label">ADTECH name</label>
+						<label for="data.streetname" class="col-lg-2 control-label">ADTECH name</label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="streetname" placeholder="ADTECH name">
+							<input type="text" class="form-control" ng-model="data.streetname" placeholder="ADTECH name">
 							<span class="help-block">Separate multiple names by comma.</span>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="street" class="col-lg-2 control-label">Address</label>
+						<label for="data.address" class="col-lg-2 control-label">Address</label>
 						<div class="col-lg-4">
-							<input type="text" class="form-control" ng-model="address" placeholder="Street">
+							<input type="text" class="form-control" ng-model="data.address" placeholder="Street">
 						</div>
 						<div class="col-lg-3">
-							<input type="text" class="form-control" ng-model="zip" placeholder="ZIP">
+							<input type="text" class="form-control" ng-model="data.zip" placeholder="ZIP">
 						</div>
 						<div class="col-lg-3">
-							<input type="text" class="form-control" ng-model="city" placeholder="City">
+							<input type="text" class="form-control" ng-model="data.city" placeholder="City">
 						</div>
 					</div>
-
+					
 					<div class="form-group">
-						<label for="comment" class="col-lg-2 control-label">Comment</label>
+						<label for="data.url" class="col-lg-2 control-label">Webpage</label>
 						<div class="col-lg-10">
-							<textarea class="form-control" rows="3" ng-model="comment"></textarea>
+							<input type="text" class="form-control" ng-model="data.url" placeholder="http://www.the-restaurant.de"> 
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="data.comment" class="col-lg-2 control-label">Comment</label>
+						<div class="col-lg-10">
+							<textarea class="form-control" rows="3" ng-model="data.comment"></textarea>
 							<span class="help-block">Put any comments here.</span>
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label for="turnaroundtime" class="col-lg-2 control-label">Turn around time</label>
+						<label for="data.turnaroundtime" class="col-lg-2 control-label">Turn around time</label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="turnaroundtime" placeholder="e.g. 45"> 
+							<input type="text" class="form-control" ng-model="data.turnaroundtime" placeholder="e.g. 45"> 
 							<span class="help-block">Time in minutes to go there, order, eat, pay and get back to the office.</span>
 						</div>
 					</div>

@@ -79,14 +79,15 @@ controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', f
 }]).
 controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', function ($scope, $location, LocationsDao) {
 	
+	$scope.data = {};
 	$scope.alerts = [];
 	
 	$scope.closeAlert = function(index) {
 		$scope.alerts.splice(index, 1);
 	};
 	
-	$scope.submitAdd = function() {		
-		var newLoc = new LocationsDao({officialname:$scope.officialname, streetname:$scope.streetname, address:$scope.address, city:$scope.city, zip:$scope.zip, comment:$scope.comment, turnaroundtime:$scope.turnaroundtime});
+	$scope.submitAdd = function() {				
+		var newLoc = new LocationsDao($scope.data);
 		newLoc.$save(function(result) {
 			$location.path("/view/"+result.id);
 		}, function(result) {
@@ -97,7 +98,7 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', functi
 }]).
 controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', function ($scope, $stateParams, LocationsDao, ReviewDao) {
 	
-	$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
+	$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );	
 	LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
 		$scope.reviews = reviews;
 	});	
