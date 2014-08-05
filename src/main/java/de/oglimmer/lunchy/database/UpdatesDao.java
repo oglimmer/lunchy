@@ -29,8 +29,8 @@ public enum UpdatesDao {
 							+ "union "
 							+ "select 'R' as type, officialName, city, displayname as user, if (reviews.createdOn=reviews.lastUpdate , 'N' , 'U') as updatetype, location.id, reviews.lastUpdate from reviews join location on location.id=reviews.fklocation join users on reviews.fkuser=users.id "
 							+ "union "
-							+ "select 'U' as type, '' as officialName, '' as city, displayname as user,'N' as updatetype, id, createdOn from users "
-							+ "order by 3 desc " + "limit " + numberOfItems);
+							+ "select 'U' as type, '' as officialName, '' as city, displayname as user,'N' as updatetype, id, createdOn as lastUpdate from users "
+							+ "order by lastUpdate desc " + "limit " + numberOfItems);
 
 			for (Record rec : result) {
 				list.add(new ResultParam(rec));
