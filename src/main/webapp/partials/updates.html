@@ -11,9 +11,9 @@
 <div class="container">
 	<div ng-repeat="rows in latestUpdates | partition:2" class="row">
 		<div ng-repeat="update in rows" class="col-md-6">
-			<h2>{{update.text}}</h2>			
+			<h3><span class="glyphicon {{update.icon}}"></span> {{update.text}}</h3>		
 			<p>
-				<a ng-show="{{update.ref != ''}}" class="btn btn-default" href="#/{{update.ref}}" role="button">View details &raquo;</a>
+				<a ng-show="{{update.ref != ''}}" class="btn btn-default btn-xs" href="#/{{update.ref}}" role="button">View details &raquo;</a>
 			</p>
 		</div>
 	</div>

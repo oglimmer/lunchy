@@ -5,9 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
 import org.jooq.DSLContext;
@@ -27,28 +25,39 @@ public enum UpdatesDao {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 			Result<Record> result = create
-					.fetch("select concat(if (createdOn=lastUpdate , 'New location ' , 'Updated location '),officialName,' in ', city), concat('view/',id), lastUpdate from location "
+					.fetch("select 'L' as type, officialName, city, '' as user, if (createdOn=lastUpdate , 'N' , 'U') as updatetype, id, lastUpdate from location "
 							+ "union "
-							+ "select concat(if (reviews.createdOn=reviews.lastUpdate , 'New review ' , 'Updated review '),officialName,' in ', city,' from ',displayname), concat('view/',location.id), reviews.lastUpdate from reviews join location on location.id=reviews.fklocation join users on reviews.fkuser=users.id "
+							+ "select 'R' as type, officialName, city, displayname as user, if (reviews.createdOn=reviews.lastUpdate , 'N' , 'U') as updatetype, location.id, reviews.lastUpdate from reviews join location on location.id=reviews.fklocation join users on reviews.fkuser=users.id "
 							+ "union "
-							+ "select concat('New user ',displayname), '', createdOn from users "
+							+ "select 'U' as type, '' as officialName, '' as city, displayname as user,'N' as updatetype, id, createdOn from users "
 							+ "order by 3 desc " + "limit " + numberOfItems);
 
 			for (Record rec : result) {
-				list.add(new ResultParam(rec.getValue(0, String.class), rec.getValue(1, String.class)));
+				list.add(new ResultParam(rec));
 			}
 		}
 		return list;
 	}
 
+
 	@Data
-	@NoArgsConstructor
-	@AllArgsConstructor
 	public static class ResultParam {
 
-		private String text;
-		private String ref;
+		private String updatetype;
+		private String user;
+		private String type;
+		private String officialName;
+		private String city;
+		private Integer id;
 
+		private ResultParam(Record rec) {
+			id = rec.getValue("id", Integer.class);
+			type = rec.getValue("type", String.class);
+			updatetype = rec.getValue("updatetype", String.class);
+			user = rec.getValue("user", String.class);
+			officialName = rec.getValue("officialName", String.class);
+			city = rec.getValue("city", String.class);
+		}
 	}
 
 }
