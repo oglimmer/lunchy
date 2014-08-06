@@ -26,6 +26,11 @@ config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRou
 	      templateUrl: 'partials/browse-locations.html',
 	      controller : 'LunchyControllerBrowseLocations'
 		}).
+		state('passwordReset', {
+	      url: '/passwordReset',
+	      templateUrl: 'partials/passwordReset.html',
+	      controller : 'LunchyControllerPasswordReset'
+		}).
 	    state('add', {
 	      url: '/add',
 	      templateUrl: 'partials/add-location.html',
@@ -85,6 +90,14 @@ factory('UserDao', ['$resource', function($resource) {
 		'current': {
 			method: 'GET',
 			url: 'rest/users/current'
+		},
+		'sendPasswordLink': {
+			method: 'POST',
+			url: 'rest/users/:id/sendPasswordLink'			
+		},
+		'resetPassword': {
+			method: 'POST',
+			url: 'rest/users/:id/resetPassword'			
 		}
 	});
 }]).

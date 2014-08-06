@@ -1,7 +1,9 @@
 package de.oglimmer.lunchy.rest;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -13,29 +15,73 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import lombok.Data;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.mindrot.jbcrypt.BCrypt;
 
 import de.oglimmer.lunchy.database.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.services.Email;
 
 @Path("/users")
 public class UserResource {
 
 	@OPTIONS
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{id}")
-	public Response checkByEmail(@Context HttpServletRequest request, @PathParam("id") String email) {
+	@Path("{email}")
+	public ResultParam checkByEmail(@Context HttpServletRequest request, @PathParam("email") String email) {
 		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email);
 		ResultParam rp = new ResultParam();
 		if (user != null) {
 			rp.setSuccess(true);
 			rp.setErrorMsg(Integer.toString(user.getId()));
 		}
-		return Response.ok(rp).build();
+		return rp;
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{email}/sendPasswordLink")
+	public ResultParam sendPasswordLink(@Context HttpServletRequest request, @PathParam("email") String email) {
+		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email);
+		ResultParam rp = new ResultParam();
+		if (user != null) {
+			user.setPasswordresettoken(RandomStringUtils.randomAlphanumeric(32));
+			user.setPasswordresettimestamp(new Timestamp(new Date().getTime()));
+			UserDao.INSTANCE.store(user);
+			Email.INSTANCE.sendPasswordLink(user);
+			rp.setSuccess(true);
+		}
+		return rp;
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{token}/resetPassword")
+	public ResultParam sendPasswordLink(@Context HttpServletRequest request, @PathParam("token") String token, UserInput input) {
+		UsersRecord user = UserDao.INSTANCE.getUserByToken(token);
+		ResultParam rp = new ResultParam();
+		if (user != null) {
+			Calendar now = GregorianCalendar.getInstance();
+			Calendar cal = GregorianCalendar.getInstance();
+			cal.setTime(new Date(user.getPasswordresettimestamp().getTime()));
+			cal.add(Calendar.HOUR_OF_DAY, 24);
+			if (now.before(cal)) {
+				user.setPasswordresettoken(null);
+				user.setPasswordresettimestamp(null);
+				user.setPassword(BCrypt.hashpw(input.getPassword(), BCrypt.gensalt()));
+				UserDao.INSTANCE.store(user);
+				rp.setSuccess(true);
+				Email.INSTANCE.sendPasswordResetDone(user);
+			} else {
+				rp.setErrorMsg("Token too old");
+			}
+		} else {
+			rp.setErrorMsg("Token not found");
+		}
+		return rp;
 	}
 
 	@GET
@@ -79,6 +125,7 @@ public class UserResource {
 				user.setCreatedon(new Timestamp(new Date().getTime()));
 				user.setLastlogin(new Timestamp(new Date().getTime()));
 				user.setPermissions(0);
+				Email.INSTANCE.sendWelcome(user);
 			} else {
 				user = UserDao.INSTANCE.getById(input.getId());
 				if (!BCrypt.checkpw(input.getCurrentpassword(), user.getPassword())) {

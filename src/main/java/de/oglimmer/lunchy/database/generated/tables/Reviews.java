@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> {
 
-	private static final long serialVersionUID = 374435177;
+	private static final long serialVersionUID = 1749619803;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.reviews</code>
@@ -109,7 +109,7 @@ public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	 */
 	@Override
 	public java.util.List<org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord>> getKeys() {
-		return java.util.Arrays.<org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord>>asList(de.oglimmer.lunchy.database.generated.Keys.KEY_REVIEWS_PRIMARY);
+		return java.util.Arrays.<org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord>>asList(de.oglimmer.lunchy.database.generated.Keys.KEY_REVIEWS_PRIMARY, de.oglimmer.lunchy.database.generated.Keys.KEY_REVIEWS_FKUSER);
 	}
 
 	/**

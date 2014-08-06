@@ -4,8 +4,8 @@
 
 angular.module('LunchyApp.controllers', []).
 controller('LunchyControllerMain', [
-	'$scope', 'LoginDao', 'UserDao', 'UpdatesDao', '$location', 'Authetication', 
-	function($scope, LoginDao, UserDao, UpdatesDao, $location, Authetication) {
+	'$scope', 'LoginDao', 'UserDao', 'UpdatesDao', '$location', 'Authetication', '$modal',
+	function($scope, LoginDao, UserDao, UpdatesDao, $location, Authetication, $modal) {
 	
 	$scope.Authetication = Authetication;
 	$scope.latestUpdates = UpdatesDao.query();
@@ -19,7 +19,14 @@ controller('LunchyControllerMain', [
 	$scope.showRegister = function() {
 		$scope.Authetication.showRegister();
 	}
-	
+
+	$scope.showHelp = function() {
+		$modal.open({
+			templateUrl : 'partials/help.html',
+			controller : 'LunchyControllerHelp'
+		});
+	}
+
 	$scope.getClass = function(path) {
 	    if ($location.path().substr(0, path.length) == path) {
 	      return "active"
@@ -74,6 +81,44 @@ controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', f
 				$scope.alerts.push({type:'danger',msg:result.errorMsg});
 			}
 		});		
+	}
+	
+}]).
+controller('LunchyControllerHelp', ['$scope', '$modalInstance', 'UserDao', function ($scope, $modalInstance, UserDao) {
+	
+	$scope.data = {};
+	$scope.alerts = [];
+	
+	$scope.cancelHelp = function() {
+		$modalInstance.dismiss('cancel');
+	}
+	
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
+	
+	$scope.submitHelp = function() {
+		UserDao.sendPasswordLink({id:$scope.data.email});
+		$modalInstance.dismiss('cancel');
+	}
+	
+}]).
+controller('LunchyControllerPasswordReset', ['$scope', 'UserDao', '$location', function ($scope, UserDao, $location) {
+	$scope.data = {};
+	$scope.alerts = [];
+	
+	$scope.closeAlert = function(index) {
+		$scope.alerts.splice(index, 1);
+	};
+	
+	$scope.savePassword = function() {
+		UserDao.resetPassword({id:($location.search()).token}, {password:$scope.data.password}, function(result) {
+			if(result.success) {
+				$location.path("/");
+			} else {
+				$scope.alerts.push({type:'danger', msg: 'Error while setting password: ' + result.errorMsg});
+			}
+		});
 	}
 	
 }]).

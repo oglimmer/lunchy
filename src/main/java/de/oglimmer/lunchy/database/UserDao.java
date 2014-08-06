@@ -50,4 +50,17 @@ public enum UserDao {
 		}
 	}
 
+	@SneakyThrows(value = SQLException.class)
+	public UsersRecord getUserByToken(String token) {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+
+			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+			UsersRecord rec = create.fetchOne(Users.USERS, Users.USERS.PASSWORDRESETTOKEN.equal(token));
+			if (rec != null) {
+				rec.attach(null);
+			}
+			return rec;
+		}
+	}
+
 }
