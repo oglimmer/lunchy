@@ -302,6 +302,37 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	});
 
 }]).
+controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'ngTableParams',
+                                                function($scope, $location, LocationsDao, $filter, ngTableParams) {
+	
+	$scope.rowclick = function(item) {
+		$location.path('/view/'+item.id);
+	}
+	
+	LocationsDao.query(function (data) {
+		$scope.tableParams = new ngTableParams({
+	        page: 1,
+	        count: 10,
+	        sorting: {
+	        	officialname: 'asc'
+	        }
+	    }, {
+	        total: data.length,
+	        getData: function($defer, params) {
+	        	
+	            var filterData = data; //$filter('filter')(data, params.filter());
+	         
+	            var orderedData = $filter('orderBy')(filterData, params.orderBy());
+
+	            var pagedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+	            params.total(filterData.length);
+	            return $defer.resolve(pagedData);	        	
+	        }
+	    });
+	});
+	
+}]).
 controller('LunchyControllerSettings', [ '$scope', 'UserDao', function($scope, UserDao) {
 	$scope.data = UserDao.current();
 	$scope.alerts = [];

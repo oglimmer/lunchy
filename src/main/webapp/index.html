@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html lang="en" ng-app="LunchyApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html lang="en" ng-app="LunchyApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html lang="en" ng-app="LunchyApp" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html lang="en" ng-app="LunchyApp" class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:ng="http://angularjs.org"> <!--<![endif]-->
+<html lang="en" ng-app="LunchyApp" class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:ng="http://angularjs.org">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,8 +8,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="css/styles.css" />
 	<!-- <link rel="stylesheet" type="text/css" href="webjars/angular-ui/0.4.0/angular-ui.min.css" />  -->	
-	<link href="css/bootstrap.min.css" rel="stylesheet"><!-- modal-dialog -->
+	<link href="webjars/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"><!-- modal-dialog -->
 	<link href="css/bootstrap-theme.min.css" rel="stylesheet"><!-- modal-dialog -->
+	<link href="webjars/ng-table/0.3.3/ng-table.min.css" rel="stylesheet"><!-- modal-dialog -->
 </head>
 <body ng-controller="LunchyControllerMain">
 
@@ -20,7 +18,7 @@
 
 	<div ng-include="'partials/head-menu.html'"></div>
 
-	<!--[if lt IE 7]><p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
+	<!--[if lt IE 9]><p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
 
 	<div ui-view></div>
 
@@ -33,6 +31,7 @@
 	<!-- <script src="webjars/angular-ui/0.4.0/angular-ui.min.js"></script>  --><!-- needed? -->
 	<script src="webjars/angular-ui-bootstrap/0.11.0/ui-bootstrap.min.js"></script><!-- modal-dialog -->
 	<script src="webjars/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script><!-- modal-dialog -->
+	<script src="webjars/ng-table/0.3.3/ng-table.min.js"></script><!-- modal-dialog -->
 	
 	<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
 	<script src="webjars/lodash/2.4.1/lodash.underscore.min.js"></script>

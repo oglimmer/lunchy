@@ -3,7 +3,7 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('LunchyApp', [
-  'ngResource', 'ui.router', 'ui.validate', 'ui.bootstrap', 'google-maps', 
+  'ngResource', 'ui.router', 'ui.validate', 'ui.bootstrap', 'google-maps', 'ngTable',
   'LunchyApp.filters',
   'LunchyApp.services',
   'LunchyApp.directives',
@@ -26,6 +26,11 @@ config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRou
 	      templateUrl: 'partials/browse-locations.html',
 	      controller : 'LunchyControllerBrowseLocations'
 		}).
+		state('list', {
+		      url: '/list',
+		      templateUrl: 'partials/list-locations.html',
+		      controller : 'LunchyControllerListLocations'
+			}).
 		state('passwordReset', {
 	      url: '/passwordReset',
 	      templateUrl: 'partials/passwordReset.html',

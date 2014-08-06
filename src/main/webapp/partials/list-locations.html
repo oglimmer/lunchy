@@ -1,0 +1,27 @@
+<br/><br/><br/>
+
+<div class="container">
+
+	<div class="row">
+		<div class="col-lg-12">
+		
+			<table ng-table="tableParams" class="table table-striped" >
+		        <tr ng-repeat="item in $data" ng-click="rowclick(item)">
+		            <td data-title="'Official Name'" sortable="'officialname'" filter="{ 'officialname': 'text' }">
+		                {{item.officialname}}
+		            </td>
+		            <td data-title="'ADTECH name'" sortable="'streetname'" filter="{ 'streetname': 'text' }">
+		                {{item.streetname}}
+		            </td>
+		            <td data-title="'Turn around time'" sortable="'turnaroundtime'" filter="{ 'turnaroundtime': 'text' }">
+		                {{item.turnaroundtime}}
+		            </td>
+		            <td data-title="'Address'" sortable="'city'" filter="{ 'city': 'text' }">
+		                {{item.address}}, {{item.city}}
+		            </td>
+		        </tr>
+		    </table>
+		
+		</div>
+	</div>
+</div>
