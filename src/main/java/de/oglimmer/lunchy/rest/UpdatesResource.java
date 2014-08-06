@@ -59,7 +59,7 @@ public class UpdatesResource {
 	}
 
 	private String setTextForReview(ResultParam update) {
-		if ("I".equals(update.getUpdatetype())) {
+		if ("N".equals(update.getUpdatetype())) {
 			return "New review for " + update.getOfficialName() + " in " + update.getCity() + " by " + update.getUser();
 		} else {
 			return update.getUser() + " updated the review for " + update.getOfficialName() + " in " + update.getCity();
@@ -67,7 +67,7 @@ public class UpdatesResource {
 	}
 
 	private String setTextForLocation(ResultParam update) {
-		if ("I".equals(update.getUpdatetype())) {
+		if ("N".equals(update.getUpdatetype())) {
 			return "New location " + update.getOfficialName() + " in " + update.getCity();
 		} else {
 			return update.getOfficialName() + " in " + update.getCity() + " was updated";
