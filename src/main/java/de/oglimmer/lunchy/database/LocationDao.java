@@ -2,6 +2,7 @@ package de.oglimmer.lunchy.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,8 @@ import org.jooq.impl.DSL;
 import de.oglimmer.lunchy.database.connection.DBConn;
 import de.oglimmer.lunchy.database.generated.tables.Location;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
+import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.rest.dto.LocationQuery;
 
 public enum LocationDao {
 	INSTANCE;
@@ -32,18 +35,41 @@ public enum LocationDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public List<LocationRecord> getList() {
+	public List<LocationQuery> getList() {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-			Result<Record> result = create.select().from(Location.LOCATION).fetch();
+			Result<Record> result = create
+					.fetch("select location.*, count(*) as numberOfReviews,max(reviews.lastUpdate) as lastRating,avg(reviews.rating) as avgRating from location left JOIN reviews on location.id=reviews.fkLocation group by location.id");
 
-			List<LocationRecord> resultList = new ArrayList<>();
+			List<LocationQuery> resultList = new ArrayList<>();
 			for (Record rawRec : result) {
-				LocationRecord rec = (LocationRecord) rawRec;
-				rec.attach(null);
-				resultList.add(rec);
+				LocationQuery lq = new LocationQuery();
+				lq.setId(rawRec.getValue("id", Integer.class));
+				lq.setOfficialname(rawRec.getValue("officialname", String.class));
+				lq.setStreetname(rawRec.getValue("streetname", String.class));
+				lq.setAddress(rawRec.getValue("address", String.class));
+				lq.setCity(rawRec.getValue("city", String.class));
+				lq.setZip(rawRec.getValue("zip", String.class));
+				lq.setCountry(rawRec.getValue("country", String.class));
+				lq.setUrl(rawRec.getValue("url", String.class));
+				lq.setComment(rawRec.getValue("comment", String.class));
+				lq.setTurnaroundtime(rawRec.getValue("turnAroundTime", Integer.class));
+				lq.setCreatedon(rawRec.getValue("createdOn", Timestamp.class));
+				lq.setLastupdate(rawRec.getValue("lastUpdate", Timestamp.class));
+
+				UsersRecord user = UserDao.INSTANCE.getById(rawRec.getValue("fkUser", Integer.class));
+				lq.setCreationUser(user.getDisplayname());
+
+				lq.setGeoLat(rawRec.getValue("geo_lat", Double.class));
+				lq.setGeoLng(rawRec.getValue("geo_lng", Double.class));
+				Timestamp lastRating = rawRec.getValue("lastRating", Timestamp.class);
+				lq.setLastRating(lastRating);
+				Integer numberOfReviews = lastRating != null ? rawRec.getValue("numberOfReviews", Integer.class) : 0;
+				lq.setNumberOfReviews(numberOfReviews);
+				lq.setAvgRating(rawRec.getValue("avgRating", Float.class));
+				resultList.add(lq);
 			}
 
 			return resultList;

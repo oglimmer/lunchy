@@ -5,7 +5,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 		
-			<table ng-table="tableParams" class="table table-striped" >
+			<table ng-table="tableParams" class="table table-striped" show-filter="true">
 		        <tr ng-repeat="item in $data" ng-click="rowclick(item)">
 		            <td data-title="'Official Name'" sortable="'officialname'" filter="{ 'officialname': 'text' }">
 		                {{item.officialname}}
@@ -15,6 +15,18 @@
 		            </td>
 		            <td data-title="'Turn around time'" sortable="'turnaroundtime'" filter="{ 'turnaroundtime': 'text' }">
 		                {{item.turnaroundtime}}
+		            </td>
+		            <td data-title="'# Reviews'" sortable="'numberOfReviews'" filter="{ 'numberOfReviews': 'text' }">
+		                {{item.numberOfReviews}}
+		            </td>
+		            <td data-title="'Avg Rating'" sortable="'avgRating'" filter="{ 'avgRating': 'text' }">
+		                {{item.avgRating}}
+		            </td>
+		            <td data-title="'Last Rating'" sortable="'lastRating'">
+		                {{item.lastRating|date:'shortDate'}}
+		            </td>
+		            <td data-title="'Last Update'" sortable="'lastupdate'">
+		                {{item.lastupdate|date:'shortDate'}}
 		            </td>
 		            <td data-title="'Address'" sortable="'city'" filter="{ 'city': 'text' }">
 		                {{item.address}}, {{item.city}}

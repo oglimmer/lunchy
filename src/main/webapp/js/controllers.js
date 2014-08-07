@@ -307,8 +307,8 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	
 	$scope.rowclick = function(item) {
 		$location.path('/view/'+item.id);
-	}
-	
+	};
+
 	LocationsDao.query(function (data) {
 		$scope.tableParams = new ngTableParams({
 	        page: 1,
@@ -320,7 +320,38 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	        total: data.length,
 	        getData: function($defer, params) {
 	        	
-	            var filterData = data; //$filter('filter')(data, params.filter());
+	        	function comparator(obj, text) {	        	    
+	        	    if (obj && text && typeof obj === 'object' && typeof text === 'object') {
+	        	        for (var objKey in obj) {
+	        	            if (objKey.charAt(0) !== '$' && hasOwnProperty.call(obj, objKey) && comparator(obj[objKey], text[objKey])) {
+	        	                return true;
+	        	            }
+	        	        }
+	        	        return false;
+	        	    }	        	    
+	        	    if (text.charAt(0) === '@') {	        	        
+	        	        return parseFloat(obj) <= parseFloat(text.substr(1));
+	        	    }
+	        	    if (text.charAt(0) === '#') {	        	        
+	        	    	return parseFloat(obj) >= parseFloat(text.substr(1));
+	        	    }
+	        	    text = ('' + text).toLowerCase();
+	        	    return ('' + obj).toLowerCase().indexOf(text) > -1;
+	        	};
+	        	
+	  	        var filterParams = angular.copy(params.filter());
+	  	        
+	  	        if(typeof(filterParams.turnaroundtime) !== 'undefined' && filterParams.turnaroundtime != "") {
+	  	        	filterParams.turnaroundtime = "@"+filterParams.turnaroundtime;
+	  	        }
+	  	        if(typeof(filterParams.numberOfReviews) !== 'undefined' && filterParams.numberOfReviews != "") {
+	  	        	filterParams.numberOfReviews = "#"+filterParams.numberOfReviews;
+	  	        }
+	  	        if(typeof(filterParams.avgRating) !== 'undefined' && filterParams.avgRating != "") {
+	  	        	filterParams.avgRating = "#"+filterParams.avgRating;
+	  	        }
+
+	  	        var filterData = $filter('filter')(data, filterParams, comparator);
 	         
 	            var orderedData = $filter('orderBy')(filterData, params.orderBy());
 

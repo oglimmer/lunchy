@@ -31,6 +31,7 @@ import de.oglimmer.lunchy.database.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 import de.oglimmer.lunchy.rest.dto.Location;
+import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.rest.dto.Review;
 
 @Slf4j
@@ -63,12 +64,8 @@ public class LocationResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Location> query() {
-		List<Location> resultList = new ArrayList<>();
-		for (LocationRecord locationRec : LocationDao.INSTANCE.getList()) {
-			resultList.add(Location.getInstance(locationRec));
-		}
-		return resultList;
+	public List<LocationQuery> query() {
+		return LocationDao.INSTANCE.getList();
 	}
 
 	@GET
