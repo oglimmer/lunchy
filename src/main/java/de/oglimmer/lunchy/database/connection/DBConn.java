@@ -1,8 +1,10 @@
 package de.oglimmer.lunchy.database.connection;
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Enumeration;
 
 import lombok.SneakyThrows;
 
@@ -13,6 +15,8 @@ import org.apache.commons.dbcp2.PoolableConnectionFactory;
 import org.apache.commons.dbcp2.PoolingDriver;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
+
+import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
 import de.oglimmer.lunchy.services.LunchyProperties;
 
@@ -57,8 +61,23 @@ public enum DBConn {
 
 	@SneakyThrows(value = SQLException.class)
 	public void shutdownDriver() {
+		// close pool
 		PoolingDriver driver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
 		driver.closePool("lunchyDataStore");
+
+		// mysql thread
+		try {
+			AbandonedConnectionCleanupThread.shutdown();
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// dont care
+		}
+
+		// JdbcDriver
+		Enumeration<Driver> drivers = DriverManager.getDrivers();
+		while (drivers.hasMoreElements()) {
+			DriverManager.deregisterDriver(drivers.nextElement());
+		}
 	}
 
 }
