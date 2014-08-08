@@ -1,14 +1,4 @@
 
-#registerForm label {
-	width:200px;
-	display: inline-block;
-	text-align:right;
-}
-
-#registerForm span {
-	padding:20px;
-}
-
 /* added for angular-ui-bootstrap */
 .nav, .pagination, .carousel, .panel-title a { 
 	cursor: pointer; 
