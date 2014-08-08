@@ -125,9 +125,13 @@ factory('LocationsDao', ['$resource', function($resource) {
 factory('ReviewDao', ['$resource', function($resource) {
 	return $resource('rest/reviews/:id', {id: '@id'});
 }]).
-factory('Authetication', ['$modal', '$q', 'LoginDao', function($modal, $q, LoginDao) {
+factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', function($modal, $q, LoginDao, $rootScope) {
 	return {
 		loggedIn: false,
+		logInUser: function() {
+			this.loggedIn = true;
+			$rootScope.$broadcast('userLoggedIn', []);
+		},
 		checkLoggedIn: function() {
 			var thiz = this;
 			if(thiz.loggedIn) {

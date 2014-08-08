@@ -41,7 +41,7 @@ controller('LunchyControllerLogin', ['$scope', 'LoginDao', '$timeout', 'Authetic
 	$scope.submitLogin = function() {				
 		LoginDao.login({email:$scope.email, password:$scope.password}, function(data) {
 			if(data.success) {
-				$scope.Authetication.loggedIn = true;
+				$scope.Authetication.logInUser();
 				$scope.password = "";
 			} else {
 				$scope.errorMsg = data.errorMsg;
@@ -143,6 +143,15 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', functi
 }]).
 controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication) {
 	
+	function checkForUserHasReview() {
+		LocationsDao.userHasReview({"id": $stateParams.locationId }, function (result) {
+			if(result.success) {
+				$scope.usersReview = result.errorMsg;
+				$scope.reviewButton = "Edit Review";
+			}
+		});
+	}
+	
 	$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );	
 	LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
 		$scope.reviews = reviews;
@@ -161,14 +170,12 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	$scope.reviewButton = "Add Review";
 	Authetication.checkLoggedIn().then(function(data) {
 		if(data.loggedIn){
-			LocationsDao.userHasReview({"id": $stateParams.locationId }, function (result) {
-				if(result.success) {
-					$scope.usersReview = result.errorMsg;
-					$scope.reviewButton = "Edit Review";
-				}
-			});		 
+			checkForUserHasReview();	 
 		};		
-	});		
+	});
+	$scope.$on('userLoggedIn', function(event) {
+		checkForUserHasReview();
+	});
 	
 	function setRatingExplained(val) {
 		switch(val) {
@@ -311,10 +318,12 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 		$location.path('/view/'+item.id);
 	};
 	
+	var dataHolder = null;
+	
 	LocationsDao.query(function (data) {
-		
+		dataHolder = data;
 		$scope.tableParams = new ngTableParams(ListConfig, {
-	        total: data.length,
+	        total: dataHolder.length,
 	        getData: function($defer, params) {
 	        	ListConfig.copyParams(params);	        	
 	        	
@@ -340,7 +349,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	  	        	flagIntegerSearch(key, typeof(flags[key])!=='undefined'?flags[key]:'');
 	  	        }	  	       
 	  	        
-	  	        var filterData = $filter('filter')(data, filterParams, Comparator);
+	  	        var filterData = $filter('filter')(dataHolder, filterParams, Comparator);
 	  	        
 	            var orderedData = $filter('orderBy')(filterData, params.orderBy());
 
@@ -350,6 +359,13 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	            return $defer.resolve(pagedData);	        	
 	        }
 	    });
+	});
+	
+	$scope.$on('userLoggedIn', function(event) {
+		LocationsDao.query(function (data) {
+			dataHolder = data;
+			$scope.tableParams.reload();
+		});
 	});
 	
 }]).
