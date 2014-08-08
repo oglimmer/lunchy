@@ -61,13 +61,13 @@ public enum Email {
 		}
 	}
 
-	public void sendWelcome(UsersRecord user) {
+	public void sendWelcome(String emailAddress, String name) {
 		try {
 			org.apache.commons.mail.Email email = setup();
 			email.setSubject("Welcome to Lunchy");
-			email.setMsg("Hello " + user.getDisplayname() + "\r\n\r\nYou have successfully registered at lunchy.\r\n\r\nVisit " + URL
+			email.setMsg("Hello " + name + "\r\n\r\nYou have successfully registered at lunchy.\r\n\r\nVisit " + URL
 					+ " to explore lunch places.\r\n\r\nRegards,\r\nOli");
-			email.addTo(user.getEmail());
+			email.addTo(emailAddress);
 			send(email);
 		} catch (EmailException e) {
 			log.error("Failed to send password email", e);

@@ -125,7 +125,7 @@ public class UserResource {
 				user.setCreatedon(new Timestamp(new Date().getTime()));
 				user.setLastlogin(new Timestamp(new Date().getTime()));
 				user.setPermissions(0);
-				Email.INSTANCE.sendWelcome(user);
+				Email.INSTANCE.sendWelcome(input.getEmail(), input.getDisplayname());
 			} else {
 				user = UserDao.INSTANCE.getById(input.getId());
 				if (!BCrypt.checkpw(input.getCurrentpassword(), user.getPassword())) {
