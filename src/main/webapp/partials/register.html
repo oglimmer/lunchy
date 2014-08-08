@@ -12,29 +12,37 @@
 				<fieldset>
 					<div class="form-group">
 						<label for="newUser.email" class="col-lg-4 control-label">Email</label>
-						<div class="col-lg-8">
+						<div class="col-lg-6">
 							<input class="form-control" type="email" placeholder="email" name="email" ng-model="newUser.email" ng-model-options="{ debounce: 1000 }" required unique="email" focus="true" />
+						</div>
+						<div class="col-lg-2">
 							<span ng-show="!registerForm.email.$error.required && !registerForm.email.$error.email && !registerForm.email.$error.unique">✔</span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="newUser.nickname" class="col-lg-4 control-label">Nickname</label>
-						<div class="col-lg-8">
+						<div class="col-lg-6">
 							<input class="form-control" type="text" placeholder="nickname" name="nickname" ng-model="newUser.nickname" required />
+						</div>
+						<div class="col-lg-2">
 							<span ng-show="!registerForm.nickname.$error.required">✔</span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="newUser.password" class="col-lg-4 control-label">Password</label>
-						<div class="col-lg-8">
+						<div class="col-lg-6">
 							<input class="form-control" type="password" placeholder="password" name="password" ng-model="newUser.password" required />
+						</div>
+						<div class="col-lg-2">
 							<span ng-show="!registerForm.password.$error.required">✔</span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="newUser.confirm_password" class="col-lg-4 control-label">Password verification</label>
-						<div class="col-lg-8">
+						<div class="col-lg-6">
 							<input class="form-control" type="password" placeholder="password" name="confirm_password" ng-model="newUser.confirm_password" ui-validate=" '$value==newUser.password' " ui-validate-watch=" 'newUser.password' " />
+						</div>
+						<div class="col-lg-2">
 							<span ng-show="!registerForm.confirm_password.$error.validator && !registerForm.password.$error.required">✔</span>
 						</div>
 					</div>
