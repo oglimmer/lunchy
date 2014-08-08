@@ -2,7 +2,8 @@
 
 /* Filters */
 
-angular.module('LunchyApp.filters', []).filter('partition', function() {
+angular.module('LunchyApp.filters', []).
+filter('partition', function() {
 	var cache = {};
 	var filter = function(arr, size) {
 		if (!arr) {

@@ -7,6 +7,9 @@
 		
 			<table ng-table="tableParams" class="table table-striped" show-filter="true">
 		        <tr ng-repeat="item in $data" ng-click="rowclick(item)">
+		            <td ng-show="Authetication.loggedIn" data-title="'R'" sortable="'reviewed'">
+		                <span class="glyphicon" ng-class="{'glyphicon-ok':item.reviewed}"></span>
+		            </td>
 		            <td data-title="'Official Name'" sortable="'officialname'" filter="{ 'officialname': 'text' }">
 		                {{item.officialname}}
 		            </td>

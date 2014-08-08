@@ -35,13 +35,18 @@ public enum LocationDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public List<LocationQuery> getList() {
+	public List<LocationQuery> getList(Integer fkUser) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
+			String reviewedSubSql = fkUser == null ? "'0'"
+					: "(select count(*) from reviews where location.id=reviews.fkLocation and fkUser=" + fkUser + ")";
+
 			Result<Record> result = create
-					.fetch("select location.*, count(*) as numberOfReviews,max(reviews.lastUpdate) as lastRating,avg(reviews.rating) as avgRating from location left JOIN reviews on location.id=reviews.fkLocation group by location.id");
+					.fetch("select location.*, count(*) as numberOfReviews, max(reviews.lastUpdate) as lastRating, avg(reviews.rating) as avgRating, "
+							+ reviewedSubSql
+							+ " as reviewed from location left JOIN reviews on location.id=reviews.fkLocation group by location.id");
 
 			List<LocationQuery> resultList = new ArrayList<>();
 			for (Record rawRec : result) {
@@ -68,7 +73,11 @@ public enum LocationDao {
 				lq.setLastRating(lastRating);
 				Integer numberOfReviews = lastRating != null ? rawRec.getValue("numberOfReviews", Integer.class) : 0;
 				lq.setNumberOfReviews(numberOfReviews);
-				lq.setAvgRating(rawRec.getValue("avgRating", Float.class));
+
+				Float avgRating = rawRec.getValue("avgRating", Float.class);
+				lq.setAvgRating(avgRating);
+				lq.setReviewed(rawRec.getValue("reviewed", Integer.class) != 0);
+
 				resultList.add(lq);
 			}
 

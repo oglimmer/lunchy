@@ -162,6 +162,45 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', function($modal, $q, Login
 		}
 	};
 }]).
+factory('ListConfig', function() {
+	return {
+        page: 1,
+        count: 10,
+        sorting: {
+        	lastRating: 'desc'
+        },
+        filter: {        	
+        },
+        copyParams: function(params) {
+        	this.page = params.page();
+        	this.count = params.count();
+        	this.filter = params.filter();
+        	this.sorting = params.sorting();
+        }
+    };
+	
+}).
+factory('Comparator', function() {
+	function comparator(obj, text) {	        	    
+	    if (obj && text && typeof obj === 'object' && typeof text === 'object') {
+	        for (var objKey in obj) {
+	            if (objKey.charAt(0) !== '$' && hasOwnProperty.call(obj, objKey) && comparator(obj[objKey], text[objKey])) {
+	                return true;
+	            }
+	        }
+	        return false;
+	    }	        	    
+	    if (text.charAt(0) === '@') {	        	        
+	        return parseFloat(obj) <= parseFloat(text.substr(1));
+	    }
+	    if (text.charAt(0) === '#') {	        	        
+	    	return parseFloat(obj) >= parseFloat(text.substr(1));
+	    }
+	    text = ('' + text).toLowerCase();
+	    return ('' + obj).toLowerCase().indexOf(text) > -1;
+	};
+	return comparator;
+}).
 run(['$rootScope', '$location', 'Authetication', 'LoginDao', function($rootScope, $location, Authetication) {	
 	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, eventObj) {
 		if (eventObj.authenticated === false) {

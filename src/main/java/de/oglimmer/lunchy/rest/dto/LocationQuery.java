@@ -29,6 +29,7 @@ public class LocationQuery {
 	private Integer numberOfReviews;
 	private Float avgRating;
 	private Timestamp lastRating;
+	private boolean reviewed;
 
 	public static LocationQuery getInstance(LocationRecord locationRec) {
 		LocationQuery locationDto = new LocationQuery();

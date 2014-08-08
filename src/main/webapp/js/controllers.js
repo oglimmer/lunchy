@@ -302,57 +302,46 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	});
 
 }]).
-controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'ngTableParams',
-                                                function($scope, $location, LocationsDao, $filter, ngTableParams) {
+controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'ngTableParams', 'ListConfig', 'Comparator',
+                                                function($scope, $location, LocationsDao, $filter, ngTableParams, ListConfig, Comparator) {
+	
+	$scope.bar = true;
 	
 	$scope.rowclick = function(item) {
 		$location.path('/view/'+item.id);
 	};
-
+	
 	LocationsDao.query(function (data) {
-		$scope.tableParams = new ngTableParams({
-	        page: 1,
-	        count: 10,
-	        sorting: {
-	        	officialname: 'asc'
-	        }
-	    }, {
+		
+		$scope.tableParams = new ngTableParams(ListConfig, {
 	        total: data.length,
 	        getData: function($defer, params) {
-	        	
-	        	function comparator(obj, text) {	        	    
-	        	    if (obj && text && typeof obj === 'object' && typeof text === 'object') {
-	        	        for (var objKey in obj) {
-	        	            if (objKey.charAt(0) !== '$' && hasOwnProperty.call(obj, objKey) && comparator(obj[objKey], text[objKey])) {
-	        	                return true;
-	        	            }
-	        	        }
-	        	        return false;
-	        	    }	        	    
-	        	    if (text.charAt(0) === '@') {	        	        
-	        	        return parseFloat(obj) <= parseFloat(text.substr(1));
-	        	    }
-	        	    if (text.charAt(0) === '#') {	        	        
-	        	    	return parseFloat(obj) >= parseFloat(text.substr(1));
-	        	    }
-	        	    text = ('' + text).toLowerCase();
-	        	    return ('' + obj).toLowerCase().indexOf(text) > -1;
-	        	};
+	        	ListConfig.copyParams(params);	        	
 	        	
 	  	        var filterParams = angular.copy(params.filter());
 	  	        
-	  	        if(typeof(filterParams.turnaroundtime) !== 'undefined' && filterParams.turnaroundtime != "") {
-	  	        	filterParams.turnaroundtime = "@"+filterParams.turnaroundtime;
+	  	        function flagIntegerSearch(attr, flagChar) {
+	  	        	if(typeof(filterParams[attr]) !== 'undefined') {
+		  	        	if(filterParams[attr] != "") {
+		  	        		filterParams[attr] = flagChar+filterParams[attr];
+		  	        	} else {
+		  	        		delete filterParams[attr];
+		  	        	}
+		  	        }
 	  	        }
-	  	        if(typeof(filterParams.numberOfReviews) !== 'undefined' && filterParams.numberOfReviews != "") {
-	  	        	filterParams.numberOfReviews = "#"+filterParams.numberOfReviews;
+	  	        
+	  	        var flags = {
+	  	        	turnaroundtime:'@',
+	  	        	numberOfReviews:'#',
+	  	        	avgRating:'#',
 	  	        }
-	  	        if(typeof(filterParams.avgRating) !== 'undefined' && filterParams.avgRating != "") {
-	  	        	filterParams.avgRating = "#"+filterParams.avgRating;
-	  	        }
-
-	  	        var filterData = $filter('filter')(data, filterParams, comparator);
-	         
+	  	        
+	  	        for(var key in filterParams) {
+	  	        	flagIntegerSearch(key, typeof(flags[key])!=='undefined'?flags[key]:'');
+	  	        }	  	       
+	  	        
+	  	        var filterData = $filter('filter')(data, filterParams, Comparator);
+	  	        
 	            var orderedData = $filter('orderBy')(filterData, params.orderBy());
 
 	            var pagedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());

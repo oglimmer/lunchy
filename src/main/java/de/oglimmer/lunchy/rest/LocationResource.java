@@ -64,8 +64,12 @@ public class LocationResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<LocationQuery> query() {
-		return LocationDao.INSTANCE.getList();
+	public List<LocationQuery> query(@Context HttpServletRequest request) {
+		Integer fkUser = null;
+		if (request.getSession(false) != null) {
+			fkUser = (Integer) request.getSession(false).getAttribute("userId");
+		}
+		return LocationDao.INSTANCE.getList(fkUser);
 	}
 
 	@GET
