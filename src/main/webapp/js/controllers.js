@@ -302,7 +302,10 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 			                	$location.path("/view/"+loc.id);
 			                });
 			            }			            
-			        }
+			        },
+			        markerOptions: {
+				    	title: loc.officialname+" ("+loc.numberOfReviews+"/"+loc.avgRating+"/"+(loc.reviewed?"X":"-")+")"
+				    }
 				});
 			}			
 		});

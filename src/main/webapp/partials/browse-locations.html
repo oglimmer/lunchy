@@ -1,8 +1,8 @@
 <br/><br/><br/>
 
 	<google-map id="browseMap" center="map.center" zoom="map.zoom" draggable="true" events='map.events'> 
-		<marker ng-repeat="marker in markers" idKey='marker.id' coords='marker.coords' events='marker.events'>
-			<marker-label content="marker.title" anchor="0 0" class="marker-labels"/>			
+		<marker ng-repeat="marker in markers" idKey='marker.id' coords='marker.coords' events='marker.events' options="marker.markerOptions">
+			<marker-label content="marker.title" anchor="30 0" class="marker-labels"/>			
 		</marker>
 		
 		<window ng-repeat="marker in markers" coords='marker.coords' show="false">Foobar</window>
