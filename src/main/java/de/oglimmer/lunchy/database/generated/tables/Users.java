@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> {
 
-	private static final long serialVersionUID = -430258519;
+	private static final long serialVersionUID = -2102248145;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.users</code>
@@ -70,6 +70,16 @@ public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.g
 	 * The column <code>oli_lunchy.users.passwordResetTimestamp</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.sql.Timestamp> PASSWORDRESETTIMESTAMP = createField("passwordResetTimestamp", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
+
+	/**
+	 * The column <code>oli_lunchy.users.longTimeToken</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.String> LONGTIMETOKEN = createField("longTimeToken", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.users.longTimeTimestamp</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.sql.Timestamp> LONGTIMETIMESTAMP = createField("longTimeTimestamp", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.users</code> table reference

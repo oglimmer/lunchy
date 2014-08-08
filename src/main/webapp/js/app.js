@@ -82,8 +82,8 @@ factory('LoginDao', ['$resource', '$http', function($resource, $http) {
 		}
 	});	
 	// check needs to return a promise
-	LoginDao.prototype.check = function() {
-		return $http.get(ENDPOINT);
+	LoginDao.prototype.check = function(longTimeToken) {
+		return $http.get(ENDPOINT+"?longTimeToken="+longTimeToken);
 	}
 	return LoginDao;
 }]).
@@ -125,7 +125,7 @@ factory('LocationsDao', ['$resource', function($resource) {
 factory('ReviewDao', ['$resource', function($resource) {
 	return $resource('rest/reviews/:id', {id: '@id'});
 }]).
-factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', function($modal, $q, LoginDao, $rootScope) {
+factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', function($modal, $q, LoginDao, $rootScope, StorageService) {
 	return {
 		loggedIn: false,
 		logInUser: function() {
@@ -137,7 +137,7 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', function($mo
 			if(thiz.loggedIn) {
 				return $q.when(thiz);
 			} else {
-				return new LoginDao().check()
+				return new LoginDao().check(StorageService.get('longTimeToken'))
 					.then(function(successResp) {
 						if(successResp.data.success) {
 							thiz.loggedIn = true 
@@ -204,6 +204,27 @@ factory('Comparator', function() {
 	    return ('' + obj).toLowerCase().indexOf(text) > -1;
 	};
 	return comparator;
+}).
+factory('StorageService', function ($window) {
+	var localStorage = $window['localStorage'];
+    return {
+        
+        get: function (key) {
+           return JSON.parse(localStorage.getItem(key));
+        },
+
+        save: function (key, data) {
+           localStorage.setItem(key, JSON.stringify(data));
+        },
+
+        remove: function (key) {
+            localStorage.removeItem(key);
+        },
+        
+        clearAll : function () {
+            localStorage.clear();
+        }
+    };
 }).
 run(['$rootScope', '$location', 'Authetication', 'LoginDao', function($rootScope, $location, Authetication) {	
 	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, eventObj) {

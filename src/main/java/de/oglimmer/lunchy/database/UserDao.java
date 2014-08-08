@@ -63,4 +63,18 @@ public enum UserDao {
 		}
 	}
 
+	@SneakyThrows(value = SQLException.class)
+	public UsersRecord getByLongTimeToken(String longTimeToken) {
+		System.out.println(longTimeToken);
+		try (Connection conn = DBConn.INSTANCE.get()) {
+
+			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+			UsersRecord rec = create.fetchOne(Users.USERS, Users.USERS.LONGTIMETOKEN.equal(longTimeToken));
+			if (rec != null) {
+				rec.attach(null);
+			}
+			return rec;
+		}
+	}
+
 }

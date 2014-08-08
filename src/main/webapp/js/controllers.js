@@ -36,13 +36,16 @@ controller('LunchyControllerMain', [
 	}
 		
 }]).
-controller('LunchyControllerLogin', ['$scope', 'LoginDao', '$timeout', 'Authetication', function ($scope, LoginDao, $timeout, Authetication) {
+controller('LunchyControllerLogin', ['$scope', 'LoginDao', '$timeout', 'Authetication', 'StorageService', function ($scope, LoginDao, $timeout, Authetication, StorageService) {
 	
-	$scope.submitLogin = function() {				
+	$scope.submitLogin = function() {
 		LoginDao.login({email:$scope.email, password:$scope.password}, function(data) {
 			if(data.success) {
 				$scope.Authetication.logInUser();
 				$scope.password = "";
+				if($scope.email.indexOf('#')===0) {
+					StorageService.save('longTimeToken', data.errorMsg);
+				}
 			} else {
 				$scope.errorMsg = data.errorMsg;
 				$timeout(function() {$('#LoginError').trigger('show');}, 1);

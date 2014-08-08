@@ -48,7 +48,7 @@ public class UserResource {
 		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email);
 		ResultParam rp = new ResultParam();
 		if (user != null) {
-			user.setPasswordresettoken(RandomStringUtils.randomAlphanumeric(32));
+			user.setPasswordresettoken(RandomStringUtils.randomAlphanumeric(128));
 			user.setPasswordresettimestamp(new Timestamp(new Date().getTime()));
 			UserDao.INSTANCE.store(user);
 			Email.INSTANCE.sendPasswordLink(user);
