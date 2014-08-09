@@ -104,7 +104,7 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ResultParam create(@Context HttpServletRequest request, @PathParam("id") Integer id, UserInput input) {
+	public ResultParam update(@Context HttpServletRequest request, @PathParam("id") Integer id, UserInput input) {
 		if (id != input.getId()) {
 			throw new RuntimeException("id not matching");
 		}

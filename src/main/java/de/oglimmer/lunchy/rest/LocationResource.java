@@ -83,7 +83,7 @@ public class LocationResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Location post(@Context HttpServletRequest request, Location locationDto) {
+	public Location create(@Context HttpServletRequest request, Location locationDto) {
 		LocationRecord locationRec = convertDtoToRecord(locationDto);
 		addInitialData(request, locationRec);
 		return updateRec(locationRec);
@@ -93,7 +93,8 @@ public class LocationResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Location postUpdate(@Context HttpServletRequest request, @PathParam("id") int id, Location locationDto) {
+	public Location update(@Context HttpServletRequest request, @PathParam("id") int id, Location locationDto) {
+		SecurityProvider.INSTANCE.checkConfirmedUser(request);
 		if (id != locationDto.getId()) {
 			throw new RuntimeException("wrong id");
 		}
@@ -166,7 +167,8 @@ public class LocationResource {
 
 	@DELETE
 	@Path("{id}")
-	public void delete(@PathParam("id") int id) {
+	public void delete(@Context HttpServletRequest request, @PathParam("id") int id) {
+		SecurityProvider.INSTANCE.checkAdmin(request);
 		LocationDao.INSTANCE.delete(id);
 	}
 

@@ -73,7 +73,8 @@ public class ReviewResource {
 
 	@DELETE
 	@Path("{id}")
-	public void delete(@PathParam("id") int id) {
+	public void delete(@Context HttpServletRequest request, @PathParam("id") int id) {
+		SecurityProvider.INSTANCE.checkAdmin(request);
 		ReviewDao.INSTANCE.delete(id);
 	}
 
