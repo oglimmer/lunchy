@@ -36,6 +36,63 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>jooq-build</id>
+			<activation>
+				<property>
+					<name>generateDBClasses</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jooq</groupId>
+						<artifactId>jooq-codegen-maven</artifactId>
+						<version>3.4.1</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>mysql</groupId>
+								<artifactId>mysql-connector-java</artifactId>
+								<version>5.1.31</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<jdbc>
+								<driver>com.mysql.jdbc.Driver</driver>
+								<url>jdbc:mysql://127.0.0.1</url>
+								<user>root</user>
+								<password></password>
+							</jdbc>
+							<generator>
+								<name>org.jooq.util.DefaultGenerator</name>
+								<database>
+									<name>org.jooq.util.mysql.MySQLDatabase</name>
+									<includes>.*</includes>
+									<excludes></excludes>
+									<inputSchema>oli_lunchy</inputSchema>
+								</database>
+								<target>
+									<packageName>de.oglimmer.lunchy.database.generated</packageName>
+									<!-- <directory>target/generated-sources/jooq</directory> -->
+									<directory>src/main/java</directory>
+								</target>
+							</generator>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
 		<finalName>lunchy##001</finalName>
 		<plugins>
@@ -77,47 +134,6 @@
 							<Lunchy-Version>${project.version}</Lunchy-Version>
 						</manifestEntries>
 					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.jooq</groupId>
-				<artifactId>jooq-codegen-maven</artifactId>
-				<version>3.4.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>mysql</groupId>
-						<artifactId>mysql-connector-java</artifactId>
-						<version>5.1.31</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<jdbc>
-						<driver>com.mysql.jdbc.Driver</driver>
-						<url>jdbc:mysql://127.0.0.1</url>
-						<user>root</user>
-						<password></password>
-					</jdbc>
-					<generator>
-						<name>org.jooq.util.DefaultGenerator</name>
-						<database>
-							<name>org.jooq.util.mysql.MySQLDatabase</name>
-							<includes>.*</includes>
-							<excludes></excludes>
-							<inputSchema>oli_lunchy</inputSchema>
-						</database>
-						<target>
-							<packageName>de.oglimmer.lunchy.database.generated</packageName>
-							<!-- <directory>target/generated-sources/jooq</directory> -->
-							<directory>src/main/java</directory>
-						</target>
-					</generator>
 				</configuration>
 			</plugin>
 			<plugin>
