@@ -7,11 +7,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import lombok.SneakyThrows;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import de.oglimmer.lunchy.database.UpdatesDao;
 import de.oglimmer.lunchy.database.UpdatesDao.ResultParam;
@@ -21,17 +18,16 @@ public class UpdatesResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@SneakyThrows(value = JSONException.class)
 	public String query(@Context HttpServletRequest request) {
-		JSONArray resultArray = new JSONArray();
+		JsonArray resultArray = new JsonArray();
 		for (ResultParam update : UpdatesDao.INSTANCE.get(10)) {
-			resultArray.put(createJson(update));
+			resultArray.add(createJson(update));
 		}
 		return resultArray.toString();
 	}
 
-	private JSONObject createJson(ResultParam update) throws JSONException {
-		JSONObject jsonObj = new JSONObject();
+	private JsonObject createJson(ResultParam update) {
+		JsonObject jsonObj = new JsonObject();
 		String text, icon, ref;
 		switch (update.getType()) {
 		case "L":
@@ -52,9 +48,9 @@ public class UpdatesResource {
 		default:
 			throw new RuntimeException("Illegal type=" + update.getType());
 		}
-		jsonObj.put("text", text);
-		jsonObj.put("ref", ref);
-		jsonObj.put("icon", icon);
+		jsonObj.addProperty("text", text);
+		jsonObj.addProperty("ref", ref);
+		jsonObj.addProperty("icon", icon);
 		return jsonObj;
 	}
 
