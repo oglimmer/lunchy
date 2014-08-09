@@ -16,6 +16,7 @@ import org.apache.commons.dbcp2.PoolingDriver;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
+import com.google.gson.JsonObject;
 import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
 import de.oglimmer.lunchy.services.LunchyProperties;
@@ -51,12 +52,14 @@ public enum DBConn {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public void printDriverStats() {
+	public JsonObject getDriverStats() {
 		PoolingDriver driver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
 		ObjectPool<? extends Connection> connectionPool = driver.getConnectionPool("lunchyDataStore");
 
-		System.out.println("NumActive: " + connectionPool.getNumActive());
-		System.out.println("NumIdle: " + connectionPool.getNumIdle());
+		JsonObject data = new JsonObject();
+		data.addProperty("NumActive", connectionPool.getNumActive());
+		data.addProperty("NumIdle", connectionPool.getNumIdle());
+		return data;
 	}
 
 	@SneakyThrows(value = SQLException.class)
