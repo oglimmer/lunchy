@@ -66,6 +66,10 @@ public enum SecurityProvider {
 		return false;
 	}
 
+	public void updateCache(Integer id) {
+		cb.refresh(id);
+	}
+
 }
 
 @AllArgsConstructor

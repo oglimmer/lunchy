@@ -53,8 +53,11 @@ public class UserResource {
 		if (input.getPermissions() == 0 || input.getPermissions() == 1) {
 			UsersRecord user = UserDao.INSTANCE.getById(id);
 			if (user != null) {
-				user.setPermissions(input.getPermissions());
-				UserDao.INSTANCE.store(user);
+				if (user.getPermissions() != input.getPermissions()) {
+					user.setPermissions(input.getPermissions());
+					UserDao.INSTANCE.store(user);
+					SecurityProvider.INSTANCE.updateCache(user.getId());
+				}
 				rp.setSuccess(true);
 			}
 		}
