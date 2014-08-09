@@ -7,6 +7,14 @@
 		</encoder>
 	</appender>
 
+	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+		<file>/var/log/lunchy/lunchy.log</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</pattern>
+		</encoder>
+	</appender>
+	
 	<logger name="de.oglimmer" level="debug"></logger>
 	 
 	<root level="info">

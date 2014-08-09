@@ -2,10 +2,15 @@ package de.oglimmer.lunchy.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.SneakyThrows;
 
+import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
@@ -18,21 +23,29 @@ public enum UserDao {
 
 	@SneakyThrows(value = SQLException.class)
 	public UsersRecord getById(Integer id) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			UsersRecord rec = create.fetchOne(Users.USERS, Users.USERS.ID.equal(id));
-			rec.attach(null);
-			return rec;
-		}
+		return getBy(Users.USERS.ID.equal(id));
 	}
 
 	@SneakyThrows(value = SQLException.class)
 	public UsersRecord getUserByEmail(String email) {
+		return getBy(Users.USERS.EMAIL.equalIgnoreCase(email));
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public UsersRecord getUserByToken(String token) {
+		return getBy(Users.USERS.PASSWORDRESETTOKEN.equal(token));
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public UsersRecord getByLongTimeToken(String longTimeToken) {
+		return getBy(Users.USERS.LONGTIMETOKEN.equal(longTimeToken));
+	}
+
+	private UsersRecord getBy(Condition cond) throws SQLException {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			UsersRecord rec = create.fetchOne(Users.USERS, Users.USERS.EMAIL.equalIgnoreCase(email));
+			UsersRecord rec = create.fetchOne(Users.USERS, cond);
 			if (rec != null) {
 				rec.attach(null);
 			}
@@ -51,28 +64,21 @@ public enum UserDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public UsersRecord getUserByToken(String token) {
+	public List<UsersRecord> query() {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			UsersRecord rec = create.fetchOne(Users.USERS, Users.USERS.PASSWORDRESETTOKEN.equal(token));
-			if (rec != null) {
-				rec.attach(null);
-			}
-			return rec;
-		}
-	}
 
-	@SneakyThrows(value = SQLException.class)
-	public UsersRecord getByLongTimeToken(String longTimeToken) {		
-		try (Connection conn = DBConn.INSTANCE.get()) {
+			Result<Record> result = create.select().from(Users.USERS).fetch();
 
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			UsersRecord rec = create.fetchOne(Users.USERS, Users.USERS.LONGTIMETOKEN.equal(longTimeToken));
-			if (rec != null) {
+			List<UsersRecord> resultList = new ArrayList<>();
+			for (Record rawRec : result) {
+				UsersRecord rec = (UsersRecord) rawRec;
 				rec.attach(null);
+				resultList.add(rec);
 			}
-			return rec;
+
+			return resultList;
 		}
 	}
 

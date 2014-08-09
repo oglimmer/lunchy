@@ -1,0 +1,38 @@
+<br/><br/><br/>
+
+<div class="container">
+
+	<div class="row">
+		<div class="col-lg-12">
+		
+			<table ng-table="tableParams" class="table table-striped" show-filter="true">
+		        <tr ng-repeat="item in $data" ng-click="rowclick(item)">
+		            <td data-title="'Email'" sortable="'email'" filter="{ 'email': 'text' }">
+		                {{item.email}}
+		            </td>
+		            <td data-title="'Name'" sortable="'displayname'" filter="{ 'displayname': 'text' }">
+		                {{item.displayname}}
+		            </td>
+		            <td data-title="'Created'" sortable="'createdon'">
+		                {{item.createdon|date:'short'}}
+		            </td>
+		            <td data-title="'Last Login'" sortable="'lastlogin'" >
+		                {{item.lastlogin|date:'short'}}
+		            </td>
+		            <td data-title="'Permissions'" sortable="'permissions'" filter="{ 'permissions': 'text' }">
+		                <span ng-hide="lineEdit[item.id]">{{item.permissions}}</span>
+		                <button class="btn btn-default btn-sm" ng-class="{'btn-primary':item.permissions==0}" ng-show="lineEdit[item.id]" ng-click="changePermission(item,0);$event.stopPropagation();">0</button>
+		                <button class="btn btn-default btn-sm" ng-class="{'btn-primary':item.permissions==1}" ng-show="lineEdit[item.id]" ng-click="changePermission(item,1);$event.stopPropagation();">1</button>
+		            </td>
+		            <td data-title="'PassReset'" sortable="'passwordresettimestamp'">
+		                {{item.passwordresettimestamp|date:'short'}}
+		            </td>
+		            <td data-title="'LongTime'" sortable="'longtimetimestamp'">
+		                {{item.longtimetimestamp|date:'short'}}
+		            </td>		           
+		        </tr>
+		    </table>
+		
+		</div>
+	</div>
+</div>

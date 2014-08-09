@@ -1,9 +1,11 @@
 package de.oglimmer.lunchy.rest;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -23,6 +25,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import de.oglimmer.lunchy.database.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.rest.dto.User;
 import de.oglimmer.lunchy.services.Email;
 
 @Path("/users")
@@ -37,6 +40,23 @@ public class UserResource {
 		if (user != null) {
 			rp.setSuccess(true);
 			rp.setErrorMsg(Integer.toString(user.getId()));
+		}
+		return rp;
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/savePermission")
+	public ResultParam savePermission(@Context HttpServletRequest request, @PathParam("id") Integer id, PermissionInput input) {
+		SecurityProvider.INSTANCE.checkAdmin(request);
+		ResultParam rp = new ResultParam();
+		if (input.getPermissions() == 0 || input.getPermissions() == 1) {
+			UsersRecord user = UserDao.INSTANCE.getById(id);
+			if (user != null) {
+				user.setPermissions(input.getPermissions());
+				UserDao.INSTANCE.store(user);
+				rp.setSuccess(true);
+			}
 		}
 		return rp;
 	}
@@ -82,6 +102,17 @@ public class UserResource {
 			rp.setErrorMsg("Token not found");
 		}
 		return rp;
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> query(@Context HttpServletRequest request) {
+		SecurityProvider.INSTANCE.checkAdmin(request);
+		List<User> resultList = new ArrayList<>();
+		for (UsersRecord reviewRec : UserDao.INSTANCE.query()) {
+			resultList.add(User.getInstance(reviewRec));
+		}
+		return resultList;
 	}
 
 	@GET
@@ -152,6 +183,11 @@ public class UserResource {
 			}
 		}
 		return result;
+	}
+
+	@Data
+	public static class PermissionInput {
+		private Integer permissions;
 	}
 
 	@Data

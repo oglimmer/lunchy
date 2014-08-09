@@ -27,14 +27,19 @@ config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRou
 	      controller : 'LunchyControllerBrowseLocations'
 		}).
 		state('list', {
-		      url: '/list',
-		      templateUrl: 'partials/list-locations.html',
-		      controller : 'LunchyControllerListLocations'
-			}).
+	      url: '/list',
+	      templateUrl: 'partials/list-locations.html',
+	      controller : 'LunchyControllerListLocations'
+		}).
 		state('passwordReset', {
 	      url: '/passwordReset',
 	      templateUrl: 'partials/passwordReset.html',
 	      controller : 'LunchyControllerPasswordReset'
+		}).
+		state('user', {
+	      url: '/user',
+	      templateUrl: 'partials/users.html',
+	      controller : 'LunchyControllerUser'
 		}).
 	    state('add', {
 	      url: '/add',
@@ -103,6 +108,10 @@ factory('UserDao', ['$resource', function($resource) {
 		'resetPassword': {
 			method: 'POST',
 			url: 'rest/users/:id/resetPassword'			
+		},
+		'savePermission': {
+			method: 'POST',
+			url: 'rest/users/:id/savePermission'
 		}
 	});
 }]).
