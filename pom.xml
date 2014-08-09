@@ -26,6 +26,7 @@
 		<url>https://github.com/oglimmer/lunchy</url>
 		<connection>scm:git:git://github.com/oglimmer/lunchy.git</connection>
 		<developerConnection>scm:git:git@github.com:oglimmer/lunchy.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
 
 	<properties>
