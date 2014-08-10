@@ -144,7 +144,8 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', functi
 	}
 	
 }]).
-controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication) {
+controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 
+                                    function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication,$timeout) {
 	
 	$scope.allowedToEdit = false;
 	function getlocationStatusForCurrentUser() {
@@ -226,11 +227,18 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	
 	$scope.saveEdit = function() {		
 		if($scope.editableButton == 0) {
-			LocationsDao.save($scope.data, function(result) {
-				// nothing to do
-			}, function(result) {
-				$scope.alerts.push({type:'danger', msg: 'Error while saving location: ' + result.statusText});
-			});		
+			if($scope.editLocation.$invalid) {
+				$scope.alerts.push({type:'danger', msg: 'Missing fields'});
+				$timeout(function() {
+					$scope.editableButton = 0;
+				});
+			} else {
+				LocationsDao.save($scope.data, function(result) {
+					// nothing to do
+				}, function(result) {
+					$scope.alerts.push({type:'danger', msg: 'Error while saving location: ' + result.statusText});
+				});
+			}
 		}
 	};
 	

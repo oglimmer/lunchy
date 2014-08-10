@@ -13,3 +13,9 @@
 .jumbotron {
 	padding:10px !important;
 }
+
+.required:after {
+    content: "*";
+    padding-left:1%;
+    color:red;
+}

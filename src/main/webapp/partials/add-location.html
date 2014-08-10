@@ -6,13 +6,13 @@
 	
 	<div class="row">
 		<div class="col-lg-12">
-			<form class="form-horizontal">
+			<form class="form-horizontal" name="addLocation" novalidate>
 				<fieldset>
 					<legend>Adding a new location</legend>
 					<div class="form-group">
-						<label for="data.officialname" class="col-lg-2 control-label">Official name</label>
+						<label for="data.officialname" class="col-lg-2 control-label required">Official name</label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="data.officialname" placeholder="Official name" focus="true">
+							<input type="text" class="form-control" ng-model="data.officialname" placeholder="Official name" focus="true" required>
 						</div>
 					</div>
 					<div class="form-group">
@@ -23,15 +23,15 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="data.address" class="col-lg-2 control-label">Address</label>
+						<label for="data.address" class="col-lg-2 control-label required">Address</label>
 						<div class="col-lg-4">
-							<input type="text" class="form-control" ng-model="data.address" placeholder="Street">
+							<input type="text" class="form-control" ng-model="data.address" placeholder="Street" required>
 						</div>
 						<div class="col-lg-3">
 							<input type="text" class="form-control" ng-model="data.zip" placeholder="ZIP">
 						</div>
 						<div class="col-lg-3">
-							<input type="text" class="form-control" ng-model="data.city" placeholder="City">
+							<input type="text" class="form-control" ng-model="data.city" placeholder="City" required>
 						</div>
 					</div>
 					
@@ -51,9 +51,9 @@
 					</div>
 
 					<div class="form-group">
-						<label for="data.turnaroundtime" class="col-lg-2 control-label">Turn around time</label>
+						<label for="data.turnaroundtime" class="col-lg-2 control-label required">Turn around time</label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="data.turnaroundtime" placeholder="e.g. 45"> 
+							<input type="text" class="form-control" ng-model="data.turnaroundtime" placeholder="e.g. 45" required> 
 							<span class="help-block">Time in minutes to go there, order, eat, pay and get back to the office.</span>
 						</div>
 					</div>
@@ -61,7 +61,7 @@
 					<div class="form-group">
 						<div class="col-lg-10 col-lg-offset-2">
 							<!--  <button class="btn btn-default">Cancel</button> -->
-							<button type="submit" class="btn btn-primary" ng-click="submitAdd()">Save</button>
+							<button type="submit" class="btn btn-primary" ng-click="submitAdd()" ng-disabled="addLocation.$invalid">Save</button>
 						</div>
 					</div>
 				</fieldset>
