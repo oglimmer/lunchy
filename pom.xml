@@ -134,7 +134,7 @@
 					<archiveClasses>true</archiveClasses>
 					<archive>
 						<manifestEntries>
-							<SVN-Revision-No>${buildNumber}</SVN-Revision-No>
+							<Git-Commit>${buildNumber}</Git-Commit>
 							<Creation-Date>${timestamp}</Creation-Date>
 							<Lunchy-Version>${project.version}</Lunchy-Version>
 						</manifestEntries>
