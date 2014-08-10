@@ -25,6 +25,7 @@ public class Location {
 	private String creationUser;
 	private Double geoLat;
 	private Double geoLng;
+	private String tags;
 
 	public static Location getInstance(LocationRecord locationRec) {
 		Location locationDto = new Location();

@@ -31,8 +31,13 @@
 		            <td data-title="'Last Update'" sortable="'lastupdate'">
 		                {{item.lastupdate|date:'shortDate'}}
 		            </td>
+		            <!-- 
 		            <td data-title="'Address'" sortable="'city'" filter="{ 'city': 'text' }">
 		                {{item.address}}, {{item.city}}
+		            </td>
+		             -->
+		            <td data-title="'Tags'" sortable="'tags'" filter="{ 'tags': 'text' }">
+		                {{item.tags}}
 		            </td>
 		        </tr>
 		    </table>

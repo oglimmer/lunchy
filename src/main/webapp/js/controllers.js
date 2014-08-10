@@ -130,6 +130,8 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', functi
 	$scope.data = {};
 	$scope.alerts = [];
 	
+	$scope.allTags = ["Mex", "Italian", "Burger", "Döner", "Thai", "Chinese", "Indian", "Sandwich", "Wurst", "Fish"];
+	
 	$scope.closeAlert = function(index) {
 		$scope.alerts.splice(index, 1);
 	};
@@ -162,6 +164,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
 		$scope.reviews = reviews;
 	});
+	$scope.allTags = ["Mex", "Italian", "Burger", "Döner", "Thai", "Chinese", "Indian", "Sandwich", "Wurst", "Fish"];	
 	$scope.editableButton = 1;
 	$scope.addReviewButton = 0;
 	$scope.alerts = [];

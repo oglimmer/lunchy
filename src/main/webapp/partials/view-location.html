@@ -9,7 +9,7 @@
 			<div class="col-md-12"><legend>Viewing {{data.officialname}} in {{data.city}}</legend></div>
 		</div>
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-6">
 				<div class="row">
 					<div class="col-md-12"><h3>Official name</h3></div>
 				</div>
@@ -19,7 +19,7 @@
 					</div>
 				</div>
 			</div>			
-			<div class="col-md-4">
+			<div class="col-md-6">
 				<div class="row">
 					<div class="col-md-12"><h3>ADTECH name</h3></div>
 				</div>
@@ -31,7 +31,7 @@
 			</div>			
 		</div>
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-6">
 				<div class="row">
 					<div class="col-md-12"><h3>Address</h3></div>
 				</div>
@@ -42,7 +42,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-6">
 				<div class="row">
 					<div class="col-md-12"><h3>Webpage</h3></div>
 				</div>
@@ -54,7 +54,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-6">
 				<div class="row">
 					<div class="col-md-12"><h3>Comment</h3></div>
 				</div>
@@ -64,7 +64,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="row">
 					<div class="col-md-12"><h3>Turn around time</h3></div>
 				</div>
@@ -74,9 +74,21 @@
 					</div>
 				</div>
 			</div>
+			<div class="col-md-3">
+				<div class="row">
+					<div class="col-md-12"><h3>Tags</h3></div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span ng-repeat="tag in data.tags | bycomma">
+							<span class="label label-default">{{tag}}</span>
+						</span>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-6">
 				<div class="row">
 					<div class="col-md-12"><h3>Created</h3></div>
 				</div>
@@ -86,7 +98,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-6">
 				<div class="row">
 					<div class="col-md-12"><h3>Updated</h3></div>
 				</div>
@@ -151,6 +163,14 @@
 						<div class="col-lg-10">
 							<input type="text" class="form-control" name="turnaroundtime" ng-model="data.turnaroundtime" ly-placeholder="e.g. 45" ly-disabled="editableButton" required> 
 							<span ng-hide="editableButton" class="help-block">Time in minutes to go there, order, eat, pay and get back to the office.</span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="data.tags" class="col-lg-2 control-label">Tags</label>
+						<div class="col-lg-10">
+							<tag-input autocomplete='allTags' taglist='data.tags'></tag-input> 
+							<span class="help-block">Use the up/down cursor keys to scroll all available entries.</span>
 						</div>
 					</div>
 					

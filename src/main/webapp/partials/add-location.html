@@ -59,6 +59,14 @@
 					</div>
 
 					<div class="form-group">
+						<label for="data.tags" class="col-lg-2 control-label">Tags</label>
+						<div class="col-lg-10">
+							<tag-input autocomplete='allTags' taglist='data.tags'></tag-input> 
+							<span class="help-block">Use the up/down cursor keys to scroll all available entries.</span>
+						</div>
+					</div>
+
+					<div class="form-group">
 						<div class="col-lg-10 col-lg-offset-2">
 							<!--  <button class="btn btn-default">Cancel</button> -->
 							<button type="submit" class="btn btn-primary" ng-click="submitAdd()" ng-disabled="addLocation.$invalid">Save</button>
