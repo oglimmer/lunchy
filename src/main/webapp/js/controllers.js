@@ -146,10 +146,12 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', functi
 }]).
 controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication) {
 	
-	function checkForUserHasReview() {
-		LocationsDao.userHasReview({"id": $stateParams.locationId }, function (result) {
-			if(result.success) {
-				$scope.usersReview = result.errorMsg;
+	$scope.allowedToEdit = false;
+	function getlocationStatusForCurrentUser() {
+		LocationsDao.locationStatusForCurrentUser({"id": $stateParams.locationId }, function (result) {
+			$scope.allowedToEdit = result.allowedToEdit;
+			if(result.hasReview) {
+				$scope.usersReview = result.fkReview;
 				$scope.reviewButton = "Edit Review";
 			}
 		});
@@ -173,11 +175,11 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	$scope.reviewButton = "Add Review";
 	Authetication.checkLoggedIn().then(function(data) {
 		if(data.loggedIn){
-			checkForUserHasReview();	 
+			getlocationStatusForCurrentUser();	 
 		};		
 	});
 	$scope.$on('userLoggedIn', function(event) {
-		checkForUserHasReview();
+		getlocationStatusForCurrentUser();
 	});
 	
 	function setRatingExplained(val) {

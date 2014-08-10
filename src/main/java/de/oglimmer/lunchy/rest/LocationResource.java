@@ -17,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.code.geocoder.Geocoder;
@@ -51,14 +52,25 @@ public class LocationResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("{id}/userHasReview")
-	public ResultParam checkUserHasReview(@Context HttpServletRequest request, @PathParam("id") int id) {
-		Integer reviewId = ReviewDao.INSTANCE.hasUserReview(id, (Integer) request.getSession(false).getAttribute("userId"));
-		ResultParam result = new ResultParam();
+	@Path("{id}/locationStatusForCurrentUser")
+	public LocationStatus locationStatusForCurrentUser(@Context HttpServletRequest request, @PathParam("id") int id) {
+		Integer userId = (Integer) request.getSession(false).getAttribute("userId");
+		Integer reviewId = ReviewDao.INSTANCE.hasUserReview(id, userId);
+		LocationStatus result = new LocationStatus();
 		if (reviewId != null) {
-			result.setSuccess(true);
-			result.setErrorMsg(reviewId.toString());
+			result.setHasReview(true);
+			result.setFkReview(reviewId);
 		}
+		LocationRecord locRec = LocationDao.INSTANCE.getById(id);
+		result.setAllowedToEdit(true);
+		if (locRec.getFkuser() != userId) {
+			try {
+				SecurityProvider.INSTANCE.checkConfirmedUser(request);
+			} catch (UserRightException e) {
+				result.setAllowedToEdit(false);
+			}
+		}
+
 		return result;
 	}
 
@@ -94,11 +106,13 @@ public class LocationResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Location update(@Context HttpServletRequest request, @PathParam("id") int id, Location locationDto) {
-		SecurityProvider.INSTANCE.checkConfirmedUser(request);
 		if (id != locationDto.getId()) {
 			throw new RuntimeException("wrong id");
 		}
 		LocationRecord locationRec = convertDtoToRecord(locationDto);
+		if (locationRec.getFkuser() != request.getSession(false).getAttribute("userId")) {
+			SecurityProvider.INSTANCE.checkConfirmedUser(request);
+		}
 		addInitialData(request, locationRec);
 		return updateRec(locationRec);
 	}
@@ -172,4 +186,10 @@ public class LocationResource {
 		LocationDao.INSTANCE.delete(id);
 	}
 
+	@Data
+	public static class LocationStatus {
+		private boolean hasReview;
+		private boolean allowedToEdit;
+		private Integer fkReview;
+	}
 }

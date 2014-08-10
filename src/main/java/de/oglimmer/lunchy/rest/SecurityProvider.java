@@ -57,7 +57,7 @@ public enum SecurityProvider {
 	private boolean checkRightOnUser(Permission permissionToCheck, Integer userId) {
 		try {
 			Permission permission = cb.get(userId);
-			if (permission == permissionToCheck) {
+			if (permission.getVal() >= permissionToCheck.getVal()) {
 				return true;
 			}
 		} catch (ExecutionException e) {
