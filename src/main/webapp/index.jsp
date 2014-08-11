@@ -7,12 +7,12 @@
 	<title>Lunchy</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="webjars/jquery-ui/1.11.0/jquery-ui.min.css?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>" rel="stylesheet" />
+	<link href="webjars/jquery-ui/1.11.0/jquery-ui.min.css" rel="stylesheet" />
 	<link href="css/styles.css?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>" rel="stylesheet" />
-	<!-- <link href="webjars/angular-ui/0.4.0/angular-ui.min.css?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>" rel="stylesheet" />  -->	
-	<link href="webjars/bootstrap/3.2.0/css/bootstrap.min.css?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>" rel="stylesheet"><!-- modal-dialog -->
-	<link href="css/bootstrap-theme.min.css?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>" rel="stylesheet"><!-- modal-dialog -->
-	<link href="webjars/ng-table/0.3.3/ng-table.min.css?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>" rel="stylesheet"><!-- modal-dialog -->
+	<!-- <link href="webjars/angular-ui/0.4.0/angular-ui.min.css" rel="stylesheet" />  -->	
+	<link href="webjars/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"><!-- modal-dialog -->
+	<link href="css/bootstrap-theme.min.css" rel="stylesheet"><!-- modal-dialog -->
+	<link href="webjars/ng-table/0.3.3/ng-table.min.css" rel="stylesheet"><!-- modal-dialog -->
 </head>
 <body ng-controller="LunchyControllerMain">
 
@@ -24,21 +24,21 @@
 
 	<div ui-view></div>
 
-	<script src="webjars/jquery/2.1.1/jquery.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script><!-- popover -->
-	<script src="webjars/jquery-ui/1.11.0/jquery-ui.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script><!-- tag autocomplete -->
-	<script src="webjars/angularjs/1.3.0-beta.15/angular.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script><!-- base -->
-	<script src="webjars/angularjs/1.3.0-beta.15/angular-resource.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script><!-- $resource -->
-	<script src="webjars/angularjs/1.3.0-beta.15/angular-route.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script><!-- $route -->
-	<script src="webjars/angular-ui-utils/0.1.1/ui-utils.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script><!-- validate -->
-	<script src="webjars/angular-ui-router/0.2.10/angular-ui-router.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script><!-- ui-router -->
-	<!-- <script src="webjars/angular-ui/0.4.0/angular-ui.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>  --><!-- needed? -->
-	<script src="webjars/angular-ui-bootstrap/0.11.0/ui-bootstrap.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script><!-- modal-dialog -->
-	<script src="webjars/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script><!-- modal-dialog -->
-	<script src="webjars/ng-table/0.3.3/ng-table.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script><!-- modal-dialog -->
+	<script src="webjars/jquery/2.1.1/jquery.min.js"></script><!-- popover -->
+	<script src="webjars/jquery-ui/1.11.0/jquery-ui.min.js"></script><!-- tag autocomplete -->
+	<script src="webjars/angularjs/1.3.0-beta.15/angular.min.js"></script><!-- base -->
+	<script src="webjars/angularjs/1.3.0-beta.15/angular-resource.min.js"></script><!-- $resource -->
+	<script src="webjars/angularjs/1.3.0-beta.15/angular-route.min.js"></script><!-- $route -->
+	<script src="webjars/angular-ui-utils/0.1.1/ui-utils.min.js"></script><!-- validate -->
+	<script src="webjars/angular-ui-router/0.2.10/angular-ui-router.min.js"></script><!-- ui-router -->
+	<!-- <script src="webjars/angular-ui/0.4.0/angular-ui.min.js"></script>  --><!-- needed? -->
+	<script src="webjars/angular-ui-bootstrap/0.11.0/ui-bootstrap.min.js"></script><!-- modal-dialog -->
+	<script src="webjars/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script><!-- modal-dialog -->
+	<script src="webjars/ng-table/0.3.3/ng-table.min.js"></script><!-- modal-dialog -->
 	
-	<script src='//maps.googleapis.com/maps/api/js?sensor=false&noCache=<%=LunchyVersion.INSTANCE.getCommit()%>'></script>
-	<script src="webjars/lodash/2.4.1/lodash.underscore.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
-	<script src="js/ext/angular-google-maps.1.2.0.min.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
+	<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+	<script src="webjars/lodash/2.4.1/lodash.underscore.min.js"></script>
+	<script src="js/ext/angular-google-maps.1.2.0.min.js"></script>
 	
 	<!-- <script src="js/cookie.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script> --><!-- my own cookie lib -->
 	<script src="js/app.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
@@ -46,6 +46,7 @@
 	<script src="js/controllers.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
 	<script src="js/filters.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
 	<script src="js/directives.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
+	<script src="js/compiled_coffee.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
 </body>
 </html>
 
