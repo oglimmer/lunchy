@@ -31,7 +31,7 @@ public enum LunchyProperties {
 	}
 
 	public String getDbUrl() {
-		return prop.getProperty("db.url", "jdbc:mysql://localhost/oli_lunchy");
+		return prop.getProperty("db.url", "jdbc:mysql://127.0.0.1/oli_lunchy");
 	}
 
 }

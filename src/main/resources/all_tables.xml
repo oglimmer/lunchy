@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+    <changeSet author="oli (generated)" id="1407795125518-1">
+        <createTable tableName="location">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="officialname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="streetname" type="VARCHAR(255)"/>
+            <column defaultValue="" name="address" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="city" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="zip" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="country" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="VARCHAR(255)"/>
+            <column name="comment" type="TEXT"/>
+            <column name="turnAroundTime" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="0000-00-00 00:00:00" name="createdOn" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="0000-00-00 00:00:00" name="lastUpdate" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fkUser" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="geo_lat" type="DOUBLE"/>
+            <column name="geo_lng" type="DOUBLE"/>
+            <column name="tags" type="TEXT"/>            
+        </createTable>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1407795125518-2">
+        <createTable tableName="reviews">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="fkUser" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fkLocation" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment" type="TEXT"/>
+            <column defaultValue="0000-00-00 00:00:00" name="createdOn" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="0000-00-00 00:00:00" name="lastUpdate" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rating" type="INT(10)"/>
+            <column name="favoriteMeal" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1407795125518-3">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="displayname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="0000-00-00 00:00:00" name="createdOn" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="0000-00-00 00:00:00" name="lastLogin" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="permissions" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="passwordResetToken" type="VARCHAR(255)"/>
+            <column name="passwordResetTimestamp" type="TIMESTAMP"/>
+            <column name="longTimeToken" type="VARCHAR(255)"/>
+            <column name="longTimeTimestamp" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1407795125518-4">
+        <addUniqueConstraint columnNames="email" constraintName="email" deferrable="false" disabled="false" initiallyDeferred="false" tableName="users"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1407795125518-5">
+        <addUniqueConstraint columnNames="fkUser, fkLocation" constraintName="fkUser" deferrable="false" disabled="false" initiallyDeferred="false" tableName="reviews"/>
+    </changeSet>
+</databaseChangeLog>
