@@ -235,7 +235,7 @@ factory('StorageService', function ($window) {
         }
     };
 }).
-run(['$rootScope', '$location', 'Authetication', 'LoginDao', function($rootScope, $location, Authetication) {	
+run(['$rootScope', '$location', 'Authetication', 'LoginDao', '$timeout', function($rootScope, $location, Authetication, LoginDao, $timeout) {	
 	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, eventObj) {
 		if (eventObj.authenticated === false) {
 			$location.path("/");
@@ -243,4 +243,14 @@ run(['$rootScope', '$location', 'Authetication', 'LoginDao', function($rootScope
 		}
 	});
 	Authetication.checkLoggedIn();
+
+	
+	function keepAlive() {
+		if(Authetication.loggedIn){
+			new LoginDao().check();
+		}
+		$timeout(keepAlive, 1000*60*5);
+	}
+	keepAlive();
+	
 }]);
