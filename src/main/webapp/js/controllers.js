@@ -258,13 +258,9 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 				if($scope.usersReview==null) {
 					$scope.reviewButton = "Edit Review";
 				} else {
-					angular.forEach($scope.reviews, function(rev, idx) {
-						if(rev.id == result.id) {
-							$scope.reviews.splice(idx, 1);							
-						}
-					});
+					$scope.reviews = _.filter($scope.reviews, function(review) { return review.id !== result.id; });
 				}
-				$scope.reviews.push(result);
+				$scope.reviews.splice(0, 0, result);
 				$scope.usersReview = result.id;
 			}, function(result) {
 				if(result.status==409) {

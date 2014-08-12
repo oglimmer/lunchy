@@ -38,7 +38,8 @@ public enum ReviewDao {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-			Result<Record> result = create.select().from(Reviews.REVIEWS).where(Reviews.REVIEWS.FKLOCATION.equal(fklocation)).fetch();
+			Result<Record> result = create.select().from(Reviews.REVIEWS).where(Reviews.REVIEWS.FKLOCATION.equal(fklocation))
+					.orderBy(Reviews.REVIEWS.LASTUPDATE.desc()).fetch();
 
 			List<ReviewsRecord> resultList = new ArrayList<>();
 			for (Record rawRec : result) {
