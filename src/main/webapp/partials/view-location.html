@@ -4,119 +4,138 @@
 
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
-	<div ng-show="editableButton">
-		<div class="row">
-			<div class="col-md-12"><legend>Viewing {{data.officialname}} in {{data.city}}</legend></div>
-		</div>
-		<div class="row">
-			<div class="col-md-6">
+	<tabset justified="true" ng-show="editableButton">
+    	<tab heading="Base data">
+			<div>
 				<div class="row">
-					<div class="col-md-12"><h3>Official name</h3></div>
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-12"><h3>Official name</h3></div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								{{ data.officialname }}
+							</div>
+						</div>
+					</div>			
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-12"><h3>ADTECH name</h3></div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								{{ data.streetname }}
+							</div>
+						</div>
+					</div>			
 				</div>
 				<div class="row">
-					<div class="col-md-12">
-						{{ data.officialname }}
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-12"><h3>Address</h3></div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								{{ data.address }}<br/>
+								{{ data.zip }} {{ data.city }}
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-12"><h3>Webpage</h3></div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<a href="{{ data.url }}">{{ data.url }}</a>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>			
-			<div class="col-md-6">
 				<div class="row">
-					<div class="col-md-12"><h3>ADTECH name</h3></div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						{{ data.streetname }}
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-12"><h3>Comment</h3></div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<span ng-repeat="line in data.comment | newlines track by $index">{{line}}<br/></span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="row">
+							<div class="col-md-12"><h3>Turn around time</h3></div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								{{ data.turnaroundtime }}
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="row">
+							<div class="col-md-12"><h3>Tags</h3></div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<span ng-repeat="tag in data.tags | bycomma track by $index">
+									<span class="label label-default">{{tag}}</span>
+								</span>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>			
-		</div>
-		<div class="row">
-			<div class="col-md-6">
 				<div class="row">
-					<div class="col-md-12"><h3>Address</h3></div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						{{ data.address }}<br/>
-						{{ data.zip }} {{ data.city }}
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-12"><h3>Created</h3></div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								{{data.createdon | date :'short'}} by {{data.creationUser}} 
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-12"><h3>Updated</h3></div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								{{data.lastupdate | date :'short'}} 
+							</div>
+						</div>
 					</div>
 				</div>
+				<br/><br/>
 			</div>
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-12"><h3>Webpage</h3></div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<a href="{{ data.url }}">{{ data.url }}</a>
-					</div>
-				</div>
+		</tab>
+    	<tab heading="Map" ng-click="mapSelected()">
+		  	<div ng-if="mapTabShown">
+				<google-map id="locationMap" center="map.center" zoom="map.zoom" draggable="false" events='map.events'> 
+					<marker idKey='marker.id' coords='marker.coords' options="marker.markerOptions" />
+				</google-map>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-12"><h3>Comment</h3></div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<span ng-repeat="line in data.comment | newlines track by $index">{{line}}<br/></span>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="row">
-					<div class="col-md-12"><h3>Turn around time</h3></div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						{{ data.turnaroundtime }}
-					</div>
-				</div>
-			</div>
-			<div class="col-md-3">
-				<div class="row">
-					<div class="col-md-12"><h3>Tags</h3></div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<span ng-repeat="tag in data.tags | bycomma track by $index">
-							<span class="label label-default">{{tag}}</span>
-						</span>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-12"><h3>Created</h3></div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						{{data.createdon | date :'short'}} by {{data.creationUser}} 
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="row">
-					<div class="col-md-12"><h3>Updated</h3></div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">
-						{{data.lastupdate | date :'short'}} 
-					</div>
-				</div>
-			</div>
-		</div>
-		<br/><br/>
-	</div>
+		</tab>
+    	<tab heading="Pictures">
+			<carousel>
+				<slide ng-repeat="pic in picures" active="pic.active">
+					<img ng-src="./rest/pictures/{{pic.filename}}" style="margin:auto;">
+						<div class="carousel-caption">
+							<p>{{pic.caption}}</p>
+						</div>
+				</slide>
+			</carousel>
+    	</tab>
+  	</tabset>
+  	
 	
 	<div class="row" ng-hide="editableButton">
 		<div class="col-lg-12">
 			<form class="form-horizontal" novalidate name="editLocation">
 				<fieldset>
-					<legend>Viewing {{data.officialname}} in {{data.city}}</legend>
+					<legend>Edit {{data.officialname}} in {{data.city}}</legend>
 					<div class="form-group" ng-class="{'has-error': editLocation.officialname.$invalid}">
 						<label for="data.officialname" class="col-lg-2 control-label required">Official name</label>
 						<div class="col-lg-10">
@@ -184,7 +203,7 @@
 		</div>
 	</div>
 										
-	<div class="row">
+	<div class="row" ng-hide="addPictureButton">
 		<div class="col-lg-12">
 			<form class="form-horizontal">
 				<fieldset>
@@ -226,17 +245,53 @@
 						</div>
 					</div>
 					
-					<div class="form-group">
-						<div class="col-lg-10 col-lg-offset-2">
-							<button ng-hide="editableButton && !addReviewButton" class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
-							<button ng-show="allowedToEdit && !addReviewButton" type="button" class="btn btn-primary" ng-model="editableButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="Save;Edit" ng-click="saveEdit()"/>
-							<button ng-show="Authetication.loggedIn && editableButton" type="button" class="btn btn-default" ng-model="addReviewButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="$reviewButton;Save" ng-click="addReview()"/>
-						</div>
-					</div>
-					
-										
 				</fieldset>
 			</form>
+		</div>
+	</div>
+					
+	<div class="row" ng-show="addPictureButton">
+		<div class="col-lg-12" flow-init flow-name="flowHolder.$flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-files-submitted="$flow.upload()">
+			<h3>Add picture</h3>
+			<hr class="soften" />
+			<div flow-transfers>				
+			    <div ng-repeat="file in transfers">
+			    	<div ng-show="file.isUploading()">
+						<div class="progress progress-striped">
+							<div class="progress-bar" ng-style="{'width': (100*( file.sizeUploaded() / file.size )) + '%' }"><span>Upload in progress ... {{ file.sizeUploaded() | number:0 }} bytes / {{ file.size | number}} bytes ({{file.progress()*100| number:0}}%)</span></div>
+						</div>
+					</div>
+					<div ng-hide="file.isUploading()">
+						<alert type="success">Upload completed! <a href="javascript:void(null);" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</a></alert>
+						<form class="form-horizontal">
+							<input class="form-control" type="text" ng-model="flowHolder.picCaption" placeholder="Put any caption here ..." focus="true" />
+						</form>
+					</div>
+			   </div>
+			</div>
+			<div>
+				<div ng-hide="$flow.files.length" class="dropzone" flow-drop flow-drag-enter="class='dropzone-active'" flow-drag-leave="class='dropzone'">
+					Drag'n drop an image (jpeg, png, gif) here to upload it or press the 'select image' button.																				
+					<a href="javascript:void(null);" class="btn btn-primary btn-sm" flow-btn flow-attrs="{accept:'image/*'}">Select image</a>
+				</div>
+
+				<div class="thumbnail" ng-show="$flow.files.length">
+					<img flow-img="$flow.files[0]" />
+				</div>
+			</div>
+		</div>
+	</div>
+					
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="form-group">
+				<div class="col-lg-10 col-lg-offset-2">
+					<button ng-hide="editableButton && !addReviewButton && !addPictureButton" class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
+					<button ng-show="allowedToEdit && !addReviewButton && !addPictureButton" type="button" class="btn btn-primary" ng-model="editableButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="Save;Edit" ng-click="saveEdit()"/>
+					<button ng-show="Authetication.loggedIn && editableButton && !addPictureButton" type="button" class="btn btn-default" ng-model="addReviewButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="$reviewButton;Save" ng-click="addReview()"/>
+					<button ng-show="Authetication.loggedIn && editableButton && !addReviewButton" type="button" class="btn btn-default" ng-model="addPictureButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="Add Picutre;Save" ng-click="addPicture()"/>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -35,6 +35,7 @@
 	<script src="webjars/angular-ui-bootstrap/0.11.0/ui-bootstrap.min.js"></script><!-- modal-dialog and more -->
 	<script src="webjars/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js"></script><!-- modal-dialog and more -->
 	<script src="webjars/ng-table/0.3.3/ng-table.min.js"></script><!-- ng-table -->
+	<script src="webjars/ng-flow/2.4.0/ng-flow-standalone.min.js"></script><!-- file upload -->
 	
 	<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script><!-- google-maps -->
 	<script src="webjars/lodash/2.4.1/lodash.underscore.min.js"></script><!-- google-maps && my own code -->

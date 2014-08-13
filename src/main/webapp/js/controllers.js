@@ -146,8 +146,8 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', functi
 	}
 	
 }]).
-controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 
-                                    function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication,$timeout) {
+controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao',
+                                    function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao) {
 	
 	$scope.allowedToEdit = false;
 	function getlocationStatusForCurrentUser() {
@@ -177,6 +177,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	};
 	$scope.usersReview = null;
 	$scope.reviewButton = "Add Review";
+	$scope.flowHolder = {};
 	Authetication.checkLoggedIn().then(function(data) {
 		if(data.loggedIn){
 			getlocationStatusForCurrentUser();	 
@@ -185,6 +186,31 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	$scope.$on('userLoggedIn', function(event) {
 		getlocationStatusForCurrentUser();
 	});
+	LocationsDao.queryPictures({"id": $stateParams.locationId }, function (picures) {
+		$scope.picures = picures;
+	});
+	
+
+	$scope.mapSelected = function() {
+		$scope.map = {
+				center : {
+					latitude : $scope.data.geoLat, 
+					longitude : $scope.data.geoLng
+				},
+				zoom : 13
+		};
+		$scope.marker = {
+				id:$scope.data.id,
+				coords: {
+					latitude: $scope.data.geoLat, 
+					longitude: $scope.data.geoLng
+				},
+				markerOptions: {
+					title: $scope.data.officialname
+				}
+		}
+		$scope.mapTabShown = true;
+	};
 	
 	function setRatingExplained(val) {
 		switch(val) {
@@ -226,6 +252,10 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 		$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
 		$scope.editableButton = 1;
 		$scope.addReviewButton = 0;
+		$scope.addPictureButton = 0;
+		if($scope.flowHolder.$flow) {
+			$scope.flowHolder.$flow.cancel();
+		}
 	};
 	
 	$scope.saveEdit = function() {		
@@ -270,6 +300,26 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 				}
 			});			
 
+		}
+	}
+	$scope.addPicture = function() {
+		if($scope.addPictureButton==1) {
+			if($scope.flowHolder.$flow.files.length>0) {
+				var f1 = $scope.flowHolder.$flow.files[0];
+				if(f1.isUploading() || f1.size > 1024*1024*15) {
+					$scope.addPictureButton=0;					
+				} else {
+				
+					var newPic = new PicturesDao({fklocation: $stateParams.locationId, caption: $scope.flowHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
+					newPic.$save(function(pic) {
+						$scope.picures.splice(0, 0, pic);
+					});
+					$scope.flowHolder.$flow.cancel();
+					$scope.flowHolder.picCaption = "";
+				}				
+			} else {
+				$scope.addPictureButton=0;
+			}
 		}
 	}
 	

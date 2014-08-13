@@ -28,11 +28,14 @@ import com.google.code.geocoder.model.GeocoderResult;
 import com.google.code.geocoder.model.LatLng;
 
 import de.oglimmer.lunchy.database.LocationDao;
+import de.oglimmer.lunchy.database.PicturesDao;
 import de.oglimmer.lunchy.database.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
+import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 import de.oglimmer.lunchy.rest.dto.Location;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
+import de.oglimmer.lunchy.rest.dto.Picture;
 import de.oglimmer.lunchy.rest.dto.Review;
 
 @Slf4j
@@ -42,10 +45,21 @@ public class LocationResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/reviews")
-	public List<Review> query(@PathParam("id") int id) {
+	public List<Review> queryReviews(@PathParam("id") int id) {
 		List<Review> resultList = new ArrayList<>();
 		for (ReviewsRecord reviewRec : ReviewDao.INSTANCE.getList(id)) {
 			resultList.add(Review.getInstance(reviewRec));
+		}
+		return resultList;
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/pictures")
+	public List<Picture> queryPictures(@PathParam("id") int id) {
+		List<Picture> resultList = new ArrayList<>();
+		for (PicturesRecord reviewRec : PicturesDao.INSTANCE.getList(id)) {
+			resultList.add(Picture.getInstance(reviewRec));
 		}
 		return resultList;
 	}

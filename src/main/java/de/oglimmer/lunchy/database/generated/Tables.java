@@ -19,6 +19,11 @@ public class Tables {
 	public static final de.oglimmer.lunchy.database.generated.tables.Location LOCATION = de.oglimmer.lunchy.database.generated.tables.Location.LOCATION;
 
 	/**
+	 * The table oli_lunchy.pictures
+	 */
+	public static final de.oglimmer.lunchy.database.generated.tables.Pictures PICTURES = de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES;
+
+	/**
 	 * The table oli_lunchy.reviews
 	 */
 	public static final de.oglimmer.lunchy.database.generated.tables.Reviews REVIEWS = de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS;

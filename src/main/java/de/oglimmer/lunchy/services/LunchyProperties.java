@@ -34,4 +34,12 @@ public enum LunchyProperties {
 		return prop.getProperty("db.url", "jdbc:mysql://127.0.0.1/oli_lunchy");
 	}
 
+	public String getTmpPath() {
+		return prop.getProperty("app.tmpdir", System.getProperty("java.io.tmpdir"));
+	}
+
+	public String getPictureDestinationPath() {
+		return prop.getProperty("app.picturedir", System.getProperty("lunchy.picturedir", "FAILED_TO_GET_PICTURE_DIR"));
+	}
+
 }

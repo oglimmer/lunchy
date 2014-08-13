@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> {
 
-	private static final long serialVersionUID = -2140481220;
+	private static final long serialVersionUID = -1807100933;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.location</code>
@@ -104,7 +104,7 @@ public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	/**
 	 * The column <code>oli_lunchy.location.tags</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> TAGS = createField("tags", org.jooq.impl.SQLDataType.CLOB.length(65535).nullable(false), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> TAGS = createField("tags", org.jooq.impl.SQLDataType.CLOB.length(65535), this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.location</code> table reference

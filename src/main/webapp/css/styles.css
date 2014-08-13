@@ -20,6 +20,10 @@
     color:red;
 }
 
+#locationMap .angular-google-map-container { 
+	height: 450px; 
+}
+
 .tag-input-ctn {
   border: 1px solid #ccc;
   padding: 2px 3px;
@@ -63,4 +67,15 @@
 }
 .tag-input-ctn .input-tag .delete-tag:hover {
   background-color: #96b4d2;
+}
+
+.dropzone,.dropzone-active {
+	border:2px solid #aeaeae;
+	height:80px;
+	padding:20px;
+	margin:10px;
+	border-radius: 3px;
+}
+.dropzone-active {
+	border:2px dotted #aeaeae;
 }

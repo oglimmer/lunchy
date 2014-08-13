@@ -3,7 +3,7 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('LunchyApp', [
-  'ngResource', 'ui.router', 'ui.validate', 'ui.bootstrap', 'google-maps', 'ngTable',
+  'ngResource', 'ui.router', 'ui.validate', 'ui.bootstrap', 'google-maps', 'ngTable', 'flow',
   'LunchyApp.filters',
   'LunchyApp.services',
   'LunchyApp.directives',
@@ -76,6 +76,19 @@ config(['$tooltipProvider', function($tooltipProvider){
         'show': 'hide'
     });
 }]).
+config(['flowFactoryProvider', function (flowFactoryProvider) {
+  flowFactoryProvider.defaults = {
+    target: './upload',
+    method:'octet',
+    testChunks:false,
+    chunkSize:1024*1024*15
+  };
+  flowFactoryProvider.on('catchAll', function (event) {
+    console.log('catchAll', arguments);
+  });
+  // Can be used with different implementations of Flow.js
+  // flowFactoryProvider.factory = fustyFlowFactory;
+}]).
 factory('LoginDao', ['$resource', '$http', function($resource, $http) {
 	var ENDPOINT = 'rest/login';
 	var LoginDao = $resource(ENDPOINT, null, {
@@ -118,11 +131,19 @@ factory('UserDao', ['$resource', function($resource) {
 factory('UpdatesDao', ['$resource', function($resource) {
 	return $resource('rest/updates');
 }]).
+factory('PicturesDao', ['$resource', function($resource) {
+	return $resource('rest/pictures/:id', {id: '@id'});
+}]).
 factory('LocationsDao', ['$resource', function($resource) {
 	return $resource('rest/locations/:id', {id: '@id'}, {
 		'queryReviews': {
 			method: 'GET',
 			url: 'rest/locations/:id/reviews',
+			isArray: true
+		},
+		'queryPictures': {
+			method: 'GET',
+			url: 'rest/locations/:id/pictures',
 			isArray: true
 		},
 		'locationStatusForCurrentUser': {
