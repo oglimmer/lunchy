@@ -180,7 +180,7 @@
 					<div class="form-group" ng-class="{'has-error': editLocation.turnaroundtime.$invalid}">
 						<label for="data.turnaroundtime" class="col-lg-2 control-label required">Turn around time</label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control" name="turnaroundtime" ng-model="data.turnaroundtime" ly-placeholder="e.g. 45" ly-disabled="editableButton" required> 
+							<input type="number" class="form-control" name="turnaroundtime" ng-model="data.turnaroundtime" ly-placeholder="e.g. 45" ly-disabled="editableButton" required> 
 							<span ng-hide="editableButton" class="help-block">Time in minutes to go there, order, eat, pay and get back to the office.</span>
 						</div>
 					</div>
