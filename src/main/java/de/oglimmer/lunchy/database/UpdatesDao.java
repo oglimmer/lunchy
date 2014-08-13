@@ -30,6 +30,8 @@ public enum UpdatesDao {
 							+ "select 'R' as type, officialName, city, displayname as user, if (reviews.createdOn=reviews.lastUpdate , 'N' , 'U') as updatetype, location.id, reviews.lastUpdate from reviews join location on location.id=reviews.fklocation join users on reviews.fkuser=users.id "
 							+ "union "
 							+ "select 'U' as type, '' as officialName, '' as city, displayname as user,'N' as updatetype, id, createdOn as lastUpdate from users "
+							+ "union "
+							+ "select 'P' as type, officialName, city, displayname as user, 'N' as updatetype, location.id, pictures.createdOn from pictures join location on location.id=pictures.fklocation join users on pictures.fkuser=users.id "
 							+ "order by lastUpdate desc " + "limit " + numberOfItems);
 
 			for (Record rec : result) {

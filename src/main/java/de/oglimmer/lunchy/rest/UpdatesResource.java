@@ -45,6 +45,11 @@ public class UpdatesResource {
 			icon = "glyphicon-user";
 			ref = "";
 			break;
+		case "P":
+			text = "New picture for " + update.getOfficialName() + " in " + update.getCity() + " by " + update.getUser();
+			icon = "glyphicon-picture";
+			ref = "view/" + update.getId();
+			break;
 		default:
 			throw new RuntimeException("Illegal type=" + update.getType());
 		}
