@@ -76,7 +76,7 @@ public class LoginResource {
 	public ResultParam login(@Context HttpServletRequest request, InputParam input) {
 		ResultParam result = new ResultParam();
 		String email = input.getEmail();
-		if (email.startsWith("#")) {
+		if (email != null && email.startsWith("#")) {
 			email = email.substring(1);
 		}
 		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email);
