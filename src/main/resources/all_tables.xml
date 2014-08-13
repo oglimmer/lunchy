@@ -37,7 +37,27 @@
             </column>
             <column name="geo_lat" type="DOUBLE"/>
             <column name="geo_lng" type="DOUBLE"/>
-            <column name="tags" type="TEXT"/>            
+            <column name="tags" type="TEXT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1407968041666-2">
+        <createTable tableName="pictures">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="fkLocation" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fkUser" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="filename" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="caption" type="VARCHAR(255)"/>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="createdOn" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet author="oli (generated)" id="1407795125518-2">
