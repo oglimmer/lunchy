@@ -1,0 +1,104 @@
+<div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12"><h3>Official name</h3></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					{{ data.officialname }}
+				</div>
+			</div>
+		</div>			
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12"><h3>ADTECH name</h3></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					{{ data.streetname }}
+				</div>
+			</div>
+		</div>			
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12"><h3>Address</h3></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					{{ data.address }}<br/>
+					{{ data.zip }} {{ data.city }}
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12"><h3>Webpage</h3></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<a href="{{ data.url }}">{{ data.url }}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12"><h3>Comment</h3></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<span ng-repeat="line in data.comment | newlines track by $index">{{line}}<br/></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="row">
+				<div class="col-md-12"><h3>Turn around time</h3></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					{{ data.turnaroundtime }}
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="row">
+				<div class="col-md-12"><h3>Tags</h3></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<span ng-repeat="tag in data.tags | bycomma track by $index">
+						<span class="label label-default">{{tag}}</span>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12"><h3>Created</h3></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					{{data.createdon | date :'short'}} by {{data.creationUser}} 
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12"><h3>Updated</h3></div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					{{data.lastupdate | date :'short'}} 
+				</div>
+			</div>
+		</div>
+	</div>
+	<br/><br/>
+</div>

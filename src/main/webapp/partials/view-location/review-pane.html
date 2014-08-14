@@ -1,0 +1,46 @@
+<div class="row" ng-hide="addPictureButton">
+	<div class="col-lg-12">
+		<form class="form-horizontal">
+			<fieldset>
+				<legend ng-show="reviews.length">Reviews</legend>
+				<div class="form-group">
+					<div class="col-lg-12">
+						<div class="list-group">
+						    <div ng-repeat="review in reviews" class="list-group-item">
+						        <h4 class="list-group-item-heading">{{review.creationUser}} wrote on {{review.lastupdate | date:'short'}}</h4>
+						        <p class="list-group-item-text">{{review.comment}}</p>
+						        <p ng-show="review.favoritemeal" class="list-group-item-text">My favorite: {{review.favoritemeal}}</p>
+						        <p class="list-group-item-text">My rating: {{review.rating}} stars</p>
+						    </div>
+						</div>
+					</div>
+				</div>
+									
+				<div ng-show="addReviewButton">
+					<legend>All fields are optional, feel free to just rate it</legend>
+					<div class="form-group">
+						<label for="comment" class="col-lg-2 control-label">Comment</label>
+						<div class="col-lg-10">
+							<textarea class="form-control" rows="3" ng-model="newReview.comment"></textarea>
+							<span class="help-block">Your personal opinion about this location. What do <strong>you</strong> like and what not?</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="streetname" class="col-lg-2 control-label">Your favorite meal</label>
+						<div class="col-lg-10">
+							<input type="text" class="form-control" ng-model="newReview.favoritemeal">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="streetname" class="col-lg-2 control-label">Your location rating</label>
+						<div class="col-lg-10">
+							<rating ng-model="newReview.rating" on-hover="hoveringOver(value)" on-leave="hoveringOut()"></rating>
+							<span class="help-block">{{newReview.ratingExplained}}</span>
+						</div>
+					</div>
+				</div>
+				
+			</fieldset>
+		</form>
+	</div>
+</div>

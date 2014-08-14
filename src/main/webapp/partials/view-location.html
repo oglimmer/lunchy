@@ -6,110 +6,7 @@
 
 	<tabset justified="true" ng-show="editableButton">
     	<tab heading="Base data">
-			<div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="row">
-							<div class="col-md-12"><h3>Official name</h3></div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								{{ data.officialname }}
-							</div>
-						</div>
-					</div>			
-					<div class="col-md-6">
-						<div class="row">
-							<div class="col-md-12"><h3>ADTECH name</h3></div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								{{ data.streetname }}
-							</div>
-						</div>
-					</div>			
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="row">
-							<div class="col-md-12"><h3>Address</h3></div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								{{ data.address }}<br/>
-								{{ data.zip }} {{ data.city }}
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="row">
-							<div class="col-md-12"><h3>Webpage</h3></div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<a href="{{ data.url }}">{{ data.url }}</a>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="row">
-							<div class="col-md-12"><h3>Comment</h3></div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<span ng-repeat="line in data.comment | newlines track by $index">{{line}}<br/></span>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="row">
-							<div class="col-md-12"><h3>Turn around time</h3></div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								{{ data.turnaroundtime }}
-							</div>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="row">
-							<div class="col-md-12"><h3>Tags</h3></div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<span ng-repeat="tag in data.tags | bycomma track by $index">
-									<span class="label label-default">{{tag}}</span>
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-6">
-						<div class="row">
-							<div class="col-md-12"><h3>Created</h3></div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								{{data.createdon | date :'short'}} by {{data.creationUser}} 
-							</div>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="row">
-							<div class="col-md-12"><h3>Updated</h3></div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								{{data.lastupdate | date :'short'}} 
-							</div>
-						</div>
-					</div>
-				</div>
-				<br/><br/>
-			</div>
+			<div ng-include="'partials/view-location/base-data.html'"></div>
 		</tab>
     	<tab heading="Map" ng-click="mapSelected()">
 		  	<div ng-if="mapTabShown">
@@ -121,166 +18,24 @@
     	<tab heading="Pictures">
 			<carousel>
 				<slide ng-repeat="pic in picures" active="pic.active">
-					<img ng-src="./rest/pictures/{{pic.filename}}" style="margin:auto;">
-						<div class="carousel-caption">
-							<p>{{pic.caption}}</p>
-						</div>
+					<img ng-src="./rest/pictures/{{pic.filename}}" style="margin:auto;"/>
+					<div class="carousel-caption">
+						<p>{{pic.caption}}</p>
+					</div>					
 				</slide>
 			</carousel>
     	</tab>
   	</tabset>
   	
-	
-	<div class="row" ng-hide="editableButton">
-		<div class="col-lg-12">
-			<form class="form-horizontal" novalidate name="editLocation">
-				<fieldset>
-					<legend>Edit {{data.officialname}} in {{data.city}}</legend>
-					<div class="form-group" ng-class="{'has-error': editLocation.officialname.$invalid}">
-						<label for="data.officialname" class="col-lg-2 control-label required">Official name</label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control" name="officialname" ng-model="data.officialname" ly-placeholder="Official name" focus="true" ly-disabled="editableButton" required>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="data.streetname" class="col-lg-2 control-label">ADTECH name</label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="data.streetname" ly-placeholder="ADTECH name" ly-disabled="editableButton">
-							<span ng-hide="editableButton" class="help-block">Separate multiple names by comma.</span>
-						</div>
-					</div>
-					<div class="form-group" ng-class="{'has-error': editLocation.address.$invalid || editLocation.city.$invalid}">
-						<label for="data.address" class="col-lg-2 control-label required">Address</label>
-						<div class="col-lg-4">
-							<input type="text" class="form-control" name="address" ng-model="data.address" ly-placeholder="Street" ly-disabled="editableButton" required>
-						</div>
-						<div class="col-lg-3">
-							<input type="text" class="form-control" ng-model="data.zip" ly-placeholder="ZIP" ly-disabled="editableButton">
-						</div>
-						<div class="col-lg-3">
-							<input type="text" class="form-control" name="city" ng-model="data.city" ly-placeholder="City" ly-disabled="editableButton" required>
-						</div>
-					</div>
 
-					<div class="form-group">
-						<label for="data.url" class="col-lg-2 control-label">Webpage</label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="data.url" ly-placeholder="http://www.the-restaurant.de" ly-disabled="editableButton"> 
-						</div>
-					</div>
-					
-					<div class="form-group">
-						<label for="data.comment" class="col-lg-2 control-label">Comment</label>
-						<div class="col-lg-10">
-							<textarea class="form-control" rows="3" ng-model="data.comment" ly-disabled="editableButton"></textarea>
-							<span ng-hide="editableButton" class="help-block">Describe the location without judging it. Your personal opinions should go into a review.</span>
-						</div>
-					</div>
+	<div ng-include="'partials/view-location/edit-location.html'"></div>	
 
-					<div class="form-group" ng-class="{'has-error': editLocation.turnaroundtime.$invalid}">
-						<label for="data.turnaroundtime" class="col-lg-2 control-label required">Turn around time</label>
-						<div class="col-lg-10">
-							<input type="number" class="form-control" name="turnaroundtime" ng-model="data.turnaroundtime" ly-placeholder="e.g. 45" ly-disabled="editableButton" required> 
-							<span ng-hide="editableButton" class="help-block">Time in minutes to go there, order, eat, pay and get back to the office.</span>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label for="data.tags" class="col-lg-2 control-label">Tags</label>
-						<div class="col-lg-10">
-							<tag-input autocomplete='allTags' taglist='data.tags'></tag-input> 
-							<span class="help-block">Use the up/down cursor keys to scroll all available entries.</span>
-						</div>
-					</div>
-					
-					<div class="form-group">
-						<div class="col-lg-10 col-lg-offset-2">
-							Created: {{data.createdon | date :'short'}} by {{data.creationUser}}, last update: {{data.lastupdate | date :'short'}}
-						</div>
-					</div>
-				</fieldset>
-			</form>
-		</div>
-	</div>
 										
-	<div class="row" ng-hide="addPictureButton">
-		<div class="col-lg-12">
-			<form class="form-horizontal">
-				<fieldset>
-					<legend ng-show="reviews.length">Reviews</legend>
-					<div class="form-group">
-						<div class="col-lg-12">
-							<div class="list-group">
-							    <div ng-repeat="review in reviews" class="list-group-item">
-							        <h4 class="list-group-item-heading">{{review.creationUser}} wrote on {{review.lastupdate | date:'short'}}</h4>
-							        <p class="list-group-item-text">{{review.comment}}</p>
-							        <p ng-show="review.favoritemeal" class="list-group-item-text">My favorite: {{review.favoritemeal}}</p>
-							        <p class="list-group-item-text">My rating: {{review.rating}} stars</p>
-							    </div>
-							</div>
-						</div>
-					</div>
-										
-					<div ng-show="addReviewButton">
-						<legend>All fields are optional, feel free to just rate it</legend>
-						<div class="form-group">
-							<label for="comment" class="col-lg-2 control-label">Comment</label>
-							<div class="col-lg-10">
-								<textarea class="form-control" rows="3" ng-model="newReview.comment"></textarea>
-								<span class="help-block">Your personal opinion about this location. What do <strong>you</strong> like and what not?</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="streetname" class="col-lg-2 control-label">Your favorite meal</label>
-							<div class="col-lg-10">
-								<input type="text" class="form-control" ng-model="newReview.favoritemeal">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="streetname" class="col-lg-2 control-label">Your location rating</label>
-							<div class="col-lg-10">
-								<rating ng-model="newReview.rating" on-hover="hoveringOver(value)" on-leave="hoveringOut()"></rating>
-								<span class="help-block">{{newReview.ratingExplained}}</span>
-							</div>
-						</div>
-					</div>
-					
-				</fieldset>
-			</form>
-		</div>
-	</div>
-					
-	<div class="row" ng-show="addPictureButton">
-		<div class="col-lg-12" flow-init flow-name="flowHolder.$flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-files-submitted="$flow.upload()">
-			<h3>Add picture</h3>
-			<hr class="soften" />
-			<div flow-transfers>				
-			    <div ng-repeat="file in transfers">
-			    	<div ng-show="file.isUploading()">
-						<div class="progress progress-striped">
-							<div class="progress-bar" ng-style="{'width': (100*( file.sizeUploaded() / file.size )) + '%' }"><span>Upload in progress ... {{ file.sizeUploaded() | number:0 }} bytes / {{ file.size | number}} bytes ({{file.progress()*100| number:0}}%)</span></div>
-						</div>
-					</div>
-					<div ng-hide="file.isUploading()">
-						<alert type="success">Upload completed! <a href="javascript:void(null);" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</a></alert>
-						<form class="form-horizontal">
-							<input class="form-control" type="text" ng-model="flowHolder.picCaption" placeholder="Put any caption here ..." focus="true" />
-						</form>
-					</div>
-			   </div>
-			</div>
-			<div>
-				<div ng-hide="$flow.files.length" class="dropzone" flow-drop flow-drag-enter="class='dropzone-active'" flow-drag-leave="class='dropzone'">
-					Drag'n drop an image (jpeg, png, gif) here to upload it or press the 'select image' button.																				
-					<a href="javascript:void(null);" class="btn btn-primary btn-sm" flow-btn flow-attrs="{accept:'image/*'}">Select image</a>
-				</div>
+	<div ng-include="'partials/view-location/review-pane.html'"></div>	
 
-				<div class="thumbnail" ng-show="$flow.files.length">
-					<img flow-img="$flow.files[0]" />
-				</div>
-			</div>
-		</div>
-	</div>
+					
+	<div ng-include="'partials/view-location/add-picture.html'"></div>	
+
 					
 	<div class="row">
 		<div class="col-lg-12">
