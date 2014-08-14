@@ -1,5 +1,6 @@
 package de.oglimmer.lunchy.web.servlet;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -24,8 +25,10 @@ public class UploadServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String resumableIdentifier = req.getParameter("flowIdentifier");
-		try (FileOutputStream fos = new FileOutputStream(LunchyProperties.INSTANCE.getTmpPath() + "/" + resumableIdentifier)) {
+		File originalFile = new File(LunchyProperties.INSTANCE.getTmpPath() + "/" + resumableIdentifier);
+		try (FileOutputStream fos = new FileOutputStream(originalFile)) {
 			log.debug("Uploaded file {} with {} bytes", resumableIdentifier, ByteStreams.copy(req.getInputStream(), fos));
 		}
 	}
+
 }

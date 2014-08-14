@@ -1,9 +1,7 @@
 package de.oglimmer.lunchy.rest;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -27,6 +25,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import de.oglimmer.lunchy.database.PicturesDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.rest.dto.Picture;
+import de.oglimmer.lunchy.services.FileServices;
 import de.oglimmer.lunchy.services.LunchyProperties;
 
 @Path("pictures")
@@ -40,7 +39,7 @@ public class PictureResource {
 			throw new RuntimeException("Illegal filename:" + filename);
 		}
 
-		String fileExt = getFileExtension(filename);
+		String fileExt = FileServices.getFileExtension(filename);
 		String mt;
 		switch (fileExt) {
 		case ".jpg":
@@ -81,11 +80,11 @@ public class PictureResource {
 			rec.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
 			rec.setCreatedon(new Timestamp(new Date().getTime()));
 			rec.setFklocation(input.getFklocation());
-			rec.setFilename(RandomStringUtils.randomAlphanumeric(32) + getFileExtension(input.getOriginalFilename()));
+			rec.setFilename(RandomStringUtils.randomAlphanumeric(32) + FileServices.getFileExtension(input.getOriginalFilename()));
 			rec.setCaption(input.getCaption());
 
-			move(input.getUniqueId(), rec.getFilename());
-
+			moveFromTmpToPermanentDir(input, rec);
+			scaleIfTooLarge(rec);
 		} else {
 			rec = PicturesDao.INSTANCE.getById(input.getId());
 			rec.setCaption(input.getCaption());
@@ -97,18 +96,16 @@ public class PictureResource {
 		return retObj;
 	}
 
-	private void move(String uniqueId, String filename) throws IOException {
-		File file = new File(LunchyProperties.INSTANCE.getTmpPath() + "/" + uniqueId);
-		File newFile = new File(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
-
-		Files.move(file.toPath(), newFile.toPath());
+	private void scaleIfTooLarge(PicturesRecord rec) throws IOException {
+		PictureScaler ps = new PictureScaler(rec.getFilename());
+		if (ps.scale()) {
+			ps.moveOriginalFileToBackup();
+			ps.saveToDisk();
+		}
 	}
 
-	private String getFileExtension(String originalFilename) {
-		if (originalFilename.contains(".")) {
-			return originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
-		}
-		return "";
+	private void moveFromTmpToPermanentDir(CreateParam input, PicturesRecord rec) throws IOException {
+		FileServices.move(input.getUniqueId(), rec.getFilename());
 	}
 
 	@Data
