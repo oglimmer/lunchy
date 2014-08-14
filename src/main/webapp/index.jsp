@@ -29,6 +29,7 @@
 	<script src="webjars/angularjs/1.3.0-beta.15/angular.min.js"></script><!-- base -->
 	<script src="webjars/angularjs/1.3.0-beta.15/angular-resource.min.js"></script><!-- $resource -->
 	<script src="webjars/angularjs/1.3.0-beta.15/angular-route.min.js"></script><!-- $route -->
+	<script src="webjars/angularjs/1.3.0-beta.15/angular-touch.min.js"></script><!-- touch support -->
 	<script src="webjars/angular-ui-utils/0.1.1/ui-utils.min.js"></script><!-- validate -->
 	<script src="webjars/angular-ui-router/0.2.10/angular-ui-router.min.js"></script><!-- ui-router -->
 	<!-- <script src="webjars/angular-ui/0.4.0/angular-ui.min.js"></script>  --><!-- needed? -->
