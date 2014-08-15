@@ -4,8 +4,14 @@
 	cursor: pointer; 
 }
 
-@media only screen and (max-width: 1280px), only screen and (max-device-width: 1280px) {
+@media only screen and (max-width: 1440px), only screen and (max-device-width: 1440px) {
 	.githubBadge {
+		display:none;
+	}
+}
+
+@media only screen and (max-width: 768px), only screen and (max-device-width: 768px) {
+	.removeOnExtraSmall {
 		display:none;
 	}
 }

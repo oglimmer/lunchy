@@ -20,7 +20,7 @@
 				<slide ng-repeat="pic in picures" active="pic.active">
 					<img ng-src="./rest/pictures/{{pic.filename}}" style="margin:auto;"/>
 					<div class="carousel-caption">
-						<p>{{pic.caption}} by {{pic.creationUser}}</p>
+						<p class="removeOnExtraSmall">{{pic.caption}} by {{pic.creationUser}}</p>
 					</div>					
 				</slide>
 			</carousel>
