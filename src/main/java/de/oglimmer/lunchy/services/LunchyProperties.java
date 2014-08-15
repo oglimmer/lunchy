@@ -42,4 +42,8 @@ public enum LunchyProperties {
 		return prop.getProperty("app.picturedir", System.getProperty("lunchy.picturedir", "FAILED_TO_GET_PICTURE_DIR"));
 	}
 
+	public String getBackupDestinationPath() {
+		return prop.getProperty("app.backupdir", System.getProperty("lunchy.backupdir", null));
+	}
+
 }

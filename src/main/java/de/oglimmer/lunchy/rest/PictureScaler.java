@@ -61,8 +61,11 @@ public class PictureScaler {
 	}
 
 	public void moveOriginalFileToBackup() throws IOException {
-		File backupFile = new File(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename + "_original"
-				+ FileServices.getFileExtension(filename));
+		String path = LunchyProperties.INSTANCE.getBackupDestinationPath();
+		if (path == null) {
+			path = LunchyProperties.INSTANCE.getPictureDestinationPath();
+		}
+		File backupFile = new File(path + "/" + filename + "_original" + FileServices.getFileExtension(filename));
 		FileServices.move(originalFile, backupFile);
 	}
 
