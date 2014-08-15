@@ -80,8 +80,7 @@ config(['flowFactoryProvider', function (flowFactoryProvider) {
   flowFactoryProvider.defaults = {
     target: './upload',
     method:'octet',
-    testChunks:false,
-    chunkSize:1024*1024*15
+    singleFile:true    
   };
   flowFactoryProvider.on('catchAll', function (event) {
     console.log('catchAll', arguments);

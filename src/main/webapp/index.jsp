@@ -14,7 +14,7 @@
 	<link href="css/bootstrap-theme.min.css" rel="stylesheet"><!-- modal-dialog and more -->
 	<link href="webjars/ng-table/0.3.3/ng-table.min.css" rel="stylesheet"><!-- ng-table -->
 </head>
-<body ng-controller="LunchyControllerMain">
+<body ng-controller="LunchyControllerMain" flow-prevent-drop>
 
 	<a href="https://github.com/oglimmer/lunchy" class="githubBadge"><img style="position: absolute; top: 0; left: 0; border: 0;z-index: 2001" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
 

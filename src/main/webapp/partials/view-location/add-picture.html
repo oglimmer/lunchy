@@ -3,29 +3,32 @@
 		<h3>Add picture</h3>
 		<hr class="soften" />
 		<div flow-transfers>				
-		    <div ng-repeat="file in transfers">
-		    	<div ng-show="file.isUploading()">
+			<div ng-repeat="file in transfers">
+				<div ng-show="file.isUploading()">
+					<div>Progress: {{ file.sizeUploaded() / 1024 | number:0 }} kb / {{ file.size / 1024 | number:0}} kb</div>
 					<div class="progress progress-striped">
-						<div class="progress-bar" ng-style="{'width': (100*( file.sizeUploaded() / file.size )) + '%' }"><span>Upload in progress ... {{ file.sizeUploaded() | number:0 }} bytes / {{ file.size | number}} bytes ({{file.progress()*100| number:0}}%)</span></div>
+						<div class="progress-bar" ng-style="{'width': (100*( file.sizeUploaded() / file.size )) + '%' }"><span style="color:black">{{file.progress()*100| number:0}}%</span></div>
 					</div>
 				</div>
-				<div ng-hide="file.isUploading()">
-					<alert type="success">Upload completed! <a href="javascript:void(null);" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</a></alert>
-					<form class="form-horizontal">
-						<input class="form-control" type="text" ng-model="flowHolder.picCaption" placeholder="Put any caption here ..." focus="true" />
-					</form>
-				</div>
-		   </div>
-		</div>
-		<div>
-			<div ng-hide="$flow.files.length" class="dropzone" flow-drop flow-drag-enter="class='dropzone-active'" flow-drag-leave="class='dropzone'">
-				Drag'n drop an image (jpeg, png, gif) here to upload it or press the 'select image' button.																				
-				<a href="javascript:void(null);" class="btn btn-primary btn-sm" flow-btn flow-attrs="{accept:'image/*'}">Select image</a>
 			</div>
 
-			<div class="thumbnail" ng-show="$flow.files.length">
+			<div ng-show="transfers.length > 0 && !$flow.isUploading()">
+				<alert type="success">Upload completed! <a href="javascript:void(null);" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</a></alert>
+				<form class="form-horizontal">
+					<input class="form-control" type="text" ng-model="flowHolder.picCaption" placeholder="Put any caption here ..." focus="true" />
+				</form>
+			</div>
+		</div>
+		<div>
+			<div ng-hide="$flow.files.length" class="drop" ng-class="dropClass" flow-drop flow-drag-enter="dropClass='drag-over'" flow-drag-leave="dropClass=''">
+				Drag'n drop an image (jpeg, png, gif) here to upload it or press the 'select image' button.																								
+				<span class="btn btn-primary btn-sm" flow-btn flow-attrs="{accept:'image/*;capture=camera'}">Select image</span>
+			</div>
+
+			<div class="thumbnail" ng-show="$flow.files.length>0">
 				<img flow-img="$flow.files[0]" />
 			</div>
+			
 		</div>
 	</div>
 </div>

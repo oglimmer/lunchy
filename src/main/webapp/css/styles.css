@@ -69,12 +69,13 @@
   background-color: #96b4d2;
 }
 
-.dropzone,.dropzone-active {
+.drop {
 	border:2px solid #aeaeae;
 	padding:20px;
 	margin:10px;
 	border-radius: 3px;
 }
-.dropzone-active {
-	border:2px dotted #aeaeae;
+.drop.drag-over {
+    background: #2b73a2;
+    color: #fff;
 }
