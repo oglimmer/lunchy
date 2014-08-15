@@ -88,21 +88,18 @@ config(['flowFactoryProvider', function (flowFactoryProvider) {
   // Can be used with different implementations of Flow.js
   // flowFactoryProvider.factory = fustyFlowFactory;
 }]).
-factory('LoginDao', ['$resource', '$http', function($resource, $http) {
-	var ENDPOINT = 'rest/login';
-	var LoginDao = $resource(ENDPOINT, null, {
+factory('LoginDao', ['$resource', '$http', function($resource, $http) {	
+	return $resource('rest/login', null, {
 		'login': {
 			method: 'POST'
 		},
 		'logout': {
 			method: 'DELETE'
-		}
-	});	
-	// check needs to return a promise
-	LoginDao.prototype.check = function(longTimeToken) {
-		return $http.get(ENDPOINT+"?longTimeToken="+longTimeToken);
-	}
-	return LoginDao;
+		},
+		'check': {
+			method: 'GET'
+		}		
+	});		
 }]).
 factory('UserDao', ['$resource', function($resource) {
 	return $resource('rest/users/:id', {id: '@id'}, {
@@ -166,9 +163,9 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 			if(thiz.loggedIn) {
 				return $q.when(thiz);
 			} else {
-				return new LoginDao().check(StorageService.get('longTimeToken'))
-					.then(function(successResp) {
-						if(successResp.data.success) {
+				return LoginDao.check({longTimeToken:StorageService.get('longTimeToken')}).$promise
+					.then(function(successResp) {						
+						if(successResp.success) {
 							thiz.loggedIn = true 
 							return $q.when(thiz);
 						} else {
@@ -267,7 +264,7 @@ run(['$rootScope', '$location', 'Authetication', 'LoginDao', '$timeout', functio
 	
 	function keepAlive() {
 		if(Authetication.loggedIn){
-			new LoginDao().check();
+			LoginDao.check();
 		}
 		$timeout(keepAlive, 1000*60*5);
 	}
