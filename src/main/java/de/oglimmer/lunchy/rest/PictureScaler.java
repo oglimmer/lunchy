@@ -85,7 +85,7 @@ public class PictureScaler {
 
 	private void createShrinkedImage(int width, int height) throws IOException {
 		BufferedImage tmpImg = fixRotation();
-		scaledImage = Scalr.resize(tmpImg, Scalr.Method.QUALITY, width, height);
+		scaledImage = Scalr.resize(tmpImg, Scalr.Method.ULTRA_QUALITY, width, height);
 	}
 
 	/**
