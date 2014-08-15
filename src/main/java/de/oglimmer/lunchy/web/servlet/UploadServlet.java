@@ -78,11 +78,12 @@ public class UploadServlet extends HttpServlet {
 		long flowChunkNumber = Long.parseLong(req.getParameter("flowChunkNumber"));
 		long flowChunkSize = Long.parseLong(req.getParameter("flowChunkSize"));
 		long flowTotalSize = Long.parseLong(req.getParameter("flowTotalSize"));
+		long flowTotalChunks = Long.parseLong(req.getParameter("flowTotalChunks"));
 
 		log.debug("ID:{} with chunk {} write for {}/{} ", flowIdentifier, flowChunkNumber, flowChunkSize, flowTotalSize);
 
 		writeChunkToFile(req, flowChunkNumber, flowChunkSize, flowTotalSize, originalFile);
-		addCache(flowIdentifier, flowChunkNumber);
+		addCache(flowIdentifier, flowChunkNumber, flowTotalChunks);
 
 	}
 
@@ -97,9 +98,13 @@ public class UploadServlet extends HttpServlet {
 		}
 	}
 
-	private void addCache(String flowIdentifier, long flowChunkNumber) {
+	private synchronized void addCache(String flowIdentifier, long flowChunkNumber, long flowTotalChunks) {
 		try {
-			chunkCache.get(flowIdentifier).add(new Long(flowChunkNumber));
+			Set<Long> chunkSet = chunkCache.get(flowIdentifier);
+			chunkSet.add(new Long(flowChunkNumber));
+			if (flowTotalChunks == chunkSet.size()) {
+				chunkCache.invalidate(flowIdentifier);
+			}
 		} catch (ExecutionException e) {
 			log.error("Failed to add chunk to cache", e);
 		}

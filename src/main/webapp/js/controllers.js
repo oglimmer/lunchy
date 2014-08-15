@@ -186,8 +186,14 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	$scope.$on('userLoggedIn', function(event) {
 		getlocationStatusForCurrentUser();
 	});
-	LocationsDao.queryPictures({"id": $stateParams.locationId }, function (picures) {
-		$scope.picures = picures;
+	$scope.tabs = {};
+	$scope.tabs.pictureTabActive = false;
+	$scope.picHolder = {};
+	LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
+		$scope.picHolder.pictures = pictures;
+		if(pictures.length > 0) {
+			$scope.tabs.pictureTabActive = true;
+		}
 	});
 	
 
@@ -289,7 +295,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 					$scope.reviewButton = "Edit Review";
 				} else {
 					$scope.reviews = _.filter($scope.reviews, function(review) { return review.id !== result.id; });
-				}
+				}		
 				$scope.reviews.splice(0, 0, result);
 				$scope.usersReview = result.id;
 			}, function(result) {
@@ -312,10 +318,13 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 				
 					var newPic = new PicturesDao({fklocation: $stateParams.locationId, caption: $scope.flowHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
 					newPic.$save(function(pic) {
-						$scope.picures.splice(0, 0, pic);
+						LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
+							$scope.picHolder.pictures = pictures;
+						});
 					});
 					$scope.flowHolder.$flow.cancel();
 					$scope.flowHolder.picCaption = "";
+					$scope.tabs.pictureTabActive = true;
 				}				
 			} else {
 				$scope.addPictureButton=0;
