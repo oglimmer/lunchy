@@ -26,6 +26,11 @@ config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRou
 	      templateUrl: 'partials/browse-locations.html',
 	      controller : 'LunchyControllerBrowseLocations'
 		}).
+		state('browse-by-office', {
+			url: '/browse/:officeId',
+			templateUrl: 'partials/browse-locations.html',
+			controller : 'LunchyControllerBrowseLocations'
+		}).
 		state('list', {
 	      url: '/list',
 	      templateUrl: 'partials/list-locations.html',
@@ -131,7 +136,13 @@ factory('PicturesDao', ['$resource', function($resource) {
 	return $resource('rest/pictures/:id', {id: '@id'});
 }]).
 factory('OfficesDao', ['$resource', function($resource) {
-	return $resource('rest/offices/:id', {id: '@id'});
+	return $resource('rest/offices/:id', {id: '@id'}, {
+		'locations': {
+			method: 'GET',
+			url: 'rest/offices/:id/locations',
+			isArray: true
+		}		
+	});
 }]).
 factory('LocationsDao', ['$resource', function($resource) {
 	return $resource('rest/locations/:id', {id: '@id'}, {

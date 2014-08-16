@@ -348,11 +348,21 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$location', '$window', 'LocationsDao', 'OfficesDao', 'Authetication',
                                                 function($scope, $stateParams, $location, $window, LocationsDao, OfficesDao, Authetication) {
 
+	if(typeof($stateParams.officeId)==='undefined') {
+		$location.path('/browse/'+Authetication.fkBaseOffice);
+		return;
+	}
+	$scope.selectedOffice = $stateParams.officeId;
+	
+	OfficesDao.query(function(offices) {
+		$scope.offices = offices;	
+	});
+	
 	$scope.map = {
 		loaded:false
 	};
 	Authetication.checkLoggedIn().then(function(data) {		
-		OfficesDao.get({id:Authetication.fkBaseOffice}).$promise.then(function(office) {			
+		OfficesDao.get({id:$scope.selectedOffice}).$promise.then(function(office) {			
 			$scope.map = {
 				center : {
 					latitude : office.geoLat,
@@ -370,12 +380,16 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 			$scope.map.loaded = true;
 		});
 	});
+	
+	$scope.$watch("selectedOffice", function() {
+		$location.path('/browse/'+$scope.selectedOffice);
+	});
 		
 	$scope.mapCreated = function() {
 		$("#browseMap .angular-google-map-container").height(angular.element($window).height()-75);
 	}
 	
-	LocationsDao.query(function (locations) {
+	OfficesDao.locations({id: $scope.selectedOffice}, function (locations) {
 		$scope.markers = [];
 		angular.forEach(locations, function(loc, idx) {			
 			if(loc.geoLat != null && loc.geoLng != null) {			
@@ -403,61 +417,71 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	});
 
 }]).
-controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'ngTableParams', 'ListConfig', 'Comparator',
-                                                function($scope, $location, LocationsDao, $filter, ngTableParams, ListConfig, Comparator) {
+controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'ngTableParams', 'ListConfig', 'Comparator', 'OfficesDao', 'Authetication',
+                                                function($scope, $location, LocationsDao, $filter, ngTableParams, ListConfig, Comparator, OfficesDao, Authetication) {
 	
 	$scope.rowclick = function(item) {
 		$location.path('/view/'+item.id);
 	};
 	
-	var dataHolder = null;
-	
-	LocationsDao.query(function (data) {
-		dataHolder = data;
-		$scope.tableParams = new ngTableParams(ListConfig, {
-	        total: dataHolder.length,
-	        getData: function($defer, params) {
-	        	ListConfig.copyParams(params);	        	
-	        	
-	  	        var filterParams = angular.copy(params.filter());
-	  	        
-	  	        function flagIntegerSearch(attr, flagChar) {
-	  	        	if(typeof(filterParams[attr]) !== 'undefined') {
-		  	        	if(filterParams[attr] != "") {
-		  	        		filterParams[attr] = flagChar+filterParams[attr];
-		  	        	} else {
-		  	        		delete filterParams[attr];
-		  	        	}
-		  	        }
-	  	        }
-	  	        
-	  	        var flags = {
-	  	        	turnaroundtime:'@',
-	  	        	numberOfReviews:'#',
-	  	        	avgRating:'#',
-	  	        }
-	  	        
-	  	        for(var key in filterParams) {
-	  	        	flagIntegerSearch(key, typeof(flags[key])!=='undefined'?flags[key]:'');
-	  	        }	  	       
-	  	        
-	  	        var filterData = $filter('filter')(dataHolder, filterParams, Comparator);
-	  	        
-	            var orderedData = $filter('orderBy')(filterData, params.orderBy());
-
-	            var pagedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-	            params.total(filterData.length);
-	            return $defer.resolve(pagedData);	        	
-	        }
-	    });
+	OfficesDao.query(function(offices) {
+		$scope.offices = offices;
 	});
 	
-	$scope.$on('userLoggedIn', function(event) {
-		LocationsDao.query(function (data) {
+	$scope.selectedOffice = Authetication.fkBaseOffice;
+	var dataHolder = [];
+	
+	$scope.tableParams = new ngTableParams(ListConfig, {
+        total: dataHolder.length,
+        getData: function($defer, params) {
+        	ListConfig.copyParams(params);	        	
+        	
+  	        var filterParams = angular.copy(params.filter());
+  	        
+  	        function flagIntegerSearch(attr, flagChar) {
+  	        	if(typeof(filterParams[attr]) !== 'undefined') {
+	  	        	if(filterParams[attr] != "") {
+	  	        		filterParams[attr] = flagChar+filterParams[attr];
+	  	        	} else {
+	  	        		delete filterParams[attr];
+	  	        	}
+	  	        }
+  	        }
+  	        
+  	        var flags = {
+  	        	turnaroundtime:'@',
+  	        	numberOfReviews:'#',
+  	        	avgRating:'#',
+  	        }
+  	        
+  	        for(var key in filterParams) {
+  	        	flagIntegerSearch(key, typeof(flags[key])!=='undefined'?flags[key]:'');
+  	        }	  	       
+  	        
+  	        var filterData = $filter('filter')(dataHolder, filterParams, Comparator);
+  	        
+            var orderedData = $filter('orderBy')(filterData, params.orderBy());
+
+            var pagedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+            params.total(filterData.length);
+            return $defer.resolve(pagedData);	        	
+        }
+	});
+	
+	function reloadTableData() {
+		OfficesDao.locations({id: $scope.selectedOffice}, function (data) {
 			dataHolder = data;
 			$scope.tableParams.reload();
 		});
+	}
+	
+	$scope.$on('userLoggedIn', function(event) {
+		reloadTableData();
+	});
+	
+	$scope.$watch('selectedOffice', function() {
+		reloadTableData();
 	});
 	
 }]).

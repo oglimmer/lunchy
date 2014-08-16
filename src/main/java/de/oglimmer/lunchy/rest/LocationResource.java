@@ -95,7 +95,7 @@ public class LocationResource {
 		if (request.getSession(false) != null) {
 			fkUser = (Integer) request.getSession(false).getAttribute("userId");
 		}
-		return LocationDao.INSTANCE.getList(fkUser);
+		return LocationDao.INSTANCE.getList(fkUser, null);
 	}
 
 	@GET

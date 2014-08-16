@@ -1,5 +1,20 @@
 <br/><br/><br/>
 
+<div class="row">
+	<div class="col-lg-12">
+		<form class="form-horizontal">
+			<fieldset>
+					<label for="data.fkoffice" class="col-lg-1 control-label">Office</label>
+					<div class="col-lg-11">
+						<select class="form-control" ng-model="selectedOffice">
+							<option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==selectedOffice">{{office.name}}</option>
+						</select>							
+					</div>
+			</fieldset>
+		</form>			
+	</div>
+</div>
+
 <div ng-if="map.loaded">
 	<google-map id="browseMap" center="map.center" zoom="map.zoom" draggable="true" events='map.events' ng-init="mapCreated()"> 
 		<marker ng-repeat="marker in markers" idKey='marker.id' coords='marker.coords' events='marker.events' options="marker.markerOptions">

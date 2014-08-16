@@ -33,7 +33,7 @@ public enum LocationDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public List<LocationQuery> getList(Integer fkUser) {
+	public List<LocationQuery> getList(Integer fkUser, Integer fkOffice) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
@@ -41,10 +41,15 @@ public enum LocationDao {
 			String reviewedSubSql = fkUser == null ? "'0'"
 					: "(select count(*) from reviews where location.id=reviews.fkLocation and fkUser=" + fkUser + ")";
 
-			Result<Record> result = create
-					.fetch("select location.*, count(*) as numberOfReviews, max(reviews.lastUpdate) as lastRating, avg(reviews.rating) as avgRating, "
-							+ reviewedSubSql
-							+ " as reviewed from location left JOIN reviews on location.id=reviews.fkLocation group by location.id");
+			String officeFilter = fkOffice != null ? (" where fkOffice=" + fkOffice) : "";
+
+			String sql = "select location.*, count(*) as numberOfReviews, max(reviews.lastUpdate) as lastRating, avg(reviews.rating) as avgRating, "
+					+ reviewedSubSql
+					+ " as reviewed from location left JOIN reviews on location.id=reviews.fkLocation "
+					+ officeFilter
+					+ " group by location.id";
+
+			Result<Record> result = create.fetch(sql);
 
 			List<LocationQuery> resultList = new ArrayList<>();
 			for (Record rawRec : result) {

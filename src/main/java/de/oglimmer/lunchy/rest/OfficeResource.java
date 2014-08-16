@@ -3,14 +3,18 @@ package de.oglimmer.lunchy.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import de.oglimmer.lunchy.database.LocationDao;
 import de.oglimmer.lunchy.database.OfficeDao;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
+import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.rest.dto.Office;
 
 @Path("offices")
@@ -32,5 +36,16 @@ public class OfficeResource {
 	public Office get(@PathParam("id") int id) {
 		OfficesRecord officeRec = OfficeDao.INSTANCE.getById(id);
 		return Office.getInstance(officeRec);
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/locations")
+	public List<LocationQuery> query(@Context HttpServletRequest request, @PathParam("id") int id) {
+		Integer fkUser = null;
+		if (request.getSession(false) != null) {
+			fkUser = (Integer) request.getSession(false).getAttribute("userId");
+		}
+		return LocationDao.INSTANCE.getList(fkUser, id);
 	}
 }
