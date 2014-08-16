@@ -27,6 +27,7 @@ import de.oglimmer.lunchy.database.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
 import de.oglimmer.lunchy.rest.dto.User;
+import de.oglimmer.lunchy.services.Community;
 import de.oglimmer.lunchy.services.Email;
 
 @Path("/users")
@@ -36,7 +37,7 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{email}")
 	public ResultParam checkByEmail(@Context HttpServletRequest request, @PathParam("email") String email) {
-		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email);
+		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email, Community.get(request));
 		ResultParam rp = new ResultParam();
 		if (user != null) {
 			rp.setSuccess(true);
@@ -52,7 +53,7 @@ public class UserResource {
 		SecurityProvider.INSTANCE.checkAdmin(request);
 		ResultParam rp = new ResultParam();
 		if (input.getPermissions() == 0 || input.getPermissions() == 1) {
-			UsersRecord user = UserDao.INSTANCE.getById(id);
+			UsersRecord user = UserDao.INSTANCE.getById(id, Community.get(request));
 			if (user != null) {
 				if (user.getPermissions() != input.getPermissions()) {
 					user.setPermissions(input.getPermissions());
@@ -69,7 +70,7 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{email}/sendPasswordLink")
 	public ResultParam sendPasswordLink(@Context HttpServletRequest request, @PathParam("email") String email) {
-		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email);
+		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email, Community.get(request));
 		ResultParam rp = new ResultParam();
 		if (user != null) {
 			user.setPasswordresettoken(RandomStringUtils.randomAlphanumeric(128));
@@ -85,7 +86,7 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{token}/resetPassword")
 	public ResultParam sendPasswordLink(@Context HttpServletRequest request, @PathParam("token") String token, UserInput input) {
-		UsersRecord user = UserDao.INSTANCE.getUserByToken(token);
+		UsersRecord user = UserDao.INSTANCE.getUserByToken(token, Community.get(request));
 		ResultParam rp = new ResultParam();
 		if (user != null) {
 			Calendar now = GregorianCalendar.getInstance();
@@ -113,7 +114,7 @@ public class UserResource {
 	public List<User> query(@Context HttpServletRequest request) {
 		SecurityProvider.INSTANCE.checkAdmin(request);
 		List<User> resultList = new ArrayList<>();
-		for (UsersRecord reviewRec : UserDao.INSTANCE.query()) {
+		for (UsersRecord reviewRec : UserDao.INSTANCE.query(Community.get(request))) {
 			resultList.add(User.getInstance(reviewRec));
 		}
 		return resultList;
@@ -123,15 +124,15 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("current")
 	public UserResponse get(@Context HttpServletRequest request) {
-		UsersRecord user = UserDao.INSTANCE.getById((Integer) request.getSession(true).getAttribute("userId"));
+		UsersRecord user = UserDao.INSTANCE.getById((Integer) request.getSession(true).getAttribute("userId"), Community.get(request));
 		return UserResponse.getInstance(user);
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public UserResponse get(@PathParam("id") Integer id) {
-		UsersRecord user = UserDao.INSTANCE.getById(id);
+	public UserResponse get(@Context HttpServletRequest request, @PathParam("id") Integer id) {
+		UsersRecord user = UserDao.INSTANCE.getById(id, Community.get(request));
 		return UserResponse.getInstance(user);
 	}
 
@@ -162,7 +163,7 @@ public class UserResource {
 				user.setPermissions(0);
 				Email.INSTANCE.sendWelcome(input.getEmail(), input.getDisplayname());
 			} else {
-				user = UserDao.INSTANCE.getById(input.getId());
+				user = UserDao.INSTANCE.getById(input.getId(), Community.get(request));
 				if (!BCrypt.checkpw(input.getCurrentpassword(), user.getPassword())) {
 					result.setErrorMsg("Password wrong");
 					user = null;
@@ -176,6 +177,7 @@ public class UserResource {
 				user.setDisplayname(input.getDisplayname());
 				user.setEmail(input.getEmail());
 				user.setFkbaseoffice(input.getFkbaseoffice());
+				user.setFkcommunity(Community.get(request));
 				UserDao.INSTANCE.store(user);
 				LoginResponseProvider.INSTANCE.login(result, user, request.getSession(true));
 			}

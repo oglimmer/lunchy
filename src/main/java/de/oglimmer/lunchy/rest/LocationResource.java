@@ -37,6 +37,7 @@ import de.oglimmer.lunchy.rest.dto.Location;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.rest.dto.Picture;
 import de.oglimmer.lunchy.rest.dto.Review;
+import de.oglimmer.lunchy.services.Community;
 
 @Slf4j
 @Path("locations")
@@ -95,7 +96,7 @@ public class LocationResource {
 		if (request.getSession(false) != null) {
 			fkUser = (Integer) request.getSession(false).getAttribute("userId");
 		}
-		return LocationDao.INSTANCE.getList(fkUser, null);
+		return LocationDao.INSTANCE.getList(request, fkUser, null);
 	}
 
 	@GET
@@ -133,6 +134,7 @@ public class LocationResource {
 
 	private void addInitialData(HttpServletRequest request, LocationRecord locationRec) {
 		if (locationRec.getId() == null || locationRec.getId() == 0) {
+			locationRec.setFkcommunity(Community.get(request));
 			locationRec.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
 			locationRec.setCreatedon(new Timestamp(new Date().getTime()));
 			locationRec.setCountry("Germany");

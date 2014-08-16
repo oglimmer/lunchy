@@ -32,12 +32,13 @@ public enum OfficeDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public List<OfficesRecord> query() {
+	public List<OfficesRecord> query(int fkCommunity) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-			Result<Record> result = create.select().from(Offices.OFFICES).orderBy(Offices.OFFICES.NAME).fetch();
+			Result<Record> result = create.select().from(Offices.OFFICES).where(Offices.OFFICES.FKCOMMUNITY.equal(fkCommunity))
+					.orderBy(Offices.OFFICES.NAME).fetch();
 
 			List<OfficesRecord> resultList = new ArrayList<>();
 			for (Record rawRec : result) {

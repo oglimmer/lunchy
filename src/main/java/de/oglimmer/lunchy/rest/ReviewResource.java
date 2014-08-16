@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 import de.oglimmer.lunchy.database.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 import de.oglimmer.lunchy.rest.dto.Review;
+import de.oglimmer.lunchy.services.Community;
 
 @Path("reviews")
 public class ReviewResource {
@@ -54,6 +55,7 @@ public class ReviewResource {
 			ReviewsRecord reviewRec = createRecordInstance(reviewDto);
 
 			if (reviewRec.getId() == null || reviewRec.getId() == 0) {
+				reviewRec.setFkcommunity(Community.get(request));
 				reviewRec.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
 				reviewRec.setCreatedon(new Timestamp(new Date().getTime()));
 			}

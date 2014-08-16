@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OliLunchy extends org.jooq.impl.SchemaImpl {
 
-	private static final long serialVersionUID = -406837324;
+	private static final long serialVersionUID = -688077236;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy</code>
@@ -34,6 +34,9 @@ public class OliLunchy extends org.jooq.impl.SchemaImpl {
 
 	private final java.util.List<org.jooq.Table<?>> getTables0() {
 		return java.util.Arrays.<org.jooq.Table<?>>asList(
+			de.oglimmer.lunchy.database.generated.tables.Communities.COMMUNITIES,
+			de.oglimmer.lunchy.database.generated.tables.Databasechangelog.DATABASECHANGELOG,
+			de.oglimmer.lunchy.database.generated.tables.Databasechangeloglock.DATABASECHANGELOGLOCK,
 			de.oglimmer.lunchy.database.generated.tables.Location.LOCATION,
 			de.oglimmer.lunchy.database.generated.tables.Offices.OFFICES,
 			de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES,

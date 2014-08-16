@@ -23,29 +23,42 @@ public enum UserDao {
 
 	@SneakyThrows(value = SQLException.class)
 	public UsersRecord getById(Integer id) {
-		return getBy(Users.USERS.ID.equal(id));
-	}
-
-	@SneakyThrows(value = SQLException.class)
-	public UsersRecord getUserByEmail(String email) {
-		return getBy(Users.USERS.EMAIL.equalIgnoreCase(email));
-	}
-
-	@SneakyThrows(value = SQLException.class)
-	public UsersRecord getUserByToken(String token) {
-		return getBy(Users.USERS.PASSWORDRESETTOKEN.equal(token));
-	}
-
-	@SneakyThrows(value = SQLException.class)
-	public UsersRecord getByLongTimeToken(String longTimeToken) {
-		return getBy(Users.USERS.LONGTIMETOKEN.equal(longTimeToken));
-	}
-
-	private UsersRecord getBy(Condition cond) throws SQLException {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			UsersRecord rec = create.fetchOne(Users.USERS, cond);
+			UsersRecord rec = create.fetchOne(Users.USERS, Users.USERS.ID.equal(id));
+			if (rec != null) {
+				rec.attach(null);
+			}
+			return rec;
+		}
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public UsersRecord getById(Integer id, int fkCommunity) {
+		return getBy(Users.USERS.ID.equal(id), fkCommunity);
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public UsersRecord getUserByEmail(String email, int fkCommunity) {
+		return getBy(Users.USERS.EMAIL.equalIgnoreCase(email), fkCommunity);
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public UsersRecord getUserByToken(String token, int fkCommunity) {
+		return getBy(Users.USERS.PASSWORDRESETTOKEN.equal(token), fkCommunity);
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public UsersRecord getByLongTimeToken(String longTimeToken, int fkCommunity) {
+		return getBy(Users.USERS.LONGTIMETOKEN.equal(longTimeToken), fkCommunity);
+	}
+
+	private UsersRecord getBy(Condition cond, int fkCommunity) throws SQLException {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+
+			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+			UsersRecord rec = create.fetchOne(Users.USERS, cond.and(Users.USERS.FKCOMMUNITY.equal(fkCommunity)));
 			if (rec != null) {
 				rec.attach(null);
 			}
@@ -64,12 +77,12 @@ public enum UserDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public List<UsersRecord> query() {
+	public List<UsersRecord> query(int fkCommunity) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 
-			Result<Record> result = create.select().from(Users.USERS).fetch();
+			Result<Record> result = create.select().from(Users.USERS).where(Users.USERS.FKCOMMUNITY.equal(fkCommunity)).fetch();
 
 			List<UsersRecord> resultList = new ArrayList<>();
 			for (Record rawRec : result) {

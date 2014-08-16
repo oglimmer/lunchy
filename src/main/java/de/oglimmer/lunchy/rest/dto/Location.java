@@ -32,7 +32,7 @@ public class Location {
 		Location locationDto = new Location();
 		BeanMappingProvider.INSTANCE.getMapper().map(locationRec, locationDto);
 
-		UsersRecord user = UserDao.INSTANCE.getById(locationRec.getFkuser());
+		UsersRecord user = UserDao.INSTANCE.getById(locationRec.getFkuser(), locationRec.getFkcommunity());
 		locationDto.setCreationUser(user.getDisplayname());
 
 		return locationDto;

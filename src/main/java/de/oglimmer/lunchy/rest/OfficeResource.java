@@ -16,15 +16,16 @@ import de.oglimmer.lunchy.database.OfficeDao;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.rest.dto.Office;
+import de.oglimmer.lunchy.services.Community;
 
 @Path("offices")
 public class OfficeResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Office> queryReviews() {
+	public List<Office> queryReviews(@Context HttpServletRequest request) {
 		List<Office> resultList = new ArrayList<>();
-		for (OfficesRecord officeRec : OfficeDao.INSTANCE.query()) {
+		for (OfficesRecord officeRec : OfficeDao.INSTANCE.query(Community.get(request))) {
 			resultList.add(Office.getInstance(officeRec));
 		}
 		return resultList;
@@ -46,6 +47,6 @@ public class OfficeResource {
 		if (request.getSession(false) != null) {
 			fkUser = (Integer) request.getSession(false).getAttribute("userId");
 		}
-		return LocationDao.INSTANCE.getList(fkUser, id);
+		return LocationDao.INSTANCE.getList(request, fkUser, id);
 	}
 }

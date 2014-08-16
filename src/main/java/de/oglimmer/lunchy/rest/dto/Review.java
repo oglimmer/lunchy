@@ -24,7 +24,7 @@ public class Review {
 		Review reviewDto = new Review();
 		BeanMappingProvider.INSTANCE.getMapper().map(reviewRec, reviewDto);
 
-		UsersRecord user = UserDao.INSTANCE.getById(reviewRec.getFkuser());
+		UsersRecord user = UserDao.INSTANCE.getById(reviewRec.getFkuser(), reviewRec.getFkcommunity());
 		reviewDto.setCreationUser(user.getDisplayname());
 
 		return reviewDto;

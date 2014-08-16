@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Offices extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord> {
 
-	private static final long serialVersionUID = -452881095;
+	private static final long serialVersionUID = -1104468526;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.offices</code>
@@ -30,6 +30,11 @@ public class Offices extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	 * The column <code>oli_lunchy.offices.id</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.offices.fkCommunity</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Integer> FKCOMMUNITY = createField("fkCommunity", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.offices.name</code>.

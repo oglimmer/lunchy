@@ -25,6 +25,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import de.oglimmer.lunchy.database.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
+import de.oglimmer.lunchy.services.Community;
 
 @Path("login")
 public class LoginResource {
@@ -37,12 +38,12 @@ public class LoginResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public LoginResponse check(@Context HttpServletRequest request, @QueryParam(value = "longTimeToken") String longTimeToken) {
 		LoginResponse response = new LoginResponse();
-		UsersRecord user = loginProvider.getLoggedInUser(request.getSession(false));
+		UsersRecord user = loginProvider.getLoggedInUser(request.getSession(false), Community.get(request));
 		if (user != null) {
 			loginProvider.login(response, user, request.getSession(true));
 		}
 		if (!response.isSuccess() && longTimeToken != null) {
-			UsersRecord userFromToken = UserDao.INSTANCE.getByLongTimeToken(longTimeToken);
+			UsersRecord userFromToken = UserDao.INSTANCE.getByLongTimeToken(longTimeToken, Community.get(request));
 			if (userFromToken != null) {
 				if (isLongTimeTokenYoungerThen3Month(userFromToken)) {
 					loginProvider.login(response, userFromToken, request.getSession(true));
@@ -72,7 +73,7 @@ public class LoginResource {
 		if (longTimeLogin) {
 			email = email.substring(1);
 		}
-		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email);
+		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email, Community.get(request));
 		if (user != null) {
 			if (!BCrypt.checkpw(input.getPassword(), user.getPassword())) {
 				result.setErrorMsg(USER_PASS_WRONG);
@@ -92,7 +93,7 @@ public class LoginResource {
 	public void logout(@Context HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		if (session != null) {
-			UsersRecord user = loginProvider.getLoggedInUser(request.getSession(false));
+			UsersRecord user = loginProvider.getLoggedInUser(request.getSession(false), Community.get(request));
 			loginProvider.removeToken(user);
 			loginProvider.destroySession(request.getSession(false));
 		}

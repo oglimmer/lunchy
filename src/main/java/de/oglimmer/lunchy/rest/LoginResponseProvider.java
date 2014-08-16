@@ -38,10 +38,10 @@ public enum LoginResponseProvider {
 		return null;
 	}
 
-	public UsersRecord getLoggedInUser(HttpSession session) {
+	public UsersRecord getLoggedInUser(HttpSession session, int fkCommunity) {
 		Integer userId = getLoggedInUserId(session);
 		if (userId != null) {
-			return UserDao.INSTANCE.getById(userId);
+			return UserDao.INSTANCE.getById(userId, fkCommunity);
 		}
 		return null;
 	}

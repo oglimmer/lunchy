@@ -21,7 +21,7 @@ public class Picture {
 	public static Picture getInstance(PicturesRecord reviewRec) {
 		Picture pictureDto = new Picture();
 		BeanMappingProvider.INSTANCE.getMapper().map(reviewRec, pictureDto);
-		UsersRecord user = UserDao.INSTANCE.getById(reviewRec.getFkuser());
+		UsersRecord user = UserDao.INSTANCE.getById(reviewRec.getFkuser(), reviewRec.getFkcommunity());
 		pictureDto.setCreationUser(user.getDisplayname());
 		return pictureDto;
 	}

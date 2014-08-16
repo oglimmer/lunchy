@@ -25,6 +25,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import de.oglimmer.lunchy.database.PicturesDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.rest.dto.Picture;
+import de.oglimmer.lunchy.services.Community;
 import de.oglimmer.lunchy.services.FileServices;
 import de.oglimmer.lunchy.services.LunchyProperties;
 
@@ -77,6 +78,7 @@ public class PictureResource {
 		PicturesRecord rec = new PicturesRecord();
 
 		if (input.getId() == null || input.getId() == 0) {
+			rec.setFkcommunity(Community.get(request));
 			rec.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
 			rec.setCreatedon(new Timestamp(new Date().getTime()));
 			rec.setFklocation(input.getFklocation());

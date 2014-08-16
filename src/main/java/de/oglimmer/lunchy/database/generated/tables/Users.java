@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> {
 
-	private static final long serialVersionUID = 1173213789;
+	private static final long serialVersionUID = -912710384;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.users</code>
@@ -32,9 +32,9 @@ public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.g
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.users.fkBaseOffice</code>.
+	 * The column <code>oli_lunchy.users.fkCommunity</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> FKBASEOFFICE = createField("fkBaseOffice", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> FKCOMMUNITY = createField("fkCommunity", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.users.email</code>.
@@ -85,6 +85,11 @@ public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.g
 	 * The column <code>oli_lunchy.users.longTimeTimestamp</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.sql.Timestamp> LONGTIMETIMESTAMP = createField("longTimeTimestamp", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
+
+	/**
+	 * The column <code>oli_lunchy.users.fkBaseOffice</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> FKBASEOFFICE = createField("fkBaseOffice", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.users</code> table reference

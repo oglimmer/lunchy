@@ -19,7 +19,7 @@ public class LocationQuery extends Location {
 	private Timestamp lastRating;
 	private boolean reviewed;
 
-	public static LocationQuery getInstance(Record rawRec) {
+	public static LocationQuery getInstance(Record rawRec, int fkCommunity) {
 		LocationQuery lq = new LocationQuery();
 		lq.setId(rawRec.getValue("id", Integer.class));
 		lq.setOfficialname(rawRec.getValue("officialname", String.class));
@@ -35,7 +35,7 @@ public class LocationQuery extends Location {
 		lq.setLastupdate(rawRec.getValue("lastUpdate", Timestamp.class));
 		lq.setTags(rawRec.getValue("tags", String.class));
 
-		UsersRecord user = UserDao.INSTANCE.getById(rawRec.getValue("fkUser", Integer.class));
+		UsersRecord user = UserDao.INSTANCE.getById(rawRec.getValue("fkUser", Integer.class), fkCommunity);
 		lq.setCreationUser(user.getDisplayname());
 
 		lq.setGeoLat(rawRec.getValue("geo_lat", Double.class));

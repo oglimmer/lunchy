@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> {
 
-	private static final long serialVersionUID = -464251859;
+	private static final long serialVersionUID = 1344748502;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.location</code>
@@ -32,9 +32,9 @@ public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.location.fkOffice</code>.
+	 * The column <code>oli_lunchy.location.fkCommunity</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> FKOFFICE = createField("fkOffice", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> FKCOMMUNITY = createField("fkCommunity", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.location.officialname</code>.
@@ -112,6 +112,11 @@ public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> TAGS = createField("tags", org.jooq.impl.SQLDataType.CLOB.length(65535), this, "");
 
 	/**
+	 * The column <code>oli_lunchy.location.fkOffice</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> FKOFFICE = createField("fkOffice", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+	/**
 	 * Create a <code>oli_lunchy.location</code> table reference
 	 */
 	public Location() {
@@ -162,7 +167,7 @@ public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	 */
 	@Override
 	public java.util.List<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, ?>> getReferences() {
-		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_LOC_OFF, de.oglimmer.lunchy.database.generated.Keys.FK_LOC_USR);
+		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_LOC_USR, de.oglimmer.lunchy.database.generated.Keys.FK_LOC_OFF);
 	}
 
 	/**

@@ -14,6 +14,21 @@ package de.oglimmer.lunchy.database.generated;
 public class Tables {
 
 	/**
+	 * The table oli_lunchy.communities
+	 */
+	public static final de.oglimmer.lunchy.database.generated.tables.Communities COMMUNITIES = de.oglimmer.lunchy.database.generated.tables.Communities.COMMUNITIES;
+
+	/**
+	 * The table oli_lunchy.DATABASECHANGELOG
+	 */
+	public static final de.oglimmer.lunchy.database.generated.tables.Databasechangelog DATABASECHANGELOG = de.oglimmer.lunchy.database.generated.tables.Databasechangelog.DATABASECHANGELOG;
+
+	/**
+	 * The table oli_lunchy.DATABASECHANGELOGLOCK
+	 */
+	public static final de.oglimmer.lunchy.database.generated.tables.Databasechangeloglock DATABASECHANGELOGLOCK = de.oglimmer.lunchy.database.generated.tables.Databasechangeloglock.DATABASECHANGELOGLOCK;
+
+	/**
 	 * The table oli_lunchy.location
 	 */
 	public static final de.oglimmer.lunchy.database.generated.tables.Location LOCATION = de.oglimmer.lunchy.database.generated.tables.Location.LOCATION;

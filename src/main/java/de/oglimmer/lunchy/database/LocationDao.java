@@ -5,6 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+
 import lombok.SneakyThrows;
 
 import org.jooq.DSLContext;
@@ -17,6 +20,7 @@ import de.oglimmer.lunchy.database.connection.DBConn;
 import de.oglimmer.lunchy.database.generated.tables.Location;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
+import de.oglimmer.lunchy.services.Community;
 
 public enum LocationDao {
 	INSTANCE;
@@ -33,7 +37,7 @@ public enum LocationDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public List<LocationQuery> getList(Integer fkUser, Integer fkOffice) {
+	public List<LocationQuery> getList(@Context HttpServletRequest request, Integer fkUser, Integer fkOffice) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
@@ -53,7 +57,7 @@ public enum LocationDao {
 
 			List<LocationQuery> resultList = new ArrayList<>();
 			for (Record rawRec : result) {
-				resultList.add(LocationQuery.getInstance(rawRec));
+				resultList.add(LocationQuery.getInstance(rawRec, Community.get(request)));
 			}
 
 			return resultList;
