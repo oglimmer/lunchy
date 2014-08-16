@@ -36,4 +36,15 @@ filter('bycomma', function () {
     		return text.split(/,/g);
     	}
     }
+}).
+filter('resolveNameById', function () {
+    return function(id, objArray) {
+    	var resolvedName = id;
+    	angular.forEach(objArray, function(obj) {
+    		if(obj.id == id) {
+    			resolvedName = obj.name;
+    		}
+    	})
+    	return resolvedName;
+    }
 });

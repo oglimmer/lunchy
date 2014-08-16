@@ -11,6 +11,7 @@ import de.oglimmer.lunchy.rest.BeanMappingProvider;
 @Data
 public class Location {
 	private Integer id;
+	private Integer fkoffice;
 	private String officialname;
 	private String streetname;
 	private String address;

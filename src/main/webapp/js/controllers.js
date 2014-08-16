@@ -129,7 +129,7 @@ controller('LunchyControllerPasswordReset', ['$scope', 'UserDao', '$location', f
 	}
 	
 }]).
-controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'OfficesDao', function ($scope, $location, LocationsDao, OfficesDao) {
+controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'OfficesDao', 'Authetication', function ($scope, $location, LocationsDao, OfficesDao, Authetication) {
 	
 	$scope.data = {};
 	$scope.alerts = [];
@@ -138,7 +138,7 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'Offic
 	
 	OfficesDao.query(function(offices) {
 		$scope.offices = offices;
-		$scope.data.fkoffice = 1;
+		$scope.data.fkoffice = Authetication.fkBaseOffice;
 	});
 	
 	$scope.closeAlert = function(index) {
@@ -155,8 +155,8 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'Offic
 	}
 	
 }]).
-controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao',
-                                    function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao) {
+controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao', 'OfficesDao',
+                                    function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao, OfficesDao) {
 	
 	$scope.allowedToEdit = false;
 	function getlocationStatusForCurrentUser() {
@@ -205,7 +205,10 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 		}
 	});
 	
-
+	OfficesDao.query(function(offices) {
+		$scope.offices = offices;		
+	});
+	
 	$scope.mapSelected = function() {
 		$scope.map = {
 				center : {
