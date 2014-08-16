@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Offices extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord> {
 
-	private static final long serialVersionUID = 1259325586;
+	private static final long serialVersionUID = -452881095;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.offices</code>
@@ -45,6 +45,11 @@ public class Offices extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	 * The column <code>oli_lunchy.offices.geo_lng</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Double> GEO_LNG = createField("geo_lng", org.jooq.impl.SQLDataType.DOUBLE.nullable(false), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.offices.zoomfactor</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Integer> ZOOMFACTOR = createField("zoomfactor", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.offices</code> table reference

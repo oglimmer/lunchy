@@ -11,6 +11,7 @@ public class Office {
 	private String name;
 	private Double geoLat;
 	private Double geoLng;
+	private Integer zoomfactor;
 
 	public static Office getInstance(OfficesRecord officeRec) {
 		Office officeDto = new Office();

@@ -41,7 +41,7 @@ controller('LunchyControllerLogin', ['$scope', 'LoginDao', '$timeout', 'Authetic
 	$scope.submitLogin = function() {
 		LoginDao.login({email:$scope.email, password:$scope.password}, function(data) {
 			if(data.success) {
-				$scope.Authetication.logInUser();
+				$scope.Authetication.logInUser(data);
 				$scope.password = "";
 				if($scope.email.indexOf('#')===0) {
 					StorageService.save('longTimeToken', data.errorMsg);
@@ -83,7 +83,7 @@ controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', '
 		var newUser = new UserDao($scope.newUser);
 		newUser.$save(function(result) {
 			if(result.success) {
-				$modalInstance.close(true);				
+				$modalInstance.close(result);				
 			} else {
 				$scope.alerts.push({type:'danger',msg:result.errorMsg});
 			}
@@ -342,27 +342,35 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	}
 	
 }]).
-controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$location', '$window', 'LocationsDao', 
-                                                function($scope, $stateParams, $location, $window, LocationsDao) {
+controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$location', '$window', 'LocationsDao', 'OfficesDao', 'Authetication',
+                                                function($scope, $stateParams, $location, $window, LocationsDao, OfficesDao, Authetication) {
 
 	$scope.map = {
-		center : {
-			latitude : 50.032687,
-			longitude : 8.705638
-		},
-		zoom : 13,
-		events: {
-			tilesloaded: function (map) {
-                $scope.$apply(function () {
-                    google.maps.event.trigger(map, 'resize');
-                });
-            }
-		}
+		loaded:false
 	};
-	
-	$scope.$on('$viewContentLoaded', function () {
-		$("#browseMap .angular-google-map-container").height(angular.element($window).height()-75);		
+	Authetication.checkLoggedIn().then(function(data) {		
+		OfficesDao.get({id:Authetication.fkBaseOffice}).$promise.then(function(office) {			
+			$scope.map = {
+				center : {
+					latitude : office.geoLat,
+					longitude : office.geoLng
+				},
+				zoom : office.zoomfactor,
+				events: {
+					tilesloaded: function (map) {
+		                $scope.$apply(function () {
+		                    google.maps.event.trigger(map, 'resize');
+		                });
+		            }
+				}
+			};			
+			$scope.map.loaded = true;
+		});
 	});
+		
+	$scope.mapCreated = function() {
+		$("#browseMap .angular-google-map-container").height(angular.element($window).height()-75);
+	}
 	
 	LocationsDao.query(function (locations) {
 		$scope.markers = [];
@@ -450,7 +458,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	});
 	
 }]).
-controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', function($scope, UserDao, OfficesDao) {
+controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Authetication', function($scope, UserDao, OfficesDao, Authetication) {
 	$scope.data = UserDao.current();
 	$scope.alerts = [];
 	
@@ -472,6 +480,7 @@ controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', func
 				$scope.data.currentpassword = '';
 				$scope.data.password = '';
 				$scope.data.newpasswordverification = '';
+				Authetication.fkBaseOffice = result.fkOffice; 
 			}
 		}, function(result) {
 			$scope.alerts.push({type:'danger', msg: 'Error while saving user: ' + result.statusText});

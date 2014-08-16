@@ -5,24 +5,14 @@ import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
-import lombok.Data;
-
 import org.apache.commons.lang3.RandomStringUtils;
 
 import de.oglimmer.lunchy.database.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.rest.dto.LoginResponse;
 
 public enum LoginResponseProvider {
 	INSTANCE;
-
-	@Data
-	public static class LoginResponse {
-		private boolean success;
-		private Integer userId;
-		private Integer fkOffice;
-		private String longTimeToken;
-		private String errorMsg;
-	}
 
 	public void login(LoginResponse loginResponse, UsersRecord user, HttpSession session) {
 		fillResponse(loginResponse, user);

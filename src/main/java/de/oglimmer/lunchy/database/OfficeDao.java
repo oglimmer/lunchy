@@ -21,6 +21,17 @@ public enum OfficeDao {
 	INSTANCE;
 
 	@SneakyThrows(value = SQLException.class)
+	public OfficesRecord getById(int id) {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+
+			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+			OfficesRecord rec = create.fetchOne(Offices.OFFICES, Offices.OFFICES.ID.equal(id));
+			rec.attach(null);
+			return rec;
+		}
+	}
+
+	@SneakyThrows(value = SQLException.class)
 	public List<OfficesRecord> query() {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 

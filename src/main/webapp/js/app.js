@@ -157,10 +157,19 @@ factory('ReviewDao', ['$resource', function($resource) {
 factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', function($modal, $q, LoginDao, $rootScope, StorageService) {
 	return {
 		loggedIn: false,
-		logInUser: function() {
-			this.loggedIn = true;
-			$rootScope.$broadcast('userLoggedIn', []);
+		fkBaseOffice: -1,
+		
+		logInUser: function(loginResponse) {
+			if(loginResponse.success) {
+				this.loggedIn = true;
+				this.fkBaseOffice = loginResponse.fkOffice;
+				$rootScope.$broadcast('userLoggedIn', []);
+				console.log(this);
+			} else {
+				console.error("logInUser was called but response didnt succeed.");
+			}
 		},
+		
 		checkLoggedIn: function() {
 			var thiz = this;
 			if(thiz.loggedIn) {
@@ -169,7 +178,7 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 				return LoginDao.check({longTimeToken:StorageService.get('longTimeToken')}).$promise
 					.then(function(successResp) {						
 						if(successResp.success) {
-							thiz.loggedIn = true 
+							thiz.logInUser(successResp);							
 							return $q.when(thiz);
 						} else {
 							return $q.reject({ authenticated: false });
@@ -186,8 +195,9 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 			  controller: 'LunchyControllerRegister'		  
 			});
 			modalInstance.result.then(function (result) {
-				if(result) {
-					thiz.loggedIn = true
+				console.log(result);
+				if(result.success) {
+					thiz.logInUser(result);
 				}
 			}, function () {
 				console.log('Modal dismissed at: ' + new Date());

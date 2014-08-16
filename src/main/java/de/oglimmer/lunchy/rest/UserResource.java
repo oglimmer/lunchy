@@ -25,7 +25,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import de.oglimmer.lunchy.database.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
-import de.oglimmer.lunchy.rest.LoginResponseProvider.LoginResponse;
+import de.oglimmer.lunchy.rest.dto.LoginResponse;
 import de.oglimmer.lunchy.rest.dto.User;
 import de.oglimmer.lunchy.services.Email;
 
