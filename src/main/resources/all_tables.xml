@@ -176,4 +176,88 @@
     <changeSet author="oli (generated)" id="1408201702340-11">
         <addForeignKeyConstraint baseColumnNames="fkBaseOffice" baseTableName="users" constraintName="fk_usr_off" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="offices"/>
     </changeSet>
+    <changeSet author="oli (generated)" id="1408224948427-1">
+        <createTable tableName="communities">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="domain" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="adminEmail" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408224948427-2">
+        <addColumn tableName="location">
+            <column name="fkCommunity" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408224948427-3">
+        <addColumn tableName="offices">
+            <column name="fkCommunity" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408224948427-4">
+        <addColumn tableName="pictures">
+            <column name="fkCommunity" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408224948427-5">
+        <addColumn tableName="reviews">
+            <column name="fkCommunity" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408224948427-6">
+        <addColumn tableName="users">
+            <column name="fkCommunity" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="custom-1" author="oli (generated)">
+    	<sql>insert into communities (id, name, domain, adminEmail) values (1,'ADTECH','adtech','oli@zimpasser.de')</sql>
+    </changeSet>
+    <changeSet id="custom-2" author="oli (generated)">
+    	<sql>update location set fkCommunity=1</sql>
+    </changeSet>
+    <changeSet id="custom-3" author="oli (generated)">
+    	<sql>update offices set fkCommunity=1</sql>
+    </changeSet>
+    <changeSet id="custom-4" author="oli (generated)">
+    	<sql>update pictures set fkCommunity=1</sql>
+    </changeSet>
+    <changeSet id="custom-5" author="oli (generated)">
+    	<sql>update reviews set fkCommunity=1</sql>
+    </changeSet>
+    <changeSet id="custom-6" author="oli (generated)">
+    	<sql>update users set fkCommunity=1</sql>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408224948427-7">
+        <addForeignKeyConstraint baseColumnNames="fkCommunity" baseTableName="location" constraintName="fk_loc_com" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408224948427-8">
+        <addForeignKeyConstraint baseColumnNames="fkCommunity" baseTableName="offices" constraintName="fk_off_com" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408224948427-9">
+        <addForeignKeyConstraint baseColumnNames="fkCommunity" baseTableName="pictures" constraintName="fk_pic_com" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408224948427-10">
+        <addForeignKeyConstraint baseColumnNames="fkCommunity" baseTableName="reviews" constraintName="fk_rev_com" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408224948427-11">
+        <addForeignKeyConstraint baseColumnNames="fkCommunity" baseTableName="users" constraintName="fk_usr_com" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
+    </changeSet>
 </databaseChangeLog>
