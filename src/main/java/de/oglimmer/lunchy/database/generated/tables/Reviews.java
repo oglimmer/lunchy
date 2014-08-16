@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> {
 
-	private static final long serialVersionUID = 1749619803;
+	private static final long serialVersionUID = 86562293;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.reviews</code>
@@ -67,6 +67,11 @@ public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.String> FAVORITEMEAL = createField("favoriteMeal", org.jooq.impl.SQLDataType.CLOB.length(65535), this, "");
 
 	/**
+	 * The column <code>oli_lunchy.reviews.turnAroundTime</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> TURNAROUNDTIME = createField("turnAroundTime", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+	/**
 	 * Create a <code>oli_lunchy.reviews</code> table reference
 	 */
 	public Reviews() {
@@ -110,6 +115,14 @@ public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	@Override
 	public java.util.List<org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord>> getKeys() {
 		return java.util.Arrays.<org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord>>asList(de.oglimmer.lunchy.database.generated.Keys.KEY_REVIEWS_PRIMARY, de.oglimmer.lunchy.database.generated.Keys.KEY_REVIEWS_FKUSER);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public java.util.List<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, ?>> getReferences() {
+		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_REV_USR, de.oglimmer.lunchy.database.generated.Keys.FK_REV_LOC);
 	}
 
 	/**

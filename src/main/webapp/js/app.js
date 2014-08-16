@@ -130,6 +130,9 @@ factory('UpdatesDao', ['$resource', function($resource) {
 factory('PicturesDao', ['$resource', function($resource) {
 	return $resource('rest/pictures/:id', {id: '@id'});
 }]).
+factory('OfficesDao', ['$resource', function($resource) {
+	return $resource('rest/offices/:id', {id: '@id'});
+}]).
 factory('LocationsDao', ['$resource', function($resource) {
 	return $resource('rest/locations/:id', {id: '@id'}, {
 		'queryReviews': {

@@ -62,11 +62,15 @@ controller('LunchyControllerLogin', ['$scope', 'LoginDao', '$timeout', 'Authetic
 	};
 	
 }]).
-controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', function ($scope, $modalInstance, UserDao) {
+controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', 'OfficesDao', function ($scope, $modalInstance, UserDao, OfficesDao) {
 	
 	$scope.newUser = {};
 	$scope.alerts = [];
-	
+
+	OfficesDao.query(function(offices) {
+		$scope.offices = offices;
+	});
+
 	$scope.cancelRegister = function() {
 		$modalInstance.dismiss('cancel');
 	}
@@ -75,8 +79,8 @@ controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', f
 		$scope.alerts.splice(index, 1);
 	};
 	
-	$scope.submitRegister = function() {		
-		var newUser = new UserDao({email:$scope.newUser.email, password:$scope.newUser.password, displayname:$scope.newUser.nickname});
+	$scope.submitRegister = function() {	
+		var newUser = new UserDao($scope.newUser);
 		newUser.$save(function(result) {
 			if(result.success) {
 				$modalInstance.close(true);				
@@ -125,12 +129,17 @@ controller('LunchyControllerPasswordReset', ['$scope', 'UserDao', '$location', f
 	}
 	
 }]).
-controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', function ($scope, $location, LocationsDao) {
+controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'OfficesDao', function ($scope, $location, LocationsDao, OfficesDao) {
 	
 	$scope.data = {};
 	$scope.alerts = [];
 	
 	$scope.allTags = ["Mex", "Italian", "Burger", "Döner", "Thai", "Chinese", "Indian", "Sandwich", "Wurst", "Fish"];
+	
+	OfficesDao.query(function(offices) {
+		$scope.offices = offices;
+		$scope.data.fkoffice = 1;
+	});
 	
 	$scope.closeAlert = function(index) {
 		$scope.alerts.splice(index, 1);
@@ -441,9 +450,13 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	});
 	
 }]).
-controller('LunchyControllerSettings', [ '$scope', 'UserDao', function($scope, UserDao) {
+controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', function($scope, UserDao, OfficesDao) {
 	$scope.data = UserDao.current();
 	$scope.alerts = [];
+	
+	OfficesDao.query(function(offices) {
+		$scope.offices = offices;
+	});	
 	
 	$scope.closeAlert = function(index) {
 		$scope.alerts.splice(index, 1);

@@ -22,6 +22,14 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label for="fkbaseoffice" class="col-lg-2 control-label">Your office</label>
+						<div class="col-lg-10">
+							<select class="form-control" ng-model="data.fkbaseoffice" required>
+								<option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==data.fkbaseoffice">{{office.name}}</option>
+							</select>														
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="streetname" class="col-lg-2 control-label">Current password</label>
 						<div class="col-lg-10">
 							<input type="password" class="form-control" ng-model="data.currentpassword" required>

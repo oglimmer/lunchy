@@ -25,6 +25,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import de.oglimmer.lunchy.database.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.rest.LoginResponseProvider.LoginResponse;
 import de.oglimmer.lunchy.rest.dto.User;
 import de.oglimmer.lunchy.services.Email;
 
@@ -138,18 +139,18 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public ResultParam update(@Context HttpServletRequest request, @PathParam("id") Integer id, UserInput input) {
+	public LoginResponse update(@Context HttpServletRequest request, @PathParam("id") Integer id, UserInput input) {
 		if (id != input.getId()) {
 			throw new RuntimeException("id not matching");
 		}
-		return create(request, input);
+		return saveAndLogin(request, input);
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ResultParam create(@Context HttpServletRequest request, UserInput input) {
-		ResultParam result = new ResultParam();
+	public LoginResponse saveAndLogin(@Context HttpServletRequest request, UserInput input) {
+		LoginResponse result = new LoginResponse();
 
 		try {
 			UsersRecord user;
@@ -174,9 +175,9 @@ public class UserResource {
 			if (user != null) {
 				user.setDisplayname(input.getDisplayname());
 				user.setEmail(input.getEmail());
+				user.setFkbaseoffice(input.getFkbaseoffice());
 				UserDao.INSTANCE.store(user);
-				result.setSuccess(true);
-				request.getSession(true).setAttribute("userId", user.getId());
+				LoginResponseProvider.INSTANCE.login(result, user, request.getSession(true));
 			}
 		} catch (org.jooq.exception.DataAccessException e) {
 			if (e.getCause() instanceof com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException) {
@@ -200,6 +201,7 @@ public class UserResource {
 		private String password;
 		private String currentpassword;
 		private String displayname;
+		private Integer fkbaseoffice;
 	}
 
 	@Data
@@ -207,6 +209,7 @@ public class UserResource {
 		private Integer id;
 		private String email;
 		private String displayname;
+		private Integer fkbaseoffice;
 
 		public static UserResponse getInstance(UsersRecord userRec) {
 			UserResponse userDto = new UserResponse();

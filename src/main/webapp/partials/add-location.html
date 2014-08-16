@@ -10,6 +10,15 @@
 				<fieldset>
 					<legend>Adding a new location</legend>
 					<div class="form-group">
+						<label for="data.fkoffice" class="col-lg-2 control-label">Office</label>
+						<div class="col-lg-10">
+							<select class="form-control" ng-model="data.fkoffice">
+								<option ng-repeat="office in offices" value="{{office.id}}">{{office.name}}</option>
+							</select>							
+							<span class="help-block">For lunch only reachable from this office.</span>
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="data.officialname" class="col-lg-2 control-label required">Official name</label>
 						<div class="col-lg-10">
 							<input type="text" class="form-control" ng-model="data.officialname" placeholder="Official name" focus="true" required>
@@ -24,13 +33,13 @@
 					</div>
 					<div class="form-group">
 						<label for="data.address" class="col-lg-2 control-label required">Address</label>
-						<div class="col-lg-4">
+						<div class="col-lg-5">
 							<input type="text" class="form-control" ng-model="data.address" placeholder="Street" required>
 						</div>
-						<div class="col-lg-3">
+						<div class="col-lg-2">
 							<input type="text" class="form-control" ng-model="data.zip" placeholder="ZIP">
 						</div>
-						<div class="col-lg-3">
+						<div class="col-lg-2">
 							<input type="text" class="form-control" ng-model="data.city" placeholder="City" required>
 						</div>
 					</div>
@@ -68,7 +77,6 @@
 
 					<div class="form-group">
 						<div class="col-lg-10 col-lg-offset-2">
-							<!--  <button class="btn btn-default">Cancel</button> -->
 							<button type="submit" class="btn btn-primary" ng-click="submitAdd()" ng-disabled="addLocation.$invalid">Save</button>
 						</div>
 					</div>

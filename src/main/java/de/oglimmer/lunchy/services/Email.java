@@ -31,16 +31,18 @@ public enum Email {
 	}
 
 	private void send(final org.apache.commons.mail.Email simpleEmail) {
-		executor.execute(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					simpleEmail.send();
-				} catch (EmailException e) {
-					log.error("Failed to send email", e);
+		if (!LunchyProperties.INSTANCE.isEmailDisabled()) {
+			executor.execute(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						simpleEmail.send();
+					} catch (EmailException e) {
+						log.error("Failed to send email", e);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	public void sendPasswordLink(UsersRecord user) {

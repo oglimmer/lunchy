@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> {
 
-	private static final long serialVersionUID = -1807100933;
+	private static final long serialVersionUID = -464251859;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.location</code>
@@ -30,6 +30,11 @@ public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	 * The column <code>oli_lunchy.location.id</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.location.fkOffice</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> FKOFFICE = createField("fkOffice", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.location.officialname</code>.
@@ -150,6 +155,14 @@ public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	@Override
 	public java.util.List<org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord>> getKeys() {
 		return java.util.Arrays.<org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord>>asList(de.oglimmer.lunchy.database.generated.Keys.KEY_LOCATION_PRIMARY);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public java.util.List<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, ?>> getReferences() {
+		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_LOC_OFF, de.oglimmer.lunchy.database.generated.Keys.FK_LOC_USR);
 	}
 
 	/**

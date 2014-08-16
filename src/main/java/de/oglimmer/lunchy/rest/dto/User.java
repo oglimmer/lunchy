@@ -17,6 +17,7 @@ public class User {
 	private Integer permissions;
 	private Timestamp passwordresettimestamp;
 	private Timestamp longtimetimestamp;
+	private Integer fkbaseoffice;
 
 	public static User getInstance(UsersRecord userRec) {
 		User userDto = new User();

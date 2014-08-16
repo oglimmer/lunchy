@@ -19,6 +19,7 @@ public class Keys {
 	// -------------------------------------------------------------------------
 
 	public static final org.jooq.Identity<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> IDENTITY_LOCATION = Identities0.IDENTITY_LOCATION;
+	public static final org.jooq.Identity<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Integer> IDENTITY_OFFICES = Identities0.IDENTITY_OFFICES;
 	public static final org.jooq.Identity<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> IDENTITY_PICTURES = Identities0.IDENTITY_PICTURES;
 	public static final org.jooq.Identity<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> IDENTITY_REVIEWS = Identities0.IDENTITY_REVIEWS;
 	public static final org.jooq.Identity<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> IDENTITY_USERS = Identities0.IDENTITY_USERS;
@@ -28,6 +29,7 @@ public class Keys {
 	// -------------------------------------------------------------------------
 
 	public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> KEY_LOCATION_PRIMARY = UniqueKeys0.KEY_LOCATION_PRIMARY;
+	public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord> KEY_OFFICES_PRIMARY = UniqueKeys0.KEY_OFFICES_PRIMARY;
 	public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord> KEY_PICTURES_PRIMARY = UniqueKeys0.KEY_PICTURES_PRIMARY;
 	public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> KEY_REVIEWS_PRIMARY = UniqueKeys0.KEY_REVIEWS_PRIMARY;
 	public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> KEY_REVIEWS_FKUSER = UniqueKeys0.KEY_REVIEWS_FKUSER;
@@ -38,6 +40,13 @@ public class Keys {
 	// FOREIGN KEY definitions
 	// -------------------------------------------------------------------------
 
+	public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord> FK_LOC_OFF = ForeignKeys0.FK_LOC_OFF;
+	public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> FK_LOC_USR = ForeignKeys0.FK_LOC_USR;
+	public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> FK_PIC_LOC = ForeignKeys0.FK_PIC_LOC;
+	public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> FK_PIC_USR = ForeignKeys0.FK_PIC_USR;
+	public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> FK_REV_USR = ForeignKeys0.FK_REV_USR;
+	public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> FK_REV_LOC = ForeignKeys0.FK_REV_LOC;
+	public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord> FK_USR_OFF = ForeignKeys0.FK_USR_OFF;
 
 	// -------------------------------------------------------------------------
 	// [#1459] distribute members to avoid static initialisers > 64kb
@@ -45,6 +54,7 @@ public class Keys {
 
 	private static class Identities0 extends org.jooq.impl.AbstractKeys {
 		public static org.jooq.Identity<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> IDENTITY_LOCATION = createIdentity(de.oglimmer.lunchy.database.generated.tables.Location.LOCATION, de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.ID);
+		public static org.jooq.Identity<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Integer> IDENTITY_OFFICES = createIdentity(de.oglimmer.lunchy.database.generated.tables.Offices.OFFICES, de.oglimmer.lunchy.database.generated.tables.Offices.OFFICES.ID);
 		public static org.jooq.Identity<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> IDENTITY_PICTURES = createIdentity(de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES, de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.ID);
 		public static org.jooq.Identity<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> IDENTITY_REVIEWS = createIdentity(de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.ID);
 		public static org.jooq.Identity<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> IDENTITY_USERS = createIdentity(de.oglimmer.lunchy.database.generated.tables.Users.USERS, de.oglimmer.lunchy.database.generated.tables.Users.USERS.ID);
@@ -52,10 +62,21 @@ public class Keys {
 
 	private static class UniqueKeys0 extends org.jooq.impl.AbstractKeys {
 		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> KEY_LOCATION_PRIMARY = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Location.LOCATION, de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.ID);
+		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord> KEY_OFFICES_PRIMARY = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Offices.OFFICES, de.oglimmer.lunchy.database.generated.tables.Offices.OFFICES.ID);
 		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord> KEY_PICTURES_PRIMARY = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES, de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.ID);
 		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> KEY_REVIEWS_PRIMARY = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.ID);
 		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> KEY_REVIEWS_FKUSER = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FKUSER, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FKLOCATION);
 		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> KEY_USERS_PRIMARY = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Users.USERS, de.oglimmer.lunchy.database.generated.tables.Users.USERS.ID);
 		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> KEY_USERS_EMAIL = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Users.USERS, de.oglimmer.lunchy.database.generated.tables.Users.USERS.EMAIL);
+	}
+
+	private static class ForeignKeys0 extends org.jooq.impl.AbstractKeys {
+		public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord> FK_LOC_OFF = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_OFFICES_PRIMARY, de.oglimmer.lunchy.database.generated.tables.Location.LOCATION, de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.FKOFFICE);
+		public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> FK_LOC_USR = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_USERS_PRIMARY, de.oglimmer.lunchy.database.generated.tables.Location.LOCATION, de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.FKUSER);
+		public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> FK_PIC_LOC = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_LOCATION_PRIMARY, de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES, de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.FKLOCATION);
+		public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> FK_PIC_USR = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_USERS_PRIMARY, de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES, de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.FKUSER);
+		public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> FK_REV_USR = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_USERS_PRIMARY, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FKUSER);
+		public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> FK_REV_LOC = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_LOCATION_PRIMARY, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FKLOCATION);
+		public static final org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord> FK_USR_OFF = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_OFFICES_PRIMARY, de.oglimmer.lunchy.database.generated.tables.Users.USERS, de.oglimmer.lunchy.database.generated.tables.Users.USERS.FKBASEOFFICE);
 	}
 }

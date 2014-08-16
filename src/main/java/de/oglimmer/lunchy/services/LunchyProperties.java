@@ -46,4 +46,8 @@ public enum LunchyProperties {
 		return prop.getProperty("app.backupdir", System.getProperty("lunchy.backupdir", null));
 	}
 
+	public boolean isEmailDisabled() {
+		return Boolean.parseBoolean(prop.getProperty("email.disabled", System.getProperty("lunchy.email.disabled", "false")));
+	}
+
 }
