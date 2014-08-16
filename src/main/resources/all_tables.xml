@@ -260,4 +260,11 @@
     <changeSet author="oli (generated)" id="1408224948427-11">
         <addForeignKeyConstraint baseColumnNames="fkCommunity" baseTableName="users" constraintName="fk_usr_com" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
     </changeSet>
+    <changeSet author="oli (generated)" id="1408230701349-1">
+        <addColumn tableName="offices">
+            <column defaultValue="" name="country" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
