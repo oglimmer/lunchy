@@ -1,6 +1,6 @@
 <div class="row" ng-hide="editableButton">
 	<div class="col-lg-12">
-		<form class="form-horizontal" novalidate name="editLocation">
+		<form class="form-horizontal" novalidate name="childScopeHolder.editLocation">
 			<fieldset>
 				<legend>Edit {{data.officialname}} in {{data.city}}</legend>
 				<div class="form-group">
@@ -11,51 +11,51 @@
 						</select>							
 					</div>
 				</div>
-				<div class="form-group" ng-class="{'has-error': editLocation.officialname.$invalid}">
+				<div class="form-group" ng-class="{'has-error': childScopeHolder.editLocation.officialname.$invalid}">
 					<label for="data.officialname" class="col-lg-2 control-label required">Official name</label>
 					<div class="col-lg-10">
-						<input type="text" class="form-control" name="officialname" ng-model="data.officialname" ly-placeholder="Official name" focus="true" ly-disabled="editableButton" required>
+						<input type="text" class="form-control" name="officialname" ng-model="data.officialname" placeholder="Official name" focus="true"  required>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="data.streetname" class="col-lg-2 control-label">ADTECH name</label>
 					<div class="col-lg-10">
-						<input type="text" class="form-control" ng-model="data.streetname" ly-placeholder="ADTECH name" ly-disabled="editableButton">
+						<input type="text" class="form-control" ng-model="data.streetname" placeholder="ADTECH name" >
 						<span ng-hide="editableButton" class="help-block">Separate multiple names by comma.</span>
 					</div>
 				</div>
-				<div class="form-group" ng-class="{'has-error': editLocation.address.$invalid || editLocation.city.$invalid}">
+				<div class="form-group" ng-class="{'has-error': childScopeHolder.editLocation.address.$invalid || childScopeHolder.editLocation.city.$invalid}">
 					<label for="data.address" class="col-lg-2 control-label required">Address</label>
 					<div class="col-lg-4">
-						<input type="text" class="form-control" name="address" ng-model="data.address" ly-placeholder="Street" ly-disabled="editableButton" required>
+						<input type="text" class="form-control" name="address" ng-model="data.address" placeholder="Street"  required>
 					</div>
 					<div class="col-lg-3">
-						<input type="text" class="form-control" ng-model="data.zip" ly-placeholder="ZIP" ly-disabled="editableButton">
+						<input type="text" class="form-control" ng-model="data.zip" placeholder="ZIP" >
 					</div>
 					<div class="col-lg-3">
-						<input type="text" class="form-control" name="city" ng-model="data.city" ly-placeholder="City" ly-disabled="editableButton" required>
+						<input type="text" class="form-control" name="city" ng-model="data.city" placeholder="City"  required>
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label for="data.url" class="col-lg-2 control-label">Webpage</label>
 					<div class="col-lg-10">
-						<input type="text" class="form-control" ng-model="data.url" ly-placeholder="http://www.the-restaurant.de" ly-disabled="editableButton"> 
+						<input type="text" class="form-control" ng-model="data.url" placeholder="http://www.the-restaurant.de" > 
 					</div>
 				</div>
 				
 				<div class="form-group">
 					<label for="data.comment" class="col-lg-2 control-label">Comment</label>
 					<div class="col-lg-10">
-						<textarea class="form-control" rows="3" ng-model="data.comment" ly-disabled="editableButton"></textarea>
+						<textarea class="form-control" rows="3" ng-model="data.comment" ></textarea>
 						<span ng-hide="editableButton" class="help-block">Describe the location without judging it. Your personal opinions should go into a review.</span>
 					</div>
 				</div>
 
-				<div class="form-group" ng-class="{'has-error': editLocation.turnaroundtime.$invalid}">
+				<div class="form-group" ng-class="{'has-error': childScopeHolder.editLocation.turnaroundtime.$invalid}">
 					<label for="data.turnaroundtime" class="col-lg-2 control-label required">Turn around time</label>
 					<div class="col-lg-10">
-						<input type="number" class="form-control" name="turnaroundtime" ng-model="data.turnaroundtime" ly-placeholder="e.g. 45" ly-disabled="editableButton" required> 
+						<input type="number" class="form-control" name="turnaroundtime" ng-model="data.turnaroundtime" placeholder="e.g. 45"  required> 
 						<span ng-hide="editableButton" class="help-block">Time in minutes to go there, order, eat, pay and get back to the office.</span>
 					</div>
 				</div>

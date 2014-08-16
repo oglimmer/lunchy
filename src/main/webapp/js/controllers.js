@@ -186,7 +186,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	};
 	$scope.usersReview = null;
 	$scope.reviewButton = "Add Review";
-	$scope.flowHolder = {};
+	$scope.childScopeHolder = {};
 	Authetication.checkLoggedIn().then(function(data) {
 		if(data.loggedIn){
 			getlocationStatusForCurrentUser();	 
@@ -197,9 +197,9 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	});
 	$scope.tabs = {};
 	$scope.tabs.pictureTabActive = false;
-	$scope.picHolder = {};
+	
 	LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
-		$scope.picHolder.pictures = pictures;
+		$scope.childScopeHolder.pictures = pictures;
 		if(pictures.length > 0) {
 			$scope.tabs.pictureTabActive = true;
 		}
@@ -271,14 +271,14 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 		$scope.editableButton = 1;
 		$scope.addReviewButton = 0;
 		$scope.addPictureButton = 0;
-		if($scope.flowHolder.$flow) {
-			$scope.flowHolder.$flow.cancel();
+		if($scope.childScopeHolder.$flow) {
+			$scope.childScopeHolder.$flow.cancel();
 		}
 	};
 	
 	$scope.saveEdit = function() {		
-		if($scope.editableButton == 0) {
-			if($scope.editLocation.$invalid) {
+		if($scope.editableButton == 0) {			
+			if($scope.childScopeHolder.editLocation.$invalid) {
 				$scope.alerts.push({type:'danger', msg: 'Missing fields'});
 				$timeout(function() {
 					$scope.editableButton = 0;
@@ -322,20 +322,20 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	}
 	$scope.addPicture = function() {
 		if($scope.addPictureButton==1) {
-			if($scope.flowHolder.$flow.files.length>0) {
-				var f1 = $scope.flowHolder.$flow.files[0];
+			if($scope.childScopeHolder.$flow.files.length>0) {
+				var f1 = $scope.childScopeHolder.$flow.files[0];
 				if(f1.isUploading() || f1.size > 1024*1024*15) {
 					$scope.addPictureButton=0;					
 				} else {
 				
-					var newPic = new PicturesDao({fklocation: $stateParams.locationId, caption: $scope.flowHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
+					var newPic = new PicturesDao({fklocation: $stateParams.locationId, caption: $scope.childScopeHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
 					newPic.$save(function(pic) {
 						LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
-							$scope.picHolder.pictures = pictures;
+							$scope.childScopeHolder.pictures = pictures;
 						});
 					});
-					$scope.flowHolder.$flow.cancel();
-					$scope.flowHolder.picCaption = "";
+					$scope.childScopeHolder.$flow.cancel();
+					$scope.childScopeHolder.picCaption = "";
 					$scope.tabs.pictureTabActive = true;
 				}				
 			} else {

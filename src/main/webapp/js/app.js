@@ -260,7 +260,11 @@ factory('StorageService', function ($window) {
     return {
         
         get: function (key) {
-           return JSON.parse(localStorage.getItem(key));
+        	try {
+        		return JSON.parse(localStorage.getItem(key));
+        	} catch(e) {
+        		return null;
+        	}
         },
 
         save: function (key, data) {

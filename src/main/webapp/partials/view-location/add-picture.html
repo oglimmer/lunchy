@@ -1,5 +1,5 @@
 <div class="row" ng-show="addPictureButton">
-	<div class="col-lg-12" flow-init flow-name="flowHolder.$flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-files-submitted="$flow.upload()">
+	<div class="col-lg-12" flow-init flow-name="childScopeHolder.$flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-files-submitted="$flow.upload()">
 		<h3>Add picture</h3>
 		<hr class="soften" />
 		<div flow-transfers>				
@@ -15,7 +15,7 @@
 			<div ng-show="transfers.length > 0 && !$flow.isUploading()">
 				<alert type="success">Upload completed! <a href="javascript:void(null);" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</a></alert>
 				<form class="form-horizontal">
-					<input class="form-control" type="text" ng-model="flowHolder.picCaption" placeholder="Put any caption here ..." focus="true" />
+					<input class="form-control" type="text" ng-model="childScopeHolder.picCaption" placeholder="Put any caption here ..." focus="true" />
 				</form>
 			</div>
 		</div>
