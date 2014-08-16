@@ -28,9 +28,11 @@ import com.google.code.geocoder.model.GeocoderResult;
 import com.google.code.geocoder.model.LatLng;
 
 import de.oglimmer.lunchy.database.LocationDao;
+import de.oglimmer.lunchy.database.OfficeDao;
 import de.oglimmer.lunchy.database.PicturesDao;
 import de.oglimmer.lunchy.database.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
+import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 import de.oglimmer.lunchy.rest.dto.Location;
@@ -137,7 +139,8 @@ public class LocationResource {
 			locationRec.setFkcommunity(Community.get(request));
 			locationRec.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
 			locationRec.setCreatedon(new Timestamp(new Date().getTime()));
-			locationRec.setCountry("Germany");
+			OfficesRecord office = OfficeDao.INSTANCE.getById(locationRec.getFkoffice());
+			locationRec.setCountry(office.getCountry());
 		}
 	}
 

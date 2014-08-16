@@ -41,6 +41,13 @@ public class OfficeResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/defaultOffice")
+	public ResultParam getDefaultOffice(@Context HttpServletRequest request) {
+		return new ResultParam(true, Integer.toString(OfficeDao.INSTANCE.getDefaultOffice(Community.get(request))));
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/locations")
 	public List<LocationQuery> query(@Context HttpServletRequest request, @PathParam("id") int id) {
 		Integer fkUser = null;

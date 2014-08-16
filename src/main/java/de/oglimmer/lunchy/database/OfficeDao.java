@@ -32,6 +32,17 @@ public enum OfficeDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
+	public int getDefaultOffice(int fkCommunity) {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+
+			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+			Record rec = create.fetchOne("select fkBaseOffice from users where fkCommunity=" + fkCommunity
+					+ " group by fkBaseOffice order by count(*) desc limit 1");
+			return rec.getValue("fkBaseOffice", Integer.class);
+		}
+	}
+
+	@SneakyThrows(value = SQLException.class)
 	public List<OfficesRecord> query(int fkCommunity) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 

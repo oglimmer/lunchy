@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Pictures extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord> {
 
-	private static final long serialVersionUID = 2102277656;
+	private static final long serialVersionUID = -2029523998;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.pictures</code>
@@ -112,7 +112,7 @@ public class Pictures extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	 */
 	@Override
 	public java.util.List<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, ?>> getReferences() {
-		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_PIC_LOC, de.oglimmer.lunchy.database.generated.Keys.FK_PIC_USR);
+		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_PIC_COM, de.oglimmer.lunchy.database.generated.Keys.FK_PIC_LOC, de.oglimmer.lunchy.database.generated.Keys.FK_PIC_USR);
 	}
 
 	/**

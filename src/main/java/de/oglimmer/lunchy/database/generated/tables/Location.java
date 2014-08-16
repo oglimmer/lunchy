@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> {
 
-	private static final long serialVersionUID = 1344748502;
+	private static final long serialVersionUID = -631278016;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.location</code>
@@ -167,7 +167,7 @@ public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	 */
 	@Override
 	public java.util.List<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, ?>> getReferences() {
-		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_LOC_USR, de.oglimmer.lunchy.database.generated.Keys.FK_LOC_OFF);
+		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_LOC_COM, de.oglimmer.lunchy.database.generated.Keys.FK_LOC_USR, de.oglimmer.lunchy.database.generated.Keys.FK_LOC_OFF);
 	}
 
 	/**

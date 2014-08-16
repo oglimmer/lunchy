@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Offices extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord> {
 
-	private static final long serialVersionUID = -1104468526;
+	private static final long serialVersionUID = -41317531;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.offices</code>
@@ -57,6 +57,11 @@ public class Offices extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Integer> ZOOMFACTOR = createField("zoomfactor", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
+	 * The column <code>oli_lunchy.offices.country</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.String> COUNTRY = createField("country", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+
+	/**
 	 * Create a <code>oli_lunchy.offices</code> table reference
 	 */
 	public Offices() {
@@ -100,6 +105,14 @@ public class Offices extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	@Override
 	public java.util.List<org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord>> getKeys() {
 		return java.util.Arrays.<org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord>>asList(de.oglimmer.lunchy.database.generated.Keys.KEY_OFFICES_PRIMARY);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public java.util.List<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, ?>> getReferences() {
+		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_OFF_COM);
 	}
 
 	/**

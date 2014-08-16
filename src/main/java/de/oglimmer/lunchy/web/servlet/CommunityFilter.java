@@ -42,7 +42,7 @@ public class CommunityFilter implements Filter {
 				chain.doFilter(request, response);
 			}
 		} else {
-			String subdomain = domain.substring(0, domain.indexOf('.'));
+			String subdomain = domain.indexOf('.') > -1 ? domain.substring(0, domain.indexOf('.')) : domain;
 			CommunitiesRecord community = CommunityDao.INSTANCE.getByDomain(subdomain);
 			if (community != null) {
 				Community.set(httpReq, community);

@@ -355,30 +355,42 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	$scope.selectedOffice = $stateParams.officeId;
 	
 	OfficesDao.query(function(offices) {
-		$scope.offices = offices;	
+		$scope.offices = offices;
+		angular.forEach(offices, function(off) {
+			if(off.id == $scope.selectedOffice){
+				$scope.officeMarker = {
+					coords: {
+						latitude: off.geoLat,
+						longitude: off.geoLng
+					},
+					markerOptions: {
+						title: "Office " + off.name
+					}
+				}
+			}
+		})
 	});
 	
 	$scope.map = {
 		loaded:false
 	};
-	Authetication.checkLoggedIn().then(function(data) {		
-		OfficesDao.get({id:$scope.selectedOffice}).$promise.then(function(office) {			
-			$scope.map = {
-				center : {
-					latitude : office.geoLat,
-					longitude : office.geoLng
-				},
-				zoom : office.zoomfactor,
-				events: {
-					tilesloaded: function (map) {
-		                $scope.$apply(function () {
-		                    google.maps.event.trigger(map, 'resize');
-		                });
-		            }
-				}
-			};			
-			$scope.map.loaded = true;
-		});
+	
+	OfficesDao.get({id:$scope.selectedOffice}).$promise.then(function(office) {			
+		$scope.map = {
+			center : {
+				latitude : office.geoLat,
+				longitude : office.geoLng
+			},
+			zoom : office.zoomfactor,
+			events: {
+				tilesloaded: function (map) {
+	                $scope.$apply(function () {
+	                    google.maps.event.trigger(map, 'resize');
+	                });
+	            }
+			}
+		};			
+		$scope.map.loaded = true;
 	});
 	
 	$scope.$watch("selectedOffice", function() {
@@ -386,7 +398,7 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	});
 		
 	$scope.mapCreated = function() {
-		$("#browseMap .angular-google-map-container").height(angular.element($window).height()-75);
+		$("#browseMap .angular-google-map-container").height(angular.element($window).height()-110);
 	}
 	
 	OfficesDao.locations({id: $scope.selectedOffice}, function (locations) {

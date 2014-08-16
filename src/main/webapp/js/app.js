@@ -141,7 +141,11 @@ factory('OfficesDao', ['$resource', function($resource) {
 			method: 'GET',
 			url: 'rest/offices/:id/locations',
 			isArray: true
-		}		
+		},
+		'defaultOffice': {
+			method: 'GET',
+			url: 'rest/offices/defaultOffice'
+		}
 	});
 }]).
 factory('LocationsDao', ['$resource', function($resource) {
@@ -165,7 +169,9 @@ factory('LocationsDao', ['$resource', function($resource) {
 factory('ReviewDao', ['$resource', function($resource) {
 	return $resource('rest/reviews/:id', {id: '@id'});
 }]).
-factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', function($modal, $q, LoginDao, $rootScope, StorageService) {
+factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 
+					function($modal, $q, LoginDao, $rootScope, StorageService, OfficesDao) {
+	
 	return {
 		loggedIn: false,
 		fkBaseOffice: -1,
@@ -185,7 +191,18 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 			var thiz = this;
 			if(thiz.loggedIn) {
 				return $q.when(thiz);
-			} else {
+			} else {				
+				// user is not logged in, get the default office
+				if(thiz.fkBaseOffice === -1) {					
+					OfficesDao.defaultOffice(function(result) {					
+						// only if still no valid base-office
+						if(thiz.fkBaseOffice === -1) {
+							thiz.fkBaseOffice = result.errorMsg;
+							console.log("Set base office to "+thiz.fkBaseOffice);
+						}
+					});				
+				}
+
 				return LoginDao.check({longTimeToken:StorageService.get('longTimeToken')}).$promise
 					.then(function(successResp) {						
 						if(successResp.success) {
@@ -287,6 +304,7 @@ run(['$rootScope', '$location', 'Authetication', 'LoginDao', '$timeout', functio
 			Authetication.showRegister();
 		}
 	});
+
 	Authetication.checkLoggedIn();
 
 	
