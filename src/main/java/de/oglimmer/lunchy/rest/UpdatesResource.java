@@ -1,5 +1,8 @@
 package de.oglimmer.lunchy.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -7,9 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
+import lombok.Data;
 import de.oglimmer.lunchy.database.UpdatesDao;
 import de.oglimmer.lunchy.database.UpdatesDao.ResultParam;
 
@@ -18,45 +19,40 @@ public class UpdatesResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String query(@Context HttpServletRequest request) {
-		JsonArray resultArray = new JsonArray();
+	public List<QueryResultRow> query(@Context HttpServletRequest request) {
+		List<QueryResultRow> resultList = new ArrayList<>();
 		for (ResultParam update : UpdatesDao.INSTANCE.get(10)) {
-			resultArray.add(createJson(update));
+			resultList.add(createResultRow(update));
 		}
-		return resultArray.toString();
+		return resultList;
 	}
 
-	private JsonObject createJson(ResultParam update) {
-		JsonObject jsonObj = new JsonObject();
-		String text, icon, ref;
+	private QueryResultRow createResultRow(ResultParam update) {
+		QueryResultRow qrr = new QueryResultRow();
 		switch (update.getType()) {
 		case "L":
-			text = setTextForLocation(update);
-			icon = "glyphicon-tower";
-			ref = "view/" + update.getId();
+			qrr.setText(setTextForLocation(update));
+			qrr.setIcon("glyphicon-tower");
+			qrr.setRef("view/" + update.getId());
 			break;
 		case "R":
-			text = setTextForReview(update);
-			icon = "glyphicon-eye-open";
-			ref = "view/" + update.getId();
+			qrr.setText(setTextForReview(update));
+			qrr.setIcon("glyphicon-eye-open");
+			qrr.setRef("view/" + update.getId());
 			break;
 		case "U":
-			text = update.getUser() + " joined";
-			icon = "glyphicon-user";
-			ref = "";
+			qrr.setText(update.getUser() + " joined");
+			qrr.setIcon("glyphicon-user");
 			break;
 		case "P":
-			text = "New picture for " + update.getOfficialName() + " in " + update.getCity() + " by " + update.getUser();
-			icon = "glyphicon-picture";
-			ref = "view/" + update.getId();
+			qrr.setText("New picture for " + update.getOfficialName() + " in " + update.getCity() + " by " + update.getUser());
+			qrr.setIcon("glyphicon-picture");
+			qrr.setRef("view/" + update.getId());
 			break;
 		default:
 			throw new RuntimeException("Illegal type=" + update.getType());
 		}
-		jsonObj.addProperty("text", text);
-		jsonObj.addProperty("ref", ref);
-		jsonObj.addProperty("icon", icon);
-		return jsonObj;
+		return qrr;
 	}
 
 	private String setTextForReview(ResultParam update) {
@@ -73,5 +69,12 @@ public class UpdatesResource {
 		} else {
 			return update.getOfficialName() + " in " + update.getCity() + " was updated";
 		}
+	}
+
+	@Data
+	public static class QueryResultRow {
+		private String text;
+		private String ref;
+		private String icon;
 	}
 }
