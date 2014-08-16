@@ -49,7 +49,8 @@ public class CommunityFilter implements Filter {
 
 				chain.doFilter(request, response);
 			} else {
-				httpResp.sendRedirect("http://lunchylunch.com/lunchy/portal.jsp");
+				httpResp.sendRedirect("http://lunchylunch.com" + (request.getServerPort() != 80 ? ":" + request.getServerPort() : "")
+						+ "/lunchy/portal.jsp");
 			}
 		}
 	}
