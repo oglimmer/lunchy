@@ -117,4 +117,63 @@
     <changeSet author="oli (generated)" id="1407795125518-5">
         <addUniqueConstraint columnNames="fkUser, fkLocation" constraintName="fkUser" deferrable="false" disabled="false" initiallyDeferred="false" tableName="reviews"/>
     </changeSet>
+    <changeSet author="oli (generated)" id="1408201702340-1">
+        <createTable tableName="offices">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="geo_lat" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="geo_lng" type="DOUBLE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="zoomfactor" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408201702340-2">
+        <addColumn tableName="users">
+            <column name="fkBaseOffice" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408201702340-3">
+        <addColumn tableName="location">
+            <column name="fkOffice" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408201702340-4">
+        <addColumn tableName="reviews">
+            <column name="turnAroundTime" type="INT(10)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408201702340-5">
+        <addForeignKeyConstraint baseColumnNames="fkOffice" baseTableName="location" constraintName="fk_loc_off" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="offices"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408201702340-6">
+        <addForeignKeyConstraint baseColumnNames="fkUser" baseTableName="location" constraintName="fk_loc_usr" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408201702340-7">
+        <addForeignKeyConstraint baseColumnNames="fkLocation" baseTableName="pictures" constraintName="fk_pic_loc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="location"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408201702340-8">
+        <addForeignKeyConstraint baseColumnNames="fkUser" baseTableName="pictures" constraintName="fk_pic_usr" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408201702340-9">
+        <addForeignKeyConstraint baseColumnNames="fkLocation" baseTableName="reviews" constraintName="fk_rev_loc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="location"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408201702340-10">
+        <addForeignKeyConstraint baseColumnNames="fkUser" baseTableName="reviews" constraintName="fk_rev_usr" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408201702340-11">
+        <addForeignKeyConstraint baseColumnNames="fkBaseOffice" baseTableName="users" constraintName="fk_usr_off" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="offices"/>
+    </changeSet>
 </databaseChangeLog>
