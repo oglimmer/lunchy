@@ -30,7 +30,7 @@ public class RuntimeDataResource {
 	public String queryRest(@Context HttpServletRequest request) {
 		checkRuntimePassword(request);
 		JsonObject data = new JsonObject();
-		MBeanServies.copyAllNodes("org.glassfish.jersey:*,subType=Uris", data);
+		MBeanServies.copyAllNodes("org.glassfish.jersey:*,subType=Uris,executionTimes=*", data, "detail=");
 		return data.toString();
 	}
 

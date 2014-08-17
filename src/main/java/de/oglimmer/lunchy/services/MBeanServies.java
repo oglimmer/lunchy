@@ -23,13 +23,15 @@ public class MBeanServies {
 
 	private static MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 
-	public static void copyAllNodes(String domainPattern, JsonObject targetObject) {
+	public static void copyAllNodes(String domainPattern, JsonObject targetObject, String excludeString) {
 		try {
 			Set<ObjectName> objectNames = mbs.queryNames(new ObjectName(domainPattern), null);
 			for (ObjectName objName : objectNames) {
-				JsonObject node = new JsonObject();
-				copyAllAttributes(objName, node);
-				targetObject.add(objName.toString(), node);
+				if (!objName.toString().contains(excludeString)) {
+					JsonObject node = new JsonObject();
+					copyAllAttributes(objName, node);
+					targetObject.add(objName.toString(), node);
+				}
 			}
 		} catch (MalformedObjectNameException e) {
 			log.error("Failed to query mbean", e);
