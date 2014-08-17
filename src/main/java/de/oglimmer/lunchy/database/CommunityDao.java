@@ -29,4 +29,17 @@ public enum CommunityDao {
 		}
 	}
 
+	@SneakyThrows(value = SQLException.class)
+	public CommunitiesRecord getById(int id) {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+
+			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+			CommunitiesRecord rec = create.fetchOne(Communities.COMMUNITIES, Communities.COMMUNITIES.ID.equal(id));
+			if (rec != null) {
+				rec.attach(null);
+			}
+			return rec;
+		}
+	}
+
 }

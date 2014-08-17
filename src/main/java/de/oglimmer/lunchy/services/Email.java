@@ -8,18 +8,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 
+import de.oglimmer.lunchy.database.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 
 @Slf4j
 public enum Email {
 	INSTANCE;
 
-	private static final String URL = "http://lunchy.oglimmer.de/lunchy";
+	private static final String URL = "http://%s.lunchylunch.com/lunchy";
 
 	private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
 	public void shutdown() {
 		executor.shutdown();
+	}
+
+	private String getUrl(int fkCommunity) {
+		return String.format(URL, CommunityDao.INSTANCE.getById(fkCommunity).getDomain());
 	}
 
 	private org.apache.commons.mail.Email setup() throws EmailException {
@@ -52,7 +57,7 @@ public enum Email {
 			email.setMsg("Hello "
 					+ user.getDisplayname()
 					+ "\r\n\r\nYou have requested a link to reset your Lunchy password.\r\n\r\nClick here to reset your password: "
-					+ URL
+					+ getUrl(user.getFkcommunity())
 					+ "/#/passwordReset?token="
 					+ user.getPasswordresettoken()
 					+ "\r\n\r\nThis link works for 24 hours.\r\n\r\nYou can ignore this email if you haven't requested this link.\r\n\r\nRegards,\r\nOli");
@@ -63,11 +68,11 @@ public enum Email {
 		}
 	}
 
-	public void sendWelcome(String emailAddress, String name) {
+	public void sendWelcome(String emailAddress, String name, int fkCommunity) {
 		try {
 			org.apache.commons.mail.Email email = setup();
 			email.setSubject("Welcome to Lunchy");
-			email.setMsg("Hello " + name + "\r\n\r\nYou have successfully registered at lunchy.\r\n\r\nVisit " + URL
+			email.setMsg("Hello " + name + "\r\n\r\nYou have successfully registered at lunchy.\r\n\r\nVisit " + getUrl(fkCommunity)
 					+ " to explore lunch places.\r\n\r\nRegards,\r\nOli");
 			email.addTo(emailAddress);
 			send(email);
