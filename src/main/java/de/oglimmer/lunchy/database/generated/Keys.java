@@ -37,7 +37,7 @@ public class Keys {
 	public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> KEY_REVIEWS_PRIMARY = UniqueKeys0.KEY_REVIEWS_PRIMARY;
 	public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> KEY_REVIEWS_FKUSER = UniqueKeys0.KEY_REVIEWS_FKUSER;
 	public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> KEY_USERS_PRIMARY = UniqueKeys0.KEY_USERS_PRIMARY;
-	public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> KEY_USERS_EMAIL = UniqueKeys0.KEY_USERS_EMAIL;
+	public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> KEY_USERS_EMAIL_2 = UniqueKeys0.KEY_USERS_EMAIL_2;
 
 	// -------------------------------------------------------------------------
 	// FOREIGN KEY definitions
@@ -78,7 +78,7 @@ public class Keys {
 		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> KEY_REVIEWS_PRIMARY = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.ID);
 		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> KEY_REVIEWS_FKUSER = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FKUSER, de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FKLOCATION);
 		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> KEY_USERS_PRIMARY = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Users.USERS, de.oglimmer.lunchy.database.generated.tables.Users.USERS.ID);
-		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> KEY_USERS_EMAIL = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Users.USERS, de.oglimmer.lunchy.database.generated.tables.Users.USERS.EMAIL);
+		public static final org.jooq.UniqueKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> KEY_USERS_EMAIL_2 = createUniqueKey(de.oglimmer.lunchy.database.generated.tables.Users.USERS, de.oglimmer.lunchy.database.generated.tables.Users.USERS.EMAIL, de.oglimmer.lunchy.database.generated.tables.Users.USERS.FKCOMMUNITY);
 	}
 
 	private static class ForeignKeys0 extends org.jooq.impl.AbstractKeys {

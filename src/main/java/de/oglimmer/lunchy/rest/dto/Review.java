@@ -19,6 +19,8 @@ public class Review {
 	private String officialname;
 	private Integer rating;
 	private String favoritemeal;
+	private Integer traveltime;
+	private Integer onsitetime;
 
 	public static Review getInstance(ReviewsRecord reviewRec) {
 		Review reviewDto = new Review();

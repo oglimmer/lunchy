@@ -47,4 +47,12 @@ filter('resolveNameById', function () {
     	})
     	return resolvedName;
     }
+}).
+filter('numberToNA', function () {
+	return function(number) {
+		if(typeof(number)==='undefined' || number == null || number == "0") {
+			return "n/a";
+		}
+		return number;
+	}
 });

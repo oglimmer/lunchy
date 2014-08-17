@@ -151,6 +151,9 @@ public class LocationResource {
 	}
 
 	private void copyDtoToRecord(Location locationDto, LocationRecord locationRec) {
+		// HACK:make sure turnAroundTime is not overwritten
+		locationDto.setTurnaroundtime(locationRec.getTurnaroundtime());
+
 		BeanMappingProvider.INSTANCE.getMapper().map(locationDto, locationRec);
 	}
 

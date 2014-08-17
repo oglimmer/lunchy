@@ -85,3 +85,8 @@
     background: #2b73a2;
     color: #fff;
 }
+
+.dottedUnderline {
+	border-bottom: 1px blue dotted;
+}
+

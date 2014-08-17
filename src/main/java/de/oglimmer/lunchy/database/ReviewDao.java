@@ -55,10 +55,14 @@ public enum ReviewDao {
 	@SneakyThrows(value = SQLException.class)
 	public void store(ReviewsRecord review) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
-
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+
 			review.attach(create.configuration());
 			review.store();
+
+			create.execute(
+					"update location set turnAroundTime=(select avg(IFNULL(onSiteTime,0)+IFNULL(travelTime,0)) from reviews where reviews.fkLocation = location.id) where id=?",
+					review.getFklocation());
 		}
 	}
 

@@ -314,6 +314,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 				} else {
 					$scope.reviews = _.filter($scope.reviews, function(review) { return review.id !== result.id; });
 				}		
+				$scope.data.turnaroundtime = result.locationTurnAroundTime;
 				$scope.reviews.splice(0, 0, result);
 				$scope.usersReview = result.id;
 			}, function(result) {

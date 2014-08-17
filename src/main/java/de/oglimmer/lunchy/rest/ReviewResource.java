@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 import de.oglimmer.lunchy.database.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 import de.oglimmer.lunchy.rest.dto.Review;
+import de.oglimmer.lunchy.rest.dto.ReviewUpdateResponse;
 import de.oglimmer.lunchy.services.Community;
 
 @Path("reviews")
@@ -36,14 +37,14 @@ public class ReviewResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Review update(@Context HttpServletRequest request, @PathParam("id") int id, Review reviewDto) {
+	public ReviewUpdateResponse update(@Context HttpServletRequest request, @PathParam("id") int id, Review reviewDto) {
 		ReviewsRecord reviewRec = ReviewDao.INSTANCE.getById(id);
 		BeanMappingProvider.INSTANCE.getMapper().map(reviewDto, reviewRec);
 
 		reviewRec.setLastupdate(new Timestamp(new Date().getTime()));
 
 		ReviewDao.INSTANCE.store(reviewRec);
-		Review backLocationDto = Review.getInstance(reviewRec);
+		ReviewUpdateResponse backLocationDto = ReviewUpdateResponse.getInstance(reviewRec);
 		return backLocationDto;
 	}
 
@@ -62,7 +63,7 @@ public class ReviewResource {
 			reviewRec.setLastupdate(new Timestamp(new Date().getTime()));
 
 			ReviewDao.INSTANCE.store(reviewRec);
-			Review backLocationDto = Review.getInstance(reviewRec);
+			ReviewUpdateResponse backLocationDto = ReviewUpdateResponse.getInstance(reviewRec);
 			return Response.ok(backLocationDto).build();
 		} catch (org.jooq.exception.DataAccessException e) {
 			if (e.getCause() instanceof com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException) {
