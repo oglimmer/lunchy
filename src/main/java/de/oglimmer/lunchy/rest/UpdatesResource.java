@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import lombok.Data;
 import de.oglimmer.lunchy.database.UpdatesDao;
 import de.oglimmer.lunchy.database.UpdatesDao.ResultParam;
+import de.oglimmer.lunchy.services.Community;
 
 @Path("updates")
 public class UpdatesResource {
@@ -21,7 +22,7 @@ public class UpdatesResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<QueryResultRow> query(@Context HttpServletRequest request) {
 		List<QueryResultRow> resultList = new ArrayList<>();
-		for (ResultParam update : UpdatesDao.INSTANCE.get(10)) {
+		for (ResultParam update : UpdatesDao.INSTANCE.get(10, Community.get(request))) {
 			resultList.add(createResultRow(update));
 		}
 		return resultList;
