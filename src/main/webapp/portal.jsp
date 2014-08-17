@@ -69,7 +69,7 @@
 		<div class="row">
 			<div class="col-md-6">
 				<h3>Can I test / just see it?</h3>		
-				<p>There is a demo space: <a href="//demo.lunchylunch.com">http://demo.lunchylunch.com</a>. You can either register an account there and just <strong>guest/guest</strong>.</p>
+				<p>There is a demo space: <a href="//demo.lunchylunch.com">http://demo.lunchylunch.com</a>. You can either register an account there and just <strong>guest@lunchylunch.com/guest</strong>.</p>
 			</div>
 			<div class="col-md-6">
 				<h3>Is it free?</h3>		
