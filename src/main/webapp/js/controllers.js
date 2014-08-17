@@ -44,7 +44,7 @@ controller('LunchyControllerLogin', ['$scope', 'LoginDao', '$timeout', 'Authetic
 				$scope.Authetication.logInUser(data);
 				$scope.password = "";
 				if($scope.email.indexOf('#')===0) {
-					StorageService.save('longTimeToken', data.errorMsg);
+					StorageService.save('longTimeToken', data.longTimeToken);
 				}
 			} else {
 				$scope.errorMsg = data.errorMsg;
