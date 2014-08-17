@@ -14,7 +14,7 @@ import lombok.Data;
 import de.oglimmer.lunchy.database.UpdatesDao;
 import de.oglimmer.lunchy.database.UpdatesDao.ResultParam;
 
-@Path("/updates")
+@Path("updates")
 public class UpdatesResource {
 
 	@GET

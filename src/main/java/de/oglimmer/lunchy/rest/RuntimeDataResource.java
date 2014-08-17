@@ -7,23 +7,38 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import lombok.Data;
-import de.oglimmer.lunchy.database.connection.DBConn;
+import com.google.gson.JsonObject;
 
-@Path("/runtime")
+import de.oglimmer.lunchy.database.connection.DBConn;
+import de.oglimmer.lunchy.services.LunchyProperties;
+import de.oglimmer.lunchy.services.MBeanServies;
+
+@Path("runtime")
 public class RuntimeDataResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/dbpool")
-	public String query(@Context HttpServletRequest request) {
-		SecurityProvider.INSTANCE.checkAdmin(request);
+	@Path("dbpool")
+	public String queryDB(@Context HttpServletRequest request) {
+		checkRuntimePassword(request);
 		return DBConn.INSTANCE.getDriverStats().toString();
 	}
 
-	@Data
-	public static class PermissionInput {
-		private Integer permissions;
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("rest")
+	public String queryRest(@Context HttpServletRequest request) {
+		checkRuntimePassword(request);
+		JsonObject data = new JsonObject();
+		MBeanServies.copyAllNodes("org.glassfish.jersey:*,subType=Uris", data);
+		return data.toString();
+	}
+
+	private void checkRuntimePassword(HttpServletRequest request) {
+		String password = request.getHeader("pass");
+		if (!LunchyProperties.INSTANCE.getRuntimePassword().equals(password)) {
+			throw new RuntimeException("Wrong password");
+		}
 	}
 
 }

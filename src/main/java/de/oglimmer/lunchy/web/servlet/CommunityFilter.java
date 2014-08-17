@@ -35,23 +35,48 @@ public class CommunityFilter implements Filter {
 		String domain = request.getServerName();
 		String path = httpReq.getServletPath();
 
-		if ("lunchylunch.com".equalsIgnoreCase(domain) || "www.lunchylunch.com".equalsIgnoreCase(domain)) {
-			if ("/".equals(path) || "/index.jsp".equals(path)) {
+		if (isCallToRuntimeRestInterface(path)) {
+			chain.doFilter(request, response);
+		} else if (isCallWithoutCommunitySubdomain(domain)) {
+			if (isCallToPlatformPage(path)) {
 				httpResp.sendRedirect("portal.jsp");
 			} else {
 				chain.doFilter(request, response);
 			}
+		} else if (isCallToPortalPage(path)) {
+			httpResp.sendRedirect("index.jsp");
 		} else {
-			String subdomain = domain.indexOf('.') > -1 ? domain.substring(0, domain.indexOf('.')) : domain;
-			CommunitiesRecord community = CommunityDao.INSTANCE.getByDomain(subdomain);
+			CommunitiesRecord community = getCommunity(domain);
 			if (community != null) {
 				Community.set(httpReq, community);
-
 				chain.doFilter(request, response);
 			} else {
 				httpResp.sendRedirect("http://lunchylunch.com" + (request.getServerPort() != 80 ? ":" + request.getServerPort() : "")
 						+ "/lunchy/portal.jsp");
 			}
 		}
+
+	}
+
+	private boolean isCallToPortalPage(String path) {
+		return "/portal.jsp".equals(path);
+	}
+
+	private CommunitiesRecord getCommunity(String domain) {
+		String subdomain = domain.indexOf('.') > -1 ? domain.substring(0, domain.indexOf('.')) : domain;
+		CommunitiesRecord community = CommunityDao.INSTANCE.getByDomain(subdomain);
+		return community;
+	}
+
+	private boolean isCallToPlatformPage(String path) {
+		return "/".equals(path) || "/index.jsp".equals(path);
+	}
+
+	private boolean isCallWithoutCommunitySubdomain(String domain) {
+		return "lunchylunch.com".equalsIgnoreCase(domain) || "www.lunchylunch.com".equalsIgnoreCase(domain);
+	}
+
+	private boolean isCallToRuntimeRestInterface(String path) {
+		return path.startsWith("/runtime");
 	}
 }

@@ -20,6 +20,7 @@ import com.google.gson.JsonObject;
 import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
 import de.oglimmer.lunchy.services.LunchyProperties;
+import de.oglimmer.lunchy.services.MBeanServies;
 
 public enum DBConn {
 	INSTANCE;
@@ -51,14 +52,9 @@ public enum DBConn {
 
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public JsonObject getDriverStats() {
-		PoolingDriver driver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
-		ObjectPool<? extends Connection> connectionPool = driver.getConnectionPool("lunchyDataStore");
-
 		JsonObject data = new JsonObject();
-		data.addProperty("NumActive", connectionPool.getNumActive());
-		data.addProperty("NumIdle", connectionPool.getNumIdle());
+		MBeanServies.copyAllAttributes("org.apache.commons.pool2:type=GenericObjectPool,name=pool", data);
 		return data;
 	}
 

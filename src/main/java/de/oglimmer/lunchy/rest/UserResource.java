@@ -30,7 +30,7 @@ import de.oglimmer.lunchy.rest.dto.User;
 import de.oglimmer.lunchy.services.Community;
 import de.oglimmer.lunchy.services.Email;
 
-@Path("/users")
+@Path("users")
 public class UserResource {
 
 	@OPTIONS

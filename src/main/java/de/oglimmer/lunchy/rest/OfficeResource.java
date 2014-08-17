@@ -41,7 +41,7 @@ public class OfficeResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/defaultOffice")
+	@Path("defaultOffice")
 	public ResultParam getDefaultOffice(@Context HttpServletRequest request) {
 		return new ResultParam(true, Integer.toString(OfficeDao.INSTANCE.getDefaultOffice(Community.get(request))));
 	}

@@ -6,6 +6,8 @@ import java.util.Properties;
 
 import lombok.SneakyThrows;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 public enum LunchyProperties {
 	INSTANCE;
 
@@ -19,6 +21,10 @@ public enum LunchyProperties {
 				prop.load(fis);
 				System.out.println("Successfully loaded " + LUNCHY_PROPERTIES + " from " + System.getProperty(LUNCHY_PROPERTIES));
 			}
+		}
+		if (prop.getProperty("runtime.password") == null) {
+			prop.setProperty("runtime.password", RandomStringUtils.randomAlphanumeric(8));
+			System.out.println("Created random runtime.password: " + prop.getProperty("runtime.password"));
 		}
 	}
 
@@ -48,6 +54,10 @@ public enum LunchyProperties {
 
 	public boolean isEmailDisabled() {
 		return Boolean.parseBoolean(prop.getProperty("email.disabled", System.getProperty("lunchy.email.disabled", "false")));
+	}
+
+	public String getRuntimePassword() {
+		return prop.getProperty("runtime.password");
 	}
 
 }
