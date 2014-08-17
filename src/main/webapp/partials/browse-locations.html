@@ -20,7 +20,7 @@
 		<marker ng-repeat="marker in markers" idKey='marker.id' coords='marker.coords' events='marker.events' options="marker.markerOptions">
 			<marker-label content="marker.title" anchor="30 0" class="marker-labels"/>			
 		</marker>
-		<marker idKey="'office'" coords='officeMarker.coords' options="officeMarker.markerOptions" icon="'images/office.png'"/>					
+		<marker ng-repeat="marker in officeMarker" idKey='marker.id' coords='marker.coords' options="marker.markerOptions" icon="'images/office.png'"/>					
 	</google-map>
 </div>
 

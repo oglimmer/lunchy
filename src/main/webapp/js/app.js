@@ -169,6 +169,9 @@ factory('LocationsDao', ['$resource', function($resource) {
 factory('ReviewDao', ['$resource', function($resource) {
 	return $resource('rest/reviews/:id', {id: '@id'});
 }]).
+factory('TagDao', ['$resource', function($resource) {
+	return $resource('rest/tags');
+}]).
 factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 
 					function($modal, $q, LoginDao, $rootScope, StorageService, OfficesDao) {
 	
@@ -297,6 +300,13 @@ factory('StorageService', function ($window) {
         }
     };
 }).
+factory('TagService', ['$q', 'TagDao', function ($q, TagDao) {
+    return {
+        get: function() {
+        	 return TagDao.query().$promise;
+        }
+    };
+}]).
 run(['$rootScope', '$location', 'Authetication', 'LoginDao', '$timeout', function($rootScope, $location, Authetication, LoginDao, $timeout) {	
 	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, eventObj) {
 		if (eventObj.authenticated === false) {

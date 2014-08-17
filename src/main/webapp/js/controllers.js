@@ -129,12 +129,15 @@ controller('LunchyControllerPasswordReset', ['$scope', 'UserDao', '$location', f
 	}
 	
 }]).
-controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'OfficesDao', 'Authetication', function ($scope, $location, LocationsDao, OfficesDao, Authetication) {
+controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'OfficesDao', 'Authetication', 'TagService', function ($scope, $location, LocationsDao, OfficesDao, Authetication, TagService) {
 	
 	$scope.data = {};
 	$scope.alerts = [];
 	
-	$scope.allTags = ["Mex", "Italian", "Burger", "Döner", "Thai", "Chinese", "Indian", "Sandwich", "Wurst", "Fish"];
+	$scope.allTags = [];
+	TagService.get().then(function(data) {
+		$scope.allTags = data;
+	});
 	
 	OfficesDao.query(function(offices) {
 		$scope.offices = offices;
@@ -155,8 +158,8 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'Offic
 	}
 	
 }]).
-controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao', 'OfficesDao',
-                                    function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao, OfficesDao) {
+controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao', 'OfficesDao', 'TagService',
+                                    function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao, OfficesDao, TagService) {
 	
 	$scope.allowedToEdit = false;
 	function getlocationStatusForCurrentUser() {
@@ -173,7 +176,10 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
 		$scope.reviews = reviews;
 	});
-	$scope.allTags = ["Mex", "Italian", "Burger", "Döner", "Thai", "Chinese", "Indian", "Sandwich", "Wurst", "Fish"];	
+	$scope.allTags = [];
+	TagService.get().then(function(data) {
+		$scope.allTags = data;
+	});
 	$scope.editableButton = 1;
 	$scope.addReviewButton = 0;
 	$scope.alerts = [];
@@ -354,11 +360,12 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	}
 	$scope.selectedOffice = $stateParams.officeId;
 	
+	$scope.officeMarker = [];
 	OfficesDao.query(function(offices) {
 		$scope.offices = offices;
 		angular.forEach(offices, function(off) {
 			if(off.id == $scope.selectedOffice){
-				$scope.officeMarker = {
+				$scope.officeMarker = [{
 					coords: {
 						latitude: off.geoLat,
 						longitude: off.geoLng
@@ -366,7 +373,7 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 					markerOptions: {
 						title: "Office " + off.name
 					}
-				}
+				}];
 			}
 		})
 	});
