@@ -267,4 +267,29 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet author="oli (generated)" id="1408311973443-1">
+        <addColumn tableName="reviews">
+            <column name="onSiteTime" type="INT(10)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408311973443-2">
+        <addColumn tableName="reviews">
+            <column name="travelTime" type="INT(10)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408311973443-3">
+        <addUniqueConstraint columnNames="email, fkCommunity" constraintName="email_2" deferrable="false" disabled="false" initiallyDeferred="false" tableName="users"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408311973443-4">
+        <dropUniqueConstraint constraintName="email" tableName="users"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408311973443-5">
+        <dropColumn columnName="turnAroundTime" tableName="reviews"/>
+    </changeSet>
+    <changeSet author="oli (generated)" id="1408311973443-6">
+        <dropNotNullConstraint columnDataType="int(10)" columnName="turnAroundTime" tableName="location"/>
+    </changeSet>
+    <changeSet id="custom-7" author="oli (generated)">
+    	<sql>update reviews set onSiteTime = (select turnAroundTime/2 from location where location.id=fkLocation), travelTime = (select turnAroundTime/2 from location where location.id=fkLocation)</sql>
+    </changeSet>    
 </databaseChangeLog>
