@@ -70,6 +70,10 @@ public enum SecurityProvider {
 		cb.refresh(id);
 	}
 
+	public void reset() {
+		cb.invalidateAll();
+	}
+
 }
 
 @AllArgsConstructor

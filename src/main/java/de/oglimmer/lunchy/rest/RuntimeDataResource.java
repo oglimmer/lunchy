@@ -2,6 +2,7 @@ package de.oglimmer.lunchy.rest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -32,6 +33,14 @@ public class RuntimeDataResource {
 		JsonObject data = new JsonObject();
 		MBeanServies.copyAllNodes("org.glassfish.jersey:*,subType=Uris,executionTimes=*", data, "detail=");
 		return data.toString();
+	}
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("cache")
+	public void resetCaches(@Context HttpServletRequest request) {
+		checkRuntimePassword(request);
+		SecurityProvider.INSTANCE.reset();
 	}
 
 	private void checkRuntimePassword(HttpServletRequest request) {

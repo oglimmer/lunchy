@@ -9,4 +9,5 @@ public class LoginResponse {
 	private Integer fkOffice;
 	private String longTimeToken;
 	private String errorMsg;
+	private String companyName;
 }

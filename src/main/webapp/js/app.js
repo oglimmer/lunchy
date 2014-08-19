@@ -172,8 +172,8 @@ factory('ReviewDao', ['$resource', function($resource) {
 factory('TagDao', ['$resource', function($resource) {
 	return $resource('rest/tags');
 }]).
-factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 
-					function($modal, $q, LoginDao, $rootScope, StorageService, OfficesDao) {
+factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 'CommunityService',
+					function($modal, $q, LoginDao, $rootScope, StorageService, OfficesDao, CommunityService) {
 	
 	return {
 		loggedIn: false,
@@ -208,6 +208,7 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 
 				return LoginDao.check({longTimeToken:StorageService.get('longTimeToken')}).$promise
 					.then(function(successResp) {						
+						CommunityService.setCompanyName(successResp.companyName);
 						if(successResp.success) {
 							thiz.logInUser(successResp);							
 							return $q.when(thiz);
@@ -300,12 +301,19 @@ factory('StorageService', function ($window) {
         }
     };
 }).
-factory('TagService', ['$q', 'TagDao', function ($q, TagDao) {
+factory('TagService', ['TagDao', function (TagDao) {
     return {
         get: function() {
         	 return TagDao.query().$promise;
         }
     };
+}]).
+factory('CommunityService', ['$rootScope', function ($rootScope) {
+	return {
+		setCompanyName : function(val) {
+			$rootScope.companyName = val;
+		}
+	};
 }]).
 run(['$rootScope', '$location', 'Authetication', 'LoginDao', '$timeout', function($rootScope, $location, Authetication, LoginDao, $timeout) {	
 	$rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, eventObj) {

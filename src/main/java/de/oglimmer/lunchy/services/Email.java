@@ -69,12 +69,30 @@ public enum Email {
 	}
 
 	public void sendWelcome(String emailAddress, String name, int fkCommunity) {
+		sendWelcomeUser(emailAddress, name, fkCommunity);
+		sendWelcomeAdmin(name, fkCommunity);
+	}
+
+	public void sendWelcomeUser(String emailAddress, String name, int fkCommunity) {
 		try {
 			org.apache.commons.mail.Email email = setup();
 			email.setSubject("Welcome to Lunchy");
 			email.setMsg("Hello " + name + "\r\n\r\nYou have successfully registered at lunchy.\r\n\r\nVisit " + getUrl(fkCommunity)
 					+ " to explore lunch places.\r\n\r\nRegards,\r\nOli");
 			email.addTo(emailAddress);
+			send(email);
+		} catch (EmailException e) {
+			log.error("Failed to send password email", e);
+		}
+	}
+
+	public void sendWelcomeAdmin(String name, int fkCommunity) {
+		try {
+			org.apache.commons.mail.Email email = setup();
+			email.setSubject("A new user registered to Lunchy");
+			email.setMsg("Hello admin\r\n\r\na new user " + name + " registered at lunchy. Go to " + getUrl(fkCommunity)
+					+ "/#/user and set a permission.\r\n\r\nRegards,\r\nOli");
+			email.addTo(CommunityDao.INSTANCE.getById(fkCommunity).getAdminemail());
 			send(email);
 		} catch (EmailException e) {
 			log.error("Failed to send password email", e);
