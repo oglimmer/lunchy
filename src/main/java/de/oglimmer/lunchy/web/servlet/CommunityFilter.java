@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.CharMatcher;
+
 import de.oglimmer.lunchy.database.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
 import de.oglimmer.lunchy.services.Community;
@@ -33,33 +35,38 @@ public class CommunityFilter implements Filter {
 		HttpServletResponse httpResp = (HttpServletResponse) response;
 
 		String domain = request.getServerName();
-		String path = httpReq.getServletPath();
+		String servletPath = httpReq.getServletPath();// index.jsp or /rest
+		String pathInfo = httpReq.getPathInfo();// null or /runtime/dbpool
 
-		if (isCallToRuntimeRestInterface(path)) {
+		if (isCallToRuntimeRestInterface(servletPath, pathInfo)) {
 			chain.doFilter(request, response);
 		} else if (isCallWithoutCommunitySubdomain(domain)) {
-			if (isCallToPlatformPage(path)) {
+			if (isCallToPlatformPage(servletPath)) {
 				httpResp.sendRedirect("portal.jsp");
 			} else {
 				chain.doFilter(request, response);
 			}
-		} else if (isCallToPortalPage(path)) {
-			httpResp.sendRedirect("index.jsp");
+		} else if (isCallToPortalPage(servletPath)) {
+			httpResp.sendRedirect("./");
 		} else {
 			CommunitiesRecord community = getCommunity(domain);
 			if (community != null) {
 				Community.set(httpReq, community);
 				chain.doFilter(request, response);
 			} else {
-				httpResp.sendRedirect("http://lunchylunch.com" + (request.getServerPort() != 80 ? ":" + request.getServerPort() : "")
-						+ "/lunchy/portal.jsp");
+				httpResp.sendRedirect(httpReq.getProtocol() + "://" + removeSubDomains(domain)
+						+ (request.getServerPort() != 80 ? ":" + request.getServerPort() : ""));
 			}
 		}
 
 	}
 
-	private boolean isCallToPortalPage(String path) {
-		return "/portal.jsp".equals(path);
+	String removeSubDomains(String domain) {
+		String[] arr = domain.split("\\.");
+		if (arr.length == 1) {
+			return arr[0];
+		}
+		return arr[arr.length - 2] + "." + arr[arr.length - 1];
 	}
 
 	private CommunitiesRecord getCommunity(String domain) {
@@ -68,15 +75,19 @@ public class CommunityFilter implements Filter {
 		return community;
 	}
 
-	private boolean isCallToPlatformPage(String path) {
-		return "/".equals(path) || "/index.jsp".equals(path);
+	private boolean isCallToPortalPage(String servletPath) {
+		return "/portal.jsp".equals(servletPath);
+	}
+
+	private boolean isCallToPlatformPage(String servletPath) {
+		return "/index.jsp".equals(servletPath);
 	}
 
 	private boolean isCallWithoutCommunitySubdomain(String domain) {
-		return "lunchylunch.com".equalsIgnoreCase(domain) || "www.lunchylunch.com".equalsIgnoreCase(domain);
+		return CharMatcher.is('.').countIn(domain) == 1 || domain.startsWith("www.");
 	}
 
-	private boolean isCallToRuntimeRestInterface(String path) {
-		return path.startsWith("/runtime");
+	private boolean isCallToRuntimeRestInterface(String servletPath, String pathInfo) {
+		return "/rest".equals(servletPath) && pathInfo.startsWith("/runtime");
 	}
 }
