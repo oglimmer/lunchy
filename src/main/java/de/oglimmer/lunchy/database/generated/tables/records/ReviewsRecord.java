@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> implements org.jooq.Record11<java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.String, java.sql.Timestamp, java.sql.Timestamp, java.lang.Integer, java.lang.String, java.lang.Integer, java.lang.Integer> {
 
-	private static final long serialVersionUID = 1065795949;
+	private static final long serialVersionUID = 1261049082;
 
 	/**
 	 * Setter for <code>oli_lunchy.reviews.id</code>.
@@ -28,44 +28,44 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.reviews.fkCommunity</code>.
+	 * Setter for <code>oli_lunchy.reviews.fk_Community</code>.
 	 */
-	public void setFkcommunity(java.lang.Integer value) {
+	public void setFkCommunity(java.lang.Integer value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.reviews.fkCommunity</code>.
+	 * Getter for <code>oli_lunchy.reviews.fk_Community</code>.
 	 */
-	public java.lang.Integer getFkcommunity() {
+	public java.lang.Integer getFkCommunity() {
 		return (java.lang.Integer) getValue(1);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.reviews.fkUser</code>.
+	 * Setter for <code>oli_lunchy.reviews.fk_User</code>.
 	 */
-	public void setFkuser(java.lang.Integer value) {
+	public void setFkUser(java.lang.Integer value) {
 		setValue(2, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.reviews.fkUser</code>.
+	 * Getter for <code>oli_lunchy.reviews.fk_User</code>.
 	 */
-	public java.lang.Integer getFkuser() {
+	public java.lang.Integer getFkUser() {
 		return (java.lang.Integer) getValue(2);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.reviews.fkLocation</code>.
+	 * Setter for <code>oli_lunchy.reviews.fk_Location</code>.
 	 */
-	public void setFklocation(java.lang.Integer value) {
+	public void setFkLocation(java.lang.Integer value) {
 		setValue(3, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.reviews.fkLocation</code>.
+	 * Getter for <code>oli_lunchy.reviews.fk_Location</code>.
 	 */
-	public java.lang.Integer getFklocation() {
+	public java.lang.Integer getFkLocation() {
 		return (java.lang.Integer) getValue(3);
 	}
 
@@ -84,30 +84,30 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.reviews.createdOn</code>.
+	 * Setter for <code>oli_lunchy.reviews.created_On</code>.
 	 */
-	public void setCreatedon(java.sql.Timestamp value) {
+	public void setCreatedOn(java.sql.Timestamp value) {
 		setValue(5, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.reviews.createdOn</code>.
+	 * Getter for <code>oli_lunchy.reviews.created_On</code>.
 	 */
-	public java.sql.Timestamp getCreatedon() {
+	public java.sql.Timestamp getCreatedOn() {
 		return (java.sql.Timestamp) getValue(5);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.reviews.lastUpdate</code>.
+	 * Setter for <code>oli_lunchy.reviews.last_Update</code>.
 	 */
-	public void setLastupdate(java.sql.Timestamp value) {
+	public void setLastUpdate(java.sql.Timestamp value) {
 		setValue(6, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.reviews.lastUpdate</code>.
+	 * Getter for <code>oli_lunchy.reviews.last_Update</code>.
 	 */
-	public java.sql.Timestamp getLastupdate() {
+	public java.sql.Timestamp getLastUpdate() {
 		return (java.sql.Timestamp) getValue(6);
 	}
 
@@ -126,44 +126,44 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.reviews.favoriteMeal</code>.
+	 * Setter for <code>oli_lunchy.reviews.favorite_Meal</code>.
 	 */
-	public void setFavoritemeal(java.lang.String value) {
+	public void setFavoriteMeal(java.lang.String value) {
 		setValue(8, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.reviews.favoriteMeal</code>.
+	 * Getter for <code>oli_lunchy.reviews.favorite_Meal</code>.
 	 */
-	public java.lang.String getFavoritemeal() {
+	public java.lang.String getFavoriteMeal() {
 		return (java.lang.String) getValue(8);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.reviews.travelTime</code>.
+	 * Setter for <code>oli_lunchy.reviews.travel_Time</code>.
 	 */
-	public void setTraveltime(java.lang.Integer value) {
+	public void setTravelTime(java.lang.Integer value) {
 		setValue(9, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.reviews.travelTime</code>.
+	 * Getter for <code>oli_lunchy.reviews.travel_Time</code>.
 	 */
-	public java.lang.Integer getTraveltime() {
+	public java.lang.Integer getTravelTime() {
 		return (java.lang.Integer) getValue(9);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.reviews.onSiteTime</code>.
+	 * Setter for <code>oli_lunchy.reviews.on_Site_Time</code>.
 	 */
-	public void setOnsitetime(java.lang.Integer value) {
+	public void setOnSiteTime(java.lang.Integer value) {
 		setValue(10, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.reviews.onSiteTime</code>.
+	 * Getter for <code>oli_lunchy.reviews.on_Site_Time</code>.
 	 */
-	public java.lang.Integer getOnsitetime() {
+	public java.lang.Integer getOnSiteTime() {
 		return (java.lang.Integer) getValue(10);
 	}
 
@@ -212,7 +212,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field2() {
-		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FKCOMMUNITY;
+		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FK_COMMUNITY;
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field3() {
-		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FKUSER;
+		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FK_USER;
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field4() {
-		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FKLOCATION;
+		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FK_LOCATION;
 	}
 
 	/**
@@ -244,7 +244,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public org.jooq.Field<java.sql.Timestamp> field6() {
-		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.CREATEDON;
+		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.CREATED_ON;
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public org.jooq.Field<java.sql.Timestamp> field7() {
-		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.LASTUPDATE;
+		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.LAST_UPDATE;
 	}
 
 	/**
@@ -268,7 +268,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public org.jooq.Field<java.lang.String> field9() {
-		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FAVORITEMEAL;
+		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.FAVORITE_MEAL;
 	}
 
 	/**
@@ -276,7 +276,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field10() {
-		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.TRAVELTIME;
+		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.TRAVEL_TIME;
 	}
 
 	/**
@@ -284,7 +284,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field11() {
-		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.ONSITETIME;
+		return de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS.ON_SITE_TIME;
 	}
 
 	/**
@@ -300,7 +300,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public java.lang.Integer value2() {
-		return getFkcommunity();
+		return getFkCommunity();
 	}
 
 	/**
@@ -308,7 +308,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public java.lang.Integer value3() {
-		return getFkuser();
+		return getFkUser();
 	}
 
 	/**
@@ -316,7 +316,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public java.lang.Integer value4() {
-		return getFklocation();
+		return getFkLocation();
 	}
 
 	/**
@@ -332,7 +332,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public java.sql.Timestamp value6() {
-		return getCreatedon();
+		return getCreatedOn();
 	}
 
 	/**
@@ -340,7 +340,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public java.sql.Timestamp value7() {
-		return getLastupdate();
+		return getLastUpdate();
 	}
 
 	/**
@@ -356,7 +356,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public java.lang.String value9() {
-		return getFavoritemeal();
+		return getFavoriteMeal();
 	}
 
 	/**
@@ -364,7 +364,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public java.lang.Integer value10() {
-		return getTraveltime();
+		return getTravelTime();
 	}
 
 	/**
@@ -372,7 +372,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public java.lang.Integer value11() {
-		return getOnsitetime();
+		return getOnSiteTime();
 	}
 
 	/**
@@ -389,7 +389,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public ReviewsRecord value2(java.lang.Integer value) {
-		setFkcommunity(value);
+		setFkCommunity(value);
 		return this;
 	}
 
@@ -398,7 +398,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public ReviewsRecord value3(java.lang.Integer value) {
-		setFkuser(value);
+		setFkUser(value);
 		return this;
 	}
 
@@ -407,7 +407,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public ReviewsRecord value4(java.lang.Integer value) {
-		setFklocation(value);
+		setFkLocation(value);
 		return this;
 	}
 
@@ -425,7 +425,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public ReviewsRecord value6(java.sql.Timestamp value) {
-		setCreatedon(value);
+		setCreatedOn(value);
 		return this;
 	}
 
@@ -434,7 +434,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public ReviewsRecord value7(java.sql.Timestamp value) {
-		setLastupdate(value);
+		setLastUpdate(value);
 		return this;
 	}
 
@@ -452,7 +452,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public ReviewsRecord value9(java.lang.String value) {
-		setFavoritemeal(value);
+		setFavoriteMeal(value);
 		return this;
 	}
 
@@ -461,7 +461,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public ReviewsRecord value10(java.lang.Integer value) {
-		setTraveltime(value);
+		setTravelTime(value);
 		return this;
 	}
 
@@ -470,7 +470,7 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public ReviewsRecord value11(java.lang.Integer value) {
-		setOnsitetime(value);
+		setOnSiteTime(value);
 		return this;
 	}
 
@@ -496,19 +496,19 @@ public class ReviewsRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	/**
 	 * Create a detached, initialised ReviewsRecord
 	 */
-	public ReviewsRecord(java.lang.Integer id, java.lang.Integer fkcommunity, java.lang.Integer fkuser, java.lang.Integer fklocation, java.lang.String comment, java.sql.Timestamp createdon, java.sql.Timestamp lastupdate, java.lang.Integer rating, java.lang.String favoritemeal, java.lang.Integer traveltime, java.lang.Integer onsitetime) {
+	public ReviewsRecord(java.lang.Integer id, java.lang.Integer fkCommunity, java.lang.Integer fkUser, java.lang.Integer fkLocation, java.lang.String comment, java.sql.Timestamp createdOn, java.sql.Timestamp lastUpdate, java.lang.Integer rating, java.lang.String favoriteMeal, java.lang.Integer travelTime, java.lang.Integer onSiteTime) {
 		super(de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS);
 
 		setValue(0, id);
-		setValue(1, fkcommunity);
-		setValue(2, fkuser);
-		setValue(3, fklocation);
+		setValue(1, fkCommunity);
+		setValue(2, fkUser);
+		setValue(3, fkLocation);
 		setValue(4, comment);
-		setValue(5, createdon);
-		setValue(6, lastupdate);
+		setValue(5, createdOn);
+		setValue(6, lastUpdate);
 		setValue(7, rating);
-		setValue(8, favoritemeal);
-		setValue(9, traveltime);
-		setValue(10, onsitetime);
+		setValue(8, favoriteMeal);
+		setValue(9, travelTime);
+		setValue(10, onSiteTime);
 	}
 }

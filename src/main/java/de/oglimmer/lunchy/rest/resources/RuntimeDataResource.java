@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.rest.resources;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -11,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import com.google.gson.JsonObject;
 
 import de.oglimmer.lunchy.database.connection.DBConn;
+import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.services.LunchyProperties;
 import de.oglimmer.lunchy.services.MBeanServies;
 

@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OfficesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord> implements org.jooq.Record7<java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.Double, java.lang.Double, java.lang.Integer, java.lang.String> {
 
-	private static final long serialVersionUID = -794856532;
+	private static final long serialVersionUID = -241123683;
 
 	/**
 	 * Setter for <code>oli_lunchy.offices.id</code>.
@@ -28,16 +28,16 @@ public class OfficesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.offices.fkCommunity</code>.
+	 * Setter for <code>oli_lunchy.offices.fk_Community</code>.
 	 */
-	public void setFkcommunity(java.lang.Integer value) {
+	public void setFkCommunity(java.lang.Integer value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.offices.fkCommunity</code>.
+	 * Getter for <code>oli_lunchy.offices.fk_Community</code>.
 	 */
-	public java.lang.Integer getFkcommunity() {
+	public java.lang.Integer getFkCommunity() {
 		return (java.lang.Integer) getValue(1);
 	}
 
@@ -56,28 +56,28 @@ public class OfficesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.offices.geo_lat</code>.
+	 * Setter for <code>oli_lunchy.offices.geo_Lat</code>.
 	 */
 	public void setGeoLat(java.lang.Double value) {
 		setValue(3, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.offices.geo_lat</code>.
+	 * Getter for <code>oli_lunchy.offices.geo_Lat</code>.
 	 */
 	public java.lang.Double getGeoLat() {
 		return (java.lang.Double) getValue(3);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.offices.geo_lng</code>.
+	 * Setter for <code>oli_lunchy.offices.geo_Lng</code>.
 	 */
 	public void setGeoLng(java.lang.Double value) {
 		setValue(4, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.offices.geo_lng</code>.
+	 * Getter for <code>oli_lunchy.offices.geo_Lng</code>.
 	 */
 	public java.lang.Double getGeoLng() {
 		return (java.lang.Double) getValue(4);
@@ -156,7 +156,7 @@ public class OfficesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field2() {
-		return de.oglimmer.lunchy.database.generated.tables.Offices.OFFICES.FKCOMMUNITY;
+		return de.oglimmer.lunchy.database.generated.tables.Offices.OFFICES.FK_COMMUNITY;
 	}
 
 	/**
@@ -212,7 +212,7 @@ public class OfficesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public java.lang.Integer value2() {
-		return getFkcommunity();
+		return getFkCommunity();
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class OfficesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	 */
 	@Override
 	public OfficesRecord value2(java.lang.Integer value) {
-		setFkcommunity(value);
+		setFkCommunity(value);
 		return this;
 	}
 
@@ -340,11 +340,11 @@ public class OfficesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer
 	/**
 	 * Create a detached, initialised OfficesRecord
 	 */
-	public OfficesRecord(java.lang.Integer id, java.lang.Integer fkcommunity, java.lang.String name, java.lang.Double geoLat, java.lang.Double geoLng, java.lang.Integer zoomfactor, java.lang.String country) {
+	public OfficesRecord(java.lang.Integer id, java.lang.Integer fkCommunity, java.lang.String name, java.lang.Double geoLat, java.lang.Double geoLng, java.lang.Integer zoomfactor, java.lang.String country) {
 		super(de.oglimmer.lunchy.database.generated.tables.Offices.OFFICES);
 
 		setValue(0, id);
-		setValue(1, fkcommunity);
+		setValue(1, fkCommunity);
 		setValue(2, name);
 		setValue(3, geoLat);
 		setValue(4, geoLng);

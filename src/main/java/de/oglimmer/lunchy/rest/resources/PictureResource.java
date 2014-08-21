@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.rest.resources;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,8 +22,10 @@ import lombok.SneakyThrows;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
+import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.PicturesDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
+import de.oglimmer.lunchy.rest.PictureScaler;
 import de.oglimmer.lunchy.rest.dto.Picture;
 import de.oglimmer.lunchy.services.Community;
 import de.oglimmer.lunchy.services.FileServices;
@@ -78,10 +80,10 @@ public class PictureResource {
 		PicturesRecord rec = new PicturesRecord();
 
 		if (input.getId() == null || input.getId() == 0) {
-			rec.setFkcommunity(Community.get(request));
-			rec.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
-			rec.setCreatedon(new Timestamp(new Date().getTime()));
-			rec.setFklocation(input.getFklocation());
+			rec.setFkCommunity(Community.get(request));
+			rec.setFkUser((Integer) request.getSession(false).getAttribute("userId"));
+			rec.setCreatedOn(new Timestamp(new Date().getTime()));
+			rec.setFkLocation(input.getFkLocation());
 			rec.setFilename(RandomStringUtils.randomAlphanumeric(32) + FileServices.getFileExtension(input.getOriginalFilename()));
 			rec.setCaption(input.getCaption());
 

@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Communities extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord> {
 
-	private static final long serialVersionUID = 674863697;
+	private static final long serialVersionUID = 1541884208;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.communities</code>
@@ -42,9 +42,9 @@ public class Communities extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.data
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord, java.lang.String> DOMAIN = createField("domain", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.communities.adminEmail</code>.
+	 * The column <code>oli_lunchy.communities.admin_Email</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord, java.lang.String> ADMINEMAIL = createField("adminEmail", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord, java.lang.String> ADMIN_EMAIL = createField("admin_Email", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.communities</code> table reference

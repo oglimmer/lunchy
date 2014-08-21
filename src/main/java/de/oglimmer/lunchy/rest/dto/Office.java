@@ -1,8 +1,8 @@
 package de.oglimmer.lunchy.rest.dto;
 
 import lombok.Data;
+import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
-import de.oglimmer.lunchy.rest.BeanMappingProvider;
 
 @Data
 public class Office {

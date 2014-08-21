@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.rest.resources;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -23,9 +23,13 @@ import lombok.Data;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mindrot.jbcrypt.BCrypt;
 
+import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.rest.LoginResponseProvider;
+import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
+import de.oglimmer.lunchy.rest.dto.ResultParam;
 import de.oglimmer.lunchy.rest.dto.User;
 import de.oglimmer.lunchy.services.Community;
 import de.oglimmer.lunchy.services.Email;
@@ -73,8 +77,8 @@ public class UserResource {
 		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email, Community.get(request));
 		ResultParam rp = new ResultParam();
 		if (user != null) {
-			user.setPasswordresettoken(RandomStringUtils.randomAlphanumeric(128));
-			user.setPasswordresettimestamp(new Timestamp(new Date().getTime()));
+			user.setPasswordResetToken(RandomStringUtils.randomAlphanumeric(128));
+			user.setPasswordResetTimestamp(new Timestamp(new Date().getTime()));
 			UserDao.INSTANCE.store(user);
 			Email.INSTANCE.sendPasswordLink(user);
 			rp.setSuccess(true);
@@ -91,11 +95,11 @@ public class UserResource {
 		if (user != null) {
 			Calendar now = GregorianCalendar.getInstance();
 			Calendar cal = GregorianCalendar.getInstance();
-			cal.setTime(new Date(user.getPasswordresettimestamp().getTime()));
+			cal.setTime(new Date(user.getPasswordResetTimestamp().getTime()));
 			cal.add(Calendar.HOUR_OF_DAY, 24);
 			if (now.before(cal)) {
-				user.setPasswordresettoken(null);
-				user.setPasswordresettimestamp(null);
+				user.setPasswordResetToken(null);
+				user.setPasswordResetTimestamp(null);
 				user.setPassword(BCrypt.hashpw(input.getPassword(), BCrypt.gensalt()));
 				UserDao.INSTANCE.store(user);
 				rp.setSuccess(true);
@@ -158,8 +162,8 @@ public class UserResource {
 			if (input.getId() == null || input.getId() == 0) {
 				user = new UsersRecord();
 				user.setPassword(BCrypt.hashpw(input.getPassword(), BCrypt.gensalt()));
-				user.setCreatedon(new Timestamp(new Date().getTime()));
-				user.setLastlogin(new Timestamp(new Date().getTime()));
+				user.setCreatedOn(new Timestamp(new Date().getTime()));
+				user.setLastLogin(new Timestamp(new Date().getTime()));
 				user.setPermissions(0);
 				Email.INSTANCE.sendWelcome(input.getEmail(), input.getDisplayname(), Community.get(request));
 			} else {
@@ -176,8 +180,8 @@ public class UserResource {
 			if (user != null) {
 				user.setDisplayname(input.getDisplayname());
 				user.setEmail(input.getEmail());
-				user.setFkbaseoffice(input.getFkbaseoffice());
-				user.setFkcommunity(Community.get(request));
+				user.setFkBaseOffice(input.getFkBaseOffice());
+				user.setFkCommunity(Community.get(request));
 				UserDao.INSTANCE.store(user);
 				LoginResponseProvider.INSTANCE.login(result, user, request.getSession(true));
 			}
@@ -203,7 +207,7 @@ public class UserResource {
 		private String password;
 		private String currentpassword;
 		private String displayname;
-		private Integer fkbaseoffice;
+		private Integer fkBaseOffice;
 	}
 
 	@Data
@@ -211,7 +215,7 @@ public class UserResource {
 		private Integer id;
 		private String email;
 		private String displayname;
-		private Integer fkbaseoffice;
+		private Integer fkBaseOffice;
 
 		public static UserResponse getInstance(UsersRecord userRec) {
 			UserResponse userDto = new UserResponse();

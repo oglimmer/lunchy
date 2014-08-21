@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Pictures extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord> {
 
-	private static final long serialVersionUID = -2029523998;
+	private static final long serialVersionUID = 206315398;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.pictures</code>
@@ -32,19 +32,19 @@ public class Pictures extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.pictures.fkCommunity</code>.
+	 * The column <code>oli_lunchy.pictures.fk_Community</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> FKCOMMUNITY = createField("fkCommunity", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.pictures.fkLocation</code>.
+	 * The column <code>oli_lunchy.pictures.fk_Location</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> FKLOCATION = createField("fkLocation", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> FK_LOCATION = createField("fk_Location", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.pictures.fkUser</code>.
+	 * The column <code>oli_lunchy.pictures.fk_User</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> FKUSER = createField("fkUser", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> FK_USER = createField("fk_User", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.pictures.filename</code>.
@@ -57,9 +57,9 @@ public class Pictures extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.String> CAPTION = createField("caption", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.pictures.createdOn</code>.
+	 * The column <code>oli_lunchy.pictures.created_On</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.sql.Timestamp> CREATEDON = createField("createdOn", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.sql.Timestamp> CREATED_ON = createField("created_On", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.pictures</code> table reference

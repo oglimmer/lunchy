@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.rest.resources;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class UpdatesResource {
 	}
 
 	private String setTextForReview(ResultParam update) {
-		if ("N".equals(update.getUpdatetype())) {
+		if ("N".equals(update.getUpdateType())) {
 			return "New review for " + update.getOfficialName() + " in " + update.getCity() + " by " + update.getUser();
 		} else {
 			return update.getUser() + " updated the review for " + update.getOfficialName() + " in " + update.getCity();
@@ -65,7 +65,7 @@ public class UpdatesResource {
 	}
 
 	private String setTextForLocation(ResultParam update) {
-		if ("N".equals(update.getUpdatetype())) {
+		if ("N".equals(update.getUpdateType())) {
 			return "New location " + update.getOfficialName() + " in " + update.getCity();
 		} else {
 			return update.getOfficialName() + " in " + update.getCity() + " was updated";

@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CommunitiesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord> implements org.jooq.Record4<java.lang.Integer, java.lang.String, java.lang.String, java.lang.String> {
 
-	private static final long serialVersionUID = 1575036781;
+	private static final long serialVersionUID = -64972222;
 
 	/**
 	 * Setter for <code>oli_lunchy.communities.id</code>.
@@ -56,16 +56,16 @@ public class CommunitiesRecord extends org.jooq.impl.UpdatableRecordImpl<de.ogli
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.communities.adminEmail</code>.
+	 * Setter for <code>oli_lunchy.communities.admin_Email</code>.
 	 */
-	public void setAdminemail(java.lang.String value) {
+	public void setAdminEmail(java.lang.String value) {
 		setValue(3, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.communities.adminEmail</code>.
+	 * Getter for <code>oli_lunchy.communities.admin_Email</code>.
 	 */
-	public java.lang.String getAdminemail() {
+	public java.lang.String getAdminEmail() {
 		return (java.lang.String) getValue(3);
 	}
 
@@ -130,7 +130,7 @@ public class CommunitiesRecord extends org.jooq.impl.UpdatableRecordImpl<de.ogli
 	 */
 	@Override
 	public org.jooq.Field<java.lang.String> field4() {
-		return de.oglimmer.lunchy.database.generated.tables.Communities.COMMUNITIES.ADMINEMAIL;
+		return de.oglimmer.lunchy.database.generated.tables.Communities.COMMUNITIES.ADMIN_EMAIL;
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class CommunitiesRecord extends org.jooq.impl.UpdatableRecordImpl<de.ogli
 	 */
 	@Override
 	public java.lang.String value4() {
-		return getAdminemail();
+		return getAdminEmail();
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class CommunitiesRecord extends org.jooq.impl.UpdatableRecordImpl<de.ogli
 	 */
 	@Override
 	public CommunitiesRecord value4(java.lang.String value) {
-		setAdminemail(value);
+		setAdminEmail(value);
 		return this;
 	}
 
@@ -223,12 +223,12 @@ public class CommunitiesRecord extends org.jooq.impl.UpdatableRecordImpl<de.ogli
 	/**
 	 * Create a detached, initialised CommunitiesRecord
 	 */
-	public CommunitiesRecord(java.lang.Integer id, java.lang.String name, java.lang.String domain, java.lang.String adminemail) {
+	public CommunitiesRecord(java.lang.Integer id, java.lang.String name, java.lang.String domain, java.lang.String adminEmail) {
 		super(de.oglimmer.lunchy.database.generated.tables.Communities.COMMUNITIES);
 
 		setValue(0, id);
 		setValue(1, name);
 		setValue(2, domain);
-		setValue(3, adminemail);
+		setValue(3, adminEmail);
 	}
 }

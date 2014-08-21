@@ -1,93 +1,43 @@
 package de.oglimmer.lunchy.database;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import static de.oglimmer.lunchy.database.DB.DB;
+import static de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS;
+
 import java.util.List;
 
-import lombok.SneakyThrows;
-
-import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.Record1;
-import org.jooq.Result;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
-import de.oglimmer.lunchy.database.connection.DBConn;
-import de.oglimmer.lunchy.database.generated.tables.Reviews;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 
 public enum ReviewDao {
 	INSTANCE;
 
-	@SneakyThrows(value = SQLException.class)
 	public ReviewsRecord getById(int id) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			ReviewsRecord rec = create.fetchOne(Reviews.REVIEWS, Reviews.REVIEWS.ID.equal(id));
-			rec.attach(null);
-			return rec;
-		}
+		return DB.fetchOn(REVIEWS, REVIEWS.ID.equal(id));
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public List<ReviewsRecord> getList(int fklocation) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-
-			Result<Record> result = create.select().from(Reviews.REVIEWS).where(Reviews.REVIEWS.FKLOCATION.equal(fklocation))
-					.orderBy(Reviews.REVIEWS.LASTUPDATE.desc()).fetch();
-
-			List<ReviewsRecord> resultList = new ArrayList<>();
-			for (Record rawRec : result) {
-				ReviewsRecord rec = (ReviewsRecord) rawRec;
-				rec.attach(null);
-				resultList.add(rec);
-			}
-
-			return resultList;
-		}
+		return DB.query(REVIEWS, REVIEWS.FK_LOCATION.equal(fklocation), REVIEWS.LAST_UPDATE.desc(), ReviewsRecord.class);
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public void store(ReviewsRecord review) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+		SqlCommand updateTurnAroundOnParentLocation = new SqlCommand(
+				"update location set turn_Around_Time=(select avg(IFNULL(on_Site_Time,0)+IFNULL(travel_Time,0)) "
+						+ "from reviews where reviews.fk_Location = location.id) where id=?", review.getFkLocation());
 
-			review.attach(create.configuration());
-			review.store();
-
-			create.execute(
-					"update location set turnAroundTime=(select avg(IFNULL(onSiteTime,0)+IFNULL(travelTime,0)) from reviews where reviews.fkLocation = location.id) where id=?",
-					review.getFklocation());
-		}
+		DB.store(review, updateTurnAroundOnParentLocation);
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public void delete(int id) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-
-			ReviewsRecord rec = create.fetchOne(Reviews.REVIEWS, Reviews.REVIEWS.ID.equal(id));
-			rec.delete();
-		}
+		DB.delete(REVIEWS, REVIEWS.ID, id);
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public Integer hasUserReview(Integer fklocation, Integer fkUser) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-
-			Record1<Integer> result = create.select(Reviews.REVIEWS.ID).from(Reviews.REVIEWS)
-					.where(Reviews.REVIEWS.FKLOCATION.equal(fklocation).and(Reviews.REVIEWS.FKUSER.equal(fkUser))).fetchOne();
-
-			return result != null ? result.value1() : null;
+		Record rec = DB.fetchOn(REVIEWS, REVIEWS.FK_LOCATION.equal(fklocation).and(REVIEWS.FK_USER.equal(fkUser)));
+		if (rec != null) {
+			return rec.getValue(REVIEWS.ID);
 		}
+		return null;
 	}
 
 }

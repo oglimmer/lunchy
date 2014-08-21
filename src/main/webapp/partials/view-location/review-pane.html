@@ -7,13 +7,13 @@
 					<div class="col-lg-12">
 						<div class="list-group">
 						    <div ng-repeat="review in reviews" class="list-group-item">
-						        <h4 class="list-group-item-heading">{{review.creationUser}} wrote on {{review.lastupdate | date:'short'}}</h4>
+						        <h4 class="list-group-item-heading">{{review.creationUser}} wrote on {{review.lastUpdate | date:'short'}}</h4>
 						        <p class="list-group-item-text">{{review.comment}}</p>
-						        <p ng-show="review.favoritemeal" class="list-group-item-text">My favorite: {{review.favoritemeal}}</p>
+						        <p ng-show="review.favoriteMeal" class="list-group-item-text">My favorite: {{review.favoriteMeal}}</p>
 						        <p>Turn around time: 
-						        	<span tooltip-placement="bottom" tooltip="Pure travel time" class="dottedUnderline">{{ review.traveltime | numberToNA }}</span> + 
-						        	<span tooltip-placement="bottom" tooltip="Pure on site time" class="dottedUnderline">{{ review.onsitetime | numberToNA }}</span> = 
-						        	<span tooltip-placement="bottom" tooltip="Turn around time" class="dottedUnderline">{{ review.traveltime+review.onsitetime | numberToNA }}</span></p>
+						        	<span tooltip-placement="bottom" tooltip="Pure travel time" class="dottedUnderline">{{ review.travelTime | numberToNA }}</span> + 
+						        	<span tooltip-placement="bottom" tooltip="Pure on site time" class="dottedUnderline">{{ review.onSiteTime | numberToNA }}</span> = 
+						        	<span tooltip-placement="bottom" tooltip="Turn around time" class="dottedUnderline">{{ review.travelTime+review.onSiteTime | numberToNA }}</span></p>
 						        <p class="list-group-item-text">My rating: {{review.rating}} stars</p>
 						    </div>
 						</div>
@@ -30,18 +30,18 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="favoritemeal" class="col-lg-2 control-label">Your favorite meal</label>
+						<label for="favoriteMeal" class="col-lg-2 control-label">Your favorite meal</label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="newReview.favoritemeal">
+							<input type="text" class="form-control" ng-model="newReview.favoriteMeal">
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="turnaroundtime" class="col-lg-2 control-label">Turn around time</label>
+						<label for="turnAroundTime" class="col-lg-2 control-label">Turn around time</label>
 						<div class="col-lg-5">
-							<input type="number" class="form-control" name="travelTime" ng-model="newReview.traveltime" placeholder="Travel time - e.g. 20">
+							<input type="number" class="form-control" name="travelTime" ng-model="newReview.travelTime" placeholder="Travel time - e.g. 20">
 						</div>
 						<div class="col-lg-5"> 
-							<input type="number" class="form-control" name="onSiteTime" ng-model="newReview.onsitetime" placeholder="On site time - e.g. 35">
+							<input type="number" class="form-control" name="onSiteTime" ng-model="newReview.onSiteTime" placeholder="On site time - e.g. 35">
 						</div>
 						<div class="col-lg-5 col-lg-offset-2"> 
 							<span class="help-block">Pure travel time in minutes.</span>

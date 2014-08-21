@@ -1,65 +1,27 @@
 package de.oglimmer.lunchy.database;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import static de.oglimmer.lunchy.database.DB.DB;
+import static de.oglimmer.lunchy.database.generated.tables.Offices.OFFICES;
+
 import java.util.List;
 
-import lombok.SneakyThrows;
-
-import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Result;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
-
-import de.oglimmer.lunchy.database.connection.DBConn;
-import de.oglimmer.lunchy.database.generated.tables.Offices;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 
 public enum OfficeDao {
 	INSTANCE;
 
-	@SneakyThrows(value = SQLException.class)
 	public OfficesRecord getById(int id) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			OfficesRecord rec = create.fetchOne(Offices.OFFICES, Offices.OFFICES.ID.equal(id));
-			rec.attach(null);
-			return rec;
-		}
+		return DB.fetchOn(OFFICES, OFFICES.ID.equal(id));
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public int getDefaultOffice(int fkCommunity) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			Record rec = create.fetchOne("select fkBaseOffice from users where fkCommunity=" + fkCommunity
-					+ " group by fkBaseOffice order by count(*) desc limit 1");
-			return rec.getValue("fkBaseOffice", Integer.class);
-		}
+		Integer fkBaseOffice = DB.getInt(
+				"select fk_Base_Office from users where fk_Community=? group by fk_Base_Office order by count(*) desc limit 1", fkCommunity);
+		return fkBaseOffice != null ? fkBaseOffice : -1;
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public List<OfficesRecord> query(int fkCommunity) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-
-			Result<Record> result = create.select().from(Offices.OFFICES).where(Offices.OFFICES.FKCOMMUNITY.equal(fkCommunity))
-					.orderBy(Offices.OFFICES.NAME).fetch();
-
-			List<OfficesRecord> resultList = new ArrayList<>();
-			for (Record rawRec : result) {
-				OfficesRecord rec = (OfficesRecord) rawRec;
-				rec.attach(null);
-				resultList.add(rec);
-			}
-
-			return resultList;
-		}
+		return DB.query(OFFICES, OFFICES.FK_COMMUNITY.equal(fkCommunity), OFFICES.NAME.asc(), OfficesRecord.class);
 	}
 
 }

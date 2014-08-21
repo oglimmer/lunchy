@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.rest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

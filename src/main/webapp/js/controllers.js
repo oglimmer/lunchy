@@ -141,7 +141,7 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'Offic
 	
 	OfficesDao.query(function(offices) {
 		$scope.offices = offices;
-		$scope.data.fkoffice = Authetication.fkBaseOffice;
+		$scope.data.fkOffice = Authetication.fkBaseOffice;
 	});
 	
 	$scope.closeAlert = function(index) {
@@ -184,9 +184,9 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 	$scope.addReviewButton = 0;
 	$scope.alerts = [];
 	$scope.newReview = {
-			fklocation:$stateParams.locationId,
+			fkLocation:$stateParams.locationId,
 			comment:'',
-			favoritemeal:'',
+			favoriteMeal:'',
 			rating:1,
 			ratingExplained:'none'
 	};
@@ -230,7 +230,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 					longitude: $scope.data.geoLng
 				},
 				markerOptions: {
-					title: $scope.data.officialname
+					title: $scope.data.officialName
 				}
 		}
 		$scope.mapTabShown = true;
@@ -314,7 +314,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 				} else {
 					$scope.reviews = _.filter($scope.reviews, function(review) { return review.id !== result.id; });
 				}		
-				$scope.data.turnaroundtime = result.locationTurnAroundTime;
+				$scope.data.turnAroundTime = result.locationTurnAroundTime;
 				$scope.reviews.splice(0, 0, result);
 				$scope.usersReview = result.id;
 			}, function(result) {
@@ -335,7 +335,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 					$scope.addPictureButton=0;					
 				} else {
 				
-					var newPic = new PicturesDao({fklocation: $stateParams.locationId, caption: $scope.childScopeHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
+					var newPic = new PicturesDao({fkLocation: $stateParams.locationId, caption: $scope.childScopeHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
 					newPic.$save(function(pic) {
 						LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
 							$scope.childScopeHolder.pictures = pictures;
@@ -419,17 +419,17 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 				        latitude: loc.geoLat,
 				        longitude: loc.geoLng
 				    },
-				    title: loc.officialname,
+				    title: loc.officialName,
 				    events: {
 				    	click: function (marker, eventName, args) {
-			                console.log('marker clicked:'+loc.officialname+"/"+loc.id);
+			                console.log('marker clicked:'+loc.officialName+"/"+loc.id);
 			                $scope.$apply(function() {
 			                	$location.path("/view/"+loc.id);
 			                });
 			            }			            
 			        },
 			        markerOptions: {
-				    	title: loc.officialname+" ("+loc.numberOfReviews+"/"+loc.avgRating+"/"+(loc.reviewed?"X":"-")+")"
+				    	title: loc.officialName+" ("+loc.numberOfReviews+"/"+loc.avgRating+"/"+(loc.reviewed?"X":"-")+")"
 				    }
 				});
 			}			
@@ -469,7 +469,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
   	        }
   	        
   	        var flags = {
-  	        	turnaroundtime:'@',
+  	        	turnAroundTime:'@',
   	        	numberOfReviews:'#',
   	        	avgRating:'#',
   	        }

@@ -14,6 +14,9 @@ import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
+import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
+import de.oglimmer.lunchy.beanMapping.DozerAdapter;
+import de.oglimmer.lunchy.beanMapping.RestDto;
 import de.oglimmer.lunchy.database.connection.DBConn;
 
 public enum UpdatesDao {
@@ -21,44 +24,43 @@ public enum UpdatesDao {
 
 	@SneakyThrows(value = SQLException.class)
 	public List<ResultParam> get(int numberOfItems, int fkCommunity) {
-		List<ResultParam> list = new ArrayList<>(numberOfItems);
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			Result<Record> result = create
-					.fetch("select 'L' as type, officialName, city, '' as user, if (createdOn=lastUpdate , 'N' , 'U') as updatetype, id, lastUpdate from location where fkCommunity=? "
-							+ "union "
-							+ "select 'R' as type, officialName, city, displayname as user, if (reviews.createdOn=reviews.lastUpdate , 'N' , 'U') as updatetype, location.id, reviews.lastUpdate from reviews join location on location.id=reviews.fklocation join users on reviews.fkuser=users.id where location.fkCommunity=? "
-							+ "union "
-							+ "select 'U' as type, '' as officialName, '' as city, displayname as user,'N' as updatetype, id, createdOn as lastUpdate from users where users.fkCommunity=? "
-							+ "union "
-							+ "select 'P' as type, officialName, city, displayname as user, 'N' as updatetype, location.id, pictures.createdOn from pictures join location on location.id=pictures.fklocation join users on pictures.fkuser=users.id where location.fkCommunity=? "
-							+ "order by lastUpdate desc " + "limit " + numberOfItems, fkCommunity, fkCommunity, fkCommunity, fkCommunity);
+			Result<Record> result = queryDB(numberOfItems, fkCommunity, create);
+			return createResultList(result);
+		}
+	}
 
-			for (Record rec : result) {
-				list.add(new ResultParam(rec));
-			}
+	private Result<Record> queryDB(int numberOfItems, int fkCommunity, DSLContext create) {
+		String sql = "select 'L' as type, official_Name, city, '' as user, if (created_On=last_Update , 'N' , 'U') as update_Type, id, last_Update from location where fk_Community=? "
+				+ "union "
+				+ "select 'R' as type, official_Name, city, displayname as user, if (reviews.created_On=reviews.last_Update , 'N' , 'U') as update_Type, location.id, reviews.last_Update from reviews join location on location.id=reviews.fk_location join users on reviews.fk_user=users.id where location.fk_Community=? "
+				+ "union "
+				+ "select 'U' as type, '' as official_Name, '' as city, displayname as user,'N' as update_Type, id, created_On as last_Update from users where users.fk_Community=? "
+				+ "union "
+				+ "select 'P' as type, official_Name, city, displayname as user, 'N' as update_Type, location.id, pictures.created_On as last_Update from pictures join location on location.id=pictures.fk_location join users on pictures.fk_user=users.id where location.fk_Community=? "
+				+ "order by last_Update desc limit " + numberOfItems;
+		return create.fetch(sql, fkCommunity, fkCommunity, fkCommunity, fkCommunity);
+	}
+
+	private List<ResultParam> createResultList(Result<Record> result) {
+		List<ResultParam> list = new ArrayList<>(result.size());
+		for (Record rec : result) {
+			ResultParam rp = BeanMappingProvider.INSTANCE.getMapper().map(new DozerAdapter(rec), ResultParam.class);
+			list.add(rp);
 		}
 		return list;
 	}
 
 	@Data
+	@RestDto
 	public static class ResultParam {
-
-		private String updatetype;
+		private String updateType;
 		private String user;
 		private String type;
 		private String officialName;
 		private String city;
 		private Integer id;
-
-		private ResultParam(Record rec) {
-			id = rec.getValue("id", Integer.class);
-			type = rec.getValue("type", String.class);
-			updatetype = rec.getValue("updatetype", String.class);
-			user = rec.getValue("user", String.class);
-			officialName = rec.getValue("officialName", String.class);
-			city = rec.getValue("city", String.class);
-		}
 	}
 
 }

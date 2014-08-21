@@ -1,6 +1,7 @@
 package de.oglimmer.lunchy.rest;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,7 +23,7 @@ public enum SecurityProvider {
 	private LoadingCache<Integer, Permission> cb;
 
 	private SecurityProvider() {
-		cb = CacheBuilder.newBuilder().build(new CacheLoader<Integer, Permission>() {
+		cb = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.HOURS).build(new CacheLoader<Integer, Permission>() {
 			public Permission load(Integer key) {
 				return Permission.fromVal(UserDao.INSTANCE.getById(key).getPermissions());
 			}

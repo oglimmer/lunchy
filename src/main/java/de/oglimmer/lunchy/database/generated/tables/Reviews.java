@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> {
 
-	private static final long serialVersionUID = -278524572;
+	private static final long serialVersionUID = 604604255;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.reviews</code>
@@ -32,19 +32,19 @@ public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.reviews.fkCommunity</code>.
+	 * The column <code>oli_lunchy.reviews.fk_Community</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> FKCOMMUNITY = createField("fkCommunity", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.reviews.fkUser</code>.
+	 * The column <code>oli_lunchy.reviews.fk_User</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> FKUSER = createField("fkUser", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> FK_USER = createField("fk_User", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.reviews.fkLocation</code>.
+	 * The column <code>oli_lunchy.reviews.fk_Location</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> FKLOCATION = createField("fkLocation", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> FK_LOCATION = createField("fk_Location", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.reviews.comment</code>.
@@ -52,14 +52,14 @@ public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.String> COMMENT = createField("comment", org.jooq.impl.SQLDataType.CLOB.length(65535), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.reviews.createdOn</code>.
+	 * The column <code>oli_lunchy.reviews.created_On</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.sql.Timestamp> CREATEDON = createField("createdOn", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.sql.Timestamp> CREATED_ON = createField("created_On", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.reviews.lastUpdate</code>.
+	 * The column <code>oli_lunchy.reviews.last_Update</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.sql.Timestamp> LASTUPDATE = createField("lastUpdate", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.sql.Timestamp> LAST_UPDATE = createField("last_Update", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.reviews.rating</code>.
@@ -67,19 +67,19 @@ public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> RATING = createField("rating", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
 	/**
-	 * The column <code>oli_lunchy.reviews.favoriteMeal</code>.
+	 * The column <code>oli_lunchy.reviews.favorite_Meal</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.String> FAVORITEMEAL = createField("favoriteMeal", org.jooq.impl.SQLDataType.CLOB.length(65535), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.String> FAVORITE_MEAL = createField("favorite_Meal", org.jooq.impl.SQLDataType.CLOB.length(65535), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.reviews.travelTime</code>.
+	 * The column <code>oli_lunchy.reviews.travel_Time</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> TRAVELTIME = createField("travelTime", org.jooq.impl.SQLDataType.INTEGER, this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> TRAVEL_TIME = createField("travel_Time", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
 	/**
-	 * The column <code>oli_lunchy.reviews.onSiteTime</code>.
+	 * The column <code>oli_lunchy.reviews.on_Site_Time</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> ONSITETIME = createField("onSiteTime", org.jooq.impl.SQLDataType.INTEGER, this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> ON_SITE_TIME = createField("on_Site_Time", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.reviews</code> table reference

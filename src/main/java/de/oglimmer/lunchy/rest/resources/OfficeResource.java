@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.rest.resources;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import de.oglimmer.lunchy.database.OfficeDao;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.rest.dto.Office;
+import de.oglimmer.lunchy.rest.dto.ResultParam;
 import de.oglimmer.lunchy.services.Community;
 
 @Path("offices")
@@ -54,6 +55,6 @@ public class OfficeResource {
 		if (request.getSession(false) != null) {
 			fkUser = (Integer) request.getSession(false).getAttribute("userId");
 		}
-		return LocationDao.INSTANCE.getList(request, fkUser, id);
+		return LocationDao.INSTANCE.getList(Community.get(request), fkUser, id);
 	}
 }

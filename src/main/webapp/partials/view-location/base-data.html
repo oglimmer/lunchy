@@ -6,7 +6,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					{{ data.officialname }}
+					{{ data.officialName }}
 				</div>
 			</div>
 		</div>			
@@ -16,7 +16,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					{{ data.streetname }}
+					{{ data.streetName }}
 				</div>
 			</div>
 		</div>			
@@ -26,7 +26,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					{{ data.fkoffice | resolveNameById:offices }}
+					{{ data.fkOffice | resolveNameById:offices }}
 				</div>
 			</div>
 		</div>			
@@ -71,7 +71,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					{{ data.turnaroundtime }}
+					{{ data.turnAroundTime }}
 				</div>
 			</div>
 		</div>
@@ -95,7 +95,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					{{data.createdon | date :'short'}} by {{data.creationUser}} 
+					{{data.createdOn | date :'short'}} by {{data.creationUser}} 
 				</div>
 			</div>
 		</div>
@@ -105,7 +105,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					{{data.lastupdate | date :'short'}} 
+					{{data.lastUpdate | date :'short'}} 
 				</div>
 			</div>
 		</div>

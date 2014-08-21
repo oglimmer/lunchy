@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.rest.resources;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -16,6 +16,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ import com.google.code.geocoder.model.GeocoderRequest;
 import com.google.code.geocoder.model.GeocoderResult;
 import com.google.code.geocoder.model.LatLng;
 
+import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.LocationDao;
 import de.oglimmer.lunchy.database.OfficeDao;
 import de.oglimmer.lunchy.database.PicturesDao;
@@ -35,8 +38,9 @@ import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
+import de.oglimmer.lunchy.rest.SecurityProvider;
+import de.oglimmer.lunchy.rest.UserRightException;
 import de.oglimmer.lunchy.rest.dto.Location;
-import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.rest.dto.Picture;
 import de.oglimmer.lunchy.rest.dto.Review;
 import de.oglimmer.lunchy.services.Community;
@@ -78,9 +82,9 @@ public class LocationResource {
 			result.setHasReview(true);
 			result.setFkReview(reviewId);
 		}
-		LocationRecord locRec = LocationDao.INSTANCE.getById(id);
+		LocationRecord locRec = LocationDao.INSTANCE.getById(id, Community.get(request));
 		result.setAllowedToEdit(true);
-		if (locRec.getFkuser() != userId) {
+		if (locRec.getFkUser() != userId) {
 			try {
 				SecurityProvider.INSTANCE.checkConfirmedUser(request);
 			} catch (UserRightException e) {
@@ -93,27 +97,20 @@ public class LocationResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<LocationQuery> query(@Context HttpServletRequest request) {
-		Integer fkUser = null;
-		if (request.getSession(false) != null) {
-			fkUser = (Integer) request.getSession(false).getAttribute("userId");
-		}
-		return LocationDao.INSTANCE.getList(request, fkUser, null);
-	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Location get(@PathParam("id") int id) {
-		LocationRecord locationRec = LocationDao.INSTANCE.getById(id);
-		return Location.getInstance(locationRec);
+	public Response get(@Context HttpServletRequest request, @PathParam("id") int id) {
+		LocationRecord locationRec = LocationDao.INSTANCE.getById(id, Community.get(request));
+		if (locationRec == null) {
+			return Response.status(Status.NOT_FOUND).build();
+		}
+		return Response.ok(Location.getInstance(locationRec)).build();
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Location create(@Context HttpServletRequest request, Location locationDto) {
-		LocationRecord locationRec = convertDtoToRecord(locationDto);
+		LocationRecord locationRec = convertDtoToRecord(locationDto, Community.get(request));
 		addInitialData(request, locationRec);
 		return updateRec(locationRec);
 	}
@@ -126,8 +123,8 @@ public class LocationResource {
 		if (id != locationDto.getId()) {
 			throw new RuntimeException("wrong id");
 		}
-		LocationRecord locationRec = convertDtoToRecord(locationDto);
-		if (locationRec.getFkuser() != request.getSession(false).getAttribute("userId")) {
+		LocationRecord locationRec = convertDtoToRecord(locationDto, Community.get(request));
+		if (locationRec.getFkUser() != request.getSession(false).getAttribute("userId")) {
 			SecurityProvider.INSTANCE.checkConfirmedUser(request);
 		}
 		addInitialData(request, locationRec);
@@ -136,39 +133,39 @@ public class LocationResource {
 
 	private void addInitialData(HttpServletRequest request, LocationRecord locationRec) {
 		if (locationRec.getId() == null || locationRec.getId() == 0) {
-			locationRec.setFkcommunity(Community.get(request));
-			locationRec.setFkuser((Integer) request.getSession(false).getAttribute("userId"));
-			locationRec.setCreatedon(new Timestamp(new Date().getTime()));
-			OfficesRecord office = OfficeDao.INSTANCE.getById(locationRec.getFkoffice());
+			locationRec.setFkCommunity(Community.get(request));
+			locationRec.setFkUser((Integer) request.getSession(false).getAttribute("userId"));
+			locationRec.setCreatedOn(new Timestamp(new Date().getTime()));
+			OfficesRecord office = OfficeDao.INSTANCE.getById(locationRec.getFkOffice());
 			locationRec.setCountry(office.getCountry());
 		}
 	}
 
-	private LocationRecord convertDtoToRecord(Location locationDto) {
-		LocationRecord locationRec = getEmptyOrUnchangedRecord(locationDto.getId());
+	private LocationRecord convertDtoToRecord(Location locationDto, int fkCommunity) {
+		LocationRecord locationRec = getEmptyOrUnchangedRecord(locationDto.getId(), fkCommunity);
 		copyDtoToRecord(locationDto, locationRec);
 		return locationRec;
 	}
 
 	private void copyDtoToRecord(Location locationDto, LocationRecord locationRec) {
 		// HACK:make sure turnAroundTime is not overwritten
-		locationDto.setTurnaroundtime(locationRec.getTurnaroundtime());
+		locationDto.setTurnAroundTime(locationRec.getTurnAroundTime());
 
 		BeanMappingProvider.INSTANCE.getMapper().map(locationDto, locationRec);
 	}
 
-	private LocationRecord getEmptyOrUnchangedRecord(Integer id) {
+	private LocationRecord getEmptyOrUnchangedRecord(Integer id, int fkCommunity) {
 		LocationRecord locationRec;
 		if (id == null || id == 0) {
 			locationRec = new LocationRecord();
 		} else {
-			locationRec = LocationDao.INSTANCE.getById(id);
+			locationRec = LocationDao.INSTANCE.getById(id, fkCommunity);
 		}
 		return locationRec;
 	}
 
 	private Location updateRec(LocationRecord locationRec) {
-		locationRec.setLastupdate(new Timestamp(new Date().getTime()));
+		locationRec.setLastUpdate(new Timestamp(new Date().getTime()));
 
 		getGeoData(locationRec);
 

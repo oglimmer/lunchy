@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord> implements org.jooq.Record7<java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.String, java.sql.Timestamp> {
 
-	private static final long serialVersionUID = 1106842359;
+	private static final long serialVersionUID = 606242911;
 
 	/**
 	 * Setter for <code>oli_lunchy.pictures.id</code>.
@@ -28,44 +28,44 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.pictures.fkCommunity</code>.
+	 * Setter for <code>oli_lunchy.pictures.fk_Community</code>.
 	 */
-	public void setFkcommunity(java.lang.Integer value) {
+	public void setFkCommunity(java.lang.Integer value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.pictures.fkCommunity</code>.
+	 * Getter for <code>oli_lunchy.pictures.fk_Community</code>.
 	 */
-	public java.lang.Integer getFkcommunity() {
+	public java.lang.Integer getFkCommunity() {
 		return (java.lang.Integer) getValue(1);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.pictures.fkLocation</code>.
+	 * Setter for <code>oli_lunchy.pictures.fk_Location</code>.
 	 */
-	public void setFklocation(java.lang.Integer value) {
+	public void setFkLocation(java.lang.Integer value) {
 		setValue(2, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.pictures.fkLocation</code>.
+	 * Getter for <code>oli_lunchy.pictures.fk_Location</code>.
 	 */
-	public java.lang.Integer getFklocation() {
+	public java.lang.Integer getFkLocation() {
 		return (java.lang.Integer) getValue(2);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.pictures.fkUser</code>.
+	 * Setter for <code>oli_lunchy.pictures.fk_User</code>.
 	 */
-	public void setFkuser(java.lang.Integer value) {
+	public void setFkUser(java.lang.Integer value) {
 		setValue(3, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.pictures.fkUser</code>.
+	 * Getter for <code>oli_lunchy.pictures.fk_User</code>.
 	 */
-	public java.lang.Integer getFkuser() {
+	public java.lang.Integer getFkUser() {
 		return (java.lang.Integer) getValue(3);
 	}
 
@@ -98,16 +98,16 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.pictures.createdOn</code>.
+	 * Setter for <code>oli_lunchy.pictures.created_On</code>.
 	 */
-	public void setCreatedon(java.sql.Timestamp value) {
+	public void setCreatedOn(java.sql.Timestamp value) {
 		setValue(6, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.pictures.createdOn</code>.
+	 * Getter for <code>oli_lunchy.pictures.created_On</code>.
 	 */
-	public java.sql.Timestamp getCreatedon() {
+	public java.sql.Timestamp getCreatedOn() {
 		return (java.sql.Timestamp) getValue(6);
 	}
 
@@ -156,7 +156,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field2() {
-		return de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.FKCOMMUNITY;
+		return de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.FK_COMMUNITY;
 	}
 
 	/**
@@ -164,7 +164,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field3() {
-		return de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.FKLOCATION;
+		return de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.FK_LOCATION;
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field4() {
-		return de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.FKUSER;
+		return de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.FK_USER;
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.sql.Timestamp> field7() {
-		return de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.CREATEDON;
+		return de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES.CREATED_ON;
 	}
 
 	/**
@@ -212,7 +212,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.lang.Integer value2() {
-		return getFkcommunity();
+		return getFkCommunity();
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.lang.Integer value3() {
-		return getFklocation();
+		return getFkLocation();
 	}
 
 	/**
@@ -228,7 +228,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.lang.Integer value4() {
-		return getFkuser();
+		return getFkUser();
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.sql.Timestamp value7() {
-		return getCreatedon();
+		return getCreatedOn();
 	}
 
 	/**
@@ -269,7 +269,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public PicturesRecord value2(java.lang.Integer value) {
-		setFkcommunity(value);
+		setFkCommunity(value);
 		return this;
 	}
 
@@ -278,7 +278,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public PicturesRecord value3(java.lang.Integer value) {
-		setFklocation(value);
+		setFkLocation(value);
 		return this;
 	}
 
@@ -287,7 +287,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public PicturesRecord value4(java.lang.Integer value) {
-		setFkuser(value);
+		setFkUser(value);
 		return this;
 	}
 
@@ -314,7 +314,7 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public PicturesRecord value7(java.sql.Timestamp value) {
-		setCreatedon(value);
+		setCreatedOn(value);
 		return this;
 	}
 
@@ -340,15 +340,15 @@ public class PicturesRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	/**
 	 * Create a detached, initialised PicturesRecord
 	 */
-	public PicturesRecord(java.lang.Integer id, java.lang.Integer fkcommunity, java.lang.Integer fklocation, java.lang.Integer fkuser, java.lang.String filename, java.lang.String caption, java.sql.Timestamp createdon) {
+	public PicturesRecord(java.lang.Integer id, java.lang.Integer fkCommunity, java.lang.Integer fkLocation, java.lang.Integer fkUser, java.lang.String filename, java.lang.String caption, java.sql.Timestamp createdOn) {
 		super(de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES);
 
 		setValue(0, id);
-		setValue(1, fkcommunity);
-		setValue(2, fklocation);
-		setValue(3, fkuser);
+		setValue(1, fkCommunity);
+		setValue(2, fkLocation);
+		setValue(3, fkUser);
 		setValue(4, filename);
 		setValue(5, caption);
-		setValue(6, createdon);
+		setValue(6, createdOn);
 	}
 }

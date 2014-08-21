@@ -36,8 +36,7 @@ public class DB {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			Result<? extends Record> result = create.select().from(Users.USERS)
-					.fetch();
+			Result<? extends Record> result = create.select().from(Users.USERS).fetch();
 
 			for (UsersRecord rec : (Result<UsersRecord>) result) {
 
@@ -45,8 +44,7 @@ public class DB {
 				String email = rec.getEmail();
 				String displayName = rec.getDisplayname();
 
-				System.out.println("ID: " + id + " email: " + email + " name: "
-						+ displayName);
+				System.out.println("ID: " + id + " email: " + email + " name: " + displayName);
 			}
 		}
 	}
@@ -56,10 +54,10 @@ public class DB {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 			UsersRecord user = create.newRecord(Users.USERS);
-			user.setCreatedon(new Timestamp(new Date().getTime()));
+			user.setCreatedOn(new Timestamp(new Date().getTime()));
 			user.setDisplayname("Oli");
 			user.setEmail("oli@zimpasser.de");
-			user.setLastlogin(new Timestamp(new Date().getTime()));
+			user.setLastLogin(new Timestamp(new Date().getTime()));
 			user.setPassword(BCrypt.hashpw("foo", BCrypt.gensalt()));
 			user.setPermissions(0);
 			user.store();

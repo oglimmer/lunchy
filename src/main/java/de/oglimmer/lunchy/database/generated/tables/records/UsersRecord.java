@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> implements org.jooq.Record13<java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.String, java.lang.String, java.sql.Timestamp, java.sql.Timestamp, java.lang.Integer, java.lang.String, java.sql.Timestamp, java.lang.String, java.sql.Timestamp, java.lang.Integer> {
 
-	private static final long serialVersionUID = -160247750;
+	private static final long serialVersionUID = -1873135037;
 
 	/**
 	 * Setter for <code>oli_lunchy.users.id</code>.
@@ -28,16 +28,16 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.users.fkCommunity</code>.
+	 * Setter for <code>oli_lunchy.users.fk_Community</code>.
 	 */
-	public void setFkcommunity(java.lang.Integer value) {
+	public void setFkCommunity(java.lang.Integer value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.users.fkCommunity</code>.
+	 * Getter for <code>oli_lunchy.users.fk_Community</code>.
 	 */
-	public java.lang.Integer getFkcommunity() {
+	public java.lang.Integer getFkCommunity() {
 		return (java.lang.Integer) getValue(1);
 	}
 
@@ -84,30 +84,30 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.users.createdOn</code>.
+	 * Setter for <code>oli_lunchy.users.created_On</code>.
 	 */
-	public void setCreatedon(java.sql.Timestamp value) {
+	public void setCreatedOn(java.sql.Timestamp value) {
 		setValue(5, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.users.createdOn</code>.
+	 * Getter for <code>oli_lunchy.users.created_On</code>.
 	 */
-	public java.sql.Timestamp getCreatedon() {
+	public java.sql.Timestamp getCreatedOn() {
 		return (java.sql.Timestamp) getValue(5);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.users.lastLogin</code>.
+	 * Setter for <code>oli_lunchy.users.last_Login</code>.
 	 */
-	public void setLastlogin(java.sql.Timestamp value) {
+	public void setLastLogin(java.sql.Timestamp value) {
 		setValue(6, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.users.lastLogin</code>.
+	 * Getter for <code>oli_lunchy.users.last_Login</code>.
 	 */
-	public java.sql.Timestamp getLastlogin() {
+	public java.sql.Timestamp getLastLogin() {
 		return (java.sql.Timestamp) getValue(6);
 	}
 
@@ -126,72 +126,72 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.users.passwordResetToken</code>.
+	 * Setter for <code>oli_lunchy.users.password_Reset_Token</code>.
 	 */
-	public void setPasswordresettoken(java.lang.String value) {
+	public void setPasswordResetToken(java.lang.String value) {
 		setValue(8, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.users.passwordResetToken</code>.
+	 * Getter for <code>oli_lunchy.users.password_Reset_Token</code>.
 	 */
-	public java.lang.String getPasswordresettoken() {
+	public java.lang.String getPasswordResetToken() {
 		return (java.lang.String) getValue(8);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.users.passwordResetTimestamp</code>.
+	 * Setter for <code>oli_lunchy.users.password_Reset_Timestamp</code>.
 	 */
-	public void setPasswordresettimestamp(java.sql.Timestamp value) {
+	public void setPasswordResetTimestamp(java.sql.Timestamp value) {
 		setValue(9, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.users.passwordResetTimestamp</code>.
+	 * Getter for <code>oli_lunchy.users.password_Reset_Timestamp</code>.
 	 */
-	public java.sql.Timestamp getPasswordresettimestamp() {
+	public java.sql.Timestamp getPasswordResetTimestamp() {
 		return (java.sql.Timestamp) getValue(9);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.users.longTimeToken</code>.
+	 * Setter for <code>oli_lunchy.users.long_Time_Token</code>.
 	 */
-	public void setLongtimetoken(java.lang.String value) {
+	public void setLongTimeToken(java.lang.String value) {
 		setValue(10, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.users.longTimeToken</code>.
+	 * Getter for <code>oli_lunchy.users.long_Time_Token</code>.
 	 */
-	public java.lang.String getLongtimetoken() {
+	public java.lang.String getLongTimeToken() {
 		return (java.lang.String) getValue(10);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.users.longTimeTimestamp</code>.
+	 * Setter for <code>oli_lunchy.users.long_Time_Timestamp</code>.
 	 */
-	public void setLongtimetimestamp(java.sql.Timestamp value) {
+	public void setLongTimeTimestamp(java.sql.Timestamp value) {
 		setValue(11, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.users.longTimeTimestamp</code>.
+	 * Getter for <code>oli_lunchy.users.long_Time_Timestamp</code>.
 	 */
-	public java.sql.Timestamp getLongtimetimestamp() {
+	public java.sql.Timestamp getLongTimeTimestamp() {
 		return (java.sql.Timestamp) getValue(11);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.users.fkBaseOffice</code>.
+	 * Setter for <code>oli_lunchy.users.fk_Base_Office</code>.
 	 */
-	public void setFkbaseoffice(java.lang.Integer value) {
+	public void setFkBaseOffice(java.lang.Integer value) {
 		setValue(12, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.users.fkBaseOffice</code>.
+	 * Getter for <code>oli_lunchy.users.fk_Base_Office</code>.
 	 */
-	public java.lang.Integer getFkbaseoffice() {
+	public java.lang.Integer getFkBaseOffice() {
 		return (java.lang.Integer) getValue(12);
 	}
 
@@ -240,7 +240,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field2() {
-		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.FKCOMMUNITY;
+		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.FK_COMMUNITY;
 	}
 
 	/**
@@ -272,7 +272,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public org.jooq.Field<java.sql.Timestamp> field6() {
-		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.CREATEDON;
+		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.CREATED_ON;
 	}
 
 	/**
@@ -280,7 +280,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public org.jooq.Field<java.sql.Timestamp> field7() {
-		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.LASTLOGIN;
+		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.LAST_LOGIN;
 	}
 
 	/**
@@ -296,7 +296,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public org.jooq.Field<java.lang.String> field9() {
-		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.PASSWORDRESETTOKEN;
+		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.PASSWORD_RESET_TOKEN;
 	}
 
 	/**
@@ -304,7 +304,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public org.jooq.Field<java.sql.Timestamp> field10() {
-		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.PASSWORDRESETTIMESTAMP;
+		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.PASSWORD_RESET_TIMESTAMP;
 	}
 
 	/**
@@ -312,7 +312,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public org.jooq.Field<java.lang.String> field11() {
-		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.LONGTIMETOKEN;
+		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.LONG_TIME_TOKEN;
 	}
 
 	/**
@@ -320,7 +320,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public org.jooq.Field<java.sql.Timestamp> field12() {
-		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.LONGTIMETIMESTAMP;
+		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.LONG_TIME_TIMESTAMP;
 	}
 
 	/**
@@ -328,7 +328,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field13() {
-		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.FKBASEOFFICE;
+		return de.oglimmer.lunchy.database.generated.tables.Users.USERS.FK_BASE_OFFICE;
 	}
 
 	/**
@@ -344,7 +344,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public java.lang.Integer value2() {
-		return getFkcommunity();
+		return getFkCommunity();
 	}
 
 	/**
@@ -376,7 +376,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public java.sql.Timestamp value6() {
-		return getCreatedon();
+		return getCreatedOn();
 	}
 
 	/**
@@ -384,7 +384,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public java.sql.Timestamp value7() {
-		return getLastlogin();
+		return getLastLogin();
 	}
 
 	/**
@@ -400,7 +400,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public java.lang.String value9() {
-		return getPasswordresettoken();
+		return getPasswordResetToken();
 	}
 
 	/**
@@ -408,7 +408,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public java.sql.Timestamp value10() {
-		return getPasswordresettimestamp();
+		return getPasswordResetTimestamp();
 	}
 
 	/**
@@ -416,7 +416,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public java.lang.String value11() {
-		return getLongtimetoken();
+		return getLongTimeToken();
 	}
 
 	/**
@@ -424,7 +424,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public java.sql.Timestamp value12() {
-		return getLongtimetimestamp();
+		return getLongTimeTimestamp();
 	}
 
 	/**
@@ -432,7 +432,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public java.lang.Integer value13() {
-		return getFkbaseoffice();
+		return getFkBaseOffice();
 	}
 
 	/**
@@ -449,7 +449,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public UsersRecord value2(java.lang.Integer value) {
-		setFkcommunity(value);
+		setFkCommunity(value);
 		return this;
 	}
 
@@ -485,7 +485,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public UsersRecord value6(java.sql.Timestamp value) {
-		setCreatedon(value);
+		setCreatedOn(value);
 		return this;
 	}
 
@@ -494,7 +494,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public UsersRecord value7(java.sql.Timestamp value) {
-		setLastlogin(value);
+		setLastLogin(value);
 		return this;
 	}
 
@@ -512,7 +512,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public UsersRecord value9(java.lang.String value) {
-		setPasswordresettoken(value);
+		setPasswordResetToken(value);
 		return this;
 	}
 
@@ -521,7 +521,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public UsersRecord value10(java.sql.Timestamp value) {
-		setPasswordresettimestamp(value);
+		setPasswordResetTimestamp(value);
 		return this;
 	}
 
@@ -530,7 +530,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public UsersRecord value11(java.lang.String value) {
-		setLongtimetoken(value);
+		setLongTimeToken(value);
 		return this;
 	}
 
@@ -539,7 +539,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public UsersRecord value12(java.sql.Timestamp value) {
-		setLongtimetimestamp(value);
+		setLongTimeTimestamp(value);
 		return this;
 	}
 
@@ -548,7 +548,7 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	 */
 	@Override
 	public UsersRecord value13(java.lang.Integer value) {
-		setFkbaseoffice(value);
+		setFkBaseOffice(value);
 		return this;
 	}
 
@@ -574,21 +574,21 @@ public class UsersRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.l
 	/**
 	 * Create a detached, initialised UsersRecord
 	 */
-	public UsersRecord(java.lang.Integer id, java.lang.Integer fkcommunity, java.lang.String email, java.lang.String password, java.lang.String displayname, java.sql.Timestamp createdon, java.sql.Timestamp lastlogin, java.lang.Integer permissions, java.lang.String passwordresettoken, java.sql.Timestamp passwordresettimestamp, java.lang.String longtimetoken, java.sql.Timestamp longtimetimestamp, java.lang.Integer fkbaseoffice) {
+	public UsersRecord(java.lang.Integer id, java.lang.Integer fkCommunity, java.lang.String email, java.lang.String password, java.lang.String displayname, java.sql.Timestamp createdOn, java.sql.Timestamp lastLogin, java.lang.Integer permissions, java.lang.String passwordResetToken, java.sql.Timestamp passwordResetTimestamp, java.lang.String longTimeToken, java.sql.Timestamp longTimeTimestamp, java.lang.Integer fkBaseOffice) {
 		super(de.oglimmer.lunchy.database.generated.tables.Users.USERS);
 
 		setValue(0, id);
-		setValue(1, fkcommunity);
+		setValue(1, fkCommunity);
 		setValue(2, email);
 		setValue(3, password);
 		setValue(4, displayname);
-		setValue(5, createdon);
-		setValue(6, lastlogin);
+		setValue(5, createdOn);
+		setValue(6, lastLogin);
 		setValue(7, permissions);
-		setValue(8, passwordresettoken);
-		setValue(9, passwordresettimestamp);
-		setValue(10, longtimetoken);
-		setValue(11, longtimetimestamp);
-		setValue(12, fkbaseoffice);
+		setValue(8, passwordResetToken);
+		setValue(9, passwordResetTimestamp);
+		setValue(10, longTimeToken);
+		setValue(11, longTimeTimestamp);
+		setValue(12, fkBaseOffice);
 	}
 }

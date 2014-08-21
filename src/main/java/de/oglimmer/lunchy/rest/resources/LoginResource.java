@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.rest.resources;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +25,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import de.oglimmer.lunchy.database.CommunityDao;
 import de.oglimmer.lunchy.database.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.rest.LoginResponseProvider;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
 import de.oglimmer.lunchy.services.Community;
 
@@ -60,7 +61,7 @@ public class LoginResource {
 	private boolean isLongTimeTokenYoungerThen3Month(UsersRecord user) {
 		Calendar now = GregorianCalendar.getInstance();
 		Calendar cal = GregorianCalendar.getInstance();
-		cal.setTime(new Date(user.getLongtimetimestamp().getTime()));
+		cal.setTime(new Date(user.getLongTimeTimestamp().getTime()));
 		cal.add(Calendar.MONTH, 3);
 		return now.before(cal);
 	}

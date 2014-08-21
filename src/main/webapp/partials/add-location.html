@@ -10,24 +10,24 @@
 				<fieldset>
 					<legend>Adding a new location</legend>
 					<div class="form-group">
-						<label for="data.fkoffice" class="col-lg-2 control-label">Office</label>
+						<label for="data.fkOffice" class="col-lg-2 control-label">Office</label>
 						<div class="col-lg-10">
-							<select class="form-control" ng-model="data.fkoffice">
-								<option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==data.fkoffice">{{office.name}}</option>
+							<select class="form-control" ng-model="data.fkOffice">
+								<option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==data.fkOffice">{{office.name}}</option>
 							</select>							
 							<span class="help-block">For lunch only reachable from this office.</span>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="data.officialname" class="col-lg-2 control-label required">Official name</label>
+						<label for="data.officialName" class="col-lg-2 control-label required">Official name</label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="data.officialname" placeholder="Official name" focus="true" required>
+							<input type="text" class="form-control" ng-model="data.officialName" placeholder="Official name" focus="true" required>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="data.streetname" class="col-lg-2 control-label">{{ companyName }} name</label>
+						<label for="data.streetName" class="col-lg-2 control-label">{{ companyName }} name</label>
 						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="data.streetname" placeholder="{{ companyName }} name">
+							<input type="text" class="form-control" ng-model="data.streetName" placeholder="{{ companyName }} name">
 							<span class="help-block">Separate multiple names by comma.</span>
 						</div>
 					</div>

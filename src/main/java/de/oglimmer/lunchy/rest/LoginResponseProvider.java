@@ -14,15 +14,17 @@ import de.oglimmer.lunchy.rest.dto.LoginResponse;
 public enum LoginResponseProvider {
 	INSTANCE;
 
+	private static final String ATTR_NAME = "userId";
+
 	public void login(LoginResponse loginResponse, UsersRecord user, HttpSession session) {
 		fillResponse(loginResponse, user);
 		createSession(user, session);
-		user.setLastlogin(new Timestamp(new Date().getTime()));
+		user.setLastLogin(new Timestamp(new Date().getTime()));
 		UserDao.INSTANCE.store(user);
 	}
 
 	private void createSession(UsersRecord user, HttpSession session) {
-		session.setAttribute("userId", user.getId());
+		session.setAttribute(ATTR_NAME, user.getId());
 	}
 
 	public void destroySession(HttpSession session) {
@@ -33,7 +35,7 @@ public enum LoginResponseProvider {
 
 	public Integer getLoggedInUserId(HttpSession session) {
 		if (session != null) {
-			return (Integer) session.getAttribute("userId");
+			return (Integer) session.getAttribute(ATTR_NAME);
 		}
 		return null;
 	}
@@ -48,23 +50,23 @@ public enum LoginResponseProvider {
 
 	private void fillResponse(LoginResponse loginResponse, UsersRecord user) {
 		loginResponse.setSuccess(true);
-		loginResponse.setFkOffice(user.getFkbaseoffice());
+		loginResponse.setFkOffice(user.getFkBaseOffice());
 		loginResponse.setUserId(user.getId());
-		loginResponse.setLongTimeToken(user.getLongtimetoken());
+		loginResponse.setLongTimeToken(user.getLongTimeToken());
 	}
 
 	public void removeToken(UsersRecord user) {
-		if (user != null && user.getLongtimetoken() != null) {
-			user.setLongtimetoken(null);
-			user.setLongtimetimestamp(null);
+		if (user != null && user.getLongTimeToken() != null) {
+			user.setLongTimeToken(null);
+			user.setLongTimeTimestamp(null);
 			UserDao.INSTANCE.store(user);
 		}
 	}
 
 	public void generateToken(UsersRecord user) {
-		if (user.getLongtimetoken() == null) {
-			user.setLongtimetimestamp(new Timestamp(new Date().getTime()));
-			user.setLongtimetoken(RandomStringUtils.randomAlphanumeric(128));
+		if (user.getLongTimeToken() == null) {
+			user.setLongTimeTimestamp(new Timestamp(new Date().getTime()));
+			user.setLongTimeToken(RandomStringUtils.randomAlphanumeric(128));
 		}
 	}
 

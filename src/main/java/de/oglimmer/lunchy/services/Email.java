@@ -57,9 +57,9 @@ public enum Email {
 			email.setMsg("Hello "
 					+ user.getDisplayname()
 					+ "\r\n\r\nYou have requested a link to reset your Lunchy password.\r\n\r\nClick here to reset your password: "
-					+ getUrl(user.getFkcommunity())
+					+ getUrl(user.getFkCommunity())
 					+ "/#/passwordReset?token="
-					+ user.getPasswordresettoken()
+					+ user.getPasswordResetToken()
 					+ "\r\n\r\nThis link works for 24 hours.\r\n\r\nYou can ignore this email if you haven't requested this link.\r\n\r\nRegards,\r\nOli");
 			email.addTo(user.getEmail());
 			send(email);
@@ -92,7 +92,7 @@ public enum Email {
 			email.setSubject("A new user registered to Lunchy");
 			email.setMsg("Hello admin\r\n\r\na new user " + name + " registered at lunchy. Go to " + getUrl(fkCommunity)
 					+ "/#/user and set a permission.\r\n\r\nRegards,\r\nOli");
-			email.addTo(CommunityDao.INSTANCE.getById(fkCommunity).getAdminemail());
+			email.addTo(CommunityDao.INSTANCE.getById(fkCommunity).getAdminEmail());
 			send(email);
 		} catch (EmailException e) {
 			log.error("Failed to send password email", e);

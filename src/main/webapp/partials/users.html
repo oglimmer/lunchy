@@ -13,25 +13,25 @@
 		            <td data-title="'Name'" sortable="'displayname'" filter="{ 'displayname': 'text' }">
 		                {{item.displayname}}
 		            </td>
-		            <td data-title="'Created'" sortable="'createdon'">
-		                {{item.createdon|date:'short'}}
+		            <td data-title="'Created'" sortable="'createdOn'">
+		                {{item.createdOn|date:'short'}}
 		            </td>
-		            <td data-title="'Last Login'" sortable="'lastlogin'" >
-		                {{item.lastlogin|date:'short'}}
+		            <td data-title="'Last Login'" sortable="'lastLogin'" >
+		                {{item.lastLogin|date:'short'}}
 		            </td>
 		            <td data-title="'Permissions'" sortable="'permissions'" filter="{ 'permissions': 'text' }">
 		                <span ng-hide="lineEdit[item.id]">{{item.permissions}}</span>
 		                <button class="btn btn-default btn-sm" ng-class="{'btn-primary':item.permissions==0}" ng-show="lineEdit[item.id]" ng-click="changePermission(item,0);$event.stopPropagation();">0</button>
 		                <button class="btn btn-default btn-sm" ng-class="{'btn-primary':item.permissions==1}" ng-show="lineEdit[item.id]" ng-click="changePermission(item,1);$event.stopPropagation();">1</button>
 		            </td>
-		            <td data-title="'PassReset'" sortable="'passwordresettimestamp'">
-		                {{item.passwordresettimestamp|date:'short'}}
+		            <td data-title="'PassReset'" sortable="'passwordResetTimestamp'">
+		                {{item.passwordResetTimestamp|date:'short'}}
 		            </td>
-		            <td data-title="'LongTime'" sortable="'longtimetimestamp'">
-		                {{item.longtimetimestamp|date:'short'}}
+		            <td data-title="'LongTime'" sortable="'longTimeTimestamp'">
+		                {{item.longTimeTimestamp|date:'short'}}
 		            </td>		           
-		            <td data-title="'Office'" sortable="'fkbaseoffice'">
-		                {{item.fkbaseoffice}}
+		            <td data-title="'Office'" sortable="'fkBaseOffice'">
+		                {{item.fkBaseOffice}}
 		            </td>		           
 		        </tr>
 		    </table>

@@ -1,98 +1,52 @@
 package de.oglimmer.lunchy.database;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import static de.oglimmer.lunchy.database.DB.DB;
+import static de.oglimmer.lunchy.database.generated.tables.Users.USERS;
+
 import java.util.List;
 
-import lombok.SneakyThrows;
-
 import org.jooq.Condition;
-import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Result;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
-import de.oglimmer.lunchy.database.connection.DBConn;
-import de.oglimmer.lunchy.database.generated.tables.Users;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 
 public enum UserDao {
 	INSTANCE;
 
-	@SneakyThrows(value = SQLException.class)
+	/**
+	 * Method does not filter by fkCommunity!
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public UsersRecord getById(Integer id) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			UsersRecord rec = create.fetchOne(Users.USERS, Users.USERS.ID.equal(id));
-			if (rec != null) {
-				rec.attach(null);
-			}
-			return rec;
-		}
+		return DB.fetchOn(USERS, USERS.ID.equal(id));
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public UsersRecord getById(Integer id, int fkCommunity) {
-		return getBy(Users.USERS.ID.equal(id), fkCommunity);
+		return getBy(USERS.ID.equal(id), fkCommunity);
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public UsersRecord getUserByEmail(String email, int fkCommunity) {
-		return getBy(Users.USERS.EMAIL.equalIgnoreCase(email), fkCommunity);
+		return getBy(USERS.EMAIL.equalIgnoreCase(email), fkCommunity);
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public UsersRecord getUserByToken(String token, int fkCommunity) {
-		return getBy(Users.USERS.PASSWORDRESETTOKEN.equal(token), fkCommunity);
+		return getBy(USERS.PASSWORD_RESET_TOKEN.equal(token), fkCommunity);
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public UsersRecord getByLongTimeToken(String longTimeToken, int fkCommunity) {
-		return getBy(Users.USERS.LONGTIMETOKEN.equal(longTimeToken), fkCommunity);
+		return getBy(USERS.LONG_TIME_TOKEN.equal(longTimeToken), fkCommunity);
 	}
 
-	private UsersRecord getBy(Condition cond, int fkCommunity) throws SQLException {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			UsersRecord rec = create.fetchOne(Users.USERS, cond.and(Users.USERS.FKCOMMUNITY.equal(fkCommunity)));
-			if (rec != null) {
-				rec.attach(null);
-			}
-			return rec;
-		}
+	private UsersRecord getBy(Condition cond, int fkCommunity) {
+		return DB.fetchOn(USERS, cond.and(USERS.FK_COMMUNITY.equal(fkCommunity)));
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public void store(UsersRecord user) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			user.attach(create.configuration());
-			user.store();
-		}
+		DB.store(user);
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public List<UsersRecord> query(int fkCommunity) {
-		try (Connection conn = DBConn.INSTANCE.get()) {
-
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-
-			Result<Record> result = create.select().from(Users.USERS).where(Users.USERS.FKCOMMUNITY.equal(fkCommunity)).fetch();
-
-			List<UsersRecord> resultList = new ArrayList<>();
-			for (Record rawRec : result) {
-				UsersRecord rec = (UsersRecord) rawRec;
-				rec.attach(null);
-				resultList.add(rec);
-			}
-
-			return resultList;
-		}
+		return DB.query(USERS, USERS.FK_COMMUNITY.equal(fkCommunity), USERS.EMAIL.asc(), UsersRecord.class);
 	}
-
 }

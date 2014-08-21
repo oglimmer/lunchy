@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables.records;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> implements org.jooq.Record18<java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Integer, java.sql.Timestamp, java.sql.Timestamp, java.lang.Integer, java.lang.Double, java.lang.Double, java.lang.String, java.lang.Integer> {
 
-	private static final long serialVersionUID = -2146255053;
+	private static final long serialVersionUID = -1125898326;
 
 	/**
 	 * Setter for <code>oli_lunchy.location.id</code>.
@@ -28,44 +28,44 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.location.fkCommunity</code>.
+	 * Setter for <code>oli_lunchy.location.fk_Community</code>.
 	 */
-	public void setFkcommunity(java.lang.Integer value) {
+	public void setFkCommunity(java.lang.Integer value) {
 		setValue(1, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.location.fkCommunity</code>.
+	 * Getter for <code>oli_lunchy.location.fk_Community</code>.
 	 */
-	public java.lang.Integer getFkcommunity() {
+	public java.lang.Integer getFkCommunity() {
 		return (java.lang.Integer) getValue(1);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.location.officialname</code>.
+	 * Setter for <code>oli_lunchy.location.official_Name</code>.
 	 */
-	public void setOfficialname(java.lang.String value) {
+	public void setOfficialName(java.lang.String value) {
 		setValue(2, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.location.officialname</code>.
+	 * Getter for <code>oli_lunchy.location.official_Name</code>.
 	 */
-	public java.lang.String getOfficialname() {
+	public java.lang.String getOfficialName() {
 		return (java.lang.String) getValue(2);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.location.streetname</code>.
+	 * Setter for <code>oli_lunchy.location.street_Name</code>.
 	 */
-	public void setStreetname(java.lang.String value) {
+	public void setStreetName(java.lang.String value) {
 		setValue(3, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.location.streetname</code>.
+	 * Getter for <code>oli_lunchy.location.street_Name</code>.
 	 */
-	public java.lang.String getStreetname() {
+	public java.lang.String getStreetName() {
 		return (java.lang.String) getValue(3);
 	}
 
@@ -154,84 +154,84 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.location.turnAroundTime</code>.
+	 * Setter for <code>oli_lunchy.location.turn_Around_Time</code>.
 	 */
-	public void setTurnaroundtime(java.lang.Integer value) {
+	public void setTurnAroundTime(java.lang.Integer value) {
 		setValue(10, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.location.turnAroundTime</code>.
+	 * Getter for <code>oli_lunchy.location.turn_Around_Time</code>.
 	 */
-	public java.lang.Integer getTurnaroundtime() {
+	public java.lang.Integer getTurnAroundTime() {
 		return (java.lang.Integer) getValue(10);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.location.createdOn</code>.
+	 * Setter for <code>oli_lunchy.location.created_On</code>.
 	 */
-	public void setCreatedon(java.sql.Timestamp value) {
+	public void setCreatedOn(java.sql.Timestamp value) {
 		setValue(11, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.location.createdOn</code>.
+	 * Getter for <code>oli_lunchy.location.created_On</code>.
 	 */
-	public java.sql.Timestamp getCreatedon() {
+	public java.sql.Timestamp getCreatedOn() {
 		return (java.sql.Timestamp) getValue(11);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.location.lastUpdate</code>.
+	 * Setter for <code>oli_lunchy.location.last_Update</code>.
 	 */
-	public void setLastupdate(java.sql.Timestamp value) {
+	public void setLastUpdate(java.sql.Timestamp value) {
 		setValue(12, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.location.lastUpdate</code>.
+	 * Getter for <code>oli_lunchy.location.last_Update</code>.
 	 */
-	public java.sql.Timestamp getLastupdate() {
+	public java.sql.Timestamp getLastUpdate() {
 		return (java.sql.Timestamp) getValue(12);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.location.fkUser</code>.
+	 * Setter for <code>oli_lunchy.location.fk_User</code>.
 	 */
-	public void setFkuser(java.lang.Integer value) {
+	public void setFkUser(java.lang.Integer value) {
 		setValue(13, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.location.fkUser</code>.
+	 * Getter for <code>oli_lunchy.location.fk_User</code>.
 	 */
-	public java.lang.Integer getFkuser() {
+	public java.lang.Integer getFkUser() {
 		return (java.lang.Integer) getValue(13);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.location.geo_lat</code>.
+	 * Setter for <code>oli_lunchy.location.geo_Lat</code>.
 	 */
 	public void setGeoLat(java.lang.Double value) {
 		setValue(14, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.location.geo_lat</code>.
+	 * Getter for <code>oli_lunchy.location.geo_Lat</code>.
 	 */
 	public java.lang.Double getGeoLat() {
 		return (java.lang.Double) getValue(14);
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.location.geo_lng</code>.
+	 * Setter for <code>oli_lunchy.location.geo_Lng</code>.
 	 */
 	public void setGeoLng(java.lang.Double value) {
 		setValue(15, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.location.geo_lng</code>.
+	 * Getter for <code>oli_lunchy.location.geo_Lng</code>.
 	 */
 	public java.lang.Double getGeoLng() {
 		return (java.lang.Double) getValue(15);
@@ -252,16 +252,16 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.location.fkOffice</code>.
+	 * Setter for <code>oli_lunchy.location.fk_Office</code>.
 	 */
-	public void setFkoffice(java.lang.Integer value) {
+	public void setFkOffice(java.lang.Integer value) {
 		setValue(17, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.location.fkOffice</code>.
+	 * Getter for <code>oli_lunchy.location.fk_Office</code>.
 	 */
-	public java.lang.Integer getFkoffice() {
+	public java.lang.Integer getFkOffice() {
 		return (java.lang.Integer) getValue(17);
 	}
 
@@ -310,7 +310,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field2() {
-		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.FKCOMMUNITY;
+		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.FK_COMMUNITY;
 	}
 
 	/**
@@ -318,7 +318,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.lang.String> field3() {
-		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.OFFICIALNAME;
+		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.OFFICIAL_NAME;
 	}
 
 	/**
@@ -326,7 +326,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.lang.String> field4() {
-		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.STREETNAME;
+		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.STREET_NAME;
 	}
 
 	/**
@@ -382,7 +382,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field11() {
-		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.TURNAROUNDTIME;
+		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.TURN_AROUND_TIME;
 	}
 
 	/**
@@ -390,7 +390,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.sql.Timestamp> field12() {
-		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.CREATEDON;
+		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.CREATED_ON;
 	}
 
 	/**
@@ -398,7 +398,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.sql.Timestamp> field13() {
-		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.LASTUPDATE;
+		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.LAST_UPDATE;
 	}
 
 	/**
@@ -406,7 +406,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field14() {
-		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.FKUSER;
+		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.FK_USER;
 	}
 
 	/**
@@ -438,7 +438,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public org.jooq.Field<java.lang.Integer> field18() {
-		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.FKOFFICE;
+		return de.oglimmer.lunchy.database.generated.tables.Location.LOCATION.FK_OFFICE;
 	}
 
 	/**
@@ -454,7 +454,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.lang.Integer value2() {
-		return getFkcommunity();
+		return getFkCommunity();
 	}
 
 	/**
@@ -462,7 +462,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.lang.String value3() {
-		return getOfficialname();
+		return getOfficialName();
 	}
 
 	/**
@@ -470,7 +470,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.lang.String value4() {
-		return getStreetname();
+		return getStreetName();
 	}
 
 	/**
@@ -526,7 +526,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.lang.Integer value11() {
-		return getTurnaroundtime();
+		return getTurnAroundTime();
 	}
 
 	/**
@@ -534,7 +534,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.sql.Timestamp value12() {
-		return getCreatedon();
+		return getCreatedOn();
 	}
 
 	/**
@@ -542,7 +542,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.sql.Timestamp value13() {
-		return getLastupdate();
+		return getLastUpdate();
 	}
 
 	/**
@@ -550,7 +550,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.lang.Integer value14() {
-		return getFkuser();
+		return getFkUser();
 	}
 
 	/**
@@ -582,7 +582,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public java.lang.Integer value18() {
-		return getFkoffice();
+		return getFkOffice();
 	}
 
 	/**
@@ -599,7 +599,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public LocationRecord value2(java.lang.Integer value) {
-		setFkcommunity(value);
+		setFkCommunity(value);
 		return this;
 	}
 
@@ -608,7 +608,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public LocationRecord value3(java.lang.String value) {
-		setOfficialname(value);
+		setOfficialName(value);
 		return this;
 	}
 
@@ -617,7 +617,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public LocationRecord value4(java.lang.String value) {
-		setStreetname(value);
+		setStreetName(value);
 		return this;
 	}
 
@@ -680,7 +680,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public LocationRecord value11(java.lang.Integer value) {
-		setTurnaroundtime(value);
+		setTurnAroundTime(value);
 		return this;
 	}
 
@@ -689,7 +689,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public LocationRecord value12(java.sql.Timestamp value) {
-		setCreatedon(value);
+		setCreatedOn(value);
 		return this;
 	}
 
@@ -698,7 +698,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public LocationRecord value13(java.sql.Timestamp value) {
-		setLastupdate(value);
+		setLastUpdate(value);
 		return this;
 	}
 
@@ -707,7 +707,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public LocationRecord value14(java.lang.Integer value) {
-		setFkuser(value);
+		setFkUser(value);
 		return this;
 	}
 
@@ -743,7 +743,7 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	 */
 	@Override
 	public LocationRecord value18(java.lang.Integer value) {
-		setFkoffice(value);
+		setFkOffice(value);
 		return this;
 	}
 
@@ -769,26 +769,26 @@ public class LocationRecord extends org.jooq.impl.UpdatableRecordImpl<de.oglimme
 	/**
 	 * Create a detached, initialised LocationRecord
 	 */
-	public LocationRecord(java.lang.Integer id, java.lang.Integer fkcommunity, java.lang.String officialname, java.lang.String streetname, java.lang.String address, java.lang.String city, java.lang.String zip, java.lang.String country, java.lang.String url, java.lang.String comment, java.lang.Integer turnaroundtime, java.sql.Timestamp createdon, java.sql.Timestamp lastupdate, java.lang.Integer fkuser, java.lang.Double geoLat, java.lang.Double geoLng, java.lang.String tags, java.lang.Integer fkoffice) {
+	public LocationRecord(java.lang.Integer id, java.lang.Integer fkCommunity, java.lang.String officialName, java.lang.String streetName, java.lang.String address, java.lang.String city, java.lang.String zip, java.lang.String country, java.lang.String url, java.lang.String comment, java.lang.Integer turnAroundTime, java.sql.Timestamp createdOn, java.sql.Timestamp lastUpdate, java.lang.Integer fkUser, java.lang.Double geoLat, java.lang.Double geoLng, java.lang.String tags, java.lang.Integer fkOffice) {
 		super(de.oglimmer.lunchy.database.generated.tables.Location.LOCATION);
 
 		setValue(0, id);
-		setValue(1, fkcommunity);
-		setValue(2, officialname);
-		setValue(3, streetname);
+		setValue(1, fkCommunity);
+		setValue(2, officialName);
+		setValue(3, streetName);
 		setValue(4, address);
 		setValue(5, city);
 		setValue(6, zip);
 		setValue(7, country);
 		setValue(8, url);
 		setValue(9, comment);
-		setValue(10, turnaroundtime);
-		setValue(11, createdon);
-		setValue(12, lastupdate);
-		setValue(13, fkuser);
+		setValue(10, turnAroundTime);
+		setValue(11, createdOn);
+		setValue(12, lastUpdate);
+		setValue(13, fkUser);
 		setValue(14, geoLat);
 		setValue(15, geoLng);
 		setValue(16, tags);
-		setValue(17, fkoffice);
+		setValue(17, fkOffice);
 	}
 }
