@@ -292,4 +292,256 @@
     <changeSet id="custom-7" author="oli (generated)">
     	<sql>update reviews set onSiteTime = (select turnAroundTime/2 from location where location.id=fkLocation), travelTime = (select turnAroundTime/2 from location where location.id=fkLocation)</sql>
     </changeSet>    
+
+	<changeSet author="oli (generated)" id="1408653848650-1">
+		<renameColumn tableName="communities" columnDataType="VARCHAR(255)"
+			newColumnName="admin_Email" oldColumnName="adminEmail" />
+	</changeSet>
+
+	<changeSet author="oli (generated)" id="1408653848650-2">
+		<renameColumn tableName="location"
+			columnDataType="TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'"
+			newColumnName="created_On" oldColumnName="createdOn" />
+	</changeSet>
+
+	<changeSet author="oli (generated)" id="1408653848650-3">
+		<renameColumn tableName="pictures"
+			columnDataType="TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'"
+			newColumnName="created_On" oldColumnName="createdOn" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-4">
+		<renameColumn tableName="reviews"
+			columnDataType="TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'"
+			newColumnName="created_On" oldColumnName="createdOn" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-5">
+		<renameColumn tableName="users"
+			columnDataType="TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'"
+			newColumnName="created_On" oldColumnName="createdOn" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-6">
+		<renameColumn tableName="reviews" columnDataType="TEXT(65535)"
+			newColumnName="favorite_Meal" oldColumnName="favoriteMeal" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-7">
+		<renameColumn tableName="users" columnDataType="INT(10)"
+			newColumnName="fk_Base_Office" oldColumnName="fkBaseOffice" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-8">
+		<renameColumn tableName="location" columnDataType="INT(10)"
+			newColumnName="fk_Community" oldColumnName="fkCommunity" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-9">
+		<renameColumn tableName="offices" columnDataType="INT(10)"
+			newColumnName="fk_Community" oldColumnName="fkCommunity" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-10">
+		<renameColumn tableName="pictures" columnDataType="INT(10)"
+			newColumnName="fk_Community" oldColumnName="fkCommunity" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-11">
+		<renameColumn tableName="reviews" columnDataType="INT(10)"
+			newColumnName="fk_Community" oldColumnName="fkCommunity" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-12">
+		<renameColumn tableName="users" columnDataType="INT(10)"
+			newColumnName="fk_Community" oldColumnName="fkCommunity" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-13">
+		<renameColumn tableName="pictures" columnDataType="INT(10)"
+			newColumnName="fk_Location" oldColumnName="fkLocation" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-14">
+		<renameColumn tableName="reviews" columnDataType="INT(10)"
+			newColumnName="fk_Location" oldColumnName="fkLocation" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-15">
+		<renameColumn tableName="location" columnDataType="INT(10)"
+			newColumnName="fk_Office" oldColumnName="fkOffice" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-16">
+		<renameColumn tableName="location" columnDataType="INT(10)"
+			newColumnName="fk_User" oldColumnName="fkUser" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-17">
+		<renameColumn tableName="pictures" columnDataType="INT(10)"
+			newColumnName="fk_User" oldColumnName="fkUser" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-18">
+		<renameColumn tableName="reviews" columnDataType="INT(10)"
+			newColumnName="fk_User" oldColumnName="fkUser" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-19">
+		<renameColumn tableName="users" columnDataType="TIMESTAMP(19)"
+			newColumnName="last_Login" oldColumnName="lastLogin" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-20">
+		<renameColumn tableName="reviews" columnDataType="TIMESTAMP(19)"
+			newColumnName="last_Update" oldColumnName="lastUpdate" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408656902906-21">
+		<renameColumn tableName="location" columnDataType="TIMESTAMP(19)"
+			newColumnName="last_Update" oldColumnName="lastUpdate" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-22">
+		<renameColumn tableName="users" columnDataType="TIMESTAMP NULL DEFAULT NULL"
+			newColumnName="long_Time_Timestamp" oldColumnName="longTimeTimestamp" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-23">
+		<renameColumn tableName="users" columnDataType="VARCHAR(255)"
+			newColumnName="long_Time_Token" oldColumnName="longTimeToken" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-24">
+		<renameColumn tableName="location" columnDataType="VARCHAR(255)"
+			newColumnName="official_Name" oldColumnName="officialName" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-25">
+		<renameColumn tableName="reviews" columnDataType="INT(10)"
+			newColumnName="on_Site_Time" oldColumnName="onSiteTime" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-26">
+		<renameColumn tableName="users" columnDataType="TIMESTAMP NULL DEFAULT NULL"
+			newColumnName="password_Reset_Timestamp" oldColumnName="passwordResetTimestamp" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-27">
+		<renameColumn tableName="users" columnDataType="VARCHAR(255)"
+			newColumnName="password_Reset_Token" oldColumnName="passwordResetToken" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-28">
+		<renameColumn tableName="location" columnDataType="VARCHAR(255)"
+			newColumnName="street_Name" oldColumnName="streetName" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-29">
+		<renameColumn tableName="reviews" columnDataType="INT(10)"
+			newColumnName="travel_Time" oldColumnName="travelTime" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-30">
+		<renameColumn tableName="location" columnDataType="INT(10)"
+			newColumnName="turn_Around_Time" oldColumnName="turnAroundTime" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-31">
+		<renameColumn tableName="location" columnDataType="DOUBLE"
+			newColumnName="geo_Lat" oldColumnName="geo_lat" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-32">
+		<renameColumn tableName="location" columnDataType="DOUBLE"
+			newColumnName="geo_Lng" oldColumnName="geo_lng" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-33">
+		<renameColumn tableName="offices" columnDataType="DOUBLE"
+			newColumnName="geo_Lat" oldColumnName="geo_lat" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408653848650-34">
+		<renameColumn tableName="offices" columnDataType="DOUBLE"
+			newColumnName="geo_Lng" oldColumnName="geo_lng" />
+	</changeSet>
+
+
+	<changeSet author="oli (generated)" id="1408748644497-3">
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="address" tableName="location" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-4">
+		<addNotNullConstraint columnDataType="varchar(255)"
+			columnName="admin_Email" tableName="communities" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-5">
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="city" tableName="location" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-6">
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="country" tableName="location" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-7">
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="country" tableName="offices" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-8">
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="displayname" tableName="users" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-9">
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="domain" tableName="communities" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-10">
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="email" tableName="users" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-11">
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="filename" tableName="pictures" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-12">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_Base_Office" tableName="users" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-13">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_Community" tableName="location" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-14">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_Community" tableName="offices" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-15">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_Community" tableName="pictures" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-16">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_Community" tableName="reviews" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-17">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_Community" tableName="users" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-18">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_Location" tableName="pictures" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-19">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_Location" tableName="reviews" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-20">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_Office" tableName="location" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-21">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_User" tableName="location" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-22">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_User" tableName="pictures" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-23">
+		<addNotNullConstraint columnDataType="int(10)"
+			columnName="fk_User" tableName="reviews" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-24">
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="name" tableName="communities" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-25">
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="name" tableName="offices" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-26">
+		<addNotNullConstraint columnDataType="varchar(255)"
+			columnName="official_Name" tableName="location" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-27">
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="password" tableName="users" />
+	</changeSet>
+	<changeSet author="oli (generated)" id="1408748644497-28">
+		<dropNotNullConstraint columnDataType="varchar(255)"
+			columnName="zip" tableName="location" />
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="zip" tableName="location" />
+	</changeSet>
+    
 </databaseChangeLog>
