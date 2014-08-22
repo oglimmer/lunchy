@@ -1,17 +1,17 @@
 package de.oglimmer.lunchy.database;
 
 import static de.oglimmer.lunchy.database.DB.DB;
+import static de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES;
 
 import java.util.List;
 
-import static de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 
-public enum PicturesDao {
+public enum PicturesDao implements Dao<PicturesRecord> {
 	INSTANCE;
 
-	public PicturesRecord getById(int id) {
-		return DB.fetchOn(PICTURES, PICTURES.ID.equal(id));
+	public PicturesRecord getById(Integer id, Integer fkCommunity) {
+		return DB.fetchOn(PICTURES, PICTURES.ID.equal(id).and(PICTURES.FK_COMMUNITY.equal(fkCommunity)));
 	}
 
 	public List<PicturesRecord> getList(int fklocation) {

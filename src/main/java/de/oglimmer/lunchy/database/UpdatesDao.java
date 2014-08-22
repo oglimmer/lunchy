@@ -46,7 +46,7 @@ public enum UpdatesDao {
 	private List<ResultParam> createResultList(Result<Record> result) {
 		List<ResultParam> list = new ArrayList<>(result.size());
 		for (Record rec : result) {
-			ResultParam rp = BeanMappingProvider.INSTANCE.getMapper().map(new DozerAdapter(rec), ResultParam.class);
+			ResultParam rp = BeanMappingProvider.INSTANCE.map(new DozerAdapter(rec), ResultParam.class);
 			list.add(rp);
 		}
 		return list;

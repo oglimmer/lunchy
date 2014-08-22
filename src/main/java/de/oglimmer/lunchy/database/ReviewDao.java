@@ -9,11 +9,11 @@ import org.jooq.Record;
 
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 
-public enum ReviewDao {
+public enum ReviewDao implements Dao<ReviewsRecord> {
 	INSTANCE;
 
-	public ReviewsRecord getById(int id) {
-		return DB.fetchOn(REVIEWS, REVIEWS.ID.equal(id));
+	public ReviewsRecord getById(Integer id, Integer fkCommunity) {
+		return DB.fetchOn(REVIEWS, REVIEWS.ID.equal(id).and(REVIEWS.FK_COMMUNITY.equal(fkCommunity)));
 	}
 
 	public List<ReviewsRecord> getList(int fklocation) {

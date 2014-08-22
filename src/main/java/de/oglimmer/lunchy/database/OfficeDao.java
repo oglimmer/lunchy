@@ -7,16 +7,17 @@ import java.util.List;
 
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 
-public enum OfficeDao {
+public enum OfficeDao implements Dao<OfficesRecord> {
 	INSTANCE;
 
-	public OfficesRecord getById(int id) {
-		return DB.fetchOn(OFFICES, OFFICES.ID.equal(id));
+	public OfficesRecord getById(Integer id, Integer fkCommunity) {
+		return DB.fetchOn(OFFICES, OFFICES.ID.equal(id).and(OFFICES.FK_COMMUNITY.equal(fkCommunity)));
 	}
 
 	public int getDefaultOffice(int fkCommunity) {
-		Integer fkBaseOffice = DB.getInt(
-				"select fk_Base_Office from users where fk_Community=? group by fk_Base_Office order by count(*) desc limit 1", fkCommunity);
+		Integer fkBaseOffice = DB
+				.getInt("select fk_Base_Office from users where fk_Community=? group by fk_Base_Office order by count(*) desc limit 1",
+						fkCommunity);
 		return fkBaseOffice != null ? fkBaseOffice : -1;
 	}
 

@@ -119,7 +119,7 @@ public class UserResource {
 		SecurityProvider.INSTANCE.checkAdmin(request);
 		List<User> resultList = new ArrayList<>();
 		for (UsersRecord reviewRec : UserDao.INSTANCE.query(Community.get(request))) {
-			resultList.add(User.getInstance(reviewRec));
+			resultList.add(BeanMappingProvider.INSTANCE.map(reviewRec, User.class));
 		}
 		return resultList;
 	}
@@ -219,7 +219,7 @@ public class UserResource {
 
 		public static UserResponse getInstance(UsersRecord userRec) {
 			UserResponse userDto = new UserResponse();
-			BeanMappingProvider.INSTANCE.getMapper().map(userRec, userDto);
+			BeanMappingProvider.INSTANCE.map(userRec, userDto);
 			return userDto;
 		}
 	}

@@ -37,8 +37,8 @@ public class DozerAdapter {
 	public Object getValue(String fieldName) {
 		try {
 			return delegate.getValue(fileNameConversionCache.get(fieldName));
-		} catch (IllegalArgumentException | ExecutionException e) {
-			log.debug("Failed to get fieldName=" + fieldName);
+		} catch (ExecutionException | IllegalArgumentException e) {
+			log.error("Failed to get value for fieldname:" + fieldName + " from object " + delegate, e);
 		}
 		return null;
 	}

@@ -9,7 +9,7 @@ import org.jooq.Condition;
 
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 
-public enum UserDao {
+public enum UserDao implements Dao<UsersRecord> {
 	INSTANCE;
 
 	/**
@@ -22,7 +22,7 @@ public enum UserDao {
 		return DB.fetchOn(USERS, USERS.ID.equal(id));
 	}
 
-	public UsersRecord getById(Integer id, int fkCommunity) {
+	public UsersRecord getById(Integer id, Integer fkCommunity) {
 		return getBy(USERS.ID.equal(id), fkCommunity);
 	}
 

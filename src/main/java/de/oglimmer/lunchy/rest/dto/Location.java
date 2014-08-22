@@ -3,13 +3,11 @@ package de.oglimmer.lunchy.rest.dto;
 import java.sql.Timestamp;
 
 import lombok.Data;
-import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
-import de.oglimmer.lunchy.database.UserDao;
-import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
-import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.beanMapping.ForeignKey;
 
 @Data
 public class Location {
+
 	private Integer id;
 	private Integer fkOffice;
 	private String officialName;
@@ -23,18 +21,11 @@ public class Location {
 	private Integer turnAroundTime;
 	private Timestamp createdOn;
 	private Timestamp lastUpdate;
-	private String creationUser;
 	private Double geoLat;
 	private Double geoLng;
 	private String tags;
 
-	public static Location getInstance(LocationRecord locationRec) {
-		Location locationDto = new Location();
-		BeanMappingProvider.INSTANCE.getMapper().map(locationRec, locationDto);
+	@ForeignKey(dao = "user", refColumnLabel = "displayname", refColumnName = "fkUser")
+	private String creationUser;
 
-		UsersRecord user = UserDao.INSTANCE.getById(locationRec.getFkUser(), locationRec.getFkCommunity());
-		locationDto.setCreationUser(user.getDisplayname());
-
-		return locationDto;
-	}
 }

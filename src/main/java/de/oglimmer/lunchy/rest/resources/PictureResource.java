@@ -90,13 +90,13 @@ public class PictureResource {
 			moveFromTmpToPermanentDir(input, rec);
 			scaleIfTooLarge(rec);
 		} else {
-			rec = PicturesDao.INSTANCE.getById(input.getId());
+			rec = PicturesDao.INSTANCE.getById(input.getId(), Community.get(request));
 			rec.setCaption(input.getCaption());
 		}
 
 		PicturesDao.INSTANCE.store(rec);
 		Picture retObj = new Picture();
-		BeanMappingProvider.INSTANCE.getMapper().map(rec, retObj);
+		BeanMappingProvider.INSTANCE.map(rec, retObj);
 		return retObj;
 	}
 

@@ -3,8 +3,6 @@ package de.oglimmer.lunchy.rest.dto;
 import java.sql.Timestamp;
 
 import lombok.Data;
-import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
-import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 
 @Data
 public class User {
@@ -18,11 +16,5 @@ public class User {
 	private Timestamp passwordResetTimestamp;
 	private Timestamp longTimeTimestamp;
 	private Integer fkBaseOffice;
-
-	public static User getInstance(UsersRecord userRec) {
-		User userDto = new User();
-		BeanMappingProvider.INSTANCE.getMapper().map(userRec, userDto);
-		return userDto;
-	}
 
 }

@@ -55,7 +55,7 @@ public class LocationResource {
 	public List<Review> queryReviews(@PathParam("id") int id) {
 		List<Review> resultList = new ArrayList<>();
 		for (ReviewsRecord reviewRec : ReviewDao.INSTANCE.getList(id)) {
-			resultList.add(Review.getInstance(reviewRec));
+			resultList.add(BeanMappingProvider.INSTANCE.map(reviewRec, Review.class));
 		}
 		return resultList;
 	}
@@ -66,7 +66,7 @@ public class LocationResource {
 	public List<Picture> queryPictures(@PathParam("id") int id) {
 		List<Picture> resultList = new ArrayList<>();
 		for (PicturesRecord reviewRec : PicturesDao.INSTANCE.getList(id)) {
-			resultList.add(Picture.getInstance(reviewRec));
+			resultList.add(BeanMappingProvider.INSTANCE.map(reviewRec, Picture.class));
 		}
 		return resultList;
 	}
@@ -103,7 +103,7 @@ public class LocationResource {
 		if (locationRec == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		}
-		return Response.ok(Location.getInstance(locationRec)).build();
+		return Response.ok(BeanMappingProvider.INSTANCE.map(locationRec, Location.class)).build();
 	}
 
 	@POST
@@ -136,7 +136,7 @@ public class LocationResource {
 			locationRec.setFkCommunity(Community.get(request));
 			locationRec.setFkUser((Integer) request.getSession(false).getAttribute("userId"));
 			locationRec.setCreatedOn(new Timestamp(new Date().getTime()));
-			OfficesRecord office = OfficeDao.INSTANCE.getById(locationRec.getFkOffice());
+			OfficesRecord office = OfficeDao.INSTANCE.getById(locationRec.getFkOffice(), Community.get(request));
 			locationRec.setCountry(office.getCountry());
 		}
 	}
@@ -151,7 +151,7 @@ public class LocationResource {
 		// HACK:make sure turnAroundTime is not overwritten
 		locationDto.setTurnAroundTime(locationRec.getTurnAroundTime());
 
-		BeanMappingProvider.INSTANCE.getMapper().map(locationDto, locationRec);
+		BeanMappingProvider.INSTANCE.map(locationDto, locationRec);
 	}
 
 	private LocationRecord getEmptyOrUnchangedRecord(Integer id, int fkCommunity) {
@@ -170,7 +170,7 @@ public class LocationResource {
 		getGeoData(locationRec);
 
 		LocationDao.INSTANCE.store(locationRec);
-		return Location.getInstance(locationRec);
+		return BeanMappingProvider.INSTANCE.map(locationRec, Location.class);
 	}
 
 	private void getGeoData(LocationRecord locationRec) {

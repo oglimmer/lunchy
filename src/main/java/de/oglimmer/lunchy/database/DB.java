@@ -85,20 +85,17 @@ enum DB {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public <R> List<R> query(String sql, ConversionFactory<R> conversionFactory) {
+	public List<Record> query(String sql) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
 			Result<Record> result = create.fetch(sql);
-			List<R> resultList = new ArrayList<>();
+			List<Record> resultList = new ArrayList<>();
 			for (Record rec : result) {
 				rec.attach(null);
-				resultList.add(conversionFactory.createObject(rec));
+				resultList.add(rec);
 			}
 			return resultList;
 		}
 	}
 
-	interface ConversionFactory<R> {
-		R createObject(Record rec);
-	}
 }

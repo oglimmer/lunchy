@@ -7,14 +7,13 @@ import java.util.List;
 
 import org.jooq.Record;
 
-import de.oglimmer.lunchy.database.DB.ConversionFactory;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
 
-public enum LocationDao {
+public enum LocationDao implements Dao<LocationRecord> {
 	INSTANCE;
 
-	public LocationRecord getById(int id, int fkCommunity) {
+	public LocationRecord getById(Integer id, Integer fkCommunity) {
 		return DB.fetchOn(LOCATION, LOCATION.ID.equal(id).and(LOCATION.FK_COMMUNITY.equal(fkCommunity)));
 	}
 
@@ -26,12 +25,7 @@ public enum LocationDao {
 		DB.delete(LOCATION, LOCATION.ID, id);
 	}
 
-	public List<LocationQuery> getList(final int fkCommunity, Integer fkUser, int fkOffice) {
-		return DB.query(LocationQuery.buildSql(fkUser, fkOffice), new ConversionFactory<LocationQuery>() {
-			@Override
-			public LocationQuery createObject(Record rec) {
-				return LocationQuery.getInstance(rec, fkCommunity);
-			}
-		});
+	public List<Record> getList(Integer fkUser, int fkOffice) {
+		return DB.query(LocationQuery.buildSql(fkUser, fkOffice));
 	}
 }

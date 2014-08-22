@@ -30,9 +30,9 @@ public class ReviewResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Review get(@PathParam("id") int id) {
-		ReviewsRecord reviewRec = ReviewDao.INSTANCE.getById(id);
-		return Review.getInstance(reviewRec);
+	public Review get(@Context HttpServletRequest request, @PathParam("id") int id) {
+		ReviewsRecord reviewRec = ReviewDao.INSTANCE.getById(id, Community.get(request));
+		return BeanMappingProvider.INSTANCE.map(reviewRec, Review.class);
 	}
 
 	@POST
@@ -40,13 +40,13 @@ public class ReviewResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public ReviewUpdateResponse update(@Context HttpServletRequest request, @PathParam("id") int id, Review reviewDto) {
-		ReviewsRecord reviewRec = ReviewDao.INSTANCE.getById(id);
-		BeanMappingProvider.INSTANCE.getMapper().map(reviewDto, reviewRec);
+		ReviewsRecord reviewRec = ReviewDao.INSTANCE.getById(id, Community.get(request));
+		BeanMappingProvider.INSTANCE.map(reviewDto, reviewRec);
 
 		reviewRec.setLastUpdate(new Timestamp(new Date().getTime()));
 
 		ReviewDao.INSTANCE.store(reviewRec);
-		ReviewUpdateResponse backLocationDto = ReviewUpdateResponse.getInstance(reviewRec);
+		ReviewUpdateResponse backLocationDto = BeanMappingProvider.INSTANCE.map(reviewRec, ReviewUpdateResponse.class);
 		return backLocationDto;
 	}
 
@@ -65,7 +65,7 @@ public class ReviewResource {
 			reviewRec.setLastUpdate(new Timestamp(new Date().getTime()));
 
 			ReviewDao.INSTANCE.store(reviewRec);
-			ReviewUpdateResponse backLocationDto = ReviewUpdateResponse.getInstance(reviewRec);
+			ReviewUpdateResponse backLocationDto = BeanMappingProvider.INSTANCE.map(reviewRec, ReviewUpdateResponse.class);
 			return Response.ok(backLocationDto).build();
 		} catch (org.jooq.exception.DataAccessException e) {
 			if (e.getCause() instanceof com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException) {
@@ -85,7 +85,7 @@ public class ReviewResource {
 
 	private ReviewsRecord createRecordInstance(Review reviewDto) {
 		ReviewsRecord reviewRec = new ReviewsRecord();
-		BeanMappingProvider.INSTANCE.getMapper().map(reviewDto, reviewRec);
+		BeanMappingProvider.INSTANCE.map(reviewDto, reviewRec);
 		return reviewRec;
 	}
 }

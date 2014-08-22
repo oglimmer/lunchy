@@ -11,6 +11,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.jooq.Record;
+
+import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.LocationDao;
 import de.oglimmer.lunchy.database.OfficeDao;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
@@ -27,7 +30,7 @@ public class OfficeResource {
 	public List<Office> queryReviews(@Context HttpServletRequest request) {
 		List<Office> resultList = new ArrayList<>();
 		for (OfficesRecord officeRec : OfficeDao.INSTANCE.query(Community.get(request))) {
-			resultList.add(Office.getInstance(officeRec));
+			resultList.add(BeanMappingProvider.INSTANCE.map(officeRec, Office.class));
 		}
 		return resultList;
 	}
@@ -35,9 +38,9 @@ public class OfficeResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Office get(@PathParam("id") int id) {
-		OfficesRecord officeRec = OfficeDao.INSTANCE.getById(id);
-		return Office.getInstance(officeRec);
+	public Office get(@Context HttpServletRequest request, @PathParam("id") int id) {
+		OfficesRecord officeRec = OfficeDao.INSTANCE.getById(id, Community.get(request));
+		return BeanMappingProvider.INSTANCE.map(officeRec, Office.class);
 	}
 
 	@GET
@@ -55,6 +58,10 @@ public class OfficeResource {
 		if (request.getSession(false) != null) {
 			fkUser = (Integer) request.getSession(false).getAttribute("userId");
 		}
-		return LocationDao.INSTANCE.getList(Community.get(request), fkUser, id);
+		List<LocationQuery> resultList = new ArrayList<>();
+		for (Record rec : LocationDao.INSTANCE.getList(fkUser, id)) {
+			resultList.add(LocationQuery.getInstance(rec, Community.get(request)));
+		}
+		return resultList;
 	}
 }
