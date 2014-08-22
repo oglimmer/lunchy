@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.gson.JsonObject;
 
+import de.oglimmer.lunchy.database.UserDao;
 import de.oglimmer.lunchy.database.connection.DBConn;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.services.LunchyProperties;
@@ -42,6 +43,7 @@ public class RuntimeDataResource {
 	public void resetCaches(@Context HttpServletRequest request) {
 		checkRuntimePassword(request);
 		SecurityProvider.INSTANCE.reset();
+		UserDao.INSTANCE.resetCache();
 	}
 
 	private void checkRuntimePassword(HttpServletRequest request) {

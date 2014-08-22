@@ -4,13 +4,34 @@ import static de.oglimmer.lunchy.database.DB.DB;
 import static de.oglimmer.lunchy.database.generated.tables.Users.USERS;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 import org.jooq.Condition;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 
+@Slf4j
 public enum UserDao implements Dao<UsersRecord> {
 	INSTANCE;
+
+	private LoadingCache<IdCommunityTuple, UsersRecord> userRecordCache;
+
+	private UserDao() {
+		userRecordCache = CacheBuilder.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES)
+				.build(new CacheLoader<IdCommunityTuple, UsersRecord>() {
+					public UsersRecord load(IdCommunityTuple key) {
+						return getBy(USERS.ID.equal(key.getId()), key.getFkCommunity());
+					}
+				});
+	}
 
 	/**
 	 * Method does not filter by fkCommunity!
@@ -23,7 +44,12 @@ public enum UserDao implements Dao<UsersRecord> {
 	}
 
 	public UsersRecord getById(Integer id, Integer fkCommunity) {
-		return getBy(USERS.ID.equal(id), fkCommunity);
+		try {
+			return userRecordCache.get(new IdCommunityTuple(id, fkCommunity));
+		} catch (ExecutionException e) {
+			log.error("Failed to get UserRecord from cache", e);
+			return getBy(USERS.ID.equal(id), fkCommunity);
+		}
 	}
 
 	public UsersRecord getUserByEmail(String email, int fkCommunity) {
@@ -49,4 +75,15 @@ public enum UserDao implements Dao<UsersRecord> {
 	public List<UsersRecord> query(int fkCommunity) {
 		return DB.query(USERS, USERS.FK_COMMUNITY.equal(fkCommunity), USERS.EMAIL.asc(), UsersRecord.class);
 	}
+
+	public void resetCache() {
+		userRecordCache.invalidateAll();
+	}
+
+	@Value
+	class IdCommunityTuple {
+		private Integer id;
+		private Integer fkCommunity;
+	}
+
 }
