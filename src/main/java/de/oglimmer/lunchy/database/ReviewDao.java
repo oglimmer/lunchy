@@ -28,8 +28,8 @@ public enum ReviewDao implements Dao<ReviewsRecord> {
 		DB.store(review, updateTurnAroundOnParentLocation);
 	}
 
-	public void delete(int id) {
-		DB.delete(REVIEWS, REVIEWS.ID, id);
+	public void delete(int id, int fkCommunity) {
+		DB.delete(REVIEWS, REVIEWS.ID, id, fkCommunity);
 	}
 
 	public Integer hasUserReview(Integer fklocation, Integer fkUser) {

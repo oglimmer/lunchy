@@ -21,11 +21,12 @@ public enum LocationDao implements Dao<LocationRecord> {
 		DB.store(location);
 	}
 
-	public void delete(int id) {
-		DB.delete(LOCATION, LOCATION.ID, id);
+	public void delete(int id, int fkCommunity) {
+		DB.delete(LOCATION, LOCATION.ID, id, fkCommunity);
 	}
 
 	public List<Record> getList(Integer fkUser, int fkOffice) {
-		return DB.query(LocationQuery.buildSql(fkUser, fkOffice));
+		SqlCommand cmd = LocationQuery.buildSql(fkUser, fkOffice);
+		return DB.query(cmd.getSql(), cmd.getParams());
 	}
 }

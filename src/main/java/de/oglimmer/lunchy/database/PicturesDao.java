@@ -22,8 +22,8 @@ public enum PicturesDao implements Dao<PicturesRecord> {
 		DB.store(review);
 	}
 
-	public void delete(int id) {
-		DB.delete(PICTURES, PICTURES.ID, id);
+	public void delete(int id, int fkCommunity) {
+		DB.delete(PICTURES, PICTURES.ID, id, fkCommunity);
 	}
 
 }

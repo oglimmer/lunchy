@@ -89,7 +89,7 @@ public class UserResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{token}/resetPassword")
-	public ResultParam sendPasswordLink(@Context HttpServletRequest request, @PathParam("token") String token, UserInput input) {
+	public ResultParam resetPassword(@Context HttpServletRequest request, @PathParam("token") String token, UserInput input) {
 		UsersRecord user = UserDao.INSTANCE.getUserByToken(token, Community.get(request));
 		ResultParam rp = new ResultParam();
 		if (user != null) {
@@ -129,7 +129,7 @@ public class UserResource {
 	@Path("current")
 	public UserResponse get(@Context HttpServletRequest request) {
 		UsersRecord user = UserDao.INSTANCE.getById((Integer) request.getSession(true).getAttribute("userId"), Community.get(request));
-		return UserResponse.getInstance(user);
+		return BeanMappingProvider.INSTANCE.map(user, UserResponse.class);
 	}
 
 	@GET
@@ -137,14 +137,14 @@ public class UserResource {
 	@Path("{id}")
 	public UserResponse get(@Context HttpServletRequest request, @PathParam("id") Integer id) {
 		UsersRecord user = UserDao.INSTANCE.getById(id, Community.get(request));
-		return UserResponse.getInstance(user);
+		return BeanMappingProvider.INSTANCE.map(user, UserResponse.class);
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public LoginResponse update(@Context HttpServletRequest request, @PathParam("id") Integer id, UserInput input) {
+	public LoginResponse updateAndLogin(@Context HttpServletRequest request, @PathParam("id") Integer id, UserInput input) {
 		if (id != input.getId()) {
 			throw new RuntimeException("id not matching");
 		}
@@ -216,12 +216,6 @@ public class UserResource {
 		private String email;
 		private String displayname;
 		private Integer fkBaseOffice;
-
-		public static UserResponse getInstance(UsersRecord userRec) {
-			UserResponse userDto = new UserResponse();
-			BeanMappingProvider.INSTANCE.map(userRec, userDto);
-			return userDto;
-		}
 	}
 
 }

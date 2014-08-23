@@ -202,7 +202,7 @@ public class LocationResource {
 	@Path("{id}")
 	public void delete(@Context HttpServletRequest request, @PathParam("id") int id) {
 		SecurityProvider.INSTANCE.checkAdmin(request);
-		LocationDao.INSTANCE.delete(id);
+		LocationDao.INSTANCE.delete(id, Community.get(request));
 	}
 
 	@Data

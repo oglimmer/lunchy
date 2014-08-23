@@ -11,6 +11,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import org.jooq.Record;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
@@ -19,7 +23,6 @@ import de.oglimmer.lunchy.database.OfficeDao;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.rest.dto.Office;
-import de.oglimmer.lunchy.rest.dto.ResultParam;
 import de.oglimmer.lunchy.services.Community;
 
 @Path("offices")
@@ -27,7 +30,7 @@ public class OfficeResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Office> queryReviews(@Context HttpServletRequest request) {
+	public List<Office> queryOffices(@Context HttpServletRequest request) {
 		List<Office> resultList = new ArrayList<>();
 		for (OfficesRecord officeRec : OfficeDao.INSTANCE.query(Community.get(request))) {
 			resultList.add(BeanMappingProvider.INSTANCE.map(officeRec, Office.class));
@@ -46,14 +49,14 @@ public class OfficeResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("defaultOffice")
-	public ResultParam getDefaultOffice(@Context HttpServletRequest request) {
-		return new ResultParam(true, Integer.toString(OfficeDao.INSTANCE.getDefaultOffice(Community.get(request))));
+	public DefaultOfficeResponse getDefaultOffice(@Context HttpServletRequest request) {
+		return new DefaultOfficeResponse(true, OfficeDao.INSTANCE.getDefaultOffice(Community.get(request)));
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/locations")
-	public List<LocationQuery> query(@Context HttpServletRequest request, @PathParam("id") int id) {
+	public List<LocationQuery> queryLocations(@Context HttpServletRequest request, @PathParam("id") int id) {
 		Integer fkUser = null;
 		if (request.getSession(false) != null) {
 			fkUser = (Integer) request.getSession(false).getAttribute("userId");
@@ -63,5 +66,13 @@ public class OfficeResource {
 			resultList.add(LocationQuery.getInstance(rec, Community.get(request)));
 		}
 		return resultList;
+	}
+
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class DefaultOfficeResponse {
+		private boolean success;
+		private Integer defaultOffice;
 	}
 }

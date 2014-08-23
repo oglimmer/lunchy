@@ -200,7 +200,7 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 					OfficesDao.defaultOffice(function(result) {					
 						// only if still no valid base-office
 						if(thiz.fkBaseOffice === -1) {
-							thiz.fkBaseOffice = result.errorMsg;
+							thiz.fkBaseOffice = result.defaultOffice;
 							console.log("Set base office to "+thiz.fkBaseOffice);
 						}
 					});				

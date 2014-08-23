@@ -80,7 +80,7 @@ public class ReviewResource {
 	@Path("{id}")
 	public void delete(@Context HttpServletRequest request, @PathParam("id") int id) {
 		SecurityProvider.INSTANCE.checkAdmin(request);
-		ReviewDao.INSTANCE.delete(id);
+		ReviewDao.INSTANCE.delete(id, Community.get(request));
 	}
 
 	private ReviewsRecord createRecordInstance(Review reviewDto) {

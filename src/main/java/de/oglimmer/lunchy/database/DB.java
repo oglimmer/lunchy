@@ -52,10 +52,10 @@ enum DB {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public <R extends Record> void delete(Table<R> table, Field<Integer> field, int id) {
+	public <R extends Record> void delete(Table<R> table, Field<Integer> field, int id, int fkCommunity) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			create.delete(table).where(field.equal(id)).execute();
+			create.delete(table).where(field.equal(id).and("fk_Community=?", fkCommunity)).execute();
 		}
 	}
 
@@ -85,10 +85,10 @@ enum DB {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public List<Record> query(String sql) {
+	public List<Record> query(String sql, Object... params) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
-			Result<Record> result = create.fetch(sql);
+			Result<Record> result = create.fetch(sql, params);
 			List<Record> resultList = new ArrayList<>();
 			for (Record rec : result) {
 				rec.attach(null);
