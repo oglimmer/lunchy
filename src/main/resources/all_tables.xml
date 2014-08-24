@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
-    <changeSet author="oli (generated)" id="1407795125518-1">
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd"
+	objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1407795125518-1">
         <createTable tableName="location">
             <column autoIncrement="true" name="id" type="INT(10)">
                 <constraints primaryKey="true"/>
@@ -26,10 +29,10 @@
             <column name="turnAroundTime" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValue="0000-00-00 00:00:00" name="createdOn" type="TIMESTAMP">
+            <column name="createdOn" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValue="0000-00-00 00:00:00" name="lastUpdate" type="TIMESTAMP">
+            <column name="lastUpdate" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
             <column name="fkUser" type="INT(10)">
@@ -40,7 +43,7 @@
             <column name="tags" type="TEXT"/>
         </createTable>
     </changeSet>
-    <changeSet author="oli (generated)" id="1407968041666-2">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1407968041666-2">
         <createTable tableName="pictures">
             <column autoIncrement="true" name="id" type="INT(10)">
                 <constraints primaryKey="true"/>
@@ -60,7 +63,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="oli (generated)" id="1407795125518-2">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1407795125518-2">
         <createTable tableName="reviews">
             <column autoIncrement="true" name="id" type="INT(10)">
                 <constraints primaryKey="true"/>
@@ -72,17 +75,17 @@
                 <constraints nullable="false"/>
             </column>
             <column name="comment" type="TEXT"/>
-            <column defaultValue="0000-00-00 00:00:00" name="createdOn" type="TIMESTAMP">
+            <column name="createdOn" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValue="0000-00-00 00:00:00" name="lastUpdate" type="TIMESTAMP">
+            <column name="lastUpdate" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
             <column name="rating" type="INT(10)"/>
             <column name="favoriteMeal" type="TEXT"/>
         </createTable>
     </changeSet>
-    <changeSet author="oli (generated)" id="1407795125518-3">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1407795125518-3">
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="INT(10)">
                 <constraints primaryKey="true"/>
@@ -96,10 +99,10 @@
             <column defaultValue="" name="displayname" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValue="0000-00-00 00:00:00" name="createdOn" type="TIMESTAMP">
+            <column name="createdOn" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValue="0000-00-00 00:00:00" name="lastLogin" type="TIMESTAMP">
+            <column name="lastLogin" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
             <column name="permissions" type="INT(10)">
@@ -111,13 +114,13 @@
             <column name="longTimeTimestamp" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
-    <changeSet author="oli (generated)" id="1407795125518-4">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1407795125518-4">
         <addUniqueConstraint columnNames="email" constraintName="email" deferrable="false" disabled="false" initiallyDeferred="false" tableName="users"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1407795125518-5">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1407795125518-5">
         <addUniqueConstraint columnNames="fkUser, fkLocation" constraintName="fkUser" deferrable="false" disabled="false" initiallyDeferred="false" tableName="reviews"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408201702340-1">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408201702340-1">
         <createTable tableName="offices">
             <column autoIncrement="true" name="id" type="INT(10)">
                 <constraints primaryKey="true"/>
@@ -136,47 +139,47 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408201702340-2">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408201702340-2">
         <addColumn tableName="users">
             <column name="fkBaseOffice" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408201702340-3">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408201702340-3">
         <addColumn tableName="location">
             <column name="fkOffice" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408201702340-4">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408201702340-4">
         <addColumn tableName="reviews">
             <column name="turnAroundTime" type="INT(10)"/>
         </addColumn>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408201702340-5">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408201702340-5">
         <addForeignKeyConstraint baseColumnNames="fkOffice" baseTableName="location" constraintName="fk_loc_off" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="offices"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408201702340-6">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408201702340-6">
         <addForeignKeyConstraint baseColumnNames="fkUser" baseTableName="location" constraintName="fk_loc_usr" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408201702340-7">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408201702340-7">
         <addForeignKeyConstraint baseColumnNames="fkLocation" baseTableName="pictures" constraintName="fk_pic_loc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="location"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408201702340-8">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408201702340-8">
         <addForeignKeyConstraint baseColumnNames="fkUser" baseTableName="pictures" constraintName="fk_pic_usr" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408201702340-9">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408201702340-9">
         <addForeignKeyConstraint baseColumnNames="fkLocation" baseTableName="reviews" constraintName="fk_rev_loc" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="location"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408201702340-10">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408201702340-10">
         <addForeignKeyConstraint baseColumnNames="fkUser" baseTableName="reviews" constraintName="fk_rev_usr" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408201702340-11">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408201702340-11">
         <addForeignKeyConstraint baseColumnNames="fkBaseOffice" baseTableName="users" constraintName="fk_usr_off" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="offices"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408224948427-1">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408224948427-1">
         <createTable tableName="communities">
             <column autoIncrement="true" name="id" type="INT(10)">
                 <constraints primaryKey="true"/>
@@ -192,352 +195,366 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408224948427-2">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408224948427-2">
         <addColumn tableName="location">
             <column name="fkCommunity" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408224948427-3">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408224948427-3">
         <addColumn tableName="offices">
             <column name="fkCommunity" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408224948427-4">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408224948427-4">
         <addColumn tableName="pictures">
             <column name="fkCommunity" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408224948427-5">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408224948427-5">
         <addColumn tableName="reviews">
             <column name="fkCommunity" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408224948427-6">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408224948427-6">
         <addColumn tableName="users">
             <column name="fkCommunity" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet id="custom-1" author="oli (generated)">
-    	<sql>insert into communities (id, name, domain, adminEmail) values (1,'ADTECH','adtech','oli@zimpasser.de')</sql>
+    <!-- 
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="custom-1" author="oli (generated)">
+    	<insert tableName="communities">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="ADTECH"/>
+            <column name="domain" value="adtech"/>
+            <column name="adminEmail" value="oli@zimpasser.de"/>
+        </insert>
     </changeSet>
-    <changeSet id="custom-2" author="oli (generated)">
-    	<sql>update location set fkCommunity=1</sql>
+     -->
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="custom-2" author="oli (generated)">
+    	<update tableName="location">
+        	<column name="fkCommunity" valueNumeric="1"/>
+    	</update>
     </changeSet>
-    <changeSet id="custom-3" author="oli (generated)">
-    	<sql>update offices set fkCommunity=1</sql>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="custom-3" author="oli (generated)">
+    	<update tableName="offices">
+        	<column name="fkCommunity" valueNumeric="1"/>
+    	</update>
     </changeSet>
-    <changeSet id="custom-4" author="oli (generated)">
-    	<sql>update pictures set fkCommunity=1</sql>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="custom-4" author="oli (generated)">
+    	<update tableName="pictures">
+        	<column name="fkCommunity" valueNumeric="1"/>
+    	</update>
     </changeSet>
-    <changeSet id="custom-5" author="oli (generated)">
-    	<sql>update reviews set fkCommunity=1</sql>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="custom-5" author="oli (generated)">
+    	<update tableName="reviews">
+        	<column name="fkCommunity" valueNumeric="1"/>
+    	</update>
     </changeSet>
-    <changeSet id="custom-6" author="oli (generated)">
-    	<sql>update users set fkCommunity=1</sql>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="custom-6" author="oli (generated)">
+    	<update tableName="users">
+        	<column name="fkCommunity" valueNumeric="1"/>
+    	</update>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408224948427-7">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408224948427-7">
         <addForeignKeyConstraint baseColumnNames="fkCommunity" baseTableName="location" constraintName="fk_loc_com" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408224948427-8">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408224948427-8">
         <addForeignKeyConstraint baseColumnNames="fkCommunity" baseTableName="offices" constraintName="fk_off_com" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408224948427-9">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408224948427-9">
         <addForeignKeyConstraint baseColumnNames="fkCommunity" baseTableName="pictures" constraintName="fk_pic_com" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408224948427-10">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408224948427-10">
         <addForeignKeyConstraint baseColumnNames="fkCommunity" baseTableName="reviews" constraintName="fk_rev_com" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408224948427-11">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408224948427-11">
         <addForeignKeyConstraint baseColumnNames="fkCommunity" baseTableName="users" constraintName="fk_usr_com" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408230701349-1">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408230701349-1">
         <addColumn tableName="offices">
             <column defaultValue="" name="country" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408311973443-1">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408311973443-1">
         <addColumn tableName="reviews">
             <column name="onSiteTime" type="INT(10)"/>
         </addColumn>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408311973443-2">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408311973443-2">
         <addColumn tableName="reviews">
             <column name="travelTime" type="INT(10)"/>
         </addColumn>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408311973443-3">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408311973443-3">
         <addUniqueConstraint columnNames="email, fkCommunity" constraintName="email_2" deferrable="false" disabled="false" initiallyDeferred="false" tableName="users"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408311973443-4">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408311973443-4">
         <dropUniqueConstraint constraintName="email" tableName="users"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408311973443-5">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408311973443-5">
         <dropColumn columnName="turnAroundTime" tableName="reviews"/>
     </changeSet>
-    <changeSet author="oli (generated)" id="1408311973443-6">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408311973443-6">
         <dropNotNullConstraint columnDataType="int(10)" columnName="turnAroundTime" tableName="location"/>
     </changeSet>
-    <changeSet id="custom-7" author="oli (generated)">
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="custom-7" author="oli (generated)">
+		<preConditions onFail="MARK_RAN">
+			<dbms type="mysql"/>
+ 		</preConditions>
     	<sql>update reviews set onSiteTime = (select turnAroundTime/2 from location where location.id=fkLocation), travelTime = (select turnAroundTime/2 from location where location.id=fkLocation)</sql>
     </changeSet>    
 
-	<changeSet author="oli (generated)" id="1408653848650-1">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-1">
 		<renameColumn tableName="communities" columnDataType="VARCHAR(255)"
 			newColumnName="admin_Email" oldColumnName="adminEmail" />
 	</changeSet>
 
-	<changeSet author="oli (generated)" id="1408653848650-2">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-2">
 		<renameColumn tableName="location"
 			columnDataType="TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'"
 			newColumnName="created_On" oldColumnName="createdOn" />
 	</changeSet>
 
-	<changeSet author="oli (generated)" id="1408653848650-3">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-3">
 		<renameColumn tableName="pictures"
 			columnDataType="TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'"
 			newColumnName="created_On" oldColumnName="createdOn" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-4">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-4">
 		<renameColumn tableName="reviews"
 			columnDataType="TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'"
 			newColumnName="created_On" oldColumnName="createdOn" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-5">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-5">
 		<renameColumn tableName="users"
 			columnDataType="TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'"
 			newColumnName="created_On" oldColumnName="createdOn" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-6">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-6">
 		<renameColumn tableName="reviews" columnDataType="TEXT(65535)"
 			newColumnName="favorite_Meal" oldColumnName="favoriteMeal" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-7">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-7">
 		<renameColumn tableName="users" columnDataType="INT(10)"
 			newColumnName="fk_Base_Office" oldColumnName="fkBaseOffice" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-8">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-8">
 		<renameColumn tableName="location" columnDataType="INT(10)"
 			newColumnName="fk_Community" oldColumnName="fkCommunity" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-9">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-9">
 		<renameColumn tableName="offices" columnDataType="INT(10)"
 			newColumnName="fk_Community" oldColumnName="fkCommunity" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-10">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-10">
 		<renameColumn tableName="pictures" columnDataType="INT(10)"
 			newColumnName="fk_Community" oldColumnName="fkCommunity" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-11">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-11">
 		<renameColumn tableName="reviews" columnDataType="INT(10)"
 			newColumnName="fk_Community" oldColumnName="fkCommunity" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-12">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-12">
 		<renameColumn tableName="users" columnDataType="INT(10)"
 			newColumnName="fk_Community" oldColumnName="fkCommunity" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-13">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-13">
 		<renameColumn tableName="pictures" columnDataType="INT(10)"
 			newColumnName="fk_Location" oldColumnName="fkLocation" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-14">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-14">
 		<renameColumn tableName="reviews" columnDataType="INT(10)"
 			newColumnName="fk_Location" oldColumnName="fkLocation" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-15">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-15">
 		<renameColumn tableName="location" columnDataType="INT(10)"
 			newColumnName="fk_Office" oldColumnName="fkOffice" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-16">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-16">
 		<renameColumn tableName="location" columnDataType="INT(10)"
 			newColumnName="fk_User" oldColumnName="fkUser" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-17">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-17">
 		<renameColumn tableName="pictures" columnDataType="INT(10)"
 			newColumnName="fk_User" oldColumnName="fkUser" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-18">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-18">
 		<renameColumn tableName="reviews" columnDataType="INT(10)"
 			newColumnName="fk_User" oldColumnName="fkUser" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-19">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-19">
 		<renameColumn tableName="users" columnDataType="TIMESTAMP(19)"
 			newColumnName="last_Login" oldColumnName="lastLogin" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-20">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-20">
 		<renameColumn tableName="reviews" columnDataType="TIMESTAMP(19)"
 			newColumnName="last_Update" oldColumnName="lastUpdate" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408656902906-21">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408656902906-21">
 		<renameColumn tableName="location" columnDataType="TIMESTAMP(19)"
 			newColumnName="last_Update" oldColumnName="lastUpdate" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-22">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-22">
 		<renameColumn tableName="users" columnDataType="TIMESTAMP NULL DEFAULT NULL"
 			newColumnName="long_Time_Timestamp" oldColumnName="longTimeTimestamp" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-23">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-23">
 		<renameColumn tableName="users" columnDataType="VARCHAR(255)"
 			newColumnName="long_Time_Token" oldColumnName="longTimeToken" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-24">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-24">
 		<renameColumn tableName="location" columnDataType="VARCHAR(255)"
-			newColumnName="official_Name" oldColumnName="officialName" />
+			newColumnName="official_Name" oldColumnName="officialname" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-25">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-25">
 		<renameColumn tableName="reviews" columnDataType="INT(10)"
 			newColumnName="on_Site_Time" oldColumnName="onSiteTime" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-26">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-26">
 		<renameColumn tableName="users" columnDataType="TIMESTAMP NULL DEFAULT NULL"
 			newColumnName="password_Reset_Timestamp" oldColumnName="passwordResetTimestamp" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-27">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-27">
 		<renameColumn tableName="users" columnDataType="VARCHAR(255)"
 			newColumnName="password_Reset_Token" oldColumnName="passwordResetToken" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-28">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-28">
 		<renameColumn tableName="location" columnDataType="VARCHAR(255)"
-			newColumnName="street_Name" oldColumnName="streetName" />
+			newColumnName="street_Name" oldColumnName="streetname" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-29">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-29">
 		<renameColumn tableName="reviews" columnDataType="INT(10)"
 			newColumnName="travel_Time" oldColumnName="travelTime" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-30">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-30">
 		<renameColumn tableName="location" columnDataType="INT(10)"
 			newColumnName="turn_Around_Time" oldColumnName="turnAroundTime" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-31">
+	
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-31">
 		<renameColumn tableName="location" columnDataType="DOUBLE"
 			newColumnName="geo_Lat" oldColumnName="geo_lat" />
-	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-32">
 		<renameColumn tableName="location" columnDataType="DOUBLE"
 			newColumnName="geo_Lng" oldColumnName="geo_lng" />
-	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-33">
 		<renameColumn tableName="offices" columnDataType="DOUBLE"
 			newColumnName="geo_Lat" oldColumnName="geo_lat" />
-	</changeSet>
-	<changeSet author="oli (generated)" id="1408653848650-34">
 		<renameColumn tableName="offices" columnDataType="DOUBLE"
 			newColumnName="geo_Lng" oldColumnName="geo_lng" />
 	</changeSet>
 
-
-	<changeSet author="oli (generated)" id="1408748644497-3">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-3">
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="address" tableName="location" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-4">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-4">
 		<addNotNullConstraint columnDataType="varchar(255)"
 			columnName="admin_Email" tableName="communities" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-5">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-5">
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="city" tableName="location" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-6">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-6">
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="country" tableName="location" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-7">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-7">
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="country" tableName="offices" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-8">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-8">
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="displayname" tableName="users" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-9">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-9">
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="domain" tableName="communities" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-10">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-10">
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="email" tableName="users" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-11">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-11">
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="filename" tableName="pictures" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-12">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-12">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_Base_Office" tableName="users" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-13">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-13">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_Community" tableName="location" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-14">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-14">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_Community" tableName="offices" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-15">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-15">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_Community" tableName="pictures" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-16">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-16">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_Community" tableName="reviews" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-17">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-17">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_Community" tableName="users" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-18">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-18">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_Location" tableName="pictures" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-19">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-19">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_Location" tableName="reviews" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-20">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-20">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_Office" tableName="location" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-21">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-21">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_User" tableName="location" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-22">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-22">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_User" tableName="pictures" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-23">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-23">
 		<addNotNullConstraint columnDataType="int(10)"
 			columnName="fk_User" tableName="reviews" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-24">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-24">
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="name" tableName="communities" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-25">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-25">
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="name" tableName="offices" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-26">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-26">
 		<addNotNullConstraint columnDataType="varchar(255)"
 			columnName="official_Name" tableName="location" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-27">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-27">
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="password" tableName="users" />
 	</changeSet>
-	<changeSet author="oli (generated)" id="1408748644497-28">
+	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-28">
 		<dropNotNullConstraint columnDataType="varchar(255)"
 			columnName="zip" tableName="location" />
 		<dropDefaultValue columnDataType="varchar(255)"

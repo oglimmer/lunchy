@@ -81,7 +81,7 @@ public enum UserDao implements Dao<UsersRecord> {
 	}
 
 	@Value
-	class IdCommunityTuple {
+	private class IdCommunityTuple {
 		private Integer id;
 		private Integer fkCommunity;
 	}

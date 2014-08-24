@@ -12,12 +12,11 @@ import lombok.SneakyThrows;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
-import org.jooq.Record;
+import org.jooq.Record1;
 import org.jooq.Result;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
 import de.oglimmer.lunchy.database.connection.DBConn;
+import de.oglimmer.lunchy.database.generated.tables.Location;
 
 public enum TagDao {
 	INSTANCE;
@@ -37,22 +36,23 @@ public enum TagDao {
 
 	private Set<String> createSet(int fkCommunity) throws SQLException {
 		try (Connection conn = DBConn.INSTANCE.get()) {
-			DSLContext create = DSL.using(conn, SQLDialect.MYSQL);
+			DSLContext create = DB.getContext(conn);
 			return queryDatabase(fkCommunity, create);
 		}
 	}
 
 	private Set<String> queryDatabase(int fkCommunity, DSLContext create) {
 		Set<String> resultSet = new HashSet<>();
-		Result<Record> result = create.fetch("select distinct tags from location where fk_Community=? and tags != ''", fkCommunity);
-		for (Record rec : result) {
+		Result<Record1<String>> result = create.selectDistinct(Location.LOCATION.TAGS).from(Location.LOCATION)
+				.where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity).and(Location.LOCATION.TAGS.notEqual(""))).fetch();
+		for (Record1<String> rec : result) {
 			processRec(resultSet, rec);
 		}
 		return resultSet;
 	}
 
-	private void processRec(Set<String> resultSet, Record rec) {
-		String tags = rec.getValue("tags", String.class);
+	private void processRec(Set<String> resultSet, Record1<String> rec) {
+		String tags = rec.getValue(Location.LOCATION.TAGS);
 		if (hasMultipleTags(tags)) {
 			processMultipleTags(resultSet, tags);
 		} else {

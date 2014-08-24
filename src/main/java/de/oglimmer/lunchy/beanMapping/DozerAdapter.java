@@ -13,7 +13,7 @@ import com.google.common.cache.LoadingCache;
 @Slf4j
 public class DozerAdapter {
 
-	private static LoadingCache<String, String> fileNameConversionCache = CacheBuilder.newBuilder().build(
+	private static LoadingCache<String, String> fieldNameConversionCache = CacheBuilder.newBuilder().build(
 			new CacheLoader<String, String>() {
 				public String load(String fieldName) {
 					StringBuilder buff = new StringBuilder(fieldName.length());
@@ -34,9 +34,13 @@ public class DozerAdapter {
 		this.delegate = delegate;
 	}
 
+	public String getString(String fieldName) {
+		return (String) getValue(fieldName);
+	}
+
 	public Object getValue(String fieldName) {
 		try {
-			return delegate.getValue(fileNameConversionCache.get(fieldName));
+			return delegate.getValue(fieldNameConversionCache.get(fieldName));
 		} catch (ExecutionException | IllegalArgumentException e) {
 			log.error("Failed to get value for fieldname:" + fieldName + " from object " + delegate, e);
 		}

@@ -29,15 +29,23 @@ public enum LunchyProperties {
 	}
 
 	public String getDbUser() {
-		return prop.getProperty("db.user", "root");
+		return prop.getProperty("db.user", System.getProperty("lunchy.db.user", "root"));
 	}
 
 	public String getDbPassword() {
-		return prop.getProperty("db.password", "");
+		return prop.getProperty("db.password", System.getProperty("lunchy.db.password", ""));
 	}
 
-	public String getDbUrl() {
-		return prop.getProperty("db.url", "jdbc:mysql://127.0.0.1/oli_lunchy");
+	public String getDbServerUrl() {
+		return prop.getProperty("db.url", System.getProperty("lunchy.db.url", "jdbc:mysql://127.0.0.1/"));
+	}
+
+	public String getDbSchema() {
+		return prop.getProperty("db.schema", System.getProperty("lunchy.db.schema", "oli_lunchy"));
+	}
+
+	public String getDbDriver() {
+		return prop.getProperty("db.driver", System.getProperty("lunchy.db.driver", "com.mysql.jdbc.Driver"));
 	}
 
 	public String getTmpPath() {

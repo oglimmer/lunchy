@@ -11,26 +11,12 @@ import org.jooq.Record;
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.beanMapping.DozerAdapter;
 import de.oglimmer.lunchy.beanMapping.RestDto;
-import de.oglimmer.lunchy.database.ComposedSqlCommand;
-import de.oglimmer.lunchy.database.SqlCommand;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @RestDto
 public class LocationQuery extends Location {
-
-	public static SqlCommand buildSql(Integer fkUser, int fkOffice) {
-		String sql = "select location.*, count(*) as number_Of_Reviews, max(reviews.last_Update) as last_Rating, avg(reviews.rating) as avg_Rating, {0} as reviewed "
-				+ "from location left JOIN reviews on location.id=reviews.fk_Location where fk_Office=? group by location.id";
-		ComposedSqlCommand csc = new ComposedSqlCommand(sql, fkOffice);
-		if (fkUser != null) {
-			csc.add(new SqlCommand("(select count(*) from reviews where location.id=reviews.fk_Location and fk_User=?)", fkUser));
-		} else {
-			csc.add(new SqlCommand("0"));
-		}
-		return csc;
-	}
 
 	private Integer numberOfReviews;
 	private Float avgRating;

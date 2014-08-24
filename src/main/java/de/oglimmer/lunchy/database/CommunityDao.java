@@ -15,4 +15,8 @@ public enum CommunityDao {
 		return DB.fetchOn(COMMUNITIES, COMMUNITIES.ID.equal(id));
 	}
 
+	public void store(CommunitiesRecord community) {
+		DB.store(community);
+	}
+
 }

@@ -5,8 +5,14 @@ import static de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS;
 
 import java.util.List;
 
+import org.jooq.DSLContext;
 import org.jooq.Record;
+import org.jooq.Record1;
+import org.jooq.Select;
+import org.jooq.impl.DSL;
 
+import de.oglimmer.lunchy.database.generated.tables.Location;
+import de.oglimmer.lunchy.database.generated.tables.Reviews;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 
 public enum ReviewDao implements Dao<ReviewsRecord> {
@@ -20,11 +26,20 @@ public enum ReviewDao implements Dao<ReviewsRecord> {
 		return DB.query(REVIEWS, REVIEWS.FK_LOCATION.equal(fklocation), REVIEWS.LAST_UPDATE.desc(), ReviewsRecord.class);
 	}
 
-	public void store(ReviewsRecord review) {
-		SqlCommand updateTurnAroundOnParentLocation = new SqlCommand(
-				"update location set turn_Around_Time=(select avg(IFNULL(on_Site_Time,0)+IFNULL(travel_Time,0)) "
-						+ "from reviews where reviews.fk_Location = location.id) where id=?", review.getFkLocation());
-
+	public void store(final ReviewsRecord review) {
+		SqlExecCallback updateTurnAroundOnParentLocation = new SqlExecCallback() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public void exec(DSLContext context) {
+				context.update(Location.LOCATION)
+						.set(Location.LOCATION.TURN_AROUND_TIME,
+								(Select<? extends Record1<Integer>>) context
+										.select(DSL.avg(DSL.isnull(Reviews.REVIEWS.ON_SITE_TIME, 0).add(
+												DSL.isnull(Reviews.REVIEWS.TRAVEL_TIME, 0)))).from(Reviews.REVIEWS)
+										.where(Reviews.REVIEWS.FK_LOCATION.equal(Location.LOCATION.ID)))
+						.where(Location.LOCATION.ID.equal(review.getFkLocation())).execute();
+			}
+		};
 		DB.store(review, updateTurnAroundOnParentLocation);
 	}
 
