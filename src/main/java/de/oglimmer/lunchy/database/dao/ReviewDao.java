@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.Record1;
 import org.jooq.Select;
 import org.jooq.impl.DSL;
 
@@ -33,13 +32,14 @@ public enum ReviewDao implements Dao<ReviewsRecord> {
 			@SuppressWarnings("unchecked")
 			@Override
 			public void exec(DSLContext context) {
-				context.update(Location.LOCATION)
-						.set(Location.LOCATION.TURN_AROUND_TIME,
-								(Select<? extends Record1<Integer>>) context
-										.select(DSL.avg(DSL.isnull(Reviews.REVIEWS.ON_SITE_TIME, 0).add(
-												DSL.isnull(Reviews.REVIEWS.TRAVEL_TIME, 0)))).from(Reviews.REVIEWS)
-										.where(Reviews.REVIEWS.FK_LOCATION.equal(Location.LOCATION.ID)))
+				context.update(Location.LOCATION).set(Location.LOCATION.TURN_AROUND_TIME, getSubSelectToCalcAvgTurnAroundTime(context))
 						.where(Location.LOCATION.ID.equal(review.getFkLocation())).execute();
+			}
+
+			@SuppressWarnings("rawtypes")
+			private Select getSubSelectToCalcAvgTurnAroundTime(DSLContext context) {
+				return context.select(DSL.avg(DSL.isnull(Reviews.REVIEWS.ON_SITE_TIME, 0).add(DSL.isnull(Reviews.REVIEWS.TRAVEL_TIME, 0))))
+						.from(Reviews.REVIEWS).where(Reviews.REVIEWS.FK_LOCATION.equal(Location.LOCATION.ID));
 			}
 		};
 		DB.store(review, updateTurnAroundOnParentLocation);
