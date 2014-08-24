@@ -14,9 +14,11 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 
 import de.oglimmer.lunchy.database.connection.DBConn;
 
+@Ignore
 public class TestDbLoadMysql extends TestDbLoad {
 
 	@BeforeClass

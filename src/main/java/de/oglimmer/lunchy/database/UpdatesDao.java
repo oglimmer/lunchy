@@ -68,7 +68,7 @@ public enum UpdatesDao {
 				.on(Pictures.PICTURES.FK_USER.equal(Users.USERS.ID)).where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity));
 
 		Select<Record> overAll = create.select().from(locationSelect.union(reviewsSelect).union(usersSelect).union(pictureSelect))
-				.orderBy(DSL.val("last_Update").desc()).limit(numberOfItems);
+				.orderBy(DSL.val("last_Update").as("last_Update").desc()).limit(numberOfItems);
 
 		return overAll.fetch();
 

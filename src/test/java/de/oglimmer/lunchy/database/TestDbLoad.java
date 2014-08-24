@@ -17,7 +17,7 @@ import de.oglimmer.lunchy.rest.dto.Review;
 import de.oglimmer.lunchy.rest.dto.ReviewUpdateResponse;
 import de.oglimmer.lunchy.rest.dto.User;
 
-public class TestDbLoad {
+public abstract class TestDbLoad {
 
 	@Test
 	public void testReviewsList() {
