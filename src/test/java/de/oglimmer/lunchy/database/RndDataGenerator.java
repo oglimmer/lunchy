@@ -21,6 +21,7 @@ import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
+import de.oglimmer.lunchy.services.DateCalculation;
 
 public class RndDataGenerator {
 
@@ -59,6 +60,9 @@ public class RndDataGenerator {
 			user.setDisplayname(RandomStringUtils.randomAlphabetic(20));
 			user.setEmail(RandomStringUtils.randomAlphabetic(20));
 			user.setLastLogin(new Timestamp(new Date().getTime()));
+			user.setEmailUpdates(0);
+			user.setLastEmailUpdate(new Timestamp(new Date().getTime()));
+			user.setNextEmailUpdate(DateCalculation.INSTANCE.getNever());
 			user.setPassword("not-set");
 			user.setPermissions(1);
 			UserDao.INSTANCE.store(user);
