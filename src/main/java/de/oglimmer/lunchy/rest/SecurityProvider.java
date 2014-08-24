@@ -14,7 +14,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-import de.oglimmer.lunchy.database.UserDao;
+import de.oglimmer.lunchy.database.dao.UserDao;
 
 @Slf4j
 public enum SecurityProvider {

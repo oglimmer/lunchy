@@ -1,6 +1,6 @@
-package de.oglimmer.lunchy.database;
+package de.oglimmer.lunchy.database.dao;
 
-import static de.oglimmer.lunchy.database.DB.DB;
+import static de.oglimmer.lunchy.database.dao.DaoBackend.DB;
 import static de.oglimmer.lunchy.database.generated.tables.Users.USERS;
 
 import java.util.List;
@@ -16,6 +16,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+import de.oglimmer.lunchy.database.Dao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 
 @Slf4j

@@ -10,8 +10,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.gson.JsonObject;
 
-import de.oglimmer.lunchy.database.UserDao;
 import de.oglimmer.lunchy.database.connection.DBConn;
+import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.services.LunchyProperties;
 import de.oglimmer.lunchy.services.MBeanServies;

@@ -22,8 +22,8 @@ import lombok.NoArgsConstructor;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import de.oglimmer.lunchy.database.CommunityDao;
-import de.oglimmer.lunchy.database.UserDao;
+import de.oglimmer.lunchy.database.dao.CommunityDao;
+import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.LoginResponseProvider;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;

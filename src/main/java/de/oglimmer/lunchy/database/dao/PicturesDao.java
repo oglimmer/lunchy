@@ -1,10 +1,11 @@
-package de.oglimmer.lunchy.database;
+package de.oglimmer.lunchy.database.dao;
 
-import static de.oglimmer.lunchy.database.DB.DB;
+import static de.oglimmer.lunchy.database.dao.DaoBackend.DB;
 import static de.oglimmer.lunchy.database.generated.tables.Pictures.PICTURES;
 
 import java.util.List;
 
+import de.oglimmer.lunchy.database.Dao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 
 public enum PicturesDao implements Dao<PicturesRecord> {

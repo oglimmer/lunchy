@@ -18,8 +18,8 @@ import lombok.NoArgsConstructor;
 import org.jooq.Record;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
-import de.oglimmer.lunchy.database.LocationDao;
-import de.oglimmer.lunchy.database.OfficeDao;
+import de.oglimmer.lunchy.database.dao.LocationDao;
+import de.oglimmer.lunchy.database.dao.OfficeDao;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.rest.dto.Office;

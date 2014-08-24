@@ -1,6 +1,6 @@
-package de.oglimmer.lunchy.database;
+package de.oglimmer.lunchy.database.dao;
 
-import static de.oglimmer.lunchy.database.DB.DB;
+import static de.oglimmer.lunchy.database.dao.DaoBackend.DB;
 import static de.oglimmer.lunchy.database.generated.tables.Communities.COMMUNITIES;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
 

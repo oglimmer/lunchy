@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.database;
+package de.oglimmer.lunchy.database.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -36,7 +36,7 @@ public enum TagDao {
 
 	private Set<String> createSet(int fkCommunity) throws SQLException {
 		try (Connection conn = DBConn.INSTANCE.get()) {
-			DSLContext create = DB.getContext(conn);
+			DSLContext create = DaoBackend.getContext(conn);
 			return queryDatabase(fkCommunity, create);
 		}
 	}

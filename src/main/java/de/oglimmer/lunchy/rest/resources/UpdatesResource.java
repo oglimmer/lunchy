@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import org.jooq.Record;
 
 import de.oglimmer.lunchy.beanMapping.DozerAdapter;
-import de.oglimmer.lunchy.database.UpdatesDao;
+import de.oglimmer.lunchy.database.dao.UpdatesDao;
 import de.oglimmer.lunchy.rest.dto.UpdatesQuery;
 import de.oglimmer.lunchy.services.Community;
 

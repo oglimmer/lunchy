@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.database;
+package de.oglimmer.lunchy.database.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,7 +28,7 @@ public enum UpdatesDao {
 	@SneakyThrows(value = SQLException.class)
 	public List<Record> get(int numberOfItems, int fkCommunity) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
-			DSLContext create = DB.getContext(conn);
+			DSLContext create = DaoBackend.getContext(conn);
 			return queryDB(numberOfItems, fkCommunity, create);
 		}
 	}

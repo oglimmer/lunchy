@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.CharMatcher;
 
-import de.oglimmer.lunchy.database.CommunityDao;
+import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
 import de.oglimmer.lunchy.services.Community;
 

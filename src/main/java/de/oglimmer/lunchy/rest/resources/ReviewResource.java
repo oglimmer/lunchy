@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
-import de.oglimmer.lunchy.database.ReviewDao;
+import de.oglimmer.lunchy.database.dao.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.dto.Review;

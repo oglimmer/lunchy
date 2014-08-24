@@ -30,10 +30,10 @@ import com.google.code.geocoder.model.GeocoderResult;
 import com.google.code.geocoder.model.LatLng;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
-import de.oglimmer.lunchy.database.LocationDao;
-import de.oglimmer.lunchy.database.OfficeDao;
-import de.oglimmer.lunchy.database.PicturesDao;
-import de.oglimmer.lunchy.database.ReviewDao;
+import de.oglimmer.lunchy.database.dao.LocationDao;
+import de.oglimmer.lunchy.database.dao.OfficeDao;
+import de.oglimmer.lunchy.database.dao.PicturesDao;
+import de.oglimmer.lunchy.database.dao.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;

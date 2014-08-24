@@ -23,7 +23,7 @@ import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
-import de.oglimmer.lunchy.database.PicturesDao;
+import de.oglimmer.lunchy.database.dao.PicturesDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.rest.PictureScaler;
 import de.oglimmer.lunchy.rest.dto.Picture;

@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 
-import de.oglimmer.lunchy.database.CommunityDao;
+import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 
 @Slf4j

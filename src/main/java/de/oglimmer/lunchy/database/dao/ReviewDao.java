@@ -1,6 +1,6 @@
-package de.oglimmer.lunchy.database;
+package de.oglimmer.lunchy.database.dao;
 
-import static de.oglimmer.lunchy.database.DB.DB;
+import static de.oglimmer.lunchy.database.dao.DaoBackend.DB;
 import static de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS;
 
 import java.util.List;
@@ -11,6 +11,8 @@ import org.jooq.Record1;
 import org.jooq.Select;
 import org.jooq.impl.DSL;
 
+import de.oglimmer.lunchy.database.Dao;
+import de.oglimmer.lunchy.database.SqlExecCallback;
 import de.oglimmer.lunchy.database.generated.tables.Location;
 import de.oglimmer.lunchy.database.generated.tables.Reviews;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;

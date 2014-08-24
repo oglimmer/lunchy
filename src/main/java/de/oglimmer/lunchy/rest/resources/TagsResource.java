@@ -12,7 +12,7 @@ import javax.ws.rs.core.MediaType;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonPrimitive;
 
-import de.oglimmer.lunchy.database.TagDao;
+import de.oglimmer.lunchy.database.dao.TagDao;
 import de.oglimmer.lunchy.services.Community;
 
 @Path("tags")

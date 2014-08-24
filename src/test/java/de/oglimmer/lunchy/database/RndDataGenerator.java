@@ -8,6 +8,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.jooq.Record;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
+import de.oglimmer.lunchy.database.dao.CommunityDao;
+import de.oglimmer.lunchy.database.dao.LocationDao;
+import de.oglimmer.lunchy.database.dao.OfficeDao;
+import de.oglimmer.lunchy.database.dao.PicturesDao;
+import de.oglimmer.lunchy.database.dao.ReviewDao;
+import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;

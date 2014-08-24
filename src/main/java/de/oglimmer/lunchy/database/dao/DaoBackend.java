@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.database;
+package de.oglimmer.lunchy.database.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,9 +19,11 @@ import org.jooq.conf.RenderNameStyle;
 import org.jooq.conf.Settings;
 import org.jooq.impl.DSL;
 
+import de.oglimmer.lunchy.database.SqlExecCallback;
+import de.oglimmer.lunchy.database.SqlResultCallback;
 import de.oglimmer.lunchy.database.connection.DBConn;
 
-enum DB {
+enum DaoBackend {
 	DB;
 
 	public static DSLContext getContext(Connection conn) {
