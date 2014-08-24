@@ -560,5 +560,27 @@
 		<dropDefaultValue columnDataType="varchar(255)"
 			columnName="zip" tableName="location" />
 	</changeSet>
-    
+
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408917616128-1">
+        <addColumn tableName="users">
+            <column name="email_Updates" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408917616128-2">
+        <addColumn tableName="users">
+            <column name="last_Email_Update" type="TIMESTAMP(19)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408917616128-3">
+        <addColumn tableName="users">
+            <column name="next_Email_Update" type="TIMESTAMP(19)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+        
 </databaseChangeLog>
