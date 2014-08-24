@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Offices extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord> {
 
-	private static final long serialVersionUID = 1787920536;
+	private static final long serialVersionUID = -2127320390;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.offices</code>
@@ -32,24 +32,19 @@ public class Offices extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.offices.fk_Community</code>.
-	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
-
-	/**
 	 * The column <code>oli_lunchy.offices.name</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.String> NAME = createField("name", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.String> NAME = createField("name", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.offices.geo_Lat</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Double> GEO_LAT = createField("geo_Lat", org.jooq.impl.SQLDataType.DOUBLE.nullable(false), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Double> GEO_LAT = createField("geo_Lat", org.jooq.impl.SQLDataType.DOUBLE, this, "");
 
 	/**
 	 * The column <code>oli_lunchy.offices.geo_Lng</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Double> GEO_LNG = createField("geo_Lng", org.jooq.impl.SQLDataType.DOUBLE.nullable(false), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Double> GEO_LNG = createField("geo_Lng", org.jooq.impl.SQLDataType.DOUBLE, this, "");
 
 	/**
 	 * The column <code>oli_lunchy.offices.zoomfactor</code>.
@@ -57,9 +52,14 @@ public class Offices extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Integer> ZOOMFACTOR = createField("zoomfactor", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
+	 * The column <code>oli_lunchy.offices.fk_Community</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+	/**
 	 * The column <code>oli_lunchy.offices.country</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.String> COUNTRY = createField("country", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord, java.lang.String> COUNTRY = createField("country", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.offices</code> table reference

@@ -20,7 +20,7 @@ import de.oglimmer.lunchy.rest.dto.Office;
 import de.oglimmer.lunchy.rest.dto.Picture;
 import de.oglimmer.lunchy.rest.dto.Review;
 import de.oglimmer.lunchy.rest.dto.ReviewUpdateResponse;
-import de.oglimmer.lunchy.rest.dto.User;
+import de.oglimmer.lunchy.rest.dto.UserAdminResponse;
 
 public abstract class TestDbLoad {
 
@@ -60,7 +60,7 @@ public abstract class TestDbLoad {
 	@Test
 	public void testUser() {
 		for (UsersRecord reviewRec : UserDao.INSTANCE.query(1)) {
-			System.out.println(BeanMappingProvider.INSTANCE.map(reviewRec, User.class));
+			System.out.println(BeanMappingProvider.INSTANCE.map(reviewRec, UserAdminResponse.class));
 		}
 	}
 

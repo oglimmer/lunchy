@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Pictures extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord> {
 
-	private static final long serialVersionUID = 206315398;
+	private static final long serialVersionUID = 1418145395;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.pictures</code>
@@ -32,11 +32,6 @@ public class Pictures extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.pictures.fk_Community</code>.
-	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
-
-	/**
 	 * The column <code>oli_lunchy.pictures.fk_Location</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> FK_LOCATION = createField("fk_Location", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
@@ -49,7 +44,7 @@ public class Pictures extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	/**
 	 * The column <code>oli_lunchy.pictures.filename</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.String> FILENAME = createField("filename", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.String> FILENAME = createField("filename", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.pictures.caption</code>.
@@ -60,6 +55,11 @@ public class Pictures extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	 * The column <code>oli_lunchy.pictures.created_On</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.sql.Timestamp> CREATED_ON = createField("created_On", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.pictures.fk_Community</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.pictures</code> table reference
@@ -112,7 +112,7 @@ public class Pictures extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	 */
 	@Override
 	public java.util.List<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, ?>> getReferences() {
-		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_PIC_COM, de.oglimmer.lunchy.database.generated.Keys.FK_PIC_LOC, de.oglimmer.lunchy.database.generated.Keys.FK_PIC_USR);
+		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_PIC_LOC, de.oglimmer.lunchy.database.generated.Keys.FK_PIC_USR, de.oglimmer.lunchy.database.generated.Keys.FK_PIC_COM);
 	}
 
 	/**

@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import lombok.Data;
 
 @Data
-public class User {
+public class UserAdminResponse {
 
 	private Integer id;
 	private String email;
@@ -16,5 +16,6 @@ public class User {
 	private Timestamp passwordResetTimestamp;
 	private Timestamp longTimeTimestamp;
 	private Integer fkBaseOffice;
+	private Integer emailUpdates;
 
 }

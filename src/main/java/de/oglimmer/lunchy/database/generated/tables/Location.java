@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord> {
 
-	private static final long serialVersionUID = -1515327922;
+	private static final long serialVersionUID = -842076804;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.location</code>
@@ -32,14 +32,9 @@ public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.location.fk_Community</code>.
-	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
-
-	/**
 	 * The column <code>oli_lunchy.location.official_Name</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> OFFICIAL_NAME = createField("official_Name", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> OFFICIAL_NAME = createField("official_Name", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.location.street_Name</code>.
@@ -49,22 +44,22 @@ public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	/**
 	 * The column <code>oli_lunchy.location.address</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> ADDRESS = createField("address", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> ADDRESS = createField("address", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.location.city</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> CITY = createField("city", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> CITY = createField("city", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.location.zip</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> ZIP = createField("zip", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> ZIP = createField("zip", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.location.country</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> COUNTRY = createField("country", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.String> COUNTRY = createField("country", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.location.url</code>.
@@ -117,6 +112,11 @@ public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> FK_OFFICE = createField("fk_Office", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
+	 * The column <code>oli_lunchy.location.fk_Community</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+	/**
 	 * Create a <code>oli_lunchy.location</code> table reference
 	 */
 	public Location() {
@@ -167,7 +167,7 @@ public class Location extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.databas
 	 */
 	@Override
 	public java.util.List<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, ?>> getReferences() {
-		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_LOC_COM, de.oglimmer.lunchy.database.generated.Keys.FK_LOC_USR, de.oglimmer.lunchy.database.generated.Keys.FK_LOC_OFF);
+		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.LocationRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_LOC_USR, de.oglimmer.lunchy.database.generated.Keys.FK_LOC_OFF, de.oglimmer.lunchy.database.generated.Keys.FK_LOC_COM);
 	}
 
 	/**

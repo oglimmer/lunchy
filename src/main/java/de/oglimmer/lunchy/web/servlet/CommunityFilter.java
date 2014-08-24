@@ -54,8 +54,9 @@ public class CommunityFilter implements Filter {
 				Community.set(httpReq, community);
 				chain.doFilter(request, response);
 			} else {
-				httpResp.sendRedirect(httpReq.getProtocol() + "://" + removeSubDomains(domain)
-						+ (request.getServerPort() != 80 ? ":" + request.getServerPort() : ""));
+				String redirect = httpReq.getScheme() + "://" + removeSubDomains(domain)
+						+ (request.getServerPort() != 80 ? ":" + request.getServerPort() : "");
+				httpResp.sendRedirect(redirect);
 			}
 		}
 

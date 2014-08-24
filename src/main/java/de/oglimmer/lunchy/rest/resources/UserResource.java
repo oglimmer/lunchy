@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
@@ -17,6 +18,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import lombok.Data;
 
@@ -30,8 +33,9 @@ import de.oglimmer.lunchy.rest.LoginResponseProvider;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
 import de.oglimmer.lunchy.rest.dto.ResultParam;
-import de.oglimmer.lunchy.rest.dto.User;
+import de.oglimmer.lunchy.rest.dto.UserAdminResponse;
 import de.oglimmer.lunchy.services.Community;
+import de.oglimmer.lunchy.services.DateCalculation;
 import de.oglimmer.lunchy.services.Email;
 
 @Path("users")
@@ -115,11 +119,11 @@ public class UserResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<User> query(@Context HttpServletRequest request) {
+	public List<UserAdminResponse> query(@Context HttpServletRequest request) {
 		SecurityProvider.INSTANCE.checkAdmin(request);
-		List<User> resultList = new ArrayList<>();
+		List<UserAdminResponse> resultList = new ArrayList<>();
 		for (UsersRecord reviewRec : UserDao.INSTANCE.query(Community.get(request))) {
-			resultList.add(BeanMappingProvider.INSTANCE.map(reviewRec, User.class));
+			resultList.add(BeanMappingProvider.INSTANCE.map(reviewRec, UserAdminResponse.class));
 		}
 		return resultList;
 	}
@@ -127,9 +131,13 @@ public class UserResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("current")
-	public UserResponse get(@Context HttpServletRequest request) {
-		UsersRecord user = UserDao.INSTANCE.getById((Integer) request.getSession(true).getAttribute("userId"), Community.get(request));
-		return BeanMappingProvider.INSTANCE.map(user, UserResponse.class);
+	public Response current(@Context HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			UsersRecord user = UserDao.INSTANCE.getById((Integer) session.getAttribute("userId"), Community.get(request));
+			return Response.ok(BeanMappingProvider.INSTANCE.map(user, UserResponse.class)).build();
+		}
+		return Response.status(Status.NO_CONTENT).build();
 	}
 
 	@GET
@@ -165,6 +173,9 @@ public class UserResource {
 				user.setCreatedOn(new Timestamp(new Date().getTime()));
 				user.setLastLogin(new Timestamp(new Date().getTime()));
 				user.setPermissions(0);
+				user.setEmailUpdates(0);
+				user.setLastEmailUpdate(DateCalculation.INSTANCE.getOneWeekAgo());
+				user.setNextEmailUpdate(DateCalculation.INSTANCE.getNextMonday());
 				Email.INSTANCE.sendWelcome(input.getEmail(), input.getDisplayname(), Community.get(request));
 			} else {
 				user = UserDao.INSTANCE.getById(input.getId(), Community.get(request));
@@ -180,6 +191,12 @@ public class UserResource {
 			if (user != null) {
 				user.setDisplayname(input.getDisplayname());
 				user.setEmail(input.getEmail());
+				user.setEmailUpdates(Integer.valueOf(input.getEmailUpdates()));
+				if (user.getEmailUpdates() == 1) {
+					user.setNextEmailUpdate(DateCalculation.INSTANCE.getNever());
+				} else {
+					user.setNextEmailUpdate(DateCalculation.INSTANCE.getNextMonday());
+				}
 				user.setFkBaseOffice(input.getFkBaseOffice());
 				user.setFkCommunity(Community.get(request));
 				UserDao.INSTANCE.store(user);
@@ -208,6 +225,7 @@ public class UserResource {
 		private String currentpassword;
 		private String displayname;
 		private Integer fkBaseOffice;
+		private String emailUpdates;
 	}
 
 	@Data
@@ -216,6 +234,7 @@ public class UserResource {
 		private String email;
 		private String displayname;
 		private Integer fkBaseOffice;
+		private String emailUpdates;
 	}
 
 }

@@ -30,17 +30,24 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label for="emailUpdates" class="col-lg-2 control-label">Email updates</label>
+						<div class="col-lg-10">
+							<input class="form-control" type="checkbox" ng-model="data.emailUpdates" ng-true-value="'0'" ng-false-value="'1'" />
+							<span class="help-block">When checked Lunchy will provide a weekly email update.</span>																			
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="streetName" class="col-lg-2 control-label">Current password</label>
 						<div class="col-lg-10">
 							<input type="password" class="form-control" ng-model="data.currentpassword" required>
-							<span ng-hide="editableButton" class="help-block">Always needed.</span>
+							<span class="help-block">Always needed.</span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="streetName" class="col-lg-2 control-label">New password</label>
 						<div class="col-lg-10">
 							<input type="password" class="form-control" ng-model="data.password" >
-							<span ng-hide="editableButton" class="help-block">If left blank no new password will be set</span>
+							<span class="help-block">If left blank no new password will be set</span>
 						</div>
 					</div>
 					<div class="form-group">

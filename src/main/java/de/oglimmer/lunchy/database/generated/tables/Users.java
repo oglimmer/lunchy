@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord> {
 
-	private static final long serialVersionUID = -1836407440;
+	private static final long serialVersionUID = 733351538;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.users</code>
@@ -32,24 +32,19 @@ public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.g
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.users.fk_Community</code>.
-	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
-
-	/**
 	 * The column <code>oli_lunchy.users.email</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.String> EMAIL = createField("email", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.String> EMAIL = createField("email", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.users.password</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.String> PASSWORD = createField("password", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.String> PASSWORD = createField("password", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.users.displayname</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.String> DISPLAYNAME = createField("displayname", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false).defaulted(true), this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.String> DISPLAYNAME = createField("displayname", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.users.created_On</code>.
@@ -90,6 +85,26 @@ public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.g
 	 * The column <code>oli_lunchy.users.fk_Base_Office</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> FK_BASE_OFFICE = createField("fk_Base_Office", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.users.fk_Community</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.users.email_Updates</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.lang.Integer> EMAIL_UPDATES = createField("email_Updates", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.users.last_Email_Update</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.sql.Timestamp> LAST_EMAIL_UPDATE = createField("last_Email_Update", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.users.next_Email_Update</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, java.sql.Timestamp> NEXT_EMAIL_UPDATE = createField("next_Email_Update", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.users</code> table reference
@@ -142,7 +157,7 @@ public class Users extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.g
 	 */
 	@Override
 	public java.util.List<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, ?>> getReferences() {
-		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_USR_COM, de.oglimmer.lunchy.database.generated.Keys.FK_USR_OFF);
+		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.UsersRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_USR_OFF, de.oglimmer.lunchy.database.generated.Keys.FK_USR_COM);
 	}
 
 	/**

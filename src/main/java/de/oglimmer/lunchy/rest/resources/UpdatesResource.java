@@ -30,7 +30,7 @@ public class UpdatesResource {
 		return resultList;
 	}
 
-	private UpdatesQuery createResultRow(DozerAdapter update) {
+	public UpdatesQuery createResultRow(DozerAdapter update) {
 		UpdatesQuery qrr = new UpdatesQuery();
 		switch (update.getString("type")) {
 		case "L":

@@ -99,6 +99,7 @@ public enum DBConn {
 
 	@SneakyThrows(value = SQLException.class)
 	public void shutdownDriver() {
+		log.debug("Stopping DBConn...");
 		// close pool
 		PoolingDriver driver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
 		driver.closePool("lunchyDataStore");

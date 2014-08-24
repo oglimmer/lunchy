@@ -11,7 +11,7 @@ package de.oglimmer.lunchy.database.generated.tables;
 @java.lang.SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord> {
 
-	private static final long serialVersionUID = 604604255;
+	private static final long serialVersionUID = -568613219;
 
 	/**
 	 * The singleton instance of <code>oli_lunchy.reviews</code>
@@ -30,11 +30,6 @@ public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	 * The column <code>oli_lunchy.reviews.id</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
-
-	/**
-	 * The column <code>oli_lunchy.reviews.fk_Community</code>.
-	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.reviews.fk_User</code>.
@@ -72,14 +67,19 @@ public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.String> FAVORITE_MEAL = createField("favorite_Meal", org.jooq.impl.SQLDataType.CLOB.length(65535), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.reviews.travel_Time</code>.
+	 * The column <code>oli_lunchy.reviews.fk_Community</code>.
 	 */
-	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> TRAVEL_TIME = createField("travel_Time", org.jooq.impl.SQLDataType.INTEGER, this, "");
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> FK_COMMUNITY = createField("fk_Community", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.reviews.on_Site_Time</code>.
 	 */
 	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> ON_SITE_TIME = createField("on_Site_Time", org.jooq.impl.SQLDataType.INTEGER, this, "");
+
+	/**
+	 * The column <code>oli_lunchy.reviews.travel_Time</code>.
+	 */
+	public final org.jooq.TableField<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, java.lang.Integer> TRAVEL_TIME = createField("travel_Time", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.reviews</code> table reference
@@ -132,7 +132,7 @@ public class Reviews extends org.jooq.impl.TableImpl<de.oglimmer.lunchy.database
 	 */
 	@Override
 	public java.util.List<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, ?>> getReferences() {
-		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_REV_COM, de.oglimmer.lunchy.database.generated.Keys.FK_REV_USR, de.oglimmer.lunchy.database.generated.Keys.FK_REV_LOC);
+		return java.util.Arrays.<org.jooq.ForeignKey<de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord, ?>>asList(de.oglimmer.lunchy.database.generated.Keys.FK_REV_USR, de.oglimmer.lunchy.database.generated.Keys.FK_REV_LOC, de.oglimmer.lunchy.database.generated.Keys.FK_REV_COM);
 	}
 
 	/**

@@ -12,8 +12,8 @@ import org.jooq.JoinType;
 import org.jooq.Record;
 import org.jooq.Record7;
 import org.jooq.Result;
-import org.jooq.Select;
 import org.jooq.SelectConditionStep;
+import org.jooq.SelectJoinStep;
 import org.jooq.impl.DSL;
 
 import de.oglimmer.lunchy.database.connection.DBConn;
@@ -33,7 +33,24 @@ public enum UpdatesDao {
 		}
 	}
 
+	@SneakyThrows(value = SQLException.class)
+	public List<Record> get(Timestamp from, int fkCommunity) {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+			DSLContext create = DaoBackend.getContext(conn);
+			return queryDB(from, fkCommunity, create);
+		}
+	}
+
+	private Result<Record> queryDB(Timestamp from, int fkCommunity, DSLContext create) {
+		return queryDB(fkCommunity, create).where(DSL.val("last_Update", Timestamp.class).as("last_Update").greaterThan(from))
+				.orderBy(DSL.val("last_Update").as("last_Update").desc()).fetch();
+	}
+
 	private Result<Record> queryDB(int numberOfItems, int fkCommunity, DSLContext create) {
+		return queryDB(fkCommunity, create).orderBy(DSL.val("last_Update").as("last_Update").desc()).limit(numberOfItems).fetch();
+	}
+
+	private SelectJoinStep<Record> queryDB(int fkCommunity, DSLContext create) {
 
 		SelectConditionStep<Record7<String, String, String, String, String, Integer, Timestamp>> locationSelect = create
 				.select(DSL.val("L").as("type"),
@@ -67,11 +84,7 @@ public enum UpdatesDao {
 				.on(Location.LOCATION.ID.equal(Pictures.PICTURES.FK_LOCATION)).join(Users.USERS, JoinType.JOIN)
 				.on(Pictures.PICTURES.FK_USER.equal(Users.USERS.ID)).where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity));
 
-		Select<Record> overAll = create.select().from(locationSelect.union(reviewsSelect).union(usersSelect).union(pictureSelect))
-				.orderBy(DSL.val("last_Update").as("last_Update").desc()).limit(numberOfItems);
-
-		return overAll.fetch();
-
+		return create.select().from(locationSelect.union(reviewsSelect).union(usersSelect).union(pictureSelect));
 	}
 
 }

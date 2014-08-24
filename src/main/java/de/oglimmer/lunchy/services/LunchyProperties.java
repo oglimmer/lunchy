@@ -28,6 +28,30 @@ public enum LunchyProperties {
 		}
 	}
 
+	public String getSmtpUser() {
+		return prop.getProperty("smtp.user", System.getProperty("lunchy.smtp.user", ""));
+	}
+
+	public String getSmtpPassword() {
+		return prop.getProperty("smtp.password", System.getProperty("lunchy.smtp.password", ""));
+	}
+
+	public String getSmtpHost() {
+		return prop.getProperty("smtp.host", System.getProperty("lunchy.smtp.host", "localhost"));
+	}
+
+	public int getSmtpPort() {
+		return Integer.parseInt(prop.getProperty("smtp.port", System.getProperty("lunchy.smtp.port", "-1")));
+	}
+
+	public boolean getSmtpSSL() {
+		return Boolean.parseBoolean(prop.getProperty("smtp.ssl", System.getProperty("lunchy.smtp.ssl", "false")));
+	}
+
+	public String getSmtpFrom() {
+		return prop.getProperty("smtp.from", System.getProperty("lunchy.smtp.from", "no-reply@junta-online.net"));
+	}
+
 	public String getDbUser() {
 		return prop.getProperty("db.user", System.getProperty("lunchy.db.user", "root"));
 	}
@@ -62,6 +86,10 @@ public enum LunchyProperties {
 
 	public boolean isEmailDisabled() {
 		return Boolean.parseBoolean(prop.getProperty("email.disabled", System.getProperty("lunchy.email.disabled", "false")));
+	}
+
+	public boolean isEmailNotificationEnabled() {
+		return Boolean.parseBoolean(prop.getProperty("email.notification", "false"));
 	}
 
 	public String getRuntimePassword() {
