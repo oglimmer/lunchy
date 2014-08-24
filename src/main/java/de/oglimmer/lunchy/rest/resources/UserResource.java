@@ -191,11 +191,13 @@ public class UserResource {
 			if (user != null) {
 				user.setDisplayname(input.getDisplayname());
 				user.setEmail(input.getEmail());
-				user.setEmailUpdates(Integer.valueOf(input.getEmailUpdates()));
-				if (user.getEmailUpdates() == 1) {
-					user.setNextEmailUpdate(DateCalculation.INSTANCE.getNever());
-				} else {
-					user.setNextEmailUpdate(DateCalculation.INSTANCE.getNextMonday());
+				if (input.getEmailUpdates() != null && !input.getEmailUpdates().isEmpty()) {
+					user.setEmailUpdates(Integer.valueOf(input.getEmailUpdates()));
+					if (user.getEmailUpdates() == 1) {
+						user.setNextEmailUpdate(DateCalculation.INSTANCE.getNever());
+					} else {
+						user.setNextEmailUpdate(DateCalculation.INSTANCE.getNextMonday());
+					}
 				}
 				user.setFkBaseOffice(input.getFkBaseOffice());
 				user.setFkCommunity(Community.get(request));
