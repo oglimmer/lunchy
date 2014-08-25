@@ -1,51 +1,50 @@
-<br />
-<br /><br /><br />
+
 <div class="container">
 
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
-	<tabset justified="true" ng-show="editableButton">
-    	<tab heading="Base data">
-			<div ng-include="'partials/view-location/base-data.html'"></div>
-		</tab>
-    	<tab heading="Map" ng-click="mapSelected()">
-		  	<div ng-if="mapTabShown">
-				<google-map id="locationMap" center="map.center" zoom="map.zoom" draggable="false" events='map.events'> 
-					<marker idKey='marker.id' coords='marker.coords' options="marker.markerOptions" />
-				</google-map>
-			</div>
-		</tab>
-    	<tab heading="Pictures" active="tabs.pictureTabActive">
-			<carousel>
-				<slide ng-repeat="pic in childScopeHolder.pictures" active="pic.active">
-					<img ng-src="./rest/pictures/{{pic.filename}}" style="margin:auto;"/>
-					<div class="carousel-caption">
-						<p class="removeOnExtraSmall">{{pic.caption}} by {{pic.creationUser}}</p>
-					</div>					
-				</slide>
-			</carousel>
-    	</tab>
-  	</tabset>
+	<div class="form-group">
 
-	<div ng-include="'partials/view-location/edit-location.html'"></div>	
+        <tabset justified="true" ng-show="showTabMode">
+            <tab heading="Base data" active="tabs.active[0]" disabled="tabs.disabled[0]">
+                <div ng-include="'partials/view-location/base-data.html'"></div>
+            </tab>
+            <tab heading="Reviews" active="tabs.active[1]" disabled="tabs.disabled[1]">
+                <div ng-include="'partials/view-location/review-pane.html'"></div>
+            </tab>
+            <tab heading="Pictures" active="tabs.active[2]" disabled="tabs.disabled[2]">
+                <carousel>
+                    <slide ng-repeat="pic in childScopeHolder.pictures" active="pic.active">
+                        <img ng-src="./rest/pictures/{{pic.filename}}" style="margin:auto;"/>
+                        <div class="carousel-caption">
+                            <p class="removeOnExtraSmall">{{pic.caption}} by {{pic.creationUser}}</p>
+                        </div>
+                    </slide>
+                </carousel>
+                <div ng-show="addPictureMode" ng-include="'partials/view-location/add-picture.html'"></div>
+            </tab>
+            <tab heading="Map" ng-click="mapSelected()" active="tabs.active[3]" disabled="tabs.disabled[3]">
+                <div ng-if="mapTabShown">
+                    <google-map id="locationMap" center="map.center" zoom="map.zoom" draggable="false" events='map.events'>
+                        <marker idKey='marker.id' coords='marker.coords' options="marker.markerOptions" />
+                    </google-map>
+                </div>
+            </tab>
+        </tabset>
 
+	</div>		  
 
-	<div ng-include="'partials/view-location/review-pane.html'"></div>	
+	<div ng-show="editLocationMode" ng-include="'partials/view-location/edit-location.html'"></div>
 
+	<div ng-show="modifyReviewMode" ng-include="'partials/view-location/edit-review.html'"></div>
 					
-	<div ng-include="'partials/view-location/add-picture.html'"></div>	
+	<div class="form-group top17" ng-show="showButtonsMode">
 
-					
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="form-group">
-				<div class="col-lg-10 col-lg-offset-2">
-					<button ng-hide="editableButton && !addReviewButton && !addPictureButton" class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
-					<button ng-show="allowedToEdit && !addReviewButton && !addPictureButton" type="button" class="btn btn-primary" ng-model="editableButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="Save;Edit" ng-click="saveEdit()"/>
-					<button ng-show="Authetication.loggedIn && editableButton && !addPictureButton" type="button" class="btn btn-default" ng-model="addReviewButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="$reviewButton;Save" ng-click="addReview()"/>
-					<button ng-show="Authetication.loggedIn && editableButton && !addReviewButton" type="button" class="btn btn-default" ng-model="addPictureButton" btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0" ly-dynamicname="Add Picture;Save" ng-click="addPicture()"/>
-				</div>
-			</div>
-		</div>
+        <button ng-show="allowedToEditPermission" type="button" class="btn btn-primary" ng-click="editLocationStart()">Edit</button>
+
+        <button type="button" class="btn btn-default" ng-click="modifyReviewStart()">{{reviewButton}}</button>
+
+        <button type="button" class="btn btn-default" ng-click="addPictureStart()">Add Picture</button>
+
 	</div>
 </div>

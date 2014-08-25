@@ -1,34 +1,38 @@
-<div class="row" ng-show="addPictureButton">
-	<div class="col-lg-12" flow-init flow-name="childScopeHolder.$flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-files-submitted="$flow.upload()">
-		<h3>Add picture</h3>
-		<hr class="soften" />
-		<div flow-transfers>				
-			<div ng-repeat="file in transfers">
-				<div ng-show="file.isUploading()">
-					<div>Progress: {{ file.sizeUploaded() / 1024 | number:0 }} kb / {{ file.size / 1024 | number:0}} kb</div>
-					<div class="progress progress-striped">
-						<div class="progress-bar" ng-style="{'width': (100*( file.sizeUploaded() / file.size )) + '%' }"><span style="color:black">{{file.progress()*100| number:0}}%</span></div>
-					</div>
-				</div>
-			</div>
+<div flow-init flow-name="childScopeHolder.$flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]" flow-files-submitted="$flow.upload()">
+    <h3>Add picture</h3>
+    <div flow-transfers>
+        <div ng-repeat="file in transfers">
+            <div ng-show="file.isUploading()">
+                <div>Progress: {{ file.sizeUploaded() / 1024 | number:0 }} kb / {{ file.size / 1024 | number:0}} kb</div>
+                <div class="progress progress-striped">
+                    <div class="progress-bar" ng-style="{'width': (100*( file.sizeUploaded() / file.size )) + '%' }"><span style="color:black">{{file.progress()*100| number:0}}%</span></div>
+                </div>
+            </div>
+        </div>
 
-			<div ng-show="transfers.length > 0 && !$flow.isUploading()">
-				<alert type="success">Upload completed! <a href="javascript:void(null);" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</a></alert>
-				<form class="form-horizontal">
-					<input class="form-control" type="text" ng-model="childScopeHolder.picCaption" placeholder="Put any caption here ..." focus="true" />
-				</form>
-			</div>
-		</div>
-		<div>
-			<div ng-hide="$flow.files.length" class="drop" ng-class="dropClass" flow-drop flow-drag-enter="dropClass='drag-over'" flow-drag-leave="dropClass=''">
-				Drag'n drop an image (jpeg, png, gif) here to upload it or press the 'select image' button.																								
-				<span class="btn btn-primary btn-sm" flow-btn flow-attrs="{accept:'image/*;capture=camera'}">Select image</span>
-			</div>
+        <div ng-show="transfers.length > 0 && !$flow.isUploading()">
+            <alert type="success">Upload completed! <a href="javascript:void(null);" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</a></alert>
+            <form class="form-horizontal">
+                <input class="form-control" type="text" ng-model="childScopeHolder.picCaption" placeholder="Put any caption here ..." focus="true" />
+            </form>
+        </div>
+    </div>
+    <div>
+        <div ng-hide="$flow.files.length" class="drop" ng-class="dropClass" flow-drop flow-drag-enter="dropClass='drag-over'" flow-drag-leave="dropClass=''">
+            Drag'n drop an image (jpeg, png, gif) here to upload it or press the 'select image' button.
+            <span class="btn btn-primary btn-sm" flow-btn flow-attrs="{accept:'image/*;capture=camera'}">Select image</span>
+        </div>
 
-			<div class="thumbnail" ng-show="$flow.files.length>0">
-				<img flow-img="$flow.files[0]" />
-			</div>
-			
-		</div>
-	</div>
+        <div class="thumbnail" ng-show="$flow.files.length>0">
+            <img flow-img="$flow.files[0]" />
+        </div>
+
+    </div>
+
+    <div class=form-group">
+        <button type="button" class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
+
+        <button type="button" class="btn btn-primary" ng-click="addPictureSave()" ng-disabled="$flow.files.length==0">Save</button>
+    </div>
+
 </div>

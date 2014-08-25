@@ -1,0 +1,50 @@
+
+
+<form class="form-horizontal" novalidate name="editReview">
+    <fieldset>
+        <legend>All fields are optional, feel free to just rate it</legend>
+        <div class="row form-group">
+            <label for="comment" class="col-md-2 control-label">Comment</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="3" ng-model="newReview.comment"></textarea>
+                <span class="help-block">Your personal opinion about this location. What do <strong>you</strong> like and what not?</span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label for="favoriteMeal" class="col-md-2 control-label">Your favorite meal</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" ng-model="newReview.favoriteMeal">
+            </div>
+        </div>
+        <div class="row form-group" ng-class="{'has-error': editReview.travelTime.$invalid || editReview.onSiteTime.$invalid}">
+            <label for="turnAroundTime" class="col-md-2 control-label">Turn around time</label>
+            <div class="col-md-5">
+                <input type="number" class="form-control" name="travelTime" ng-model="newReview.travelTime" placeholder="Travel time - e.g. 20">
+            </div>
+            <div class="col-md-5">
+                <input type="number" class="form-control" name="onSiteTime" ng-model="newReview.onSiteTime" placeholder="On site time - e.g. 35">
+            </div>
+            <div class="col-md-5 col-md-offset-2">
+                <span class="help-block">Pure travel time in minutes.</span>
+            </div>
+            <div class="col-md-5">
+                <span class="help-block">Time you've to spend on the premises in minutes.</span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label for="rating" class="col-md-2 control-label">Your location rating</label>
+            <div class="col-md-10">
+                <rating ng-model="newReview.rating" on-hover="hoveringOver(value)" on-leave="hoveringOut()"></rating>
+                <span class="help-block">{{newReview.ratingExplained}}</span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-10 col-md-offset-2">
+                <button type="button" class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
+
+                <button type="button" class="btn btn-primary" ng-click="modifyReviewSave()" ng-disabled="editReview.$invalid">Save</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+

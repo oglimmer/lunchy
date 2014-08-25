@@ -159,197 +159,236 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'Offic
 	
 }]).
 controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao', 'OfficesDao', 'TagService',
-                                    function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao, OfficesDao, TagService) {
-	
-	$scope.allowedToEdit = false;
-	function getlocationStatusForCurrentUser() {
-		LocationsDao.locationStatusForCurrentUser({"id": $stateParams.locationId }, function (result) {
-			$scope.allowedToEdit = result.allowedToEdit;
-			if(result.hasReview) {
-				$scope.usersReview = result.fkReview;
-				$scope.reviewButton = "Edit Review";
-			}
-		});
-	}
-	
-	$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );	
-	LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
-		$scope.reviews = reviews;
-	});
-	$scope.allTags = [];
-	TagService.get().then(function(data) {
-		$scope.allTags = data;
-	});
-	$scope.editableButton = 1;
-	$scope.addReviewButton = 0;
-	$scope.alerts = [];
-	$scope.newReview = {
-			fkLocation:$stateParams.locationId,
-			comment:'',
-			favoriteMeal:'',
-			rating:1,
-			ratingExplained:'none'
-	};
-	$scope.usersReview = null;
-	$scope.reviewButton = "Add Review";
-	$scope.childScopeHolder = {};
-	Authetication.checkLoggedIn().then(function(data) {
-		if(data.loggedIn){
-			getlocationStatusForCurrentUser();	 
-		};		
-	});
-	$scope.$on('userLoggedIn', function(event) {
-		getlocationStatusForCurrentUser();
-	});
-	$scope.tabs = {};
-	$scope.tabs.pictureTabActive = false;
-	
-	LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
-		$scope.childScopeHolder.pictures = pictures;
-		if(pictures.length > 0) {
-			$scope.tabs.pictureTabActive = true;
-		}
-	});
-	
-	OfficesDao.query(function(offices) {
-		$scope.offices = offices;		
-	});
-	
-	$scope.mapSelected = function() {
-		$scope.map = {
-				center : {
-					latitude : $scope.data.geoLat, 
-					longitude : $scope.data.geoLng
-				},
-				zoom : 13
-		};
-		$scope.marker = {
-				id:$scope.data.id,
-				coords: {
-					latitude: $scope.data.geoLat, 
-					longitude: $scope.data.geoLng
-				},
-				markerOptions: {
-					title: $scope.data.officialName
-				}
-		}
-		$scope.mapTabShown = true;
-	};
-	
-	function setRatingExplained(val) {
-		switch(val) {
-		case 1:
-			$scope.newReview.ratingExplained = "I will never go there again!";
-			break;
-		case 2:
-			$scope.newReview.ratingExplained = "Not amongst my favorites, but I would eventually join.";
-			break;
-		case 3:
-			$scope.newReview.ratingExplained = "Liked it - somehow. Go there again.";
-			break;
-		case 4:
-			$scope.newReview.ratingExplained = "Nice place, happy to do it again";
-			break;
-		case 5:
-			$scope.newReview.ratingExplained = "One of my favorites! Couldn't get enough!";
-			break;
-		}
-	}
-	
-	$scope.$watch('newReview.rating', function() {
-		setRatingExplained($scope.newReview.rating);
-	});
-	
-	$scope.hoveringOver = function(val) {
-		setRatingExplained(val);
-	}
-	
-	$scope.hoveringOut = function() {
-		setRatingExplained($scope.newReview.rating);
-	}
-	
-	$scope.closeAlert = function(index) {
-		$scope.alerts.splice(index, 1);
-	};
-	
-	$scope.cancelEdit = function() {
-		$scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
-		$scope.editableButton = 1;
-		$scope.addReviewButton = 0;
-		$scope.addPictureButton = 0;
-		if($scope.childScopeHolder.$flow) {
-			$scope.childScopeHolder.$flow.cancel();
-		}
-	};
-	
-	$scope.saveEdit = function() {		
-		if($scope.editableButton == 0) {			
-			if($scope.childScopeHolder.editLocation.$invalid) {
-				$scope.alerts.push({type:'danger', msg: 'Missing fields'});
-				$timeout(function() {
-					$scope.editableButton = 0;
-				});
-			} else {
-				LocationsDao.save($scope.data, function(result) {
-					// nothing to do
-				}, function(result) {
-					$scope.alerts.push({type:'danger', msg: 'Error while saving location: ' + result.statusText});
-				});
-			}
-		}
-	};
-	
-	$scope.addReview = function() {
-		if($scope.addReviewButton == 0) {
-			angular.forEach($scope.reviews, function(rev, idx) {
-				if(rev.id == $scope.usersReview) {
-					$scope.newReview = angular.copy(rev);
-				}
-			});
-		} else {
-			var newReview = new ReviewDao($scope.newReview);
-			newReview.$save(function(result) {
-				if($scope.usersReview==null) {
-					$scope.reviewButton = "Edit Review";
-				} else {
-					$scope.reviews = _.filter($scope.reviews, function(review) { return review.id !== result.id; });
-				}		
-				$scope.data.turnAroundTime = result.locationTurnAroundTime;
-				$scope.reviews.splice(0, 0, result);
-				$scope.usersReview = result.id;
-			}, function(result) {
-				if(result.status==409) {
-					$scope.alerts.push({type:'danger', msg: 'Location was already reviewed by this user! Refresh this page!'});
-				} else {
-					$scope.alerts.push({type:'danger', msg: 'Error while saving review: ' + result.statusText});
-				}
-			});			
+        function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao, OfficesDao, TagService) {
 
-		}
-	}
-	$scope.addPicture = function() {
-		if($scope.addPictureButton==1) {
-			if($scope.childScopeHolder.$flow.files.length>0) {
-				var f1 = $scope.childScopeHolder.$flow.files[0];
-				if(f1.isUploading() || f1.size > 1024*1024*15) {
-					$scope.addPictureButton=0;					
-				} else {
-				
-					var newPic = new PicturesDao({fkLocation: $stateParams.locationId, caption: $scope.childScopeHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
-					newPic.$save(function(pic) {
-						LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
-							$scope.childScopeHolder.pictures = pictures;
-						});
-					});
-					$scope.childScopeHolder.$flow.cancel();
-					$scope.childScopeHolder.picCaption = "";
-					$scope.tabs.pictureTabActive = true;
-				}				
-			} else {
-				$scope.addPictureButton=0;
-			}
-		}
-	}
+
+            // permissions
+            $scope.allowedToEditPermission = false;
+
+            // status of buttons / areas
+            $scope.showButtonsMode= false;
+            $scope.showTabMode = true;
+            $scope.editLocationMode = false;
+            $scope.modifyReviewMode = false;
+            $scope.addPictureMode = false;
+            $scope.reviewButton = "Add Review";
+
+            // check user permission/hasReviews
+            function getlocationStatusForCurrentUser() {
+                $scope.showButtonsMode= true;
+                LocationsDao.locationStatusForCurrentUser({"id": $stateParams.locationId }, function (result) {
+                    $scope.allowedToEditPermission = result.allowedToEdit;
+                    if(result.hasReview) {
+                        $scope.usersReview = result.fkReview;
+                        $scope.reviewButton = "Edit Review";
+                    }
+                });
+            }
+
+            // load location base-data
+            $scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
+            // load location reviews
+            LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
+                $scope.reviews = reviews;
+                if(reviews.length>0) {
+                    $scope.tabs.active = [false, true, false, false];
+                }
+            });
+            // available tags in auto-completion
+            $scope.allTags = [];
+            // load all tags
+            TagService.get().then(function(data) {
+                $scope.allTags = data;
+            });
+
+            // all alerts currently shown
+            $scope.alerts = [];
+            // data of review in creation
+            $scope.newReview = {
+                    fkLocation:$stateParams.locationId,
+                    comment:'',
+                    favoriteMeal:'',
+                    rating:1,
+                    ratingExplained:'none'
+            };
+            // reference to review from current-user
+            $scope.usersReview = null;
+
+            // generic scope holder
+            $scope.childScopeHolder = {};
+
+
+            Authetication.checkLoggedIn().then(function(data) {
+                if(data.loggedIn){
+                    getlocationStatusForCurrentUser();
+                };
+            });
+            $scope.$on('userLoggedIn', function(event) {
+                getlocationStatusForCurrentUser();
+            });
+
+            // tabs state variable
+            $scope.tabs = {};
+            $scope.tabs.active = [true, false, false, false];
+            $scope.tabs.disabled = [false, false, false, false];
+
+            // load all pictures
+            LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
+                $scope.childScopeHolder.pictures = pictures;
+                if(pictures.length > 0) {
+                    $scope.tabs.active = [false, false, true, false];
+                }
+            });
+
+            // load all offices (for this community)
+            OfficesDao.query(function(offices) {
+                $scope.offices = offices;
+            });
+
+            // create map data
+            $scope.mapSelected = function() {
+                $scope.map = {
+                        center : {
+                            latitude : $scope.data.geoLat,
+                            longitude : $scope.data.geoLng
+                        },
+                        zoom : 13
+                };
+                $scope.marker = {
+                        id:$scope.data.id,
+                        coords: {
+                            latitude: $scope.data.geoLat,
+                            longitude: $scope.data.geoLng
+                        },
+                        markerOptions: {
+                            title: $scope.data.officialName
+                        }
+                }
+                $scope.mapTabShown = true;
+            };
+
+            function setRatingExplained(val) {
+                switch(val) {
+                case 1:
+                    $scope.newReview.ratingExplained = "I will never go there again!";
+                    break;
+                case 2:
+                    $scope.newReview.ratingExplained = "Not amongst my favorites, but I would eventually join.";
+                    break;
+                case 3:
+                    $scope.newReview.ratingExplained = "Liked it - somehow. Go there again.";
+                    break;
+                case 4:
+                    $scope.newReview.ratingExplained = "Nice place, happy to do it again";
+                    break;
+                case 5:
+                    $scope.newReview.ratingExplained = "One of my favorites! Couldn't get enough!";
+                    break;
+                }
+            }
+
+            $scope.$watch('newReview.rating', function() {
+                setRatingExplained($scope.newReview.rating);
+            });
+
+            $scope.hoveringOver = function(val) {
+                setRatingExplained(val);
+            }
+
+            $scope.hoveringOut = function() {
+                setRatingExplained($scope.newReview.rating);
+            }
+
+            $scope.closeAlert = function(index) {
+                $scope.alerts.splice(index, 1);
+            };
+
+            $scope.editLocationStart = function() {
+                $scope.showTabMode = false;
+                $scope.editLocationMode = true;
+                $scope.showButtonsMode= false;
+            };
+
+            $scope.modifyReviewStart = function() {
+                angular.forEach($scope.reviews, function(rev, idx) {
+                    if(rev.id == $scope.usersReview) {
+                        $scope.newReview = angular.copy(rev);
+                    }
+                });
+                $scope.showTabMode = false;
+                $scope.modifyReviewMode = true;
+                $scope.showButtonsMode= false;
+            };
+
+            $scope.addPictureStart = function() {
+                $scope.tabs.disabled = [true, true, false, true];
+                $scope.addPictureMode = true;
+                $scope.showButtonsMode= false;
+                $scope.tabs.active = [false, false, true, false];
+            };
+
+            $scope.cancelEdit = function() {
+                $scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
+                $scope.showView();
+                if($scope.childScopeHolder.$flow) {
+                    $scope.childScopeHolder.$flow.cancel();
+                }
+            };
+            $scope.showView = function() {
+                $scope.showTabMode = true;
+                $scope.editLocationMode = false;
+                $scope.modifyReviewMode = false;
+                $scope.addPictureMode = false;
+                $scope.showButtonsMode= true;
+                $scope.tabs.disabled = [false, false, false, false];
+            };
+
+            $scope.editLocationSave = function() {
+                LocationsDao.save($scope.data, function(result) {
+                    $scope.tabs.active = [true, false, false, false];
+                    $scope.showView();
+                }, function(result) {
+                    $scope.alerts.push({type:'danger', msg: 'Error while saving location: ' + result.statusText});
+                });
+            };
+
+            $scope.modifyReviewSave = function() {
+                var newReview = new ReviewDao($scope.newReview);
+                newReview.$save(function(result) {
+                    if($scope.usersReview==null) {
+                        $scope.reviewButton = "Edit Review";
+                    } else {
+                        $scope.reviews = _.filter($scope.reviews, function(review) { return review.id !== result.id; });
+                    }
+                    $scope.data.turnAroundTime = result.locationTurnAroundTime;
+                    $scope.reviews.splice(0, 0, result);
+                    $scope.usersReview = result.id;
+                    $scope.tabs.active = [false, true, false, false];
+                    $scope.showView();
+                }, function(result) {
+                    if(result.status==409) {
+                        $scope.alerts.push({type:'danger', msg: 'Location was already reviewed by this user! Refresh this page!'});
+                    } else {
+                        $scope.alerts.push({type:'danger', msg: 'Error while saving review: ' + result.statusText});
+                    }
+                });
+            }
+            $scope.addPictureSave = function() {
+                if($scope.childScopeHolder.$flow.files.length>0) {
+                    var f1 = $scope.childScopeHolder.$flow.files[0];
+                    if(!f1.isUploading() && f1.size < 1024*1024*15) {
+                        var newPic = new PicturesDao({fkLocation: $stateParams.locationId, caption: $scope.childScopeHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
+                        newPic.$save(function(pic) {
+                            LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
+                                $scope.childScopeHolder.pictures = pictures;
+                            });
+                        });
+                        $scope.childScopeHolder.$flow.cancel();
+                        $scope.childScopeHolder.picCaption = "";
+                        $scope.showView();
+                    }
+                }
+            }
 	
 }]).
 controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$location', '$window', 'LocationsDao', 'OfficesDao', 'Authetication',
