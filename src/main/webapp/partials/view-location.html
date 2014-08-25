@@ -25,8 +25,9 @@
             </tab>
             <tab heading="Map" ng-click="mapSelected()" active="tabs.active[3]" disabled="tabs.disabled[3]">
                 <div ng-if="mapTabShown">
-                    <google-map id="locationMap" center="map.center" zoom="map.zoom" draggable="false" events='map.events'>
+                    <google-map id="locationMap" center="map.center" zoom="map.zoom" draggable="true" events='map.events'>
                         <marker idKey='marker.id' coords='marker.coords' options="marker.markerOptions" />
+                        <marker ng-repeat="marker in officeMarker" idKey='marker.id' coords='marker.coords' options="marker.markerOptions" icon="'images/office.png'"/>
                     </google-map>
                 </div>
             </tab>

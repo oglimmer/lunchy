@@ -264,6 +264,20 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                             title: $scope.data.officialName
                         }
                 }
+                angular.forEach($scope.offices, function(off) {
+                    if(off.id == $scope.data.fkOffice){
+                        $scope.officeMarker = [{
+                            coords: {
+                                latitude: off.geoLat,
+                                longitude: off.geoLng
+                            },
+                            markerOptions: {
+                                title: "Office " + off.name
+                            },
+                            id: 'officeMarker'
+                        }];
+                    }
+                })
                 $scope.mapTabShown = true;
             };
 
@@ -412,7 +426,8 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 					},
 					markerOptions: {
 						title: "Office " + off.name
-					}
+					},
+                    id: 'officeMarker'
 				}];
 			}
 		})
@@ -445,7 +460,8 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	});
 		
 	$scope.mapCreated = function() {
-		$("#browseMap .angular-google-map-container").height(angular.element($window).height()-110);
+        var topArea = angular.element($window).width()<768 ? 75 : 110;
+		$("#browseMap .angular-google-map-container").height(angular.element($window).height()-topArea);
 	}
 	
 	OfficesDao.locations({id: $scope.selectedOffice}, function (locations) {

@@ -8,11 +8,11 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="webjars/jquery-ui/1.11.0/jquery-ui.min.css" rel="stylesheet" /><!-- tag autocomplete -->
-	<link href="css/styles.css?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>" rel="stylesheet" />
-	<!-- <link href="webjars/angular-ui/0.4.0/angular-ui.min.css" rel="stylesheet" />  -->	
+	<!-- <link href="webjars/angular-ui/0.4.0/angular-ui.min.css" rel="stylesheet" />  -->
 	<link href="webjars/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"><!-- modal-dialog and more -->
 	<link href="css/bootstrap-theme.min.css" rel="stylesheet"><!-- modal-dialog and more -->
 	<link href="webjars/ng-table/0.3.3/ng-table.min.css" rel="stylesheet"><!-- ng-table -->
+    <link href="css/styles.css?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>" rel="stylesheet" />
 </head>
 <body ng-controller="LunchyControllerMain" flow-prevent-drop>
 

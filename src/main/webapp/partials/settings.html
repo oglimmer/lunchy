@@ -1,70 +1,65 @@
-<br />
-<br /><br /><br />
 <div class="container">
 
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
-	
-	<div class="row">
-		<div class="col-lg-12">
-			<form novalidate name="settingsForm" class="form-horizontal">
-				<fieldset>
-					<legend>Settings</legend>
-					<div class="form-group">
-						<label for="officialName" class="col-lg-2 control-label">Email</label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="data.email" focus="true" required>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="streetName" class="col-lg-2 control-label">Nickname</label>
-						<div class="col-lg-10">
-							<input type="text" class="form-control" ng-model="data.displayname" required>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="fkBaseOffice" class="col-lg-2 control-label">Your office</label>
-						<div class="col-lg-10">
-							<select class="form-control" ng-model="data.fkBaseOffice" required>
-								<option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==data.fkBaseOffice">{{office.name}}</option>
-							</select>														
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="emailUpdates" class="col-lg-2 control-label">Email updates</label>
-						<div class="col-lg-10">
-							<input class="form-control" type="checkbox" ng-model="data.emailUpdates" ng-true-value="'0'" ng-false-value="'1'" />
-							<span class="help-block">When checked Lunchy will provide a weekly email update.</span>																			
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="streetName" class="col-lg-2 control-label">Current password</label>
-						<div class="col-lg-10">
-							<input type="password" class="form-control" ng-model="data.currentpassword" required>
-							<span class="help-block">Always needed.</span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="streetName" class="col-lg-2 control-label">New password</label>
-						<div class="col-lg-10">
-							<input type="password" class="form-control" ng-model="data.password" >
-							<span class="help-block">If left blank no new password will be set</span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="streetName" class="col-lg-2 control-label">Password verification</label>
-						<div class="col-lg-10">
-							<input type="password" class="form-control" ng-model="data.newpasswordverification" ui-validate=" '$value==data.password' " ui-validate-watch=" 'data.password' ">
-						</div>
-					</div>
-					
-					<div class="form-group">
-						<div class="col-lg-10 col-lg-offset-2">
-							<button type="button" class="btn btn-primary" ng-click="saveEdit()" ng-disabled="settingsForm.$invalid">Save</button>
-						</div>
-					</div>
-										
-				</fieldset>
-			</form>
-		</div>
-	</div>
+
+    <form novalidate name="settingsForm" class="form-horizontal">
+        <fieldset>
+            <legend>Settings</legend>
+            <div class="row form-group">
+                <label for="officialName" class="col-md-2 control-label">Email</label>
+                <div class="col-md-10">
+                    <input type="text" id="officialName" class="form-control" ng-model="data.email" focus="true" required>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="streetName" class="col-md-2 control-label">Nickname</label>
+                <div class="col-md-10">
+                    <input type="text" id="streetName" class="form-control" ng-model="data.displayname" required>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="fkBaseOffice" class="col-md-2 control-label">Your office</label>
+                <div class="col-md-10">
+                    <select class="form-control" id="fkBaseOffice" ng-model="data.fkBaseOffice" required>
+                        <option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==data.fkBaseOffice">{{office.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="emailUpdates" class="col-md-2 control-label">Email updates</label>
+                <div class="col-md-10">
+                    <input class="form-control" id="emailUpdates" type="checkbox" ng-model="data.emailUpdates" ng-true-value="'0'" ng-false-value="'1'" />
+                    <span class="help-block">When checked Lunchy will provide a weekly email update.</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="currentpassword" class="col-md-2 control-label">Current password</label>
+                <div class="col-md-10">
+                    <input type="password" id="currentpassword" class="form-control" ng-model="data.currentpassword" required>
+                    <span class="help-block">Always needed.</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="password" class="col-md-2 control-label">New password</label>
+                <div class="col-md-10">
+                    <input type="password" id="password" class="form-control" ng-model="data.password" >
+                    <span class="help-block">If left blank no new password will be set</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="newpasswordverification" class="col-md-2 control-label">Password verification</label>
+                <div class="col-md-10">
+                    <input type="password" id="newpasswordverification" class="form-control" ng-model="data.newpasswordverification" ui-validate=" '$value==data.password' " ui-validate-watch=" 'data.password' ">
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <button type="button" class="btn btn-primary" ng-click="saveEdit()" ng-disabled="settingsForm.$invalid">Save</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+
 </div>

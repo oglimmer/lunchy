@@ -1,63 +1,54 @@
-<br/><br/><br/>
 
 <div class="container">
 
-	<div class="row">
-		<div class="col-lg-12">
-			<form class="form-horizontal">
-				<fieldset>
-					<div class="form-group">
-						<label for="data.fkOffice" class="col-lg-1 control-label">Office</label>
-						<div class="col-lg-11">
-							<select class="form-control" ng-model="selectedOffice">
-								<option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==selectedOffice">{{office.name}}</option>
-							</select>							
-						</div>
-					</div>
-				</fieldset>
-			</form>			
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-lg-12">
-		
-			<table ng-table="tableParams" class="table table-striped" show-filter="true">
-		        <tr ng-repeat="item in $data" ng-click="rowclick(item)">
-		            <td ng-show="Authetication.loggedIn" data-title="'R'" sortable="'reviewed'">
-		                <span class="glyphicon" ng-class="{'glyphicon-ok':item.reviewed}"></span>
-		            </td>
-		            <td data-title="'Official Name'" sortable="'officialName'" filter="{ 'officialName': 'text' }">
-		                {{item.officialName}}
-		            </td>
-		            <td data-title="companyName+' name'" sortable="'streetName'" filter="{ 'streetName': 'text' }">
-		                {{item.streetName}}
-		            </td>
-		            <td data-title="'Turn around time'" sortable="'turnAroundTime'" filter="{ 'turnAroundTime': 'text' }">
-		                {{item.turnAroundTime}}
-		            </td>
-		            <td data-title="'# Reviews'" sortable="'numberOfReviews'" filter="{ 'numberOfReviews': 'text' }">
-		                {{item.numberOfReviews}}
-		            </td>
-		            <td data-title="'Avg Rating'" sortable="'avgRating'" filter="{ 'avgRating': 'text' }">
-		                {{item.avgRating}}
-		            </td>
-		            <td data-title="'Last Rating'" sortable="'lastRating'">
-		                {{item.lastRating|date:'shortDate'}}
-		            </td>
-		            <td data-title="'Last Update'" sortable="'lastUpdate'">
-		                {{item.lastUpdate|date:'shortDate'}}
-		            </td>
-		            <!-- 
-		            <td data-title="'Address'" sortable="'city'" filter="{ 'city': 'text' }">
-		                {{item.address}}, {{item.city}}
-		            </td>
-		             -->
-		            <td data-title="'Tags'" sortable="'tags'" filter="{ 'tags': 'text' }">
-		                {{item.tags}}
-		            </td>
-		        </tr>
-		    </table>
-		
-		</div>
-	</div>
+    <form class="form-horizontal">
+        <fieldset>
+            <div class="row form-group">
+                <label for="selectedOffice" class="col-sm-1 control-label">Office</label>
+                <div class="col-sm-11">
+                    <select class="form-control" id="selectedOffice" ng-model="selectedOffice">
+                        <option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==selectedOffice">{{office.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <table ng-table="tableParams" class="table table-striped" show-filter="true">
+        <tr ng-repeat="item in $data" ng-click="rowclick(item)">
+            <td ng-show="Authetication.loggedIn" data-title="'R'" sortable="'reviewed'">
+                <span class="glyphicon" ng-class="{'glyphicon-ok':item.reviewed}"></span>
+            </td>
+            <td data-title="'Official Name'" sortable="'officialName'" filter="{ 'officialName': 'text' }">
+                {{item.officialName}}
+            </td>
+            <td data-title="companyName+' name'" sortable="'streetName'" filter="{ 'streetName': 'text' }">
+                {{item.streetName}}
+            </td>
+            <td data-title="'Turn around time'" sortable="'turnAroundTime'" filter="{ 'turnAroundTime': 'text' }">
+                {{item.turnAroundTime}}
+            </td>
+            <td data-title="'# Reviews'" sortable="'numberOfReviews'" filter="{ 'numberOfReviews': 'text' }">
+                {{item.numberOfReviews}}
+            </td>
+            <td data-title="'Avg Rating'" sortable="'avgRating'" filter="{ 'avgRating': 'text' }">
+                {{item.avgRating}}
+            </td>
+            <td data-title="'Last Rating'" sortable="'lastRating'">
+                {{item.lastRating|date:'shortDate'}}
+            </td>
+            <td data-title="'Last Update'" sortable="'lastUpdate'">
+                {{item.lastUpdate|date:'shortDate'}}
+            </td>
+            <!--
+            <td data-title="'Address'" sortable="'city'" filter="{ 'city': 'text' }">
+                {{item.address}}, {{item.city}}
+            </td>
+             -->
+            <td data-title="'Tags'" sortable="'tags'" filter="{ 'tags': 'text' }">
+                {{item.tags}}
+            </td>
+        </tr>
+    </table>
+
 </div>
