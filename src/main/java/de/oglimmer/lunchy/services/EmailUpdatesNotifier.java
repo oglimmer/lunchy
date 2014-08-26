@@ -34,7 +34,7 @@ public enum EmailUpdatesNotifier {
 		if (LunchyProperties.INSTANCE.isEmailNotificationEnabled()) {
 			log.debug("Starting EmailUpdatesNotifier...");
 			executorService = Executors.newSingleThreadScheduledExecutor();
-			executorService.scheduleAtFixedRate(new Check(), 0, 15, TimeUnit.SECONDS);
+			executorService.scheduleAtFixedRate(new Check(), 0, 5, TimeUnit.MINUTES);
 		}
 	}
 
