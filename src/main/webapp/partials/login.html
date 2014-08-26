@@ -1,0 +1,146 @@
+
+<div ng-show="initShowMode==0">
+    <div class="modal-header">
+        <h3 class="modal-title">Login to Lunchy</h3>
+    </div>
+    <div class="modal-body">
+
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+        <form novalidate name="loginForm" id="loginForm">
+            <fieldset>
+                <div class="row form-group">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <input class="form-control" type="email" placeholder="email" name="email" ng-model="login.email" required focus="true"/>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <input class="form-control" type="password" placeholder="password" name="password" ng-model="login.password" required />
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <a href="#" ng-click="passwordForgotten()">Password forgotten?</a>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <div class="row">
+            <div class="col-sm-4 text-left">
+                <button class="btn btn-info" ng-click="register()">Register account</button>
+            </div>
+            <div class="col-sm-4 v-center">
+                <div class="v-content"><input type="checkbox" ng-model="login.keepMeLoggedIn" /><span ng-click="login.keepMeLoggedIn=!login.keepMeLoggedIn"> Keep me logged in </span></div>
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-primary" ng-click="submitLogin()" ng-disabled="loginForm.$invalid">Log me in</button>
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-show="initShowMode==1" ng-controller="LunchyControllerLoginPassReset">
+    <div class="modal-header">
+        <h3 class="modal-title">Password reset</h3>
+    </div>
+    <div class="modal-body">
+
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+        <form novalidate name="helpForm" id="helpForm" class="form-horizontal">
+            <fieldset>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <input type="email" class="form-control" ng-model="passReset.email" placeholder="email" focus="true" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <h5>To reset your password enter your email and press Reset. We will send you a link where you can reset your password.</h5>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="submitPassReset()" ng-disabled="helpForm.$invalid">Reset</button>
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</div>
+
+<div ng-show="initShowMode==2" ng-controller="LunchyControllerLoginRegister">
+    <div class="modal-header">
+        <h3 class="modal-title">Happy to welcome a new member!</h3>
+    </div>
+    <div class="modal-body">
+
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+        <form novalidate name="registerForm" id="registerForm">
+            <fieldset>
+                <div class="row form-group">
+                    <label for="email" class="col-sm-4 control-label">Email</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="email" id="email" placeholder="email" name="email" ng-model="newUser.email" ng-model-options="{ debounce: 1000 }" required unique="email" focus="true" />
+                    </div>
+                    <div class="col-sm-2">
+                        <span ng-show="!registerForm.email.$error.required && !registerForm.email.$error.email && !registerForm.email.$error.unique">✔</span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="displayname" class="col-sm-4 control-label">Screen name</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="text" id="displayname" placeholder="screen name" name="displayname" ng-model="newUser.displayname" required />
+                    </div>
+                    <div class="col-sm-2">
+                        <span ng-show="!registerForm.displayname.$error.required">✔</span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="fkBaseOffice" class="col-sm-4 control-label">Your office</label>
+                    <div class="col-sm-6">
+                        <select name="fkBaseOffice" class="form-control" ng-model="newUser.fkBaseOffice" required>
+                            <option ng-repeat="office in offices" id="fkBaseOffice" value="{{office.id}}">{{office.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <span ng-show="!registerForm.fkBaseOffice.$error.required">✔</span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="password" class="col-sm-4 control-label">Password</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="password" id="password" placeholder="password" name="password" ng-model="newUser.password" required />
+                    </div>
+                    <div class="col-sm-2">
+                        <span ng-show="!registerForm.password.$error.required">✔</span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label for="confirm_password" class="col-sm-4 control-label">Password verification</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="password" id="confirm_password" placeholder="password" name="confirm_password" ng-model="newUser.confirm_password" ui-validate=" '$value==newUser.password' " ui-validate-watch=" 'newUser.password' " />
+                    </div>
+                    <div class="col-sm-2">
+                        <span ng-show="!registerForm.confirm_password.$error.validator && !registerForm.password.$error.required">✔</span>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="submitRegister()" ng-disabled="registerForm.$invalid">Register</button>
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+</div>
+

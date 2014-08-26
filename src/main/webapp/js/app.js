@@ -14,7 +14,7 @@ config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRou
 	state('updates', {
 	      url: '/updates',
 	      templateUrl: 'partials/updates.html',
-	      controller : 'LunchyControllerMain'
+	      controller : 'LunchyControllerUpdates'
 	    }).
 		state('view', {
 	      url: '/view/:locationId',
@@ -220,21 +220,21 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 					});		
 			}
 		},
-		showRegister: function() {
-			var thiz = this;
-			var modalInstance = $modal.open({
-			  templateUrl: 'partials/register.html',
-			  controller: 'LunchyControllerRegister'		  
-			});
-			modalInstance.result.then(function (result) {
-				console.log(result);
-				if(result.success) {
-					thiz.logInUser(result);
-				}
-			}, function () {
-				console.log('Modal dismissed at: ' + new Date());
-			});
-		}
+        showLogin: function() {
+            var thiz = this;
+            var modalInstance = $modal.open({
+                templateUrl: 'partials/login.html',
+                controller: 'LunchyControllerLogin'
+            });
+            modalInstance.result.then(function (result) {
+                console.log(result);
+                if(result.success) {
+                    thiz.logInUser(result);
+                }
+            }, function () {
+                console.log('Modal dismissed at: ' + new Date());
+            });
+        }
 	};
 }]).
 factory('ListConfig', function() {

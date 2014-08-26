@@ -3,87 +3,99 @@
 /* Controllers */
 
 angular.module('LunchyApp.controllers', []).
-controller('LunchyControllerMain', [
+controller('LunchyControllerMain', ['$scope', 'LoginDao', 'UserDao', 'UpdatesDao', '$location', 'Authetication', '$modal',
+        function($scope, LoginDao, UserDao, UpdatesDao, $location, Authetication, $modal) {
+
+            $scope.Authetication = Authetication;
+
+            $scope.logout = function() {
+                LoginDao.logout();
+                $scope.Authetication.loggedIn = false;
+                $location.path("/");
+            };
+
+            $scope.login = function() {
+                $scope.Authetication.showLogin();
+            };
+
+            $scope.getClass = function(path) {
+                if ($location.path().substr(0, path.length) == path) {
+                    return "active"
+                } else {
+                    return ""
+                }
+            };
+
+}]).
+controller('LunchyControllerUpdates', [
 	'$scope', 'LoginDao', 'UserDao', 'UpdatesDao', '$location', 'Authetication', '$modal',
 	function($scope, LoginDao, UserDao, UpdatesDao, $location, Authetication, $modal) {
-	
-	$scope.Authetication = Authetication;
+
 	$scope.latestUpdates = UpdatesDao.query();
-		
-	$scope.logout = function() {
-		LoginDao.logout();	
-		$scope.Authetication.loggedIn = false;
-		$location.path("/");
-	};
-	
-	$scope.showRegister = function() {
-		$scope.Authetication.showRegister();
-	}
 
-	$scope.showHelp = function() {
-		$modal.open({
-			templateUrl : 'partials/help.html',
-			controller : 'LunchyControllerHelp'
-		});
-	}
-
-	$scope.getClass = function(path) {
-	    if ($location.path().substr(0, path.length) == path) {
-	      return "active"
-	    } else {
-	      return ""
-	    }
-	}
-		
 }]).
-controller('LunchyControllerLogin', ['$scope', 'LoginDao', '$timeout', 'Authetication', 'StorageService', function ($scope, LoginDao, $timeout, Authetication, StorageService) {
-	
-	$scope.submitLogin = function() {
-		LoginDao.login({email:$scope.email, password:$scope.password}, function(data) {
-			if(data.success) {
-				$scope.Authetication.logInUser(data);
-				$scope.password = "";
-				if($scope.email.indexOf('#')===0) {
-					StorageService.save('longTimeToken', data.longTimeToken);
-				}
-			} else {
-				$scope.errorMsg = data.errorMsg;
-				$timeout(function() {$('#LoginError').trigger('show');}, 1);
-				$timeout(function() {$('#LoginError').trigger('hide');}, 3000);				
-			}
-		});		
-	};
+controller('LunchyControllerLogin', ['$scope', '$modalInstance', 'LoginDao', '$timeout', 'Authetication', 'StorageService', function ($scope, $modalInstance, LoginDao, $timeout, Authetication, StorageService) {
 
-	// Firefox password manager sets user/pass and angularJS is not informed.
-	$scope.init = function() {
-		$timeout(function() {
-			$('input[ng-model]').trigger('input');
-		}, 100);
-	};
+        $scope.initShowMode = 0;
+        $scope.alerts = [];
+        $scope.$modalInstance = $modalInstance;
+        $scope.login = {};
+
+        $scope.passwordForgotten = function() {
+            $scope.alerts = [];
+            $scope.initShowMode = 1;
+        }
+
+        $scope.register = function() {
+            $scope.alerts = [];
+            $scope.initShowMode = 2;
+        }
+
+        $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+        }
+
+        $scope.closeAlert = function(index) {
+            $scope.alerts.splice(index, 1);
+        };
+
+        $scope.submitLogin = function() {
+            $scope.alerts = [];
+            LoginDao.login({email: $scope.login.email, password: $scope.login.password, keepLoggedIn: $scope.login.keepMeLoggedIn}, function(data) {
+                if(data.success) {
+                    Authetication.logInUser(data);
+                    $scope.password = "";
+                    if($scope.login.keepMeLoggedIn) {
+                        StorageService.save('longTimeToken', data.longTimeToken);
+                    }
+                    $modalInstance.close('ok');
+                } else {
+                    $scope.alerts.push({type:'danger',msg:data.errorMsg});
+                }
+            });
+        };
+
+        // Firefox password manager sets user/pass and angularJS is not informed.
+        $scope.init = function() {
+            $timeout(function() {
+                $('input[ng-model]').trigger('input');
+            }, 100);
+        };
 	
 }]).
-controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', 'OfficesDao', function ($scope, $modalInstance, UserDao, OfficesDao) {
+controller('LunchyControllerLoginRegister', ['$scope', 'UserDao', 'OfficesDao', function ($scope, UserDao, OfficesDao) {
 	
 	$scope.newUser = {};
-	$scope.alerts = [];
 
 	OfficesDao.query(function(offices) {
 		$scope.offices = offices;
 	});
 
-	$scope.cancelRegister = function() {
-		$modalInstance.dismiss('cancel');
-	}
-	
-	$scope.closeAlert = function(index) {
-		$scope.alerts.splice(index, 1);
-	};
-	
 	$scope.submitRegister = function() {	
 		var newUser = new UserDao($scope.newUser);
 		newUser.$save(function(result) {
 			if(result.success) {
-				$modalInstance.close(result);				
+                $scope.$modalInstance.close(result);
 			} else {
 				$scope.alerts.push({type:'danger',msg:result.errorMsg});
 			}
@@ -91,22 +103,13 @@ controller('LunchyControllerRegister', ['$scope', '$modalInstance', 'UserDao', '
 	}
 	
 }]).
-controller('LunchyControllerHelp', ['$scope', '$modalInstance', 'UserDao', function ($scope, $modalInstance, UserDao) {
+controller('LunchyControllerLoginPassReset', ['$scope', 'UserDao', function ($scope, UserDao) {
 	
 	$scope.data = {};
-	$scope.alerts = [];
-	
-	$scope.cancelHelp = function() {
-		$modalInstance.dismiss('cancel');
-	}
-	
-	$scope.closeAlert = function(index) {
-		$scope.alerts.splice(index, 1);
-	};
-	
-	$scope.submitHelp = function() {
-		UserDao.sendPasswordLink({id:$scope.data.email});
-		$modalInstance.dismiss('cancel');
+
+	$scope.submitPassReset = function() {
+		UserDao.sendPasswordLink({id:$scope.passReset.email});
+        $scope.$modalInstance.dismiss('cancel');
 	}
 	
 }]).

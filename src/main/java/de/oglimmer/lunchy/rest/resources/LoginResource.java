@@ -72,16 +72,12 @@ public class LoginResource {
 	public LoginResponse login(@Context HttpServletRequest request, InputParam input) {
 		LoginResponse result = new LoginResponse();
 		String email = input.getEmail();
-		boolean longTimeLogin = email != null && email.startsWith("#");
-		if (longTimeLogin) {
-			email = email.substring(1);
-		}
 		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email, Community.get(request));
 		if (user != null) {
 			if (!BCrypt.checkpw(input.getPassword(), user.getPassword())) {
 				result.setErrorMsg(USER_PASS_WRONG);
 			} else {
-				if (longTimeLogin) {
+				if (input.isKeepLoggedIn()) {
 					loginProvider.generateToken(user);
 				}
 				loginProvider.login(result, user, request.getSession(true));
@@ -108,6 +104,7 @@ public class LoginResource {
 	public static class InputParam {
 		private String email;
 		private String password;
+		private boolean keepLoggedIn;
 	}
 
 }

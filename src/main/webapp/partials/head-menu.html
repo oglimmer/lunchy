@@ -6,26 +6,18 @@
 			</button>
 			<a class="navbar-brand" href="#">Lunchy</a>
 		</div>
-		<div class="navbar-collapse collapse hidden-md" ng-class="!navCollapsed && 'in'">
+		<div class="navbar-collapse collapse" ng-class="!navCollapsed && 'in'">
 			<ul class="nav navbar-nav" ng-click="navCollapsed=true">
 				<li ng-class="getClass('/updates')"><a href="#/updates">Latest updates</a></li>
 				<li ng-class="getClass('/browse')"><a href="#/browse">Browse</a></li>
 				<li ng-class="getClass('/list')"><a href="#/list">List</a></li>
-
-				<li ng-class="getClass('/add')"><a href="#/add">Add</a></li>
-
-				<li ng-show="Authetication.loggedIn"><a href="#/settings">Settings</a></li>
-				<li ng-show="Authetication.loggedIn"><a href="" ng-click="logout()">Log out</a></li>
+                <li ng-show="Authetication.loggedIn" ng-class="getClass('/add')"><a href="#/add">Add</a></li>
 			</ul>
-			<span ng-hide="Authetication.loggedIn">
-				<form class="navbar-form navbar-right" role="form" ng-submit="submitLogin()" ng-controller="LunchyControllerLogin" ng-init="init()">
-					<input type="email" placeholder="Email" class="form-control" ng-model="email">
-					<input type="password" placeholder="Password" class="form-control" ng-model="password">
-					<button type="submit" class="btn btn-success" id="LoginError" popover-trigger="show" popover-placement="bottom" popover="{{errorMsg}}">Sign in</button>
-					<button type="button" class="btn btn-default" ng-click="showRegister()">Register</button>
-					<button type="button" class="btn btn-default" ng-click="showHelp()">Help</button>
-				</form>
-			</span>
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-hide="Authetication.loggedIn"><a href="" ng-click="login()">Login/Register</a></li>
+                <li ng-show="Authetication.loggedIn" ng-class="getClass('/settings')"><a href="#/settings">Settings</a></li>
+                <li ng-show="Authetication.loggedIn"><a href="" ng-click="logout()">Log out</a></li>
+            </ul>
 		</div>
 		<!--/.navbar-collapse -->
 	</div>
