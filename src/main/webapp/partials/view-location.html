@@ -9,10 +9,10 @@
             <tab heading="Base data" active="tabs.active[0]" disabled="tabs.disabled[0]">
                 <div ng-include="'partials/view-location/base-data.html'"></div>
             </tab>
-            <tab heading="Reviews" active="tabs.active[1]" disabled="tabs.disabled[1]">
+            <tab heading="Reviews ({{ reviews.length }})" active="tabs.active[1]" disabled="tabs.disabled[1]">
                 <div ng-include="'partials/view-location/review-pane.html'"></div>
             </tab>
-            <tab heading="Pictures" active="tabs.active[2]" disabled="tabs.disabled[2]">
+            <tab heading="Pictures ({{ childScopeHolder.pictures.length }})" active="tabs.active[2]" disabled="tabs.disabled[2]">
                 <carousel>
                     <slide ng-repeat="pic in childScopeHolder.pictures" active="pic.active">
                         <img ng-src="./rest/pictures/{{pic.filename}}" style="margin:auto;"/>

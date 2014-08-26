@@ -193,7 +193,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             // load location reviews
             LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
                 $scope.reviews = reviews;
-                if(reviews.length>0) {
+                if(reviews.length>0 && !$scope.tabs.active[2]) {
                     $scope.tabs.active = [false, true, false, false];
                 }
             });
