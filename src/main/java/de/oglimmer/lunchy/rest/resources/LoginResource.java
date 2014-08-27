@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -40,7 +39,7 @@ public class LoginResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public LoginResponse check(@Context HttpServletRequest request, @QueryParam(value = "longTimeToken") String longTimeToken) {
 		LoginResponse response = new LoginResponse();
-		UsersRecord user = loginProvider.getLoggedInUser(request.getSession(false), Community.get(request));
+		UsersRecord user = loginProvider.getLoggedInUser(request, Community.get(request));
 		if (user != null) {
 			loginProvider.login(response, user, request.getSession(true));
 		}
@@ -90,9 +89,8 @@ public class LoginResource {
 
 	@DELETE
 	public void logout(@Context HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			UsersRecord user = loginProvider.getLoggedInUser(request.getSession(false), Community.get(request));
+		UsersRecord user = loginProvider.getLoggedInUser(request, Community.get(request));
+		if (user != null) {
 			loginProvider.removeToken(user);
 			loginProvider.destroySession(request.getSession(false));
 		}

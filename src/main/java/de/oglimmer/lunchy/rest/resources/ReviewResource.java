@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
+import de.oglimmer.lunchy.rest.LoginResponseProvider;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.dto.Review;
 import de.oglimmer.lunchy.rest.dto.ReviewUpdateResponse;
@@ -59,7 +60,7 @@ public class ReviewResource {
 
 			if (reviewRec.getId() == null || reviewRec.getId() == 0) {
 				reviewRec.setFkCommunity(Community.get(request));
-				reviewRec.setFkUser((Integer) request.getSession(false).getAttribute("userId"));
+				reviewRec.setFkUser(LoginResponseProvider.INSTANCE.getLoggedInUserId(request));
 				reviewRec.setCreatedOn(new Timestamp(new Date().getTime()));
 			}
 			reviewRec.setLastUpdate(new Timestamp(new Date().getTime()));

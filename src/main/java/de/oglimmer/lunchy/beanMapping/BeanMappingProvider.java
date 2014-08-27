@@ -3,8 +3,11 @@ package de.oglimmer.lunchy.beanMapping;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import lombok.SneakyThrows;
@@ -40,6 +43,14 @@ public enum BeanMappingProvider {
 		T obj = dbm.map(source, destinationClass);
 		keyResolver.resolve(source, obj);
 		return obj;
+	}
+
+	public <T> List<T> mapList(Collection<?> col, Class<T> clazz) {
+		List<T> resultList = new ArrayList<>();
+		for (Object rec : col) {
+			resultList.add(map(rec, clazz));
+		}
+		return resultList;
 	}
 
 }

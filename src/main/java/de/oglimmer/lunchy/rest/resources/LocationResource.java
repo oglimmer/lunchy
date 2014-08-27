@@ -2,7 +2,6 @@ package de.oglimmer.lunchy.rest.resources;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -36,8 +35,7 @@ import de.oglimmer.lunchy.database.dao.PicturesDao;
 import de.oglimmer.lunchy.database.dao.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
-import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
-import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
+import de.oglimmer.lunchy.rest.LoginResponseProvider;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.UserRightException;
 import de.oglimmer.lunchy.rest.dto.Location;
@@ -53,31 +51,23 @@ public class LocationResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/reviews")
 	public List<Review> queryReviews(@PathParam("id") int id) {
-		List<Review> resultList = new ArrayList<>();
-		for (ReviewsRecord reviewRec : ReviewDao.INSTANCE.getList(id)) {
-			resultList.add(BeanMappingProvider.INSTANCE.map(reviewRec, Review.class));
-		}
-		return resultList;
+		return BeanMappingProvider.INSTANCE.mapList(ReviewDao.INSTANCE.getList(id), Review.class);
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/pictures")
 	public List<Picture> queryPictures(@PathParam("id") int id) {
-		List<Picture> resultList = new ArrayList<>();
-		for (PicturesRecord reviewRec : PicturesDao.INSTANCE.getList(id)) {
-			resultList.add(BeanMappingProvider.INSTANCE.map(reviewRec, Picture.class));
-		}
-		return resultList;
+		return BeanMappingProvider.INSTANCE.mapList(PicturesDao.INSTANCE.getList(id), Picture.class);
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/locationStatusForCurrentUser")
-	public LocationStatus locationStatusForCurrentUser(@Context HttpServletRequest request, @PathParam("id") int id) {
-		Integer userId = (Integer) request.getSession(false).getAttribute("userId");
+	public LocationStatusResponse locationStatusForCurrentUser(@Context HttpServletRequest request, @PathParam("id") int id) {
+		Integer userId = LoginResponseProvider.INSTANCE.getLoggedInUserId(request);
 		Integer reviewId = ReviewDao.INSTANCE.hasUserReview(id, userId);
-		LocationStatus result = new LocationStatus();
+		LocationStatusResponse result = new LocationStatusResponse();
 		if (reviewId != null) {
 			result.setHasReview(true);
 			result.setFkReview(reviewId);
@@ -124,7 +114,7 @@ public class LocationResource {
 			throw new RuntimeException("wrong id");
 		}
 		LocationRecord locationRec = convertDtoToRecord(locationDto, Community.get(request));
-		if (locationRec.getFkUser() != request.getSession(false).getAttribute("userId")) {
+		if (locationRec.getFkUser() != LoginResponseProvider.INSTANCE.getLoggedInUserId(request)) {
 			SecurityProvider.INSTANCE.checkConfirmedUser(request);
 		}
 		addInitialData(request, locationRec);
@@ -134,7 +124,7 @@ public class LocationResource {
 	private void addInitialData(HttpServletRequest request, LocationRecord locationRec) {
 		if (locationRec.getId() == null || locationRec.getId() == 0) {
 			locationRec.setFkCommunity(Community.get(request));
-			locationRec.setFkUser((Integer) request.getSession(false).getAttribute("userId"));
+			locationRec.setFkUser(LoginResponseProvider.INSTANCE.getLoggedInUserId(request));
 			locationRec.setCreatedOn(new Timestamp(new Date().getTime()));
 			OfficesRecord office = OfficeDao.INSTANCE.getById(locationRec.getFkOffice(), Community.get(request));
 			locationRec.setCountry(office.getCountry());
@@ -206,7 +196,7 @@ public class LocationResource {
 	}
 
 	@Data
-	public static class LocationStatus {
+	public static class LocationStatusResponse {
 		private boolean hasReview;
 		private boolean allowedToEdit;
 		private Integer fkReview;

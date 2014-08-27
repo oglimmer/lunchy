@@ -25,6 +25,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.PicturesDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
+import de.oglimmer.lunchy.rest.LoginResponseProvider;
 import de.oglimmer.lunchy.rest.PictureScaler;
 import de.oglimmer.lunchy.rest.dto.Picture;
 import de.oglimmer.lunchy.services.Community;
@@ -81,7 +82,7 @@ public class PictureResource {
 
 		if (input.getId() == null || input.getId() == 0) {
 			rec.setFkCommunity(Community.get(request));
-			rec.setFkUser((Integer) request.getSession(false).getAttribute("userId"));
+			rec.setFkUser(LoginResponseProvider.INSTANCE.getLoggedInUserId(request));
 			rec.setCreatedOn(new Timestamp(new Date().getTime()));
 			rec.setFkLocation(input.getFkLocation());
 			rec.setFilename(RandomStringUtils.randomAlphanumeric(32) + FileServices.getFileExtension(input.getOriginalFilename()));

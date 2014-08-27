@@ -4,7 +4,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,12 +44,9 @@ public enum SecurityProvider {
 	}
 
 	private boolean checkRightOnSession(HttpServletRequest request, Permission permissionToCheck) {
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			Integer userId = (Integer) session.getAttribute("userId");
-			if (userId != null) {
-				return checkRightOnUser(permissionToCheck, userId);
-			}
+		Integer userId = LoginResponseProvider.INSTANCE.getLoggedInUserId(request);
+		if (userId != null) {
+			return checkRightOnUser(permissionToCheck, userId);
 		}
 		return false;
 	}

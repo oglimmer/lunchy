@@ -3,6 +3,7 @@ package de.oglimmer.lunchy.rest;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -33,11 +34,24 @@ public enum LoginResponseProvider {
 		}
 	}
 
+	public Integer getLoggedInUserId(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			return getLoggedInUserId(session);
+		}
+		return null;
+	}
+
 	public Integer getLoggedInUserId(HttpSession session) {
 		if (session != null) {
 			return (Integer) session.getAttribute(ATTR_NAME);
 		}
 		return null;
+	}
+
+	public UsersRecord getLoggedInUser(HttpServletRequest request, int fkCommunity) {
+		return getLoggedInUser(request.getSession(false), fkCommunity);
+
 	}
 
 	public UsersRecord getLoggedInUser(HttpSession session, int fkCommunity) {
