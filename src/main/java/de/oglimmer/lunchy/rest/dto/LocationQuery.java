@@ -16,7 +16,7 @@ import de.oglimmer.lunchy.beanMapping.RestDto;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @RestDto
-public class LocationQuery extends Location {
+public class LocationQuery extends LocationResponse {
 
 	private Integer numberOfReviews;
 	private Float avgRating;

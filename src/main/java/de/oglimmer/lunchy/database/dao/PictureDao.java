@@ -8,15 +8,11 @@ import java.util.List;
 import de.oglimmer.lunchy.database.Dao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 
-public enum PicturesDao implements Dao<PicturesRecord> {
+public enum PictureDao implements Dao<PicturesRecord> {
 	INSTANCE;
 
 	public PicturesRecord getById(Integer id, Integer fkCommunity) {
 		return DB.fetchOn(PICTURES, PICTURES.ID.equal(id).and(PICTURES.FK_COMMUNITY.equal(fkCommunity)));
-	}
-
-	public List<PicturesRecord> getList(int fklocation) {
-		return DB.query(PICTURES, PICTURES.FK_LOCATION.equal(fklocation), PICTURES.CREATED_ON.desc(), PicturesRecord.class);
 	}
 
 	public void store(PicturesRecord review) {
@@ -25,6 +21,11 @@ public enum PicturesDao implements Dao<PicturesRecord> {
 
 	public void delete(int id, int fkCommunity) {
 		DB.delete(PICTURES, PICTURES.ID, id, fkCommunity);
+	}
+
+	@Override
+	public List<?> getListByParent(int fklocation) {
+		return DB.query(PICTURES, PICTURES.FK_LOCATION.equal(fklocation), PICTURES.CREATED_ON.desc(), PicturesRecord.class);
 	}
 
 }

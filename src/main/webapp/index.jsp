@@ -42,7 +42,7 @@
 	<script src="webjars/lodash/2.4.1/lodash.underscore.min.js"></script><!-- google-maps && my own code -->
 	<script src="js/ext/angular-google-maps.1.2.0.min.js"></script><!-- google-maps -->
 	
-	<!-- <script src="js/cookie.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script> --><!-- my own cookie lib -->
+	<script src="js/cookie.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script> <!-- my own cookie lib -->
 	<script src="js/app.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
 	<script src="js/services.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
 	<script src="js/controllers.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>

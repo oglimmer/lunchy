@@ -5,3 +5,6 @@ target
 src/main/webapp/META-INF/MANIFEST.MF
 src/main/webapp/js/compiled_coffee.js
 pic_dir
+all_data.xml
+.idea
+hsql.properties

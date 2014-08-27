@@ -37,12 +37,13 @@ public enum OfficeDao implements Dao<OfficesRecord> {
 		}
 	}
 
-	public List<OfficesRecord> query(int fkCommunity) {
-		return DB.query(OFFICES, OFFICES.FK_COMMUNITY.equal(fkCommunity), OFFICES.NAME.asc(), OfficesRecord.class);
-	}
-
 	public void store(OfficesRecord rec) {
 		DB.store(rec);
+	}
+
+	@Override
+	public List<?> getListByParent(int fkCommunity) {
+		return DB.query(OFFICES, OFFICES.FK_COMMUNITY.equal(fkCommunity), OFFICES.NAME.asc(), OfficesRecord.class);
 	}
 
 }

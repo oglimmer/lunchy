@@ -60,4 +60,9 @@ public enum LocationDao implements Dao<LocationRecord> {
 			}
 		});
 	}
+
+	@Override
+	public List<?> getListByParent(int fkOffice) {
+		return DB.query(LOCATION, LOCATION.FK_OFFICE.equal(fkOffice), LOCATION.ID.asc(), LocationRecord.class);
+	}
 }

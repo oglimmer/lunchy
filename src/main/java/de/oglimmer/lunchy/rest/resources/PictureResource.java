@@ -23,7 +23,7 @@ import lombok.SneakyThrows;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
-import de.oglimmer.lunchy.database.dao.PicturesDao;
+import de.oglimmer.lunchy.database.dao.PictureDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.rest.LoginResponseProvider;
 import de.oglimmer.lunchy.rest.PictureScaler;
@@ -91,11 +91,11 @@ public class PictureResource {
 			moveFromTmpToPermanentDir(input, rec);
 			scaleIfTooLarge(rec);
 		} else {
-			rec = PicturesDao.INSTANCE.getById(input.getId(), Community.get(request));
+			rec = PictureDao.INSTANCE.getById(input.getId(), Community.get(request));
 			rec.setCaption(input.getCaption());
 		}
 
-		PicturesDao.INSTANCE.store(rec);
+		PictureDao.INSTANCE.store(rec);
 		Picture retObj = new Picture();
 		BeanMappingProvider.INSTANCE.map(rec, retObj);
 		return retObj;

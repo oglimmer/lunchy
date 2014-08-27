@@ -14,6 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,13 +43,13 @@ public class LoginResource {
 		LoginResponse response = new LoginResponse();
 		UsersRecord user = loginProvider.getLoggedInUser(request, Community.get(request));
 		if (user != null) {
-			loginProvider.login(response, user, request.getSession(true));
+			loginProvider.login(response, user, request.getSession(true), false);
 		}
 		if (!response.isSuccess() && longTimeToken != null) {
 			UsersRecord userFromToken = UserDao.INSTANCE.getByLongTimeToken(longTimeToken, Community.get(request));
 			if (userFromToken != null) {
 				if (isLongTimeTokenYoungerThen3Month(userFromToken)) {
-					loginProvider.login(response, userFromToken, request.getSession(true));
+					loginProvider.login(response, userFromToken, request.getSession(true), false);
 				} else {
 					loginProvider.removeToken(userFromToken);
 				}
@@ -68,10 +70,9 @@ public class LoginResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public LoginResponse login(@Context HttpServletRequest request, InputParam input) {
+	public Response login(@Context HttpServletRequest request, InputParam input) {
 		LoginResponse result = new LoginResponse();
-		String email = input.getEmail();
-		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email, Community.get(request));
+		UsersRecord user = UserDao.INSTANCE.getUserByEmail(input.getEmail(), Community.get(request));
 		if (user != null) {
 			if (!BCrypt.checkpw(input.getPassword(), user.getPassword())) {
 				result.setErrorMsg(USER_PASS_WRONG);
@@ -79,12 +80,17 @@ public class LoginResource {
 				if (input.isKeepLoggedIn()) {
 					loginProvider.generateToken(user);
 				}
-				loginProvider.login(result, user, request.getSession(true));
+				loginProvider.login(result, user, request.getSession(true), input.isKeepLoggedIn());
 			}
 		} else {
 			result.setErrorMsg(USER_PASS_WRONG);
 		}
-		return result;
+		Response.ResponseBuilder builder = Response.ok(result);
+		if (input.isKeepLoggedIn()) {
+			builder.cookie(new NewCookie("lunchylogintoken", result.getLongTimeToken(), request.getContextPath(), null, null,
+					60 * 60 * 24 * 90, false));
+		}
+		return builder.build();
 	}
 
 	@DELETE

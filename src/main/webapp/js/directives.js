@@ -95,7 +95,7 @@ directive('lyDynamicname', function() {
 	            }
 	            if(name.indexOf("$") === 0) {
 	            	name = scope[name.substr(1)];
-	            	console.log("up:"+name);
+	            	//console.log("up:"+name);
 	            }
 	            element.html(name);
 	        });
@@ -105,7 +105,7 @@ directive('lyDynamicname', function() {
 	            if(names[i].indexOf("$") === 0) {
 	            	var scopeVarName = names[i].substr(1);	            	
 	            	scope.$watch(scopeVarName, function(val) {
-	            		console.log("down:"+val);
+	            		//console.log("down:"+val);
 	            		element.html(val);
 	            	});
 	            }

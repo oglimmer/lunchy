@@ -1,14 +1,12 @@
 package de.oglimmer.lunchy.rest.resources;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.OPTIONS;
@@ -39,7 +37,7 @@ import de.oglimmer.lunchy.services.DateCalculation;
 import de.oglimmer.lunchy.services.Email;
 
 @Path("users")
-public class UserResource {
+public class UserResource extends BaseResource {
 
 	@OPTIONS
 	@Produces(MediaType.APPLICATION_JSON)
@@ -121,20 +119,16 @@ public class UserResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<UserAdminResponse> query(@Context HttpServletRequest request) {
 		SecurityProvider.INSTANCE.checkAdmin(request);
-		List<UserAdminResponse> resultList = new ArrayList<>();
-		for (UsersRecord reviewRec : UserDao.INSTANCE.query(Community.get(request))) {
-			resultList.add(BeanMappingProvider.INSTANCE.map(reviewRec, UserAdminResponse.class));
-		}
-		return resultList;
+		return query(Community.get(request), UserAdminResponse.class);
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("current")
 	public Response current(@Context HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		if (session != null) {
-			UsersRecord user = UserDao.INSTANCE.getById((Integer) session.getAttribute("userId"), Community.get(request));
+		Integer userId = LoginResponseProvider.INSTANCE.getLoggedInUserId(request);
+		if (userId != null) {
+			UsersRecord user = UserDao.INSTANCE.getById(userId, Community.get(request));
 			return Response.ok(BeanMappingProvider.INSTANCE.map(user, UserResponse.class)).build();
 		}
 		return Response.status(Status.NO_CONTENT).build();
@@ -202,7 +196,7 @@ public class UserResource {
 				user.setFkBaseOffice(input.getFkBaseOffice());
 				user.setFkCommunity(Community.get(request));
 				UserDao.INSTANCE.store(user);
-				LoginResponseProvider.INSTANCE.login(result, user, request.getSession(true));
+				LoginResponseProvider.INSTANCE.login(result, user, request.getSession(true), false);
 			}
 		} catch (org.jooq.exception.DataAccessException e) {
 			if (e.getCause() instanceof com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException) {

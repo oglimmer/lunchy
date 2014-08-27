@@ -23,10 +23,6 @@ public enum ReviewDao implements Dao<ReviewsRecord> {
 		return DB.fetchOn(REVIEWS, REVIEWS.ID.equal(id).and(REVIEWS.FK_COMMUNITY.equal(fkCommunity)));
 	}
 
-	public List<ReviewsRecord> getList(int fklocation) {
-		return DB.query(REVIEWS, REVIEWS.FK_LOCATION.equal(fklocation), REVIEWS.LAST_UPDATE.desc(), ReviewsRecord.class);
-	}
-
 	public void store(final ReviewsRecord review) {
 		SqlExecCallback updateTurnAroundOnParentLocation = new SqlExecCallback() {
 			@SuppressWarnings("unchecked")
@@ -55,6 +51,11 @@ public enum ReviewDao implements Dao<ReviewsRecord> {
 			return rec.getValue(REVIEWS.ID);
 		}
 		return null;
+	}
+
+	@Override
+	public List<?> getListByParent(int fklocation) {
+		return DB.query(REVIEWS, REVIEWS.FK_LOCATION.equal(fklocation), REVIEWS.LAST_UPDATE.desc(), ReviewsRecord.class);
 	}
 
 }

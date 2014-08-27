@@ -79,9 +79,11 @@ public enum UserDao implements Dao<UsersRecord> {
 
 	public void store(UsersRecord user) {
 		DB.store(user);
+		userRecordCache.refresh(new IdCommunityTuple(user.getId(), user.getFkCommunity()));
 	}
 
-	public List<UsersRecord> query(int fkCommunity) {
+	@Override
+	public List<?> getListByParent(int fkCommunity) {
 		return DB.query(USERS, USERS.FK_COMMUNITY.equal(fkCommunity), USERS.EMAIL.asc(), UsersRecord.class);
 	}
 

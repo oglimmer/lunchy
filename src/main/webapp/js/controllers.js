@@ -65,7 +65,7 @@ controller('LunchyControllerLogin', ['$scope', '$modalInstance', 'LoginDao', '$t
                 if(data.success) {
                     Authetication.logInUser(data);
                     $scope.password = "";
-                    if($scope.login.keepMeLoggedIn) {
+                    if(data.longTimeToken != null && data.longTimeToken != "") {
                         StorageService.save('longTimeToken', data.longTimeToken);
                     }
                     $modalInstance.close('ok');
@@ -480,7 +480,7 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 				    title: loc.officialName,
 				    events: {
 				    	click: function (marker, eventName, args) {
-			                console.log('marker clicked:'+loc.officialName+"/"+loc.id);
+			                //console.log('marker clicked:'+loc.officialName+"/"+loc.id);
 			                $scope.$apply(function() {
 			                	$location.path("/view/"+loc.id);
 			                });

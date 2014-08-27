@@ -17,8 +17,8 @@ public enum LoginResponseProvider {
 
 	private static final String ATTR_NAME = "userId";
 
-	public void login(LoginResponse loginResponse, UsersRecord user, HttpSession session) {
-		fillResponse(loginResponse, user);
+	public void login(LoginResponse loginResponse, UsersRecord user, HttpSession session, boolean setToken) {
+		fillResponse(loginResponse, user, setToken);
 		createSession(user, session);
 		user.setLastLogin(new Timestamp(new Date().getTime()));
 		UserDao.INSTANCE.store(user);
@@ -62,11 +62,13 @@ public enum LoginResponseProvider {
 		return null;
 	}
 
-	private void fillResponse(LoginResponse loginResponse, UsersRecord user) {
+	private void fillResponse(LoginResponse loginResponse, UsersRecord user, boolean setToken) {
 		loginResponse.setSuccess(true);
 		loginResponse.setFkOffice(user.getFkBaseOffice());
 		loginResponse.setUserId(user.getId());
-		loginResponse.setLongTimeToken(user.getLongTimeToken());
+		if (setToken) {
+			loginResponse.setLongTimeToken(user.getLongTimeToken());
+		}
 	}
 
 	public void removeToken(UsersRecord user) {

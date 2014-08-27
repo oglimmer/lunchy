@@ -88,7 +88,7 @@ config(['flowFactoryProvider', function (flowFactoryProvider) {
     singleFile:true    
   };
   flowFactoryProvider.on('catchAll', function (event) {
-    console.log('catchAll', arguments);
+    //console.log('catchAll', arguments);
   });
   // Can be used with different implementations of Flow.js
   // flowFactoryProvider.factory = fustyFlowFactory;
@@ -184,7 +184,6 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 				this.loggedIn = true;
 				this.fkBaseOffice = loginResponse.fkOffice;
 				$rootScope.$broadcast('userLoggedIn', []);
-				console.log(this);
 			} else {
 				console.error("logInUser was called but response didnt succeed.");
 			}
@@ -194,19 +193,21 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 			var thiz = this;
 			if(thiz.loggedIn) {
 				return $q.when(thiz);
-			} else {				
+			} else {
 				// user is not logged in, get the default office
 				if(thiz.fkBaseOffice === -1) {					
 					OfficesDao.defaultOffice(function(result) {					
 						// only if still no valid base-office
 						if(thiz.fkBaseOffice === -1) {
 							thiz.fkBaseOffice = result.defaultOffice;
-							console.log("Set base office to "+thiz.fkBaseOffice);
 						}
 					});				
 				}
-
-				return LoginDao.check({longTimeToken:StorageService.get('longTimeToken')}).$promise
+                var longTimeToken = StorageService.get('longTimeToken');
+                if(typeof(longTimeToken)==='undefined'||longTimeToken==null) {
+                    longTimeToken = getCookie("lunchylogintoken");
+                }
+				return LoginDao.check({longTimeToken:longTimeToken}).$promise
 					.then(function(successResp) {						
 						CommunityService.setCompanyName(successResp.companyName);
 						if(successResp.success) {
@@ -227,12 +228,11 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
                 controller: 'LunchyControllerLogin'
             });
             modalInstance.result.then(function (result) {
-                console.log(result);
                 if(result.success) {
                     thiz.logInUser(result);
                 }
             }, function () {
-                console.log('Modal dismissed at: ' + new Date());
+                //console.log('Modal dismissed at: ' + new Date());
             });
         }
 	};
