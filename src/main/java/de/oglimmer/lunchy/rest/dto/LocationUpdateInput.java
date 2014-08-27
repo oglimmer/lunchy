@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class LocationUpdateInput {
 
+	private Integer fkOffice;
 	private String officialName;
 	private String streetName;
 	private String address;

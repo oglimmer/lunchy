@@ -7,6 +7,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class LocationCreateInput extends LocationUpdateInput {
 
-	private Integer fkOffice;
+	// all fields are changeable
 
 }
