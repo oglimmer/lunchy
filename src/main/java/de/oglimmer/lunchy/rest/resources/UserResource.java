@@ -27,8 +27,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
-import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.SecurityProvider;
+import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
 import de.oglimmer.lunchy.rest.dto.ResultParam;
 import de.oglimmer.lunchy.rest.dto.UserAdminResponse;
@@ -149,7 +149,8 @@ public class UserResource extends BaseResource {
 		user.setLastLogin(new Timestamp(new Date().getTime()));
 		user.setPermissions(0);
 		user.setLastEmailUpdate(DateCalculation.INSTANCE.getOneWeekAgo());
-		setEmailUpdates(user, 0);
+		// set email update via input dto to avoid overwriting it with null
+		input.setEmailUpdates(0);
 		Email.INSTANCE.sendWelcome(input.getEmail(), input.getDisplayname(), Community.get(request));
 
 		return store(request, user, input);
@@ -194,6 +195,8 @@ public class UserResource extends BaseResource {
 	}
 
 	private void copyDtoToRec(UsersRecord user, UserUpdateInput input) {
+		// HACK: avoid overwriting password
+		input.setPassword(user.getPassword());
 		BeanMappingProvider.INSTANCE.map(input, user);
 		handleEmailUpdates(user, input);
 	}
@@ -244,7 +247,8 @@ public class UserResource extends BaseResource {
 		private String email;
 		private String displayname;
 		private Integer fkBaseOffice;
-		private Integer emailUpdates;
+		// needs to be type String or angular would not === values
+		private String emailUpdates;
 	}
 
 }
