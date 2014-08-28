@@ -8,7 +8,7 @@ import de.oglimmer.lunchy.beanMapping.ForeignKey;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ReviewUpdateResponse extends Review {
+public class ReviewUpdateResponse extends ReviewUpdateInput {
 
 	@ForeignKey(dao = "location", refColumnLabel = "turnAroundTime", refColumnName = "fkLocation")
 	private Integer locationTurnAroundTime;

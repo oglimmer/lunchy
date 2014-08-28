@@ -25,9 +25,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.PictureDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
-import de.oglimmer.lunchy.rest.LoginResponseProvider;
+import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.PictureScaler;
-import de.oglimmer.lunchy.rest.dto.Picture;
+import de.oglimmer.lunchy.rest.dto.PictureCreateInput;
+import de.oglimmer.lunchy.rest.dto.PictureResponse;
+import de.oglimmer.lunchy.rest.dto.PictureUpdateInput;
 import de.oglimmer.lunchy.services.Community;
 import de.oglimmer.lunchy.services.FileServices;
 import de.oglimmer.lunchy.services.LunchyProperties;
@@ -39,66 +41,49 @@ public class PictureResource {
 	@GET
 	@Path("{filename}")
 	public Response load(@PathParam("filename") String filename) {
+		// NEVER REMOVE THIS!!! SECURITY check to avoid reading all files on the filesystem
 		if (filename.contains("..")) {
 			throw new RuntimeException("Illegal filename:" + filename);
 		}
-
-		String fileExt = FileServices.getFileExtension(filename);
-		String mt;
-		switch (fileExt) {
-		case ".jpg":
-		case ".jpeg":
-			mt = "image/jpeg";
-			break;
-		case ".gif":
-			mt = "image/gif";
-			break;
-		case ".png":
-			mt = "image/png";
-			break;
-		default:
-			mt = MediaType.APPLICATION_OCTET_STREAM;
-		}
-
+		String mediaType = FileServices.getMediaTypeFromFileExtension(filename);
 		FileInputStream fis = new FileInputStream(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
-
-		return Response.ok(fis, mt).build();
+		return Response.ok(fis, mediaType).build();
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Picture create(@Context HttpServletRequest request, CreateParam input) {
-		return update(request, null, input);
+	@SneakyThrows(value = IOException.class)
+	public PictureResponse create(@Context HttpServletRequest request, PictureCreateInputWithTmp inputDto) {
+		PicturesRecord rec = new PicturesRecord();
+
+		rec.setFkCommunity(Community.get(request));
+		rec.setFkUser(SessionProvider.INSTANCE.getLoggedInUserId(request));
+		rec.setCreatedOn(new Timestamp(new Date().getTime()));
+		rec.setFilename(RandomStringUtils.randomAlphanumeric(32) + FileServices.getFileExtension(inputDto.getOriginalFilename()));
+
+		BeanMappingProvider.INSTANCE.map(inputDto, rec);
+
+		moveFromTmpToPermanentDir(inputDto.getUniqueId(), rec.getFilename());
+		scaleIfTooLarge(rec);
+
+		return storeRec(rec);
+
 	}
 
-	@SneakyThrows(value = IOException.class)
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Picture update(@Context HttpServletRequest request, @PathParam("id") Integer id, CreateParam input) {
-		PicturesRecord rec = new PicturesRecord();
+	public PictureResponse update(@Context HttpServletRequest request, @PathParam("id") Integer id, PictureUpdateInput inputDto) {
+		PicturesRecord rec = PictureDao.INSTANCE.getById(id, Community.get(request));
+		BeanMappingProvider.INSTANCE.map(inputDto, rec);
+		return storeRec(rec);
+	}
 
-		if (input.getId() == null || input.getId() == 0) {
-			rec.setFkCommunity(Community.get(request));
-			rec.setFkUser(LoginResponseProvider.INSTANCE.getLoggedInUserId(request));
-			rec.setCreatedOn(new Timestamp(new Date().getTime()));
-			rec.setFkLocation(input.getFkLocation());
-			rec.setFilename(RandomStringUtils.randomAlphanumeric(32) + FileServices.getFileExtension(input.getOriginalFilename()));
-			rec.setCaption(input.getCaption());
-
-			moveFromTmpToPermanentDir(input, rec);
-			scaleIfTooLarge(rec);
-		} else {
-			rec = PictureDao.INSTANCE.getById(input.getId(), Community.get(request));
-			rec.setCaption(input.getCaption());
-		}
-
+	private PictureResponse storeRec(PicturesRecord rec) {
 		PictureDao.INSTANCE.store(rec);
-		Picture retObj = new Picture();
-		BeanMappingProvider.INSTANCE.map(rec, retObj);
-		return retObj;
+		return BeanMappingProvider.INSTANCE.map(rec, PictureResponse.class);
 	}
 
 	private void scaleIfTooLarge(PicturesRecord rec) throws IOException {
@@ -109,13 +94,13 @@ public class PictureResource {
 		}
 	}
 
-	private void moveFromTmpToPermanentDir(CreateParam input, PicturesRecord rec) throws IOException {
-		FileServices.move(input.getUniqueId(), rec.getFilename());
+	private void moveFromTmpToPermanentDir(String fromFileName, String toFileName) throws IOException {
+		FileServices.move(fromFileName, toFileName);
 	}
 
 	@Data
 	@EqualsAndHashCode(callSuper = true)
-	public static class CreateParam extends Picture {
+	public static class PictureCreateInputWithTmp extends PictureCreateInput {
 		private String uniqueId;
 		private String originalFilename;
 	}

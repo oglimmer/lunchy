@@ -12,16 +12,18 @@ import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
 
-public enum LoginResponseProvider {
+public enum SessionProvider {
 	INSTANCE;
 
 	private static final String ATTR_NAME = "userId";
 
-	public void login(LoginResponse loginResponse, UsersRecord user, HttpSession session, boolean setToken) {
+	public LoginResponse createSession(UsersRecord user, HttpSession session, boolean setToken) {
+		LoginResponse loginResponse = new LoginResponse();
 		fillResponse(loginResponse, user, setToken);
 		createSession(user, session);
 		user.setLastLogin(new Timestamp(new Date().getTime()));
 		UserDao.INSTANCE.store(user);
+		return loginResponse;
 	}
 
 	private void createSession(UsersRecord user, HttpSession session) {

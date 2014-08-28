@@ -44,7 +44,7 @@ public enum SecurityProvider {
 	}
 
 	private boolean checkRightOnSession(HttpServletRequest request, Permission permissionToCheck) {
-		Integer userId = LoginResponseProvider.INSTANCE.getLoggedInUserId(request);
+		Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
 		if (userId != null) {
 			return checkRightOnUser(permissionToCheck, userId);
 		}

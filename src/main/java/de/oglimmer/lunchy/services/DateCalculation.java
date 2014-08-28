@@ -2,6 +2,7 @@ package de.oglimmer.lunchy.services;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public enum DateCalculation {
@@ -39,5 +40,13 @@ public enum DateCalculation {
 
 	public Timestamp getNextMonday() {
 		return new Timestamp(findNextMonday().getTime().getTime());
+	}
+
+	public boolean youngerThan(Date date, int field, int units) {
+		Calendar now = GregorianCalendar.getInstance();
+		Calendar cal = GregorianCalendar.getInstance();
+		cal.setTime(date);
+		cal.add(field, units);
+		return now.before(cal);
 	}
 }

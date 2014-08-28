@@ -34,14 +34,14 @@ import de.oglimmer.lunchy.database.dao.OfficeDao;
 import de.oglimmer.lunchy.database.dao.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
-import de.oglimmer.lunchy.rest.LoginResponseProvider;
+import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.UserRightException;
 import de.oglimmer.lunchy.rest.dto.LocationCreateInput;
 import de.oglimmer.lunchy.rest.dto.LocationResponse;
 import de.oglimmer.lunchy.rest.dto.LocationUpdateInput;
-import de.oglimmer.lunchy.rest.dto.Picture;
-import de.oglimmer.lunchy.rest.dto.Review;
+import de.oglimmer.lunchy.rest.dto.PictureUpdateInput;
+import de.oglimmer.lunchy.rest.dto.ReviewUpdateInput;
 import de.oglimmer.lunchy.services.Community;
 
 @Slf4j
@@ -51,15 +51,15 @@ public class LocationResource extends BaseResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/reviews")
-	public List<Review> queryReviews(@PathParam("id") int id) {
-		return query(id, Review.class);
+	public List<ReviewUpdateInput> queryReviews(@PathParam("id") int id) {
+		return query(id, ReviewUpdateInput.class);
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/pictures")
-	public List<Picture> queryPictures(@PathParam("id") int id) {
-		return query(id, Picture.class);
+	public List<PictureUpdateInput> queryPictures(@PathParam("id") int id) {
+		return query(id, PictureUpdateInput.class);
 	}
 
 	@GET
@@ -119,7 +119,7 @@ public class LocationResource extends BaseResource {
 
 		public LocationResponse update(Integer id) {
 			LocationRecord locationRec = copyDtoToRecord(LocationDao.INSTANCE.getById(id, Community.get(request)));
-			if (locationRec.getFkUser() != LoginResponseProvider.INSTANCE.getLoggedInUserId(request)) {
+			if (locationRec.getFkUser() != SessionProvider.INSTANCE.getLoggedInUserId(request)) {
 				SecurityProvider.INSTANCE.checkConfirmedUser(request);
 			}
 			return updateRec(locationRec);
@@ -127,7 +127,7 @@ public class LocationResource extends BaseResource {
 
 		private void addInitialData(LocationRecord locationRec) {
 			locationRec.setFkCommunity(Community.get(request));
-			locationRec.setFkUser(LoginResponseProvider.INSTANCE.getLoggedInUserId(request));
+			locationRec.setFkUser(SessionProvider.INSTANCE.getLoggedInUserId(request));
 			locationRec.setCreatedOn(new Timestamp(new Date().getTime()));
 			OfficesRecord office = OfficeDao.INSTANCE.getById(locationRec.getFkOffice(), Community.get(request));
 			locationRec.setCountry(office.getCountry());
@@ -186,7 +186,7 @@ public class LocationResource extends BaseResource {
 		private void checkUserCanEdit() {
 			result.setAllowedToEdit(true);
 			LocationRecord locRec = LocationDao.INSTANCE.getById(id, Community.get(request));
-			Integer userId = LoginResponseProvider.INSTANCE.getLoggedInUserId(request);
+			Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
 			if (locRec.getFkUser() != userId) {
 				try {
 					SecurityProvider.INSTANCE.checkConfirmedUser(request);
@@ -197,7 +197,7 @@ public class LocationResource extends BaseResource {
 		}
 
 		private void checkUserReview() {
-			Integer userId = LoginResponseProvider.INSTANCE.getLoggedInUserId(request);
+			Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
 			Integer reviewId = ReviewDao.INSTANCE.hasUserReview(id, userId);
 			if (reviewId != null) {
 				result.setHasReview(true);

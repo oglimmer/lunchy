@@ -3,17 +3,17 @@ package de.oglimmer.lunchy.rest.dto;
 import java.sql.Timestamp;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import de.oglimmer.lunchy.beanMapping.ForeignKey;
 
 @Data
-public class Picture {
+@EqualsAndHashCode(callSuper = true)
+public class PictureResponse extends PictureCreateInput {
 
 	private Integer id;
-	private String filename;
-	private String caption;
-	private Timestamp createdOn;
 	@ForeignKey(dao = "user", refColumnLabel = "displayname", refColumnName = "fkUser")
 	private String creationUser;
-	private Integer fkLocation;
+	private Timestamp createdOn;
+	private String filename;
 
 }

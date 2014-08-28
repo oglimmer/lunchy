@@ -20,7 +20,7 @@ import org.jooq.Record;
 
 import de.oglimmer.lunchy.database.dao.LocationDao;
 import de.oglimmer.lunchy.database.dao.OfficeDao;
-import de.oglimmer.lunchy.rest.LoginResponseProvider;
+import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.rest.dto.Office;
 import de.oglimmer.lunchy.services.Community;
@@ -52,7 +52,7 @@ public class OfficeResource extends BaseResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/locations")
 	public List<LocationQuery> queryLocations(@Context HttpServletRequest request, @PathParam("id") int id) {
-		Integer fkUser = LoginResponseProvider.INSTANCE.getLoggedInUserId(request);
+		Integer fkUser = SessionProvider.INSTANCE.getLoggedInUserId(request);
 		List<LocationQuery> resultList = new ArrayList<>();
 		for (Record rec : LocationDao.INSTANCE.getList(fkUser, id)) {
 			resultList.add(LocationQuery.getInstance(rec, Community.get(request)));

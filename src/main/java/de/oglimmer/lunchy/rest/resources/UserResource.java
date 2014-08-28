@@ -3,7 +3,6 @@ package de.oglimmer.lunchy.rest.resources;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mindrot.jbcrypt.BCrypt;
@@ -27,7 +27,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
-import de.oglimmer.lunchy.rest.LoginResponseProvider;
+import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
 import de.oglimmer.lunchy.rest.dto.ResultParam;
@@ -91,15 +91,11 @@ public class UserResource extends BaseResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{token}/resetPassword")
-	public ResultParam resetPassword(@Context HttpServletRequest request, @PathParam("token") String token, UserInput input) {
+	public ResultParam resetPassword(@Context HttpServletRequest request, @PathParam("token") String token, PasswordInput input) {
 		UsersRecord user = UserDao.INSTANCE.getUserByToken(token, Community.get(request));
 		ResultParam rp = new ResultParam();
 		if (user != null) {
-			Calendar now = GregorianCalendar.getInstance();
-			Calendar cal = GregorianCalendar.getInstance();
-			cal.setTime(new Date(user.getPasswordResetTimestamp().getTime()));
-			cal.add(Calendar.HOUR_OF_DAY, 24);
-			if (now.before(cal)) {
+			if (DateCalculation.INSTANCE.youngerThan(user.getPasswordResetTimestamp(), Calendar.HOUR_OF_DAY, 24)) {
 				user.setPasswordResetToken(null);
 				user.setPasswordResetTimestamp(null);
 				user.setPassword(BCrypt.hashpw(input.getPassword(), BCrypt.gensalt()));
@@ -126,7 +122,7 @@ public class UserResource extends BaseResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("current")
 	public Response current(@Context HttpServletRequest request) {
-		Integer userId = LoginResponseProvider.INSTANCE.getLoggedInUserId(request);
+		Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
 		if (userId != null) {
 			UsersRecord user = UserDao.INSTANCE.getById(userId, Community.get(request));
 			return Response.ok(BeanMappingProvider.INSTANCE.map(user, UserResponse.class)).build();
@@ -145,67 +141,81 @@ public class UserResource extends BaseResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}")
-	public LoginResponse updateAndLogin(@Context HttpServletRequest request, @PathParam("id") Integer id, UserInput input) {
-		if (id != input.getId()) {
-			throw new RuntimeException("id not matching");
-		}
-		return saveAndLogin(request, input);
+	public LoginResponse createAndLogin(@Context HttpServletRequest request, UserCreateInput input) {
+		UsersRecord user = new UsersRecord();
+		user.setFkCommunity(Community.get(request));
+		user.setPassword(BCrypt.hashpw(input.getPassword(), BCrypt.gensalt()));
+		user.setCreatedOn(new Timestamp(new Date().getTime()));
+		user.setLastLogin(new Timestamp(new Date().getTime()));
+		user.setPermissions(0);
+		user.setLastEmailUpdate(DateCalculation.INSTANCE.getOneWeekAgo());
+		setEmailUpdates(user, 0);
+		Email.INSTANCE.sendWelcome(input.getEmail(), input.getDisplayname(), Community.get(request));
+
+		return store(request, user, input);
 	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public LoginResponse saveAndLogin(@Context HttpServletRequest request, UserInput input) {
-		LoginResponse result = new LoginResponse();
+	@Path("{id}")
+	public LoginResponse updateAndLogin(@Context HttpServletRequest request, @PathParam("id") Integer id, UserUpdateInput input) {
+		LoginResponse result;
 
-		try {
-			UsersRecord user;
-			if (input.getId() == null || input.getId() == 0) {
-				user = new UsersRecord();
+		UsersRecord user = UserDao.INSTANCE.getById(id, Community.get(request));
+		if (user == null || !BCrypt.checkpw(input.getCurrentpassword(), user.getPassword())) {
+			result = new LoginResponse();
+			result.setErrorMsg("Password wrong");
+		} else {
+			if (input.getPassword() != null && !input.getPassword().trim().isEmpty()) {
 				user.setPassword(BCrypt.hashpw(input.getPassword(), BCrypt.gensalt()));
-				user.setCreatedOn(new Timestamp(new Date().getTime()));
-				user.setLastLogin(new Timestamp(new Date().getTime()));
-				user.setPermissions(0);
-				user.setEmailUpdates(0);
-				user.setLastEmailUpdate(DateCalculation.INSTANCE.getOneWeekAgo());
-				user.setNextEmailUpdate(DateCalculation.INSTANCE.getNextMonday());
-				Email.INSTANCE.sendWelcome(input.getEmail(), input.getDisplayname(), Community.get(request));
-			} else {
-				user = UserDao.INSTANCE.getById(input.getId(), Community.get(request));
-				if (!BCrypt.checkpw(input.getCurrentpassword(), user.getPassword())) {
-					result.setErrorMsg("Password wrong");
-					user = null;
-				} else {
-					if (input.getPassword() != null && !input.getPassword().trim().isEmpty()) {
-						user.setPassword(BCrypt.hashpw(input.getPassword(), BCrypt.gensalt()));
-					}
-				}
 			}
-			if (user != null) {
-				user.setDisplayname(input.getDisplayname());
-				user.setEmail(input.getEmail());
-				if (input.getEmailUpdates() != null && !input.getEmailUpdates().isEmpty()) {
-					user.setEmailUpdates(Integer.valueOf(input.getEmailUpdates()));
-					if (user.getEmailUpdates() == 1) {
-						user.setNextEmailUpdate(DateCalculation.INSTANCE.getNever());
-					} else {
-						user.setNextEmailUpdate(DateCalculation.INSTANCE.getNextMonday());
-					}
-				}
-				user.setFkBaseOffice(input.getFkBaseOffice());
-				user.setFkCommunity(Community.get(request));
-				UserDao.INSTANCE.store(user);
-				LoginResponseProvider.INSTANCE.login(result, user, request.getSession(true), false);
-			}
+			result = store(request, user, input);
+		}
+		return result;
+	}
+
+	private LoginResponse store(HttpServletRequest request, UsersRecord userRec, UserUpdateInput inputDto) {
+		try {
+			copyDtoToRec(userRec, inputDto);
+
+			UserDao.INSTANCE.store(userRec);
+			return SessionProvider.INSTANCE.createSession(userRec, request.getSession(true), false);
+
 		} catch (org.jooq.exception.DataAccessException e) {
 			if (e.getCause() instanceof com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException) {
+				LoginResponse result = new LoginResponse();
 				result.setErrorMsg("User already exists");
+				return result;
 			} else {
 				throw e;
 			}
 		}
-		return result;
+	}
+
+	private void copyDtoToRec(UsersRecord user, UserUpdateInput input) {
+		BeanMappingProvider.INSTANCE.map(input, user);
+		handleEmailUpdates(user, input);
+	}
+
+	private void handleEmailUpdates(UsersRecord user, UserUpdateInput input) {
+		if (input.getEmailUpdates() != null) {
+			setEmailUpdates(user, input.getEmailUpdates());
+		}
+	}
+
+	private void setEmailUpdates(UsersRecord user, Integer newEmailUpdate) {
+		user.setEmailUpdates(newEmailUpdate);
+		if (user.getEmailUpdates() == 1) {
+			user.setNextEmailUpdate(DateCalculation.INSTANCE.getNever());
+		} else {
+			user.setNextEmailUpdate(DateCalculation.INSTANCE.getNextMonday());
+		}
+	}
+
+	@Data
+	public static class PasswordInput {
+		private String password;
 	}
 
 	@Data
@@ -214,14 +224,18 @@ public class UserResource extends BaseResource {
 	}
 
 	@Data
-	public static class UserInput {
-		private Integer id;
+	@EqualsAndHashCode(callSuper = true)
+	public static class UserCreateInput extends UserUpdateInput {
+	}
+
+	@Data
+	public static class UserUpdateInput {
 		private String email;
 		private String password;
 		private String currentpassword;
 		private String displayname;
 		private Integer fkBaseOffice;
-		private String emailUpdates;
+		private Integer emailUpdates;
 	}
 
 	@Data
@@ -230,7 +244,7 @@ public class UserResource extends BaseResource {
 		private String email;
 		private String displayname;
 		private Integer fkBaseOffice;
-		private String emailUpdates;
+		private Integer emailUpdates;
 	}
 
 }

@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
+
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.DaoFactory;
 import de.oglimmer.lunchy.services.Community;
@@ -34,6 +37,14 @@ public abstract class BaseResource {
 
 	protected <T> List<T> query(int fkParent, Class<T> clazz) {
 		return BeanMappingProvider.INSTANCE.mapList(DaoFactory.INSTANCE.getDao(getDaoName(clazz)).getListByParent(fkParent), clazz);
+	}
+
+	protected String convertToJson(List<String> listOfStrings) {
+		JsonArray jsonResultList = new JsonArray();
+		for (String string : listOfStrings) {
+			jsonResultList.add(new JsonPrimitive(string));
+		}
+		return jsonResultList.toString();
 	}
 
 }

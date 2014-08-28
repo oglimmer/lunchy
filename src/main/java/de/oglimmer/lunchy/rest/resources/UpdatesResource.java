@@ -30,33 +30,49 @@ public class UpdatesResource {
 		return resultList;
 	}
 
-	public UpdatesQuery createResultRow(DozerAdapter update) {
-		UpdatesQuery qrr = new UpdatesQuery();
-		switch (update.getString("type")) {
+	public UpdatesQuery createResultRow(DozerAdapter updateRec) {
+		UpdatesQuery updateQuery = new UpdatesQuery();
+		switch (updateRec.getString("type")) {
 		case "L":
-			qrr.setText(setTextForLocation(update));
-			qrr.setIcon("glyphicon-tower");
-			qrr.setRef("view/" + update.getValue("id"));
+			createResultRowLocation(updateRec, updateQuery);
 			break;
 		case "R":
-			qrr.setText(setTextForReview(update));
-			qrr.setIcon("glyphicon-eye-open");
-			qrr.setRef("view/" + update.getValue("id"));
+			createResultRowReview(updateRec, updateQuery);
 			break;
 		case "U":
-			qrr.setText(update.getValue("user") + " joined");
-			qrr.setIcon("glyphicon-user");
+			createResultRowUser(updateRec, updateQuery);
 			break;
 		case "P":
-			qrr.setText("New picture for " + update.getValue("officialName") + " in " + update.getValue("city") + " by "
-					+ update.getValue("user"));
-			qrr.setIcon("glyphicon-picture");
-			qrr.setRef("view/" + update.getValue("id"));
+			createResultRowPicture(updateRec, updateQuery);
 			break;
 		default:
-			throw new RuntimeException("Illegal type=" + update.getValue("type"));
+			throw new RuntimeException("Illegal type=" + updateRec.getValue("type"));
 		}
-		return qrr;
+		return updateQuery;
+	}
+
+	private void createResultRowPicture(DozerAdapter update, UpdatesQuery qrr) {
+		qrr.setText("New picture for " + update.getValue("officialName") + " in " + update.getValue("city") + " by "
+				+ update.getValue("user"));
+		qrr.setIcon("glyphicon-picture");
+		qrr.setRef("view/" + update.getValue("id"));
+	}
+
+	private void createResultRowUser(DozerAdapter update, UpdatesQuery qrr) {
+		qrr.setText(update.getValue("user") + " joined");
+		qrr.setIcon("glyphicon-user");
+	}
+
+	private void createResultRowReview(DozerAdapter update, UpdatesQuery qrr) {
+		qrr.setText(setTextForReview(update));
+		qrr.setIcon("glyphicon-eye-open");
+		qrr.setRef("view/" + update.getValue("id"));
+	}
+
+	private void createResultRowLocation(DozerAdapter update, UpdatesQuery qrr) {
+		qrr.setText(setTextForLocation(update));
+		qrr.setIcon("glyphicon-tower");
+		qrr.setRef("view/" + update.getValue("id"));
 	}
 
 	private String setTextForReview(DozerAdapter update) {

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import javax.ws.rs.core.MediaType;
+
 public class FileServices {
 
 	public static void move(String uniqueId, String filename) throws IOException {
@@ -30,6 +32,26 @@ public class FileServices {
 			return originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
 		}
 		return "";
+	}
+
+	public static String getMediaTypeFromFileExtension(String filename) {
+		String fileExt = FileServices.getFileExtension(filename);
+		String mt;
+		switch (fileExt) {
+		case ".jpg":
+		case ".jpeg":
+			mt = "image/jpeg";
+			break;
+		case ".gif":
+			mt = "image/gif";
+			break;
+		case ".png":
+			mt = "image/png";
+			break;
+		default:
+			mt = MediaType.APPLICATION_OCTET_STREAM;
+		}
+		return mt;
 	}
 
 }
