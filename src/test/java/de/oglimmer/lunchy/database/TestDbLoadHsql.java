@@ -22,6 +22,7 @@ public class TestDbLoadHsql extends TestDbLoad {
 	public static void warmUp() throws LiquibaseException, SQLException, IOException, ClassNotFoundException {
 		System.setProperty("lunchy.db.driver", "org.hsqldb.jdbc.JDBCDriver");
 		System.setProperty("lunchy.db.url", "jdbc:hsqldb:mem:mymemdb");
+		System.setProperty("lunchy.db.schema", "");
 		// System.setProperty("lunchy.db.url", "jdbc:hsqldb:hsql://localhost/");
 		// System.setProperty("lunchy.db.schema", "xdb");
 		System.setProperty("lunchy.db.user", "sa");
@@ -34,7 +35,7 @@ public class TestDbLoadHsql extends TestDbLoad {
 			// Liquibase liquibaseDM = new Liquibase("all_data.xml", new ClassLoaderResourceAccessor(), database);
 			// liquibaseDM.update("junit-warmup");
 		}
-		RndDataGenerator dataGen = new RndDataGenerator();
+		RndDataGenerator dataGen = new RndDataGenerator(0);
 		dataGen.genCommunities();
 	}
 

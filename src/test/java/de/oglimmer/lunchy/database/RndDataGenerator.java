@@ -7,11 +7,10 @@ import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jooq.Record;
 
-import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.dao.LocationDao;
 import de.oglimmer.lunchy.database.dao.OfficeDao;
-import de.oglimmer.lunchy.database.dao.PicturesDao;
+import de.oglimmer.lunchy.database.dao.PictureDao;
 import de.oglimmer.lunchy.database.dao.ReviewDao;
 import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
@@ -25,8 +24,20 @@ import de.oglimmer.lunchy.services.DateCalculation;
 
 public class RndDataGenerator {
 
+	private static final int NUM_PICTURE = 3;
+	private static final int EXTRA_REVIEWS = 500;// 15000
+	private static final int NUM_LOCATION = 5;
+	private static final int NUM_USERS = 2;// 20
+	private static final int NUM_OFFICES = 5;// 50
+	public static final int NUM_COMMUNITIES = 1;
+	private int baseId;
+
+	public RndDataGenerator(int baseId) {
+		this.baseId = baseId;
+	}
+
 	public void genCommunities() {
-		for (int i = 1; i < 4; i++) {
+		for (int i = baseId + 1; i <= baseId + NUM_COMMUNITIES; i++) {
 			CommunitiesRecord rec = new CommunitiesRecord();
 			rec.setId(i);
 			rec.setDomain(RandomStringUtils.randomAlphabetic(20));
@@ -38,7 +49,7 @@ public class RndDataGenerator {
 	}
 
 	public void genOffices(int fkCommunity) {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < NUM_OFFICES; i++) {
 			OfficesRecord rec = new OfficesRecord();
 			rec.setFkCommunity(fkCommunity);
 			rec.setCountry(RandomStringUtils.randomAlphabetic(20));
@@ -48,11 +59,12 @@ public class RndDataGenerator {
 			rec.setZoomfactor((int) (Math.random() * 20));
 			OfficeDao.INSTANCE.store(rec);
 			genUsers(fkCommunity, rec.getId());
+			genReview(fkCommunity, rec.getId());
 		}
 	}
 
 	public void genUsers(int fkCommunity, int fkBaseOffice) {
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < NUM_USERS; i++) {
 			UsersRecord user = new UsersRecord();
 			user.setFkBaseOffice(fkBaseOffice);
 			user.setFkCommunity(fkCommunity);
@@ -71,7 +83,7 @@ public class RndDataGenerator {
 	}
 
 	public void genLocation(int fkCommunity, int fkBaseOffice, int fkCreator) {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < NUM_LOCATION; i++) {
 			LocationRecord loc = new LocationRecord();
 			loc.setAddress(RandomStringUtils.randomAlphabetic(20));
 			loc.setCity(RandomStringUtils.randomAlphabetic(20));
@@ -95,11 +107,12 @@ public class RndDataGenerator {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void genReview(int fkCommunity, int fkOffice) {
 		List<Record> list = LocationDao.INSTANCE.getList(0, fkOffice);
-		List<UsersRecord> users = UserDao.INSTANCE.query(fkCommunity);
-		for (int i = 0; i < 200; i++) {
-			LocationQuery lq = BeanMappingProvider.INSTANCE.map(list.get((int) (list.size() * Math.random())), LocationQuery.class);
+		List<UsersRecord> users = (List<UsersRecord>) UserDao.INSTANCE.getListByParent(fkCommunity);
+		for (int i = 0; i < EXTRA_REVIEWS; i++) {
+			LocationQuery lq = LocationQuery.getInstance(list.get((int) (list.size() * Math.random())), fkCommunity);
 			try {
 				genReview(fkCommunity, users.get((int) (users.size() * Math.random())).getId(), lq.getId());
 			} catch (Exception e) {
@@ -123,7 +136,7 @@ public class RndDataGenerator {
 	}
 
 	public void genPictures(int fkCommunity, int fkCreator, int fkLocation) {
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < NUM_PICTURE; i++) {
 			PicturesRecord pic = new PicturesRecord();
 			pic.setCaption(RandomStringUtils.randomAlphabetic(20));
 			pic.setCreatedOn(new Timestamp(new Date().getTime()));
@@ -131,7 +144,7 @@ public class RndDataGenerator {
 			pic.setFkCommunity(fkCommunity);
 			pic.setFkLocation(fkLocation);
 			pic.setFkUser(fkCreator);
-			PicturesDao.INSTANCE.store(pic);
+			PictureDao.INSTANCE.store(pic);
 		}
 	}
 

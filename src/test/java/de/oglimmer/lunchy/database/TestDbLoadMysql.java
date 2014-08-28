@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import liquibase.Liquibase;
 import liquibase.database.Database;
@@ -40,8 +43,27 @@ public class TestDbLoadMysql extends TestDbLoad {
 			// Liquibase liquibaseDM = new Liquibase("all_data.xml", new ClassLoaderResourceAccessor(), database);
 			// liquibaseDM.update("junit-warmup");
 		}
-		RndDataGenerator dataGen = new RndDataGenerator();
+
+		RndDataGenerator dataGen = new RndDataGenerator(0);
 		dataGen.genCommunities();
+		final CountDownLatch cdl = new CountDownLatch(4);
+		ExecutorService execSer = Executors.newFixedThreadPool(4);
+		for (int i = 1; i < 5; i++) {
+			final int base = i;
+			execSer.execute(new Runnable() {
+				@Override
+				public void run() {
+					RndDataGenerator dataGen = new RndDataGenerator(base * RndDataGenerator.NUM_COMMUNITIES);
+					dataGen.genCommunities();
+					cdl.countDown();
+				}
+			});
+		}
+		try {
+			cdl.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@AfterClass
