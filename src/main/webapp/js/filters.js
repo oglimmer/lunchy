@@ -23,13 +23,6 @@ filter('partition', function() {
 	};
 	return filter;
 }).
-filter('newlines', function () {
-    return function(text) {
-    	if(typeof(text)!=='undefined') {
-    		return text.split(/\n/g);
-    	}
-    }
-}).
 filter('bycomma', function () {
     return function(text) {
     	if(typeof(text)!=='undefined') {

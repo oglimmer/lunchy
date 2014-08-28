@@ -46,7 +46,9 @@
             </td>
              -->
             <td data-title="'Tags'" sortable="'tags'" filter="{ 'tags': 'text' }">
-                {{item.tags}}
+                <span ng-repeat="tag in item.tags | bycomma track by $index">
+                    <span class="label label-default">{{tag}}</span>
+                </span>
             </td>
         </tr>
     </table>

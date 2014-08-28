@@ -34,14 +34,14 @@ import de.oglimmer.lunchy.database.dao.OfficeDao;
 import de.oglimmer.lunchy.database.dao.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
-import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.SecurityProvider;
+import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.UserRightException;
 import de.oglimmer.lunchy.rest.dto.LocationCreateInput;
 import de.oglimmer.lunchy.rest.dto.LocationResponse;
 import de.oglimmer.lunchy.rest.dto.LocationUpdateInput;
-import de.oglimmer.lunchy.rest.dto.PictureUpdateInput;
-import de.oglimmer.lunchy.rest.dto.ReviewUpdateInput;
+import de.oglimmer.lunchy.rest.dto.PictureResponse;
+import de.oglimmer.lunchy.rest.dto.ReviewResponse;
 import de.oglimmer.lunchy.services.Community;
 
 @Slf4j
@@ -51,15 +51,15 @@ public class LocationResource extends BaseResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/reviews")
-	public List<ReviewUpdateInput> queryReviews(@PathParam("id") int id) {
-		return query(id, ReviewUpdateInput.class);
+	public List<ReviewResponse> queryReviews(@PathParam("id") int id) {
+		return query(id, ReviewResponse.class);
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}/pictures")
-	public List<PictureUpdateInput> queryPictures(@PathParam("id") int id) {
-		return query(id, PictureUpdateInput.class);
+	public List<PictureResponse> queryPictures(@PathParam("id") int id) {
+		return query(id, PictureResponse.class);
 	}
 
 	@GET

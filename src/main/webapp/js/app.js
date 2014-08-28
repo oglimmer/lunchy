@@ -3,7 +3,7 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('LunchyApp', [
-  'ngResource', 'ui.router', 'ui.validate', 'ui.bootstrap', 'google-maps', 'ngTable', 'flow', 'ngTouch',
+  'ngResource', 'ui.router', 'ui.validate', 'ui.bootstrap', 'google-maps', 'ngTable', 'flow', 'ngTouch', 'ngSanitize',
   'LunchyApp.filters',
   'LunchyApp.services',
   'LunchyApp.directives',
