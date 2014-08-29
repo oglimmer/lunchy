@@ -230,16 +230,6 @@
             </column>
         </addColumn>
     </changeSet>
-    <!-- 
-    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="custom-1" author="oli (generated)">
-    	<insert tableName="communities">
-            <column name="id" valueNumeric="1"/>
-            <column name="name" value="ADTECH"/>
-            <column name="domain" value="adtech"/>
-            <column name="adminEmail" value="oli@zimpasser.de"/>
-        </insert>
-    </changeSet>
-     -->
     <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="custom-2" author="oli (generated)">
     	<update tableName="location">
         	<column name="fkCommunity" valueNumeric="1"/>
@@ -556,9 +546,7 @@
 	</changeSet>
 	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-28">
 		<dropNotNullConstraint columnDataType="varchar(255)"
-			columnName="zip" tableName="location" />
-		<dropDefaultValue columnDataType="varchar(255)"
-			columnName="zip" tableName="location" />
+			columnName="zip" tableName="location" />		
 	</changeSet>
 
     <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408917616128-1">

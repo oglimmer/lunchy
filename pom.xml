@@ -107,7 +107,7 @@
 							<execution>
 								<phase>process-resources</phase>
 								<configuration>
-									<changeLogFile>src/main/resources/all_tables.xml</changeLogFile>
+									<changeLogFile>src/main/resources/init-db.xml</changeLogFile>
 									<driver>com.mysql.jdbc.Driver</driver>
 									<url>jdbc:mysql://127.0.0.1/oli_lunchy</url>
 									<username>root</username>

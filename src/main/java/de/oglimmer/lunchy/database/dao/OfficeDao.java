@@ -32,8 +32,7 @@ public enum OfficeDao implements Dao<OfficesRecord> {
 			Record1<Integer> result = create.select(Users.USERS.FK_BASE_OFFICE).from(Users.USERS)
 					.where(Users.USERS.FK_COMMUNITY.equal(fkCommunity)).groupBy(Users.USERS.FK_BASE_OFFICE).orderBy(DSL.val("count(*)"))
 					.limit(1).fetchOne();
-			Integer fkBaseOffice = result.value1();
-			return fkBaseOffice != null ? fkBaseOffice : -1;
+			return result != null ? result.value1() : -1;
 		}
 	}
 
