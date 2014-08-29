@@ -32,6 +32,11 @@
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<lunchy.db.driver>com.mysql.jdbc.Driver</lunchy.db.driver>
+		<lunchy.db.url>jdbc:mysql://127.0.0.1/</lunchy.db.url>
+		<lunchy.db.schema>oli_lunchy</lunchy.db.schema>
+		<lunchy.db.user>root</lunchy.db.user>
+		<lunchy.db.password></lunchy.db.password>
 	</properties>
 
 	<profiles>
@@ -65,10 +70,10 @@
 						</dependencies>
 						<configuration>
 							<jdbc>
-								<driver>com.mysql.jdbc.Driver</driver>
-								<url>jdbc:mysql://127.0.0.1</url>
-								<user>root</user>
-								<password />
+								<driver>${lunchy.db.driver}</driver>
+								<url>${lunchy.db.url}</url>
+								<user>${lunchy.db.user}</user>
+								<password>${lunchy.db.password}</password>
 							</jdbc>
 							<generator>
 								<name>org.jooq.util.DefaultGenerator</name>
@@ -107,11 +112,12 @@
 							<execution>
 								<phase>process-resources</phase>
 								<configuration>
+									<promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
 									<changeLogFile>src/main/resources/init-db.xml</changeLogFile>
-									<driver>com.mysql.jdbc.Driver</driver>
-									<url>jdbc:mysql://127.0.0.1/oli_lunchy</url>
-									<username>root</username>
-									<password />
+									<driver>${lunchy.db.driver}</driver>
+									<url>${lunchy.db.url}${lunchy.db.schema}</url>
+									<username>${lunchy.db.user}</username>
+									<password>${lunchy.db.password}</password>
 								</configuration>
 								<goals>
 									<goal>update</goal>
@@ -121,6 +127,24 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+			<id>hsqldb-driver</id>
+			<activation>
+				<property>
+					<name>hsqldb</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>	
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.hsqldb</groupId>
+					<artifactId>hsqldb</artifactId>
+					<version>2.3.2</version>
+				</dependency>
+			</dependencies>
 		</profile>
 	</profiles>
 
