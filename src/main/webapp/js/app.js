@@ -3,7 +3,7 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('LunchyApp', [
-  'ngResource', 'ui.router', 'ui.validate', 'ui.bootstrap', 'google-maps', 'ngTable', 'flow', 'ngTouch', 'ngSanitize',
+  'ngResource', 'ui.router', 'ui.validate', 'ui.bootstrap', 'google-maps', 'ngTable', 'flow', 'ngTouch', 'ngSanitize', 'ngCookies',
   'LunchyApp.filters',
   'LunchyApp.services',
   'LunchyApp.directives',
@@ -172,8 +172,8 @@ factory('ReviewDao', ['$resource', function($resource) {
 factory('TagDao', ['$resource', function($resource) {
 	return $resource('rest/tags');
 }]).
-factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 'CommunityService',
-					function($modal, $q, LoginDao, $rootScope, StorageService, OfficesDao, CommunityService) {
+factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 'CommunityService', '$cookies',
+					function($modal, $q, LoginDao, $rootScope, StorageService, OfficesDao, CommunityService, $cookies) {
 	
 	return {
 		loggedIn: false,
@@ -205,7 +205,7 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 				}
                 var longTimeToken = StorageService.get('longTimeToken');
                 if(typeof(longTimeToken)==='undefined'||longTimeToken==null) {
-                    longTimeToken = getCookie("lunchylogintoken");
+                    longTimeToken = $cookies.lunchylogintoken;
                 }
 				return LoginDao.check({longTimeToken:longTimeToken}).$promise
 					.then(function(successResp) {						

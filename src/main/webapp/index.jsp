@@ -30,7 +30,8 @@
 	<script src="webjars/angularjs/1.3.0-beta.15/angular-resource.min.js"></script><!-- $resource -->
 	<script src="webjars/angularjs/1.3.0-beta.15/angular-route.min.js"></script><!-- $route -->
 	<script src="webjars/angularjs/1.3.0-beta.15/angular-touch.min.js"></script><!-- touch support -->
-	<script src="webjars/angularjs/1.3.0-beta.15/angular-sanitize.min.js"></script><!-- linky -->
+    <script src="webjars/angularjs/1.3.0-beta.15/angular-sanitize.min.js"></script><!-- linky -->
+    <script src="webjars/angularjs/1.3.0-beta.15/angular-cookies.min.js"></script><!-- cookies -->
 	<script src="webjars/angular-ui-utils/0.1.1/ui-utils.min.js"></script><!-- validate -->
 	<script src="webjars/angular-ui-router/0.2.10/angular-ui-router.min.js"></script><!-- ui-router -->
 	<!-- <script src="webjars/angular-ui/0.4.0/angular-ui.min.js"></script>  --><!-- needed? -->
@@ -42,8 +43,7 @@
 	<script src='//maps.googleapis.com/maps/api/js?sensor=false'></script><!-- google-maps -->
 	<script src="webjars/lodash/2.4.1/lodash.underscore.min.js"></script><!-- google-maps && my own code -->
 	<script src="js/ext/angular-google-maps.1.2.0.min.js"></script><!-- google-maps -->
-	
-	<lunchy:script src="js/cookie.js"/>
+		
 	<lunchy:script src="js/app.js"/>
 	<lunchy:script src="js/services.js"/>
 	<lunchy:script src="js/controllers.js"/>
