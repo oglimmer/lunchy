@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" session="false" import="de.oglimmer.lunchy.services.LunchyVersion" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" session="false" %><%@ taglib prefix="lunchy" uri="http://oglimmer.de/lunchy/tags" %>
 <!DOCTYPE html>
 <html lang="en" ng-app="LunchyApp" class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:ng="http://angularjs.org">
 <head>
@@ -11,8 +11,8 @@
 	<!-- <link href="webjars/angular-ui/0.4.0/angular-ui.min.css" rel="stylesheet" />  -->
 	<link href="webjars/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"><!-- modal-dialog and more -->
 	<link href="css/bootstrap-theme.min.css" rel="stylesheet"><!-- modal-dialog and more -->
-	<link href="webjars/ng-table/0.3.3/ng-table.min.css" rel="stylesheet"><!-- ng-table -->
-    <link href="css/styles.css?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>" rel="stylesheet" />
+	<link href="webjars/ng-table/0.3.3/ng-table.min.css" rel="stylesheet"><!-- ng-table -->    
+    <lunchy:style href="css/styles.css"/>
 </head>
 <body ng-controller="LunchyControllerMain" flow-prevent-drop>
 
@@ -43,13 +43,13 @@
 	<script src="webjars/lodash/2.4.1/lodash.underscore.min.js"></script><!-- google-maps && my own code -->
 	<script src="js/ext/angular-google-maps.1.2.0.min.js"></script><!-- google-maps -->
 	
-	<script src="js/cookie.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script> <!-- my own cookie lib -->
-	<script src="js/app.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
-	<script src="js/services.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
-	<script src="js/controllers.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
-	<script src="js/filters.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
-	<script src="js/directives.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
-	<script src="js/compiled_coffee.js?noCache=<%=LunchyVersion.INSTANCE.getCommit()%>"></script>
+	<lunchy:script src="js/cookie.js"/>
+	<lunchy:script src="js/app.js"/>
+	<lunchy:script src="js/services.js"/>
+	<lunchy:script src="js/controllers.js"/>
+	<lunchy:script src="js/filters.js"/>
+	<lunchy:script src="js/directives.js"/>
+	<lunchy:script src="js/compiled_coffee.js"/>
 </body>
 </html>
 

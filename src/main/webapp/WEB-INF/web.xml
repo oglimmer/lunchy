@@ -14,4 +14,12 @@
 	<session-config>
 		<session-timeout>120</session-timeout>
 	</session-config>
+
+	<jsp-config>
+		<taglib>
+			<taglib-uri>http://oglimmer.de/lunchy/tags</taglib-uri>
+			<taglib-location>/WEB-INF/lunchy-tags.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+	
 </web-app>

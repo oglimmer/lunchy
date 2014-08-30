@@ -9,8 +9,6 @@ import java.util.jar.Manifest;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.lang3.RandomStringUtils;
-
 import lombok.Getter;
 
 public enum LunchyVersion {
@@ -24,6 +22,8 @@ public enum LunchyVersion {
 	private String lunchyVersion;
 	@Getter
 	private String creationDate;
+	@Getter
+	private boolean runsOnDev;
 
 	public void init(ServletContext context) {
 		try (InputStream is = new FileInputStream(context.getRealPath("/META-INF/MANIFEST.MF"))) {
@@ -34,9 +34,10 @@ public enum LunchyVersion {
 			long time = Long.parseLong(attr.getValue("Creation-Date"));
 			creationDate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date(time));
 		} catch (Exception e) {
-			commit = RandomStringUtils.randomAlphanumeric(8);
+			commit = "?";
 			creationDate = "?";
 			lunchyVersion = "?";
+			runsOnDev = true;
 		}
 
 		version = "V" + lunchyVersion + " [Commit#" + commit + "] build " + creationDate;
