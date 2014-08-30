@@ -14,8 +14,6 @@ public class LocationUpdateInput {
 	private String country;
 	private String url;
 	private String comment;
-	private Double geoLat;
-	private Double geoLng;
 	private String tags;
 
 }

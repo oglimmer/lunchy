@@ -251,21 +251,31 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             // create map data
             $scope.mapSelected = function() {
                 $scope.map = {
-                        center : {
-                            latitude : $scope.data.geoLat,
-                            longitude : $scope.data.geoLng
-                        },
-                        zoom : 13
+                    center : {
+                        latitude : $scope.data.geoLat,
+                        longitude : $scope.data.geoLng
+                    },
+                    zoom : 13
                 };
                 $scope.marker = {
-                        id:$scope.data.id,
-                        coords: {
-                            latitude: $scope.data.geoLat,
-                            longitude: $scope.data.geoLng
-                        },
-                        markerOptions: {
-                            title: $scope.data.officialName
+                    id:$scope.data.id,
+                    coords: {
+                        latitude: $scope.data.geoLat,
+                        longitude: $scope.data.geoLng
+                    },
+                    events: {
+                        dragend: function(marker, eventName, args) {
+                            $scope.marker.newPosition = marker.getPosition();
+                            $scope.$apply(function() {
+                                $scope.marker.pinMoved = true;
+                            })
                         }
+                    },
+                    markerOptions: {
+                        title: $scope.data.officialName,
+                        draggable:true
+                    },
+                    pinMoved : false
                 }
                 angular.forEach($scope.offices, function(off) {
                     if(off.id == $scope.data.fkOffice){
@@ -342,6 +352,14 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                 $scope.addPictureMode = true;
                 $scope.showButtonsMode= false;
                 $scope.tabs.active = [false, false, true, false];
+            };
+
+            $scope.saveMovedPin = function() {
+                LocationsDao.updatePosition({ "id": $stateParams.locationId }, {
+                    lat: $scope.marker.newPosition.lat(),
+                    lng: $scope.marker.newPosition.lng()
+                });
+                $scope.marker.pinMoved = false;
             };
 
             $scope.cancelEdit = function() {

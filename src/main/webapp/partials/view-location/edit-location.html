@@ -25,14 +25,17 @@
         <div class="row form-group" ng-class="{'has-error': editLocation.address.$invalid || editLocation.city.$invalid}">
             <label for="data.address" class="col-md-2 control-label required">Address</label>
             <div class="col-md-4">
-                <input type="text" class="form-control" name="address" ng-model="data.address" placeholder="Street"  required>
+                <input type="text" class="form-control" name="address" ng-model="data.address" placeholder="Street" ng-disabled="data.geoMovedManually" required>
             </div>
             <div class="col-md-3">
-                <input type="text" class="form-control" ng-model="data.zip" placeholder="ZIP" >
+                <input type="text" class="form-control" ng-model="data.zip" placeholder="ZIP" ng-disabled="data.geoMovedManually" >
             </div>
             <div class="col-md-3">
-                <input type="text" class="form-control" name="city" ng-model="data.city" placeholder="City"  required>
+                <input type="text" class="form-control" name="city" ng-model="data.city" placeholder="City" ng-disabled="data.geoMovedManually" required>
             </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-10 col-md-offset-2"><input type="checkbox" name="geoMovedManually" ng-model="data.geoMovedManually" > The pin on the map was moved manually.</div>
         </div>
 
         <div class="row form-group">

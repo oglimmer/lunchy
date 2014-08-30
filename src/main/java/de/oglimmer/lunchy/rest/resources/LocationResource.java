@@ -91,6 +91,17 @@ public class LocationResource extends BaseResource {
 		return new CreateUpdateLogic(request, locationDto).update(id);
 	}
 
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}/updatePosition")
+	public void updatePosition(@Context HttpServletRequest request, @PathParam("id") int id, LocationPositionUpdate locationDto) {
+		LocationRecord loc = LocationDao.INSTANCE.getById(id, Community.get(request));
+		loc.setGeoLat(locationDto.getLat());
+		loc.setGeoLng(locationDto.getLng());
+		loc.setGeoMovedManually((byte) 1);
+		LocationDao.INSTANCE.store(loc);
+	}
+
 	@DELETE
 	@Path("{id}")
 	public void delete(@Context HttpServletRequest request, @PathParam("id") int id) {
@@ -105,11 +116,18 @@ public class LocationResource extends BaseResource {
 		private Integer fkReview;
 	}
 
+	@Data
+	public static class LocationPositionUpdate {
+		private Double lat;
+		private Double lng;
+	}
+
 	@RequiredArgsConstructor
 	class CreateUpdateLogic {
 
 		final private HttpServletRequest request;
 		final private LocationUpdateInput locationDto;
+		private boolean keepManuallyUpdatedGeoData;
 
 		public LocationResponse create() {
 			LocationRecord locationRec = copyDtoToRecord(new LocationRecord());
@@ -129,13 +147,22 @@ public class LocationResource extends BaseResource {
 			locationRec.setFkCommunity(Community.get(request));
 			locationRec.setFkUser(SessionProvider.INSTANCE.getLoggedInUserId(request));
 			locationRec.setCreatedOn(new Timestamp(new Date().getTime()));
+			locationRec.setGeoMovedManually((byte) 0);
 			OfficesRecord office = OfficeDao.INSTANCE.getById(locationRec.getFkOffice(), Community.get(request));
 			locationRec.setCountry(office.getCountry());
 		}
 
 		private LocationRecord copyDtoToRecord(LocationRecord locationRec) {
+			if (locationRec.getGeoMovedManually() == 1 && !addressChanged(locationRec)) {
+				keepManuallyUpdatedGeoData = true;
+			}
 			BeanMappingProvider.INSTANCE.map(locationDto, locationRec);
 			return locationRec;
+		}
+
+		private boolean addressChanged(LocationRecord locationRec) {
+			return !locationDto.getAddress().equals(locationRec.getAddress()) || !locationDto.getCity().equals(locationRec.getCity())
+					|| !locationDto.getZip().equals(locationRec.getZip());
 		}
 
 		private LocationResponse updateRec(LocationRecord locationRec) {
@@ -146,26 +173,28 @@ public class LocationResource extends BaseResource {
 		}
 
 		private void updateGeoData(LocationRecord locationRec) {
-			try {
-				String address = locationRec.getAddress() + "," + (locationRec.getZip() != null ? locationRec.getZip() : "") + " "
-						+ locationRec.getCity() + "," + locationRec.getCountry();
+			if (!keepManuallyUpdatedGeoData) {
+				try {
+					String address = locationRec.getAddress() + "," + (locationRec.getZip() != null ? locationRec.getZip() : "") + " "
+							+ locationRec.getCity() + "," + locationRec.getCountry();
 
-				final Geocoder geocoder = new Geocoder();
-				GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(address).getGeocoderRequest();
-				GeocodeResponse geocoderResponse = geocoder.geocode(geocoderRequest);
+					final Geocoder geocoder = new Geocoder();
+					GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(address).getGeocoderRequest();
+					GeocodeResponse geocoderResponse = geocoder.geocode(geocoderRequest);
 
-				if (geocoderResponse.getResults().size() != 1) {
-					log.error("Failed to get one result for " + address + " got " + geocoderResponse.getResults());
+					if (geocoderResponse.getResults().size() != 1) {
+						log.error("Failed to get one result for " + address + " got " + geocoderResponse.getResults());
+					}
+
+					for (GeocoderResult gr : geocoderResponse.getResults()) {
+						LatLng latLng = gr.getGeometry().getLocation();
+						locationRec.setGeoLat(latLng.getLat().doubleValue());
+						locationRec.setGeoLng(latLng.getLng().doubleValue());
+
+					}
+				} catch (IOException e) {
+					log.error("Error accessing Geocoder API", e);
 				}
-
-				for (GeocoderResult gr : geocoderResponse.getResults()) {
-					LatLng latLng = gr.getGeometry().getLocation();
-					locationRec.setGeoLat(latLng.getLat().doubleValue());
-					locationRec.setGeoLng(latLng.getLng().doubleValue());
-
-				}
-			} catch (IOException e) {
-				log.error("Error accessing Geocoder API", e);
 			}
 		}
 	}

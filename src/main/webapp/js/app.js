@@ -160,10 +160,14 @@ factory('LocationsDao', ['$resource', function($resource) {
 			url: 'rest/locations/:id/pictures',
 			isArray: true
 		},
-		'locationStatusForCurrentUser': {
-			method: 'GET',
-			url: 'rest/locations/:id/locationStatusForCurrentUser'
-		}
+        'locationStatusForCurrentUser': {
+            method: 'GET',
+            url: 'rest/locations/:id/locationStatusForCurrentUser'
+        },
+        'updatePosition': {
+            method: 'POST',
+            url: 'rest/locations/:id/updatePosition'
+        }
 	});
 }]).
 factory('ReviewDao', ['$resource', function($resource) {
