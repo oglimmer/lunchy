@@ -6,7 +6,7 @@
 	<div class="form-group">
 
         <tabset justified="true" ng-show="showTabMode">
-            <tab heading="Base data" active="tabs.active[0]" disabled="tabs.disabled[0]">
+            <tab heading="{{ data.officialName }}" active="tabs.active[0]" disabled="tabs.disabled[0]">
                 <div ng-include="'partials/view-location/base-data.html'"></div>
             </tab>
             <tab heading="Reviews ({{ reviews.length }})" active="tabs.active[1]" disabled="tabs.disabled[1]">
