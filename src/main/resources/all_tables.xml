@@ -547,6 +547,8 @@
 	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408748644497-28">
 		<dropNotNullConstraint columnDataType="varchar(255)"
 			columnName="zip" tableName="location" />		
+		<dropDefaultValue columnDataType="varchar(255)"
+			columnName="zip" tableName="location" />
 	</changeSet>
 
     <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408917616128-1">
@@ -569,6 +571,18 @@
                 <constraints nullable="false"/>
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1409410463827-1">
+        <addColumn tableName="location">
+            <column name="geo_Moved_Manually" type="TINYINT">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1409410463827-2">
+        <addDefaultValue columnDataType="varchar(255)"
+			columnName="zip" tableName="location" defaultValue="null" />
     </changeSet>
         
 </databaseChangeLog>

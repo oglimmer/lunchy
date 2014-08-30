@@ -101,6 +101,7 @@ public class RndDataGenerator {
 			loc.setTags(genTags(10));
 			loc.setUrl(RandomStringUtils.randomAlphabetic(20));
 			loc.setZip(RandomStringUtils.randomAlphabetic(6));
+			loc.setGeoMovedManually((byte) 0);
 			LocationDao.INSTANCE.store(loc);
 			genReview(fkCommunity, fkCreator, loc.getId());
 			genPictures(fkCommunity, fkCreator, loc.getId());
