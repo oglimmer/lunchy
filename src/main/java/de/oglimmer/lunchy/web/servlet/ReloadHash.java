@@ -48,7 +48,7 @@ class ReloadHash {
 		try {
 			return LunchyVersion.INSTANCE.isRunsOnDev() ? RandomStringUtils.randomAlphanumeric(8) : hashCache.get(this);
 		} catch (ExecutionException e) {
-			log.debug("Failed to get cached value for ScriptTag");
+			log.warn("Failed to get cached value for ReloadHash");
 			return calcHash(this);
 		}
 	}
