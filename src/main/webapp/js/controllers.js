@@ -634,30 +634,37 @@ controller('LunchyControllerUser', ['$scope', 'UserDao', 'ngTableParams', '$filt
 		UserDao.savePermission({id:item.id}, {permissions:item.permissions});
 		deactivateEdit();			
 	}
+
+    function initTable(data) {
+        dataHolder = data;
+        $scope.tableParams = new ngTableParams({
+            page: 1,
+            count: 10,
+            sorting: {
+                email: 'asc'
+            }
+        }, {
+            total: dataHolder.length,
+            getData: function($defer, params) {
+
+                var filterData = $filter('filter')(dataHolder, params.filter());
+
+                var orderedData = $filter('orderBy')(filterData, params.orderBy());
+
+                var pagedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+                params.total(filterData.length);
+                return $defer.resolve(pagedData);
+            }
+        });
+    }
 	
 	UserDao.query(function (data) {
-		dataHolder = data;
-		$scope.tableParams = new ngTableParams({
-			page: 1,
-	        count: 10,
-	        sorting: {
-	        	email: 'asc'
-	        }
-		}, {
-	        total: dataHolder.length,
-	        getData: function($defer, params) {
-	        		  	        
-	  	        var filterData = $filter('filter')(dataHolder, params.filter());
-	  	        
-	            var orderedData = $filter('orderBy')(filterData, params.orderBy());
+        initTable(data);
+	}, function() {
+        initTable([]);
+    });
 
-	            var pagedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
-	            params.total(filterData.length);
-	            return $defer.resolve(pagedData);	        	
-	        }
-	    });
-	});
 	$scope.$on('userLoggedIn', function(event) {
 		UserDao.query(function (data) {
 			dataHolder = data;
