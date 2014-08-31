@@ -57,8 +57,7 @@ public enum Email {
 		send(to, subject, body, null);
 	}
 
-	private void send(final String to, final String subject, String body, String htmlBody) {
-		System.out.println(htmlBody);
+	private void send(final String to, final String subject, String body, String htmlBody) {		
 		try {
 			final HtmlEmail email = setup();
 			email.addTo(to);
