@@ -36,7 +36,11 @@ public abstract class BaseResource {
 	}
 
 	protected <T> List<T> query(int fkParent, Class<T> clazz) {
-		return BeanMappingProvider.INSTANCE.mapList(DaoFactory.INSTANCE.getDao(getDaoName(clazz)).getListByParent(fkParent), clazz);
+		return query(fkParent, clazz, getDaoName(clazz));
+	}
+
+	protected <T> List<T> query(int fkParent, Class<T> clazz, String daoName) {
+		return BeanMappingProvider.INSTANCE.mapList(DaoFactory.INSTANCE.getDao(daoName).getListByParent(fkParent), clazz);
 	}
 
 	protected String convertToJson(List<String> listOfStrings) {

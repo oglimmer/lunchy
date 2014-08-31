@@ -115,7 +115,7 @@ public class UserResource extends BaseResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<UserAdminResponse> query(@Context HttpServletRequest request) {
 		SecurityProvider.INSTANCE.checkAdmin(request);
-		return query(Community.get(request), UserAdminResponse.class);
+		return query(Community.get(request), UserAdminResponse.class, "User");
 	}
 
 	@GET
