@@ -1,12 +1,11 @@
 package de.oglimmer.lunchy.rest;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import org.imgscalr.Scalr;
+import org.imgscalr.Scalr.Method;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -15,25 +14,26 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifIFD0Directory;
 
-import de.oglimmer.lunchy.services.FileServices;
-import de.oglimmer.lunchy.services.LunchyProperties;
+abstract public class ImageScaler {
 
-public class PictureScaler {
+	final private int maxWidth;
+	final private int maxHeight;
+	final private Method method;
 
-	private static final int MAX_HEIGHT = 720;
-	private static final int MAX_WIDTH = 1200;
-
-	private String filename;
-	private File originalFile;
 	private int imageWidth;
 	private int imageHeight;
-	private BufferedImage originalImage;
-	private BufferedImage scaledImage;
+	protected BufferedImage originalImage;
+	protected BufferedImage scaledImage;
 
-	public PictureScaler(String filename) {
-		this.filename = filename;
-		originalFile = new File(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
+	public ImageScaler(int maxWidth, int maxHeight, Method method) {
+		this.maxWidth = maxWidth;
+		this.maxHeight = maxHeight;
+		this.method = method;
 	}
+
+	abstract protected void loadImage() throws IOException;
+
+	abstract protected BufferedInputStream getBufferedInputStream() throws IOException;
 
 	public boolean scale() throws IOException {
 		loadImage();
@@ -48,33 +48,20 @@ public class PictureScaler {
 	private void calcDimAndScale() throws IOException {
 		int newWidth = imageWidth;
 		int newHeight = imageHeight;
-		if (newWidth > MAX_WIDTH) {
-			newHeight *= (Double.valueOf(MAX_WIDTH) / newWidth);
-			newWidth = MAX_WIDTH;
+		if (newWidth > maxWidth) {
+			newHeight *= (Double.valueOf(maxWidth) / newWidth);
+			newWidth = maxWidth;
 		}
-		if (newHeight > MAX_HEIGHT) {
-			newWidth *= (Double.valueOf(MAX_HEIGHT) / newHeight);
-			newHeight = MAX_HEIGHT;
+		if (newHeight > maxHeight) {
+			newWidth *= (Double.valueOf(maxHeight) / newHeight);
+			newHeight = maxHeight;
 		}
 
 		createShrinkedImage(newWidth, newHeight);
 	}
 
-	public void moveOriginalFileToBackup() throws IOException {
-		String path = LunchyProperties.INSTANCE.getBackupDestinationPath();
-		if (path == null) {
-			path = LunchyProperties.INSTANCE.getPictureDestinationPath();
-		}
-		File backupFile = new File(path + "/" + filename + "_original" + FileServices.getFileExtension(filename));
-		FileServices.move(originalFile, backupFile);
-	}
-
 	private boolean isScalingNeeded() {
-		return imageWidth > MAX_WIDTH || imageHeight > MAX_HEIGHT;
-	}
-
-	private void loadImage() throws IOException {
-		originalImage = ImageIO.read(originalFile);
+		return imageWidth > maxWidth || imageHeight > maxHeight;
 	}
 
 	private void readDimensions() {
@@ -82,13 +69,9 @@ public class PictureScaler {
 		imageHeight = originalImage.getHeight();
 	}
 
-	public void saveToDisk() throws IOException {
-		ImageIO.write(scaledImage, FileServices.getFileType(filename), originalFile);
-	}
-
 	private void createShrinkedImage(int width, int height) throws IOException {
 		BufferedImage tmpImg = fixRotation();
-		scaledImage = Scalr.resize(tmpImg, Scalr.Method.ULTRA_QUALITY, width, height);
+		scaledImage = Scalr.resize(tmpImg, method, width, height);
 	}
 
 	/**
@@ -101,7 +84,7 @@ public class PictureScaler {
 	private BufferedImage fixRotation() throws IOException {
 		BufferedImage tmpImg = originalImage;
 		// http://sylvana.net/jpegcrop/exif_orientation.html
-		switch (getOrientation(originalFile)) {
+		switch (getOrientation(getBufferedInputStream())) {
 		case 1:
 			break;
 		case 2:
@@ -132,11 +115,14 @@ public class PictureScaler {
 		return tmpImg;
 	}
 
-	private static int getOrientation(File imageFile) throws IOException {
+	private static int getOrientation(BufferedInputStream bis) throws IOException {
 		try {
-			Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
+			Metadata metadata = ImageMetadataReader.readMetadata(bis, false);
 			Directory directory = metadata.getDirectory(ExifIFD0Directory.class);
-			return directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+			if (directory != null) {
+				return directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+			}
+			return 1;
 		} catch (MetadataException | ImageProcessingException me) {
 			return 1;
 		}

@@ -1,6 +1,6 @@
 package de.oglimmer.lunchy.services;
 
-import java.text.DateFormat;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -11,12 +11,15 @@ import org.apache.commons.mail.HtmlEmail;
 
 import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.rest.dto.UpdatesQuery;
+import de.oglimmer.lunchy.services.EmailUpdatesNotifier.MailImage;
 
 @Slf4j
 public enum Email {
 	INSTANCE;
 
-	private static final String URL = "http://%s.lunchylunch.com/lunchy";
+	private static final String DOMAIN = "%s.lunchylunch.com";
+	private static final String URL = "http://%s/lunchy";
 
 	private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
@@ -25,8 +28,12 @@ public enum Email {
 		executor.shutdown();
 	}
 
-	private String getUrl(int fkCommunity) {
-		return String.format(URL, CommunityDao.INSTANCE.getById(fkCommunity).getDomain());
+	public String getUrl(int fkCommunity) {
+		return String.format(URL, getDomain(fkCommunity));
+	}
+
+	public String getDomain(int fkCommunity) {
+		return String.format(DOMAIN, CommunityDao.INSTANCE.getById(fkCommunity).getDomain());
 	}
 
 	private HtmlEmail setup() throws EmailException {
@@ -47,11 +54,18 @@ public enum Email {
 	}
 
 	private void send(final String to, final String subject, final String body) {
+		send(to, subject, body, null);
+	}
+
+	private void send(final String to, final String subject, String body, String htmlBody) {
+		System.out.println(htmlBody);
 		try {
 			final HtmlEmail email = setup();
 			email.addTo(to);
 			email.setSubject(subject);
-			email.addPart(body, "text/plain;charset=utf8");
+			email.setHtmlMsg(htmlBody != null ? htmlBody : body);
+			email.setTextMsg(body);
+
 			if (!LunchyProperties.INSTANCE.isEmailDisabled()) {
 				executor.execute(new Runnable() {
 					@Override
@@ -103,29 +117,11 @@ public enum Email {
 				+ "\r\n\r\nYou have successfully reset your Lunchy password.\r\n\r\nRegards,\r\nOli");
 	}
 
-	public void sendUpdates(UsersRecord rec, String updates) {
-		String CR = "\r\n";
+	public void sendUpdates(UsersRecord rec, List<UpdatesQuery> updates, List<MailImage> images) {
 		String subject = "Lunchy weekly email updates";
-		StringBuilder body = new StringBuilder();
-		body.append("Hello " + rec.getDisplayname() + " my hungry friend," + CR);
-		body.append(CR);
-		body.append("here are the updates from " + getUrl(rec.getFkCommunity()) + " starting from "
-				+ DateFormat.getDateInstance().format(rec.getLastEmailUpdate()) + " :");
-		body.append(CR);
-		if (updates.isEmpty()) {
-			body.append(CR + "Nothing happened this week :( - visit lunchy now and enter new locations, reviews and pictures!" + CR);
-		} else {
-			body.append(updates);
-		}
-		body.append(CR);
-		body.append(CR);
-		body.append("Regards," + CR);
-		body.append("Oli" + CR);
-		body.append(CR);
-		body.append(CR);
-		body.append("To unsubscribe from this email change your settings at " + getUrl(rec.getFkCommunity()));
-
-		log.debug("Updates to " + rec.getEmail() + " from " + rec.getLastEmailUpdate() + " scheduled.");
-		send(rec.getEmail(), subject, body.toString());
+		log.debug("Ready to send email to " + rec.getEmail() + " from " + rec.getLastEmailUpdate());
+		send(rec.getEmail(), subject, NotificationEmailText.INSTANCE.getText(rec, updates, images),
+				NotificationEmailText.INSTANCE.getHtml(rec, updates, images));
 	}
+
 }

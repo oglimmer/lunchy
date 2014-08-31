@@ -2,6 +2,7 @@ package de.oglimmer.lunchy.rest.resources;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,12 +23,14 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.imgscalr.Scalr;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.PictureDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
+import de.oglimmer.lunchy.rest.MemoryBaseImageScaler;
 import de.oglimmer.lunchy.rest.SessionProvider;
-import de.oglimmer.lunchy.rest.PictureScaler;
+import de.oglimmer.lunchy.rest.UploadImageScaler;
 import de.oglimmer.lunchy.rest.dto.PictureCreateInput;
 import de.oglimmer.lunchy.rest.dto.PictureResponse;
 import de.oglimmer.lunchy.rest.dto.PictureUpdateInput;
@@ -40,14 +44,18 @@ public class PictureResource {
 	@SneakyThrows(value = IOException.class)
 	@GET
 	@Path("{filename}")
-	public Response load(@PathParam("filename") String filename) {
+	public Response load(@PathParam("filename") String filename, @QueryParam("size") String size) {
 		// NEVER REMOVE THIS!!! SECURITY check to avoid reading all files on the filesystem
 		if (filename.contains("..")) {
 			throw new RuntimeException("Illegal filename:" + filename);
 		}
 		String mediaType = FileServices.getMediaTypeFromFileExtension(filename);
-		FileInputStream fis = new FileInputStream(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
-		return Response.ok(fis, mediaType).build();
+		InputStream is = new FileInputStream(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
+		if ("small".equals(size)) {
+			MemoryBaseImageScaler imageScaler = new MemoryBaseImageScaler(480, 280, Scalr.Method.SPEED, is);
+			is = imageScaler.getScaledInputStream(FileServices.getFileType(filename));
+		}
+		return Response.ok(is, mediaType).build();
 	}
 
 	@POST
@@ -87,7 +95,7 @@ public class PictureResource {
 	}
 
 	private void scaleIfTooLarge(PicturesRecord rec) throws IOException {
-		PictureScaler ps = new PictureScaler(rec.getFilename());
+		UploadImageScaler ps = new UploadImageScaler(rec.getFilename());
 		if (ps.scale()) {
 			ps.moveOriginalFileToBackup();
 			ps.saveToDisk();

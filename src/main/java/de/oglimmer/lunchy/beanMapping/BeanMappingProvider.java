@@ -53,6 +53,14 @@ public enum BeanMappingProvider {
 		return resultList;
 	}
 
+	public <T> List<T> mapListCustomDto(Collection<? extends Record> col, Class<T> clazz) {
+		List<T> resultList = new ArrayList<>();
+		for (Record rec : col) {
+			resultList.add(map(new DozerAdapter(rec), clazz));
+		}
+		return resultList;
+	}
+
 }
 
 /**

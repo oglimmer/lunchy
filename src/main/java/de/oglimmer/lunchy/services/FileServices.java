@@ -19,6 +19,10 @@ public class FileServices {
 		Files.move(file.toPath(), newFile.toPath());
 	}
 
+	public static void copy(File file, File newFile) throws IOException {
+		Files.copy(file.toPath(), newFile.toPath());
+	}
+
 	public static String getFileExtension(String originalFilename) {
 		String type = getFileType(originalFilename);
 		if (!type.isEmpty()) {

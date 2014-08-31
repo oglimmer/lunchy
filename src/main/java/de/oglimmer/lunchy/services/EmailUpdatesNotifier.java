@@ -2,18 +2,22 @@ package de.oglimmer.lunchy.services;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import org.jooq.Record;
 
+import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.beanMapping.DozerAdapter;
+import de.oglimmer.lunchy.beanMapping.RestDto;
 import de.oglimmer.lunchy.database.dao.UpdatesDao;
 import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
@@ -34,7 +38,7 @@ public enum EmailUpdatesNotifier {
 		if (LunchyProperties.INSTANCE.isEmailNotificationEnabled()) {
 			log.debug("Starting EmailUpdatesNotifier...");
 			executorService = Executors.newSingleThreadScheduledExecutor();
-			executorService.scheduleAtFixedRate(new Check(), 0, 5, TimeUnit.MINUTES);
+			executorService.scheduleAtFixedRate(new Check(), 0, 15, TimeUnit.SECONDS);
 		}
 	}
 
@@ -58,8 +62,9 @@ public enum EmailUpdatesNotifier {
 						log.debug("{} will get update, last was {}, next is {}", rec.getEmail(),
 								DateFormat.getDateTimeInstance().format(rec.getLastEmailUpdate()),
 								DateFormat.getDateTimeInstance().format(rec.getNextEmailUpdate()));
-						String updates = buildUpdates(rec);
-						Email.INSTANCE.sendUpdates(rec, updates);
+						List<UpdatesQuery> updates = buildUpdates(rec);
+						List<MailImage> images = buildPictures(rec);
+						Email.INSTANCE.sendUpdates(rec, updates, images);
 						rec.setNextEmailUpdate(calcNextUpdate(rec));
 						UserDao.INSTANCE.store(rec);
 					} else {
@@ -71,36 +76,52 @@ public enum EmailUpdatesNotifier {
 			}
 		}
 
-		private String buildUpdates(UsersRecord user) {
-			StringBuilder buff = new StringBuilder();
-			List<Record> updates = UpdatesDao.INSTANCE.get(user.getLastEmailUpdate(), user.getFkCommunity());
-			UpdatesResource up = new UpdatesResource();
-			for (Record rec : updates) {
-				UpdatesQuery uq = up.createResultRow(new DozerAdapter(rec));
-				buff.append("=> ").append(uq.getText()).append("\r\n");
-			}
-			return buff.toString();
+	}
+
+	List<UpdatesQuery> buildUpdates(UsersRecord user) {
+		List<UpdatesQuery> result = new ArrayList<>();
+		List<Record> updates = UpdatesDao.INSTANCE.get(user.getLastEmailUpdate(), user.getFkCommunity());
+		UpdatesResource up = new UpdatesResource();
+		for (Record rec : updates) {
+			UpdatesQuery uq = up.createResultRow(new DozerAdapter(rec));
+			result.add(uq);
+		}
+		return result;
+	}
+
+	List<MailImage> buildPictures(UsersRecord user) {
+		List<Record> list = UpdatesDao.INSTANCE.getPictures(user.getLastEmailUpdate(), user.getFkCommunity());
+		return BeanMappingProvider.INSTANCE.mapListCustomDto(list, MailImage.class);
+	}
+
+	private Timestamp calcNextUpdate(UsersRecord rec) {
+
+		Calendar nextUpdate = null;
+		switch (rec.getEmailUpdates()) {
+		case 0:
+			nextUpdate = DateCalculation.INSTANCE.findNextMonday();
+			break;
+		case 1:
+			nextUpdate = DateCalculation.INSTANCE.findNever();
+			log.error("User {} had EmailUpdate=1 but was selected for email sending", rec.getEmail());
+			break;
+		default:
+			throw new RuntimeException("Illegal nextUpdate=" + rec.getEmailUpdates());
 		}
 
-		private Timestamp calcNextUpdate(UsersRecord rec) {
+		log.debug("Next update for {} is {}", rec.getEmail(), DateFormat.getDateTimeInstance().format(nextUpdate.getTime()));
+		return new Timestamp(nextUpdate.getTime().getTime());
+	}
 
-			Calendar nextUpdate = null;
-			switch (rec.getEmailUpdates()) {
-			case 0:
-				nextUpdate = DateCalculation.INSTANCE.findNextMonday();
-				break;
-			case 1:
-				nextUpdate = DateCalculation.INSTANCE.findNever();
-				log.error("User {} had EmailUpdate=1 but was selected for email sending", rec.getEmail());
-				break;
-			default:
-				throw new RuntimeException("Illegal nextUpdate=" + rec.getEmailUpdates());
-			}
-
-			log.debug("Next update for {} is {}", rec.getEmail(), DateFormat.getDateTimeInstance().format(nextUpdate.getTime()));
-			return new Timestamp(nextUpdate.getTime().getTime());
-		}
-
+	@Data
+	@RestDto
+	public static class MailImage {
+		private String displayname;
+		private String officialName;
+		private String city;
+		private String caption;
+		private String filename;
+		private String id;
 	}
 
 }

@@ -24,7 +24,7 @@ public enum PictureDao implements Dao<PicturesRecord> {
 	}
 
 	@Override
-	public List<?> getListByParent(int fklocation) {
+	public List<PicturesRecord> getListByParent(int fklocation) {
 		return DB.query(PICTURES, PICTURES.FK_LOCATION.equal(fklocation), PICTURES.CREATED_ON.desc(), PicturesRecord.class);
 	}
 
