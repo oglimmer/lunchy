@@ -34,8 +34,8 @@
                 <input type="text" class="form-control" name="city" ng-model="data.city" placeholder="City" ng-disabled="data.geoMovedManually" required>
             </div>
         </div>
-        <div class="row form-group">
-            <div class="col-md-10 col-md-offset-2"><input type="checkbox" name="geoMovedManually" ng-model="data.geoMovedManually" > The pin on the map was moved manually.</div>
+        <div class="row form-group" ng-show="initialGeoMovedManually">
+            <div class="col-md-10 col-md-offset-2">The pin on the map was moved manually, un-check to allow override. <input type="checkbox" name="geoMovedManually" ng-model="data.geoMovedManually"></div>
         </div>
 
         <div class="row form-group">

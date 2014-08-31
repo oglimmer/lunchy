@@ -189,7 +189,10 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             }
 
             // load location base-data
-            $scope.data = LocationsDao.get({ "id": $stateParams.locationId } );
+            LocationsDao.get({ "id": $stateParams.locationId }, function(loadLocationResponse) {
+                $scope.data = loadLocationResponse;
+                $scope.initialGeoMovedManually = loadLocationResponse.geoMovedManually;
+            } );
             // load location reviews
             LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
                 $scope.reviews = reviews;
@@ -267,7 +270,9 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                         dragend: function(marker, eventName, args) {
                             $scope.marker.newPosition = marker.getPosition();
                             $scope.$apply(function() {
-                                $scope.marker.pinMoved = true;
+                                if($scope.allowedToEditPermission) {
+                                    $scope.marker.pinMoved = true;
+                                }
                             })
                         }
                     },

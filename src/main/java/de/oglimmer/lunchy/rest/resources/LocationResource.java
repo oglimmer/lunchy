@@ -153,8 +153,12 @@ public class LocationResource extends BaseResource {
 		}
 
 		private LocationRecord copyDtoToRecord(LocationRecord locationRec) {
-			if (Byte.valueOf((byte) 1).equals(locationRec.getGeoMovedManually()) && !addressChanged(locationRec)) {
-				keepManuallyUpdatedGeoData = true;
+			if (Byte.valueOf((byte) 1).equals(locationRec.getGeoMovedManually())) {
+				if (addressChanged(locationRec)) {
+					locationRec.setGeoMovedManually((byte) 0);
+				} else {
+					keepManuallyUpdatedGeoData = true;
+				}
 			}
 			BeanMappingProvider.INSTANCE.map(locationDto, locationRec);
 			return locationRec;
