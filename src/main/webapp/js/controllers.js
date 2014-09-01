@@ -553,7 +553,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
   	        var flags = {
   	        	turnAroundTime:'@',
   	        	numberOfReviews:'#',
-  	        	avgRating:'#',
+  	        	avgRating:'#'
   	        }
   	        
   	        for(var key in filterParams) {
@@ -583,6 +583,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	});
 	
 	$scope.$watch('selectedOffice', function() {
+        $scope.tableParams.page(1);
 		reloadTableData();
 	});
 	
