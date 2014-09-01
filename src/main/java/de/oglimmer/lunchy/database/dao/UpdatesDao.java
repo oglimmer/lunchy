@@ -183,7 +183,7 @@ public enum UpdatesDao {
 		private List<LocationIdSize> findLocationsWithNewPicturesSince(int num) {
 			Result<Record> locationsWithPic = create.selectCount().select(Pictures.PICTURES.FK_LOCATION).from(Pictures.PICTURES)
 					.where(Pictures.PICTURES.FK_COMMUNITY.equal(fkCommunity)).groupBy(Pictures.PICTURES.FK_LOCATION)
-					.orderBy(Pictures.PICTURES.CREATED_ON).limit(num).fetch();
+					.orderBy(Pictures.PICTURES.CREATED_ON.desc()).limit(num).fetch();
 
 			return convertToDtoList(locationsWithPic);
 		}
