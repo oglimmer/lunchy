@@ -48,7 +48,15 @@ public enum UpdatesDao {
 	public List<Record> getPictures(Timestamp from, int fkCommunity) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DaoBackend.getContext(conn);
-			return new RetrievePictureLogic(create, from, fkCommunity).queryPictures();
+			return new RetrievePictureLogic(create, fkCommunity).queryPictures(from);
+		}
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public List<Record> getPictures(int numberOfItems, int fkCommunity) {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+			DSLContext create = DaoBackend.getContext(conn);
+			return new RetrievePictureLogic(create, fkCommunity).queryPictures(numberOfItems);
 		}
 	}
 
@@ -123,11 +131,17 @@ public enum UpdatesDao {
 	class RetrievePictureLogic {
 
 		private DSLContext create;
-		private Timestamp from;
 		private int fkCommunity;
 
-		public List<Record> queryPictures() {
-			List<LocationIdSize> locationsWithPics = findLocationsWithNewPicturesSince();
+		public List<Record> queryPictures(int num) {
+			List<LocationIdSize> locationsWithPics = findLocationsWithNewPicturesSince(num * 4);
+			locationsWithPics = reduceList(locationsWithPics, num);
+			List<Integer> picIds = loadPicIdsForLocationIds(locationsWithPics);
+			return query(picIds);
+		}
+
+		public List<Record> queryPictures(Timestamp from) {
+			List<LocationIdSize> locationsWithPics = findLocationsWithNewPicturesSince(from);
 			locationsWithPics = reduceList(locationsWithPics, 3);
 			List<Integer> picIds = loadPicIdsForLocationIds(locationsWithPics);
 			return query(picIds);
@@ -146,9 +160,9 @@ public enum UpdatesDao {
 		private List<Integer> loadPicIdsForLocationIds(List<LocationIdSize> locationList) {
 			List<Integer> idList = new ArrayList<>();
 			for (LocationIdSize loc : locationList) {
+				int offset = (int) (Math.random() * loc.getCount());
 				Integer id = create.select(Pictures.PICTURES.ID).from(Pictures.PICTURES)
-						.where(Pictures.PICTURES.FK_LOCATION.equal(loc.getFkLocation())).limit((int) (Math.random() * loc.getSize()), 1)
-						.fetchOne().value1();
+						.where(Pictures.PICTURES.FK_LOCATION.equal(loc.getFkLocation())).limit(offset, 1).fetchOne().value1();
 				idList.add(id);
 			}
 			return idList;
@@ -156,18 +170,33 @@ public enum UpdatesDao {
 
 		private <T> List<T> reduceList(List<T> list, int maxSize) {
 			List<T> reducedList = new ArrayList<>();
-			for (int i = 0; i < maxSize && i < list.size(); i++) {
+			if (maxSize > list.size()) {
+				maxSize = list.size();
+			}
+			for (int i = 0; i < maxSize; i++) {
 				T rndSelectedObj = list.remove((int) (Math.random() * list.size()));
 				reducedList.add(rndSelectedObj);
 			}
 			return reducedList;
 		}
 
-		private List<LocationIdSize> findLocationsWithNewPicturesSince() {
+		private List<LocationIdSize> findLocationsWithNewPicturesSince(int num) {
+			Result<Record> locationsWithPic = create.selectCount().select(Pictures.PICTURES.FK_LOCATION).from(Pictures.PICTURES)
+					.where(Pictures.PICTURES.FK_COMMUNITY.equal(fkCommunity)).groupBy(Pictures.PICTURES.FK_LOCATION)
+					.orderBy(Pictures.PICTURES.CREATED_ON).limit(num).fetch();
+
+			return convertToDtoList(locationsWithPic);
+		}
+
+		private List<LocationIdSize> findLocationsWithNewPicturesSince(Timestamp from) {
 			Result<Record> locationsWithPic = create.selectCount().select(Pictures.PICTURES.FK_LOCATION).from(Pictures.PICTURES)
 					.where(Pictures.PICTURES.CREATED_ON.greaterThan(from).and(Pictures.PICTURES.FK_COMMUNITY.equal(fkCommunity)))
 					.groupBy(Pictures.PICTURES.FK_LOCATION).fetch();
 
+			return convertToDtoList(locationsWithPic);
+		}
+
+		private List<LocationIdSize> convertToDtoList(Result<Record> locationsWithPic) {
 			List<LocationIdSize> list = new ArrayList<>();
 			for (Record rec : locationsWithPic) {
 				list.add(new LocationIdSize(rec.getValue(Pictures.PICTURES.FK_LOCATION), rec.getValue("count", Integer.class)));
@@ -178,7 +207,7 @@ public enum UpdatesDao {
 		@Value
 		class LocationIdSize {
 			private int fkLocation;
-			private int size;
+			private int count;
 		}
 	}
 }

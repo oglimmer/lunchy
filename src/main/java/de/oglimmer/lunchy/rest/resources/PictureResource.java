@@ -52,7 +52,7 @@ public class PictureResource {
 		String mediaType = FileServices.getMediaTypeFromFileExtension(filename);
 		InputStream is = new FileInputStream(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
 		if ("small".equals(size)) {
-			MemoryBaseImageScaler imageScaler = new MemoryBaseImageScaler(480, 280, Scalr.Method.SPEED, is);
+			MemoryBaseImageScaler imageScaler = new MemoryBaseImageScaler(464, 9999, Scalr.Method.SPEED, is);
 			is = imageScaler.getScaledInputStream(FileServices.getFileType(filename));
 		}
 		return Response.ok(is, mediaType).build();

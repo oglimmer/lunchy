@@ -10,19 +10,36 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import org.jooq.Record;
 
+import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.beanMapping.DozerAdapter;
 import de.oglimmer.lunchy.database.dao.UpdatesDao;
 import de.oglimmer.lunchy.rest.dto.UpdatesQuery;
 import de.oglimmer.lunchy.services.Community;
+import de.oglimmer.lunchy.services.EmailUpdatesNotifier.MailImage;
 
 @Path("updates")
 public class UpdatesResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<UpdatesQuery> query(@Context HttpServletRequest request) {
+	public QueryResponse query(@Context HttpServletRequest request) {
+		List<UpdatesQuery> updateQueryList = getQueryUpdates(request);
+		List<MailImage> picturesList = getPictures(request);
+		return new QueryResponse(updateQueryList, picturesList);
+	}
+
+	private List<MailImage> getPictures(HttpServletRequest request) {
+		List<Record> recordList = UpdatesDao.INSTANCE.getPictures(2, Community.get(request));
+		return BeanMappingProvider.INSTANCE.mapListCustomDto(recordList, MailImage.class);
+	}
+
+	private List<UpdatesQuery> getQueryUpdates(HttpServletRequest request) {
 		List<UpdatesQuery> resultList = new ArrayList<>();
 		for (Record update : UpdatesDao.INSTANCE.get(10, Community.get(request))) {
 			resultList.add(createResultRow(new DozerAdapter(update)));
@@ -92,4 +109,13 @@ public class UpdatesResource {
 			return update.getValue("officialName") + " in " + update.getValue("city") + " was updated";
 		}
 	}
+
+	@Data
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class QueryResponse {
+		private List<UpdatesQuery> latestUpdates;
+		private List<MailImage> latestPictures;
+	}
+
 }

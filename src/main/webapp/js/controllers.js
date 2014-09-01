@@ -27,11 +27,12 @@ controller('LunchyControllerMain', ['$scope', 'LoginDao', 'UserDao', 'UpdatesDao
             };
 
 }]).
-controller('LunchyControllerUpdates', [
-	'$scope', 'LoginDao', 'UserDao', 'UpdatesDao', '$location', 'Authetication', '$modal',
-	function($scope, LoginDao, UserDao, UpdatesDao, $location, Authetication, $modal) {
+controller('LunchyControllerUpdates', ['$scope', 'UpdatesDao', function($scope, UpdatesDao) {
 
-	$scope.latestUpdates = UpdatesDao.query();
+        UpdatesDao.query(function(updatesResponse) {
+            $scope.latestUpdates = updatesResponse.latestUpdates;
+            $scope.latestPictures = updatesResponse.latestPictures;
+        });
 
 }]).
 controller('LunchyControllerLogin', ['$scope', '$modalInstance', 'LoginDao', '$timeout', 'Authetication', 'StorageService', function ($scope, $modalInstance, LoginDao, $timeout, Authetication, StorageService) {

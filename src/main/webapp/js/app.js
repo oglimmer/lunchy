@@ -130,7 +130,11 @@ factory('UserDao', ['$resource', function($resource) {
 	});
 }]).
 factory('UpdatesDao', ['$resource', function($resource) {
-	return $resource('rest/updates');
+	return $resource('rest/updates', null, {
+        'query': {
+            isArray: false
+        }
+    });
 }]).
 factory('PicturesDao', ['$resource', function($resource) {
 	return $resource('rest/pictures/:id', {id: '@id'});

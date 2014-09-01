@@ -8,6 +8,15 @@
 </div>
 
 <div class="container">
+    <div id='polaroid'>
+        <figure ng-repeat="pic in latestPictures">
+            <a ng-href="#/view/{{ pic.id }}">
+                <img ng-src="rest/pictures/{{ pic.filename }}?size=small" />
+                <figcaption ng-show="pic.caption != ''">{{ pic.caption }}</figcaption>
+                <figcaption ng-show="pic.caption == ''">{{ pic.officialName }}</figcaption>
+            </a>
+        </figure>
+    </div>
 	<div ng-repeat="rows in latestUpdates | partition:2" class="row">
 		<div ng-repeat="update in rows" class="col-sm-6">
 			<h3><span class="glyphicon {{update.icon}}"></span> {{update.text}}</h3>		

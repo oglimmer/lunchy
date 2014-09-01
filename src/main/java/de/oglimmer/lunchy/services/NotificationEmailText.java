@@ -20,7 +20,7 @@ public enum NotificationEmailText {
 	private static final String greeting = "Hello {0} my hungry friend,";
 	private static final String top_intro1 = "This is the weekly update from {0}.";
 	private static final String top_intro2 = "Here are {0} new pictures which have been added last week: ";
-	private static final String middle_text = "Beside of these pictures, this happened last week at {0}:";
+	private static final String middle_text = "Besides of these pictures, this happened last week at {0}:";
 	private static final String end_text1 = "Check out new lunch places at {0} today or contribute with your own pictures and reviews.";
 	private static final String end_text2 = "Btw, lunchy works on your mobile as well - you can even upload pictures from a mobile.";
 	private static final String cheers = "Regards,";
@@ -48,7 +48,7 @@ public enum NotificationEmailText {
 				if (mi.getCaption() != null && !mi.getCaption().isEmpty()) {
 					body.append("<figcaption>" + mi.getDisplayname() + ": " + mi.getCaption() + "</figcaption>");
 				} else {
-					body.append("<figcaption>" + mi.getDisplayname() + " mades this at " + mi.getOfficialName() + "</figcaption>");
+					body.append("<figcaption>" + mi.getDisplayname() + " made this at " + mi.getOfficialName() + "</figcaption>");
 				}
 				body.append("</a>");
 				body.append("</figure>");
