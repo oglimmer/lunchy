@@ -44,15 +44,15 @@ public class PictureResource {
 	@SneakyThrows(value = IOException.class)
 	@GET
 	@Path("{filename}")
-	public Response load(@PathParam("filename") String filename, @QueryParam("size") String size) {
+	public Response load(@PathParam("filename") String filename, @QueryParam("size") Integer screenWidth) {
 		// NEVER REMOVE THIS!!! SECURITY check to avoid reading all files on the filesystem
-		if (filename.contains("..")) {
+		if (filename.contains("..") || filename.contains("/")) {
 			throw new RuntimeException("Illegal filename:" + filename);
 		}
 		String mediaType = FileServices.getMediaTypeFromFileExtension(filename);
 		InputStream is = new FileInputStream(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
-		if ("small".equals(size)) {
-			MemoryBaseImageScaler imageScaler = new MemoryBaseImageScaler(464, 9999, Scalr.Method.SPEED, is);
+		if (screenWidth != null) {
+			MemoryBaseImageScaler imageScaler = new MemoryBaseImageScaler(screenWidth < 767 ? 200 : 464, 9999, Scalr.Method.SPEED, is);
 			is = imageScaler.getScaledInputStream(FileServices.getFileType(filename));
 		}
 		return Response.ok(is, mediaType).build();

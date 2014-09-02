@@ -29,6 +29,8 @@ controller('LunchyControllerMain', ['$scope', 'LoginDao', 'UserDao', 'UpdatesDao
 }]).
 controller('LunchyControllerUpdates', ['$scope', 'UpdatesDao', function($scope, UpdatesDao) {
 
+        $scope.windowWidth = $window.innerWidth;
+
         UpdatesDao.query(function(updatesResponse) {
             $scope.latestUpdates = updatesResponse.latestUpdates;
             $scope.latestPictures = updatesResponse.latestPictures;
