@@ -11,7 +11,7 @@
     <div id='polaroid'>
         <figure ng-repeat="pic in latestPictures">
             <a ng-href="#/view/{{ pic.id }}">
-                <img ng-src="rest/pictures/{{ pic.filename }}?size=small" />
+                <img ng-src="rest/pictures/{{ pic.filename }}?size={{ windowWidth }}" />
                 <figcaption ng-show="pic.caption != ''">{{ pic.caption }}</figcaption>
                 <figcaption ng-show="pic.caption == ''">{{ pic.officialName }}</figcaption>
             </a>
