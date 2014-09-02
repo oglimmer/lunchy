@@ -27,7 +27,7 @@ controller('LunchyControllerMain', ['$scope', 'LoginDao', 'UserDao', 'UpdatesDao
             };
 
 }]).
-controller('LunchyControllerUpdates', ['$scope', 'UpdatesDao', function($scope, UpdatesDao) {
+controller('LunchyControllerUpdates', ['$scope', 'UpdatesDao', '$window', function($scope, UpdatesDao, $window) {
 
         $scope.windowWidth = $window.innerWidth;
 
