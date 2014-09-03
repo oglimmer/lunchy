@@ -2,6 +2,7 @@ package de.oglimmer.lunchy.rest.resources;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,8 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.jooq.Record;
+
 import com.google.code.geocoder.Geocoder;
 import com.google.code.geocoder.GeocoderRequestBuilder;
 import com.google.code.geocoder.model.GeocodeResponse;
@@ -32,8 +35,10 @@ import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.LocationDao;
 import de.oglimmer.lunchy.database.dao.OfficeDao;
 import de.oglimmer.lunchy.database.dao.ReviewDao;
+import de.oglimmer.lunchy.database.dao.UserPictureVoteDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
+import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.UserRightException;
@@ -114,6 +119,7 @@ public class LocationResource extends BaseResource {
 		private boolean hasReview;
 		private boolean allowedToEdit;
 		private Integer fkReview;
+		private List<Integer> pictureVotes;
 	}
 
 	@Data
@@ -213,7 +219,19 @@ public class LocationResource extends BaseResource {
 		public LocationStatusResponse status() {
 			checkUserReview();
 			checkUserCanEdit();
+			checkPictureVotes();
 			return result;
+		}
+
+		private void checkPictureVotes() {
+			Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
+			List<Record> list = UserPictureVoteDao.INSTANCE.getListByParent(id, userId);
+			List<Integer> picVoteList = new ArrayList<>();
+			for (Record rec : list) {
+				UsersPicturesVotesRecord upvr = (UsersPicturesVotesRecord) rec;
+				picVoteList.add(upvr.getFkPicture());
+			}
+			result.setPictureVotes(picVoteList);
 		}
 
 		private void checkUserCanEdit() {

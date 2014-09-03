@@ -137,7 +137,12 @@ factory('UpdatesDao', ['$resource', function($resource) {
     });
 }]).
 factory('PicturesDao', ['$resource', function($resource) {
-	return $resource('rest/pictures/:id', {id: '@id'});
+	return $resource('rest/pictures/:id', {id: '@id'}, {
+        'vote': {
+            method: 'POST',
+            url: 'rest/pictures/:id/vote'
+        }
+    });
 }]).
 factory('OfficesDao', ['$resource', function($resource) {
 	return $resource('rest/offices/:id', {id: '@id'}, {

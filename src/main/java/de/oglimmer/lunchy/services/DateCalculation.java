@@ -49,4 +49,8 @@ public enum DateCalculation {
 		cal.add(field, units);
 		return now.before(cal);
 	}
+
+	public Timestamp getNow() {
+		return new Timestamp(new Date().getTime());
+	}
 }

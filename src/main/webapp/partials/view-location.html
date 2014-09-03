@@ -21,6 +21,11 @@
                         </div>
                     </slide>
                 </carousel>
+                <div class="top17" ng-show="showButtonsMode">
+                    <div class="btn btn-success pull-right" btn-checkbox ng-model="childScopeHolder.currentPicVoted" ng-click="picVoteClicked(childScopeHolder.currentPicVoted)">
+                        <span class="glyphicon glyphicon-thumbs-up" style="font-size: 22px"></span>
+                    </div>
+                </div>
                 <div ng-show="addPictureMode" ng-include="'partials/view-location/add-picture.html'"></div>
             </tab>
             <tab heading="Map" ng-click="mapSelected()" active="tabs.active[3]" disabled="tabs.disabled[3]">

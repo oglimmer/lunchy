@@ -47,11 +47,12 @@ public enum UserDao implements Dao<UsersRecord> {
 	 * 
 	 * @param id
 	 * @return
-	 */
+	 */	
 	public UsersRecord getById(Integer id) {
 		return DB.fetchOn(USERS, USERS.ID.equal(id));
 	}
 
+	@Override
 	public UsersRecord getById(Integer id, Integer fkCommunity) {
 		try {
 			return userRecordCache.get(new IdCommunityTuple(id, fkCommunity));

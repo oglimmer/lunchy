@@ -179,6 +179,15 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             $scope.addPictureMode = false;
             $scope.reviewButton = "Add Review";
 
+            function onSlideChanged() {
+                var activePicture = _.find($scope.childScopeHolder.pictures, function(pic) { return pic.active; });
+                if(_.isUndefined(activePicture)){
+                    return;
+                }
+                var activePicIsVoted = _.find($scope.picVotes, function(vote) { return vote == activePicture.id });
+                $scope.childScopeHolder.currentPicVoted = activePicIsVoted != null;
+            }
+
             // check user permission/hasReviews
             function getlocationStatusForCurrentUser() {
                 $scope.showButtonsMode= true;
@@ -188,8 +197,30 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                         $scope.usersReview = result.fkReview;
                         $scope.reviewButton = "Edit Review";
                     }
+                    $scope.picVotes = result.pictureVotes;
+                    onSlideChanged();
                 });
-            }
+            };
+
+            // generic scope holder
+            $scope.childScopeHolder = {};
+
+            // vote for current picture
+            $scope.childScopeHolder.currentPicVoted = 0;
+            $scope.picVoteClicked = function(newState) {
+                var activePicture = _.find($scope.childScopeHolder.pictures, function(pic) { return pic.active; });
+                if(_.isUndefined(activePicture)){
+                    return;
+                }
+                console.log(activePicture.id+"/"+newState);
+                if(newState) {
+                    $scope.picVotes = _.without($scope.picVotes, activePicture.id);
+                    PicturesDao.vote({id: activePicture.id}, {direction: 'down'});
+                } else {
+                    $scope.picVotes = _.union($scope.picVotes, [activePicture.id]);
+                    PicturesDao.vote({id: activePicture.id}, {direction: 'up'});
+                }
+            };
 
             // load location base-data
             LocationsDao.get({ "id": $stateParams.locationId }, function(loadLocationResponse) {
@@ -223,8 +254,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             // reference to review from current-user
             $scope.usersReview = null;
 
-            // generic scope holder
-            $scope.childScopeHolder = {};
+
 
 
             Authetication.checkLoggedIn().then(function(data) {
@@ -241,9 +271,20 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             $scope.tabs.active = [true, false, false, false];
             $scope.tabs.disabled = [false, false, false, false];
 
+            function setPictures(pictures) {
+                $scope.childScopeHolder.pictures = pictures;
+                angular.forEach(pictures, function(obj, idx) {
+                    $scope.$watch("childScopeHolder.pictures["+idx+"].active", function(val) {
+                        if(val) {
+                            onSlideChanged();
+                        }
+                    });
+                })
+            }
+
             // load all pictures
             LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
-                $scope.childScopeHolder.pictures = pictures;
+                setPictures(pictures);
                 if(pictures.length > 0) {
                     $scope.tabs.active = [false, false, true, false];
                 }
@@ -423,7 +464,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                         var newPic = new PicturesDao({fkLocation: $stateParams.locationId, caption: $scope.childScopeHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
                         newPic.$save(function(pic) {
                             LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
-                                $scope.childScopeHolder.pictures = pictures;
+                                setPictures(pictures);
                             });
                         });
                         $scope.childScopeHolder.$flow.cancel();

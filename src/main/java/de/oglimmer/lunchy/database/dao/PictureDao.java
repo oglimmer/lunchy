@@ -11,12 +11,13 @@ import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 public enum PictureDao implements Dao<PicturesRecord> {
 	INSTANCE;
 
+	@Override
 	public PicturesRecord getById(Integer id, Integer fkCommunity) {
 		return DB.fetchOn(PICTURES, PICTURES.ID.equal(id).and(PICTURES.FK_COMMUNITY.equal(fkCommunity)));
 	}
 
-	public void store(PicturesRecord review) {
-		DB.store(review);
+	public void store(PicturesRecord picture) {
+		DB.store(picture);
 	}
 
 	public void delete(int id, int fkCommunity) {

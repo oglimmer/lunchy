@@ -21,6 +21,7 @@ import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 public enum OfficeDao implements Dao<OfficesRecord> {
 	INSTANCE;
 
+	@Override
 	public OfficesRecord getById(Integer id, Integer fkCommunity) {
 		return DB.fetchOn(OFFICES, OFFICES.ID.equal(id).and(OFFICES.FK_COMMUNITY.equal(fkCommunity)));
 	}

@@ -584,5 +584,47 @@
         <addDefaultValue columnDataType="varchar(255)"
 			columnName="zip" tableName="location" defaultValue="null" />
     </changeSet>
+
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1409779727457-1">
+        <createTable tableName="users_pictures_votes">
+            <column autoIncrement="true" name="id" type="INT(10)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="fk_community" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fk_user" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fk_picture" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_on" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1409779727457-2">
+        <addColumn tableName="pictures">
+            <column name="up_Votes" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1409779727457-3">
+        <addUniqueConstraint columnNames="fk_user, fk_picture" constraintName="unique_user_picture_vote" deferrable="false" disabled="false" initiallyDeferred="false" tableName="users_pictures_votes"/>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1409779727457-4">
+        <addForeignKeyConstraint baseColumnNames="fk_community" baseTableName="users_pictures_votes" constraintName="fk_users_pictures_votes_community" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="communities"/>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1409779727457-5">
+        <addForeignKeyConstraint baseColumnNames="fk_picture" baseTableName="users_pictures_votes" constraintName="fk_users_pictures_votes_pictures" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="pictures"/>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1409779727457-6">
+        <addForeignKeyConstraint baseColumnNames="fk_user" baseTableName="users_pictures_votes" constraintName="fk_users_pictures_votes_users" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1409779727457-7">
+        <dropUniqueConstraint constraintName="email_2" tableName="users"/>
+    </changeSet>
         
 </databaseChangeLog>

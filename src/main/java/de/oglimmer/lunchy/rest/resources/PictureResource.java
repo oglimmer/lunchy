@@ -21,13 +21,16 @@ import javax.ws.rs.core.Response;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.imgscalr.Scalr;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.PictureDao;
+import de.oglimmer.lunchy.database.dao.UserPictureVoteDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
+import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
 import de.oglimmer.lunchy.rest.MemoryBaseImageScaler;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.UploadImageScaler;
@@ -35,9 +38,11 @@ import de.oglimmer.lunchy.rest.dto.PictureCreateInput;
 import de.oglimmer.lunchy.rest.dto.PictureResponse;
 import de.oglimmer.lunchy.rest.dto.PictureUpdateInput;
 import de.oglimmer.lunchy.services.Community;
+import de.oglimmer.lunchy.services.DateCalculation;
 import de.oglimmer.lunchy.services.FileServices;
 import de.oglimmer.lunchy.services.LunchyProperties;
 
+@Slf4j
 @Path("pictures")
 public class PictureResource {
 
@@ -69,6 +74,7 @@ public class PictureResource {
 		rec.setFkUser(SessionProvider.INSTANCE.getLoggedInUserId(request));
 		rec.setCreatedOn(new Timestamp(new Date().getTime()));
 		rec.setFilename(RandomStringUtils.randomAlphanumeric(32) + FileServices.getFileExtension(inputDto.getOriginalFilename()));
+		rec.setUpVotes(0);
 
 		BeanMappingProvider.INSTANCE.map(inputDto, rec);
 
@@ -87,6 +93,31 @@ public class PictureResource {
 		PicturesRecord rec = PictureDao.INSTANCE.getById(id, Community.get(request));
 		BeanMappingProvider.INSTANCE.map(inputDto, rec);
 		return storeRec(rec);
+	}
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}/vote")
+	public void vote(@Context HttpServletRequest request, @PathParam("id") Integer id, PictureVoteInput inputDto) {
+		PicturesRecord rec = PictureDao.INSTANCE.getById(id, Community.get(request));
+		Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
+		UsersPicturesVotesRecord vote = UserPictureVoteDao.INSTANCE.getByParents(id, userId);
+		if ("up".equalsIgnoreCase(inputDto.getDirection()) && vote == null) {
+			vote = new UsersPicturesVotesRecord();
+			vote.setFkCommunity(Community.get(request));
+			vote.setFkPicture(id);
+			vote.setFkUser(userId);
+			vote.setCreatedOn(DateCalculation.INSTANCE.getNow());
+			UserPictureVoteDao.INSTANCE.store(vote);
+			rec.setUpVotes(rec.getUpVotes() + 1);
+			PictureDao.INSTANCE.store(rec);
+		} else if ("down".equalsIgnoreCase(inputDto.getDirection()) && vote != null) {
+			rec.setUpVotes(rec.getUpVotes() - 1);
+			PictureDao.INSTANCE.store(rec);
+			UserPictureVoteDao.INSTANCE.delete(vote.getId(), Community.get(request));
+		} else {
+			log.warn("vote called for {} with direction {} but user {}'s vote didn't match", id, inputDto.getDirection(), userId);
+		}
 	}
 
 	private PictureResponse storeRec(PicturesRecord rec) {
@@ -111,5 +142,10 @@ public class PictureResource {
 	public static class PictureCreateInputWithTmp extends PictureCreateInput {
 		private String uniqueId;
 		private String originalFilename;
+	}
+
+	@Data
+	public static class PictureVoteInput {
+		private String direction;
 	}
 }

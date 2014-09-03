@@ -15,5 +15,6 @@ public class PictureResponse extends PictureCreateInput {
 	private String creationUser;
 	private Timestamp createdOn;
 	private String filename;
+	private Integer upVotes;
 
 }

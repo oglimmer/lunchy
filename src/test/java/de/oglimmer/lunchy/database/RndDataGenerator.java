@@ -145,6 +145,7 @@ public class RndDataGenerator {
 			pic.setFkCommunity(fkCommunity);
 			pic.setFkLocation(fkLocation);
 			pic.setFkUser(fkCreator);
+			pic.setUpVotes(0);
 			PictureDao.INSTANCE.store(pic);
 		}
 	}

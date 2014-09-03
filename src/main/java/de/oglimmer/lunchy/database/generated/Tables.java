@@ -52,4 +52,9 @@ public class Tables {
 	 * The table oli_lunchy.users
 	 */
 	public static final de.oglimmer.lunchy.database.generated.tables.Users USERS = de.oglimmer.lunchy.database.generated.tables.Users.USERS;
+
+	/**
+	 * The table oli_lunchy.users_pictures_votes
+	 */
+	public static final de.oglimmer.lunchy.database.generated.tables.UsersPicturesVotes USERS_PICTURES_VOTES = de.oglimmer.lunchy.database.generated.tables.UsersPicturesVotes.USERS_PICTURES_VOTES;
 }

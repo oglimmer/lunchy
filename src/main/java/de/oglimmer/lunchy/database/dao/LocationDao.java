@@ -21,6 +21,7 @@ import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 public enum LocationDao implements Dao<LocationRecord> {
 	INSTANCE;
 
+	@Override
 	public LocationRecord getById(Integer id, Integer fkCommunity) {
 		return DB.fetchOn(LOCATION, LOCATION.ID.equal(id).and(LOCATION.FK_COMMUNITY.equal(fkCommunity)));
 	}

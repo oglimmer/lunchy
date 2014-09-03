@@ -19,6 +19,7 @@ import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 public enum ReviewDao implements Dao<ReviewsRecord> {
 	INSTANCE;
 
+	@Override
 	public ReviewsRecord getById(Integer id, Integer fkCommunity) {
 		return DB.fetchOn(REVIEWS, REVIEWS.ID.equal(id).and(REVIEWS.FK_COMMUNITY.equal(fkCommunity)));
 	}
