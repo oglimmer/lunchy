@@ -599,7 +599,7 @@
             <column name="fk_picture" type="INT(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_on" type="TIMESTAMP">
+            <column name="created_on" type="TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'">
                 <constraints nullable="false"/>
             </column>
         </createTable>
