@@ -8,15 +8,19 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.Value;
 
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.JoinType;
 import org.jooq.Record;
 import org.jooq.Record7;
 import org.jooq.Result;
+import org.jooq.ResultQuery;
 import org.jooq.SelectConditionStep;
 import org.jooq.SelectJoinStep;
+import org.jooq.SelectOnConditionStep;
+import org.jooq.SelectSeekStep1;
+import org.jooq.SelectSelectStep;
 import org.jooq.impl.DSL;
 
 import de.oglimmer.lunchy.database.connection.DBConn;
@@ -48,7 +52,7 @@ public enum UpdatesDao {
 	public List<Record> getPictures(Timestamp from, int fkCommunity) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DaoBackend.getContext(conn);
-			return new RetrievePictureLogic(create, fkCommunity).queryPictures(from);
+			return new RetrievePictureLogic(create, fkCommunity).querySince(from, 3);
 		}
 	}
 
@@ -56,7 +60,7 @@ public enum UpdatesDao {
 	public List<Record> getPictures(int numberOfItems, int fkCommunity) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DaoBackend.getContext(conn);
-			return new RetrievePictureLogic(create, fkCommunity).queryPictures(numberOfItems);
+			return new RetrievePictureLogic(create, fkCommunity).queryLatest(numberOfItems);
 		}
 	}
 
@@ -133,81 +137,81 @@ public enum UpdatesDao {
 		private DSLContext create;
 		private int fkCommunity;
 
-		public List<Record> queryPictures(int num) {
-			List<LocationIdSize> locationsWithPics = findLocationsWithNewPicturesSince(num * 4);
-			locationsWithPics = reduceList(locationsWithPics, num);
-			List<Integer> picIds = loadPicIdsForLocationIds(locationsWithPics);
-			return query(picIds);
-		}
-
-		public List<Record> queryPictures(Timestamp from) {
-			List<LocationIdSize> locationsWithPics = findLocationsWithNewPicturesSince(from);
-			locationsWithPics = reduceList(locationsWithPics, 3);
-			List<Integer> picIds = loadPicIdsForLocationIds(locationsWithPics);
-			return query(picIds);
-		}
-
-		private Result<Record> query(List<Integer> picIds) {
-			return create
-					.select()
-					.select(Location.LOCATION.ID, Location.LOCATION.OFFICIAL_NAME, Location.LOCATION.CITY, Users.USERS.DISPLAYNAME,
-							Pictures.PICTURES.FILENAME, Pictures.PICTURES.CAPTION).from(Location.LOCATION)
-					.join(Pictures.PICTURES, JoinType.JOIN).on(Location.LOCATION.ID.equal(Pictures.PICTURES.FK_LOCATION))
-					.join(Users.USERS, JoinType.JOIN).on(Pictures.PICTURES.FK_USER.equal(Users.USERS.ID))
-					.where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity)).and(Pictures.PICTURES.ID.in(picIds)).fetch();
-		}
-
-		private List<Integer> loadPicIdsForLocationIds(List<LocationIdSize> locationList) {
-			List<Integer> idList = new ArrayList<>();
-			for (LocationIdSize loc : locationList) {
-				int offset = (int) (Math.random() * loc.getCount());
-				Integer id = create.select(Pictures.PICTURES.ID).from(Pictures.PICTURES)
-						.where(Pictures.PICTURES.FK_LOCATION.equal(loc.getFkLocation())).limit(offset, 1).fetchOne().value1();
-				idList.add(id);
+		public List<Record> queryLatest(int numberOfPictures) {
+			List<Record> result = new ArrayList<>();
+			Record firstRec = query(1, numberOfPictures, null);
+			if (firstRec == null) {
+				firstRec = query(0, numberOfPictures, null);
 			}
-			return idList;
-		}
+			result.add(firstRec);
 
-		private <T> List<T> reduceList(List<T> list, int maxSize) {
-			List<T> reducedList = new ArrayList<>();
-			if (maxSize > list.size()) {
-				maxSize = list.size();
+			Record secondRec = query(1, numberOfPictures, firstRec.getValue(Location.LOCATION.ID));
+			if (secondRec == null) {
+				secondRec = query(0, numberOfPictures, firstRec.getValue(Location.LOCATION.ID));
 			}
-			for (int i = 0; i < maxSize; i++) {
-				T rndSelectedObj = list.remove((int) (Math.random() * list.size()));
-				reducedList.add(rndSelectedObj);
+			result.add(secondRec);
+
+			return result;
+		}
+
+		public List<Record> querySince(Timestamp from, int minNumberOfPictures) {
+			Condition cond = Pictures.PICTURES.CREATED_ON.greaterThan(from);
+			List<Record> result = query(1, cond);
+			if (result.size() < minNumberOfPictures) {
+				result = query(0, cond);
 			}
-			return reducedList;
+			return result;
 		}
 
-		private List<LocationIdSize> findLocationsWithNewPicturesSince(int num) {
-			Result<Record> locationsWithPic = create.selectCount().select(Pictures.PICTURES.FK_LOCATION).from(Pictures.PICTURES)
-					.where(Pictures.PICTURES.FK_COMMUNITY.equal(fkCommunity)).groupBy(Pictures.PICTURES.FK_LOCATION)
-					.orderBy(Pictures.PICTURES.CREATED_ON.desc()).limit(num).fetch();
-
-			return convertToDtoList(locationsWithPic);
+		private Record query(int voteLimit, Integer maxRows, Integer notFromLocation) {
+			Result<Record> recList = query(voteLimit, maxRows, notFromLocation, null);
+			return recList.get((int) (Math.random() * recList.size()));
 		}
 
-		private List<LocationIdSize> findLocationsWithNewPicturesSince(Timestamp from) {
-			Result<Record> locationsWithPic = create.selectCount().select(Pictures.PICTURES.FK_LOCATION).from(Pictures.PICTURES)
-					.where(Pictures.PICTURES.CREATED_ON.greaterThan(from).and(Pictures.PICTURES.FK_COMMUNITY.equal(fkCommunity)))
-					.groupBy(Pictures.PICTURES.FK_LOCATION).fetch();
-
-			return convertToDtoList(locationsWithPic);
+		private Result<Record> query(int voteLimit, Condition cond) {
+			return query(voteLimit, null, null, cond);
 		}
 
-		private List<LocationIdSize> convertToDtoList(Result<Record> locationsWithPic) {
-			List<LocationIdSize> list = new ArrayList<>();
-			for (Record rec : locationsWithPic) {
-				list.add(new LocationIdSize(rec.getValue(Pictures.PICTURES.FK_LOCATION), rec.getValue("count", Integer.class)));
+		private Result<Record> query(int voteLimit, Integer maxRows, Integer notFromLocation, Condition cond) {
+			return limit(maxRows, orderBy(where(voteLimit, notFromLocation, cond, from(select())))).fetch();
+		}
+
+		private SelectSelectStep<Record> select() {
+			return create.select().select(Location.LOCATION.ID, Location.LOCATION.OFFICIAL_NAME, Location.LOCATION.CITY,
+					Users.USERS.DISPLAYNAME, Pictures.PICTURES.FILENAME, Pictures.PICTURES.CAPTION);
+		}
+
+		private SelectOnConditionStep<Record> from(SelectSelectStep<Record> select) {
+			return select.from(Location.LOCATION).join(Pictures.PICTURES, JoinType.JOIN)
+					.on(Location.LOCATION.ID.equal(Pictures.PICTURES.FK_LOCATION)).join(Users.USERS, JoinType.JOIN)
+					.on(Pictures.PICTURES.FK_USER.equal(Users.USERS.ID));
+		}
+
+		private SelectConditionStep<Record> where(int voteLimit, Integer notFromLocation, Condition cond,
+				SelectOnConditionStep<Record> tables) {
+			SelectConditionStep<Record> where = tables.where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity)).and(
+					Pictures.PICTURES.UP_VOTES.greaterOrEqual(voteLimit));
+
+			if (notFromLocation != null) {
+				where = where.and(Pictures.PICTURES.FK_LOCATION.notEqual(notFromLocation));
 			}
-			return list;
+
+			if (cond != null) {
+				where = where.and(cond);
+			}
+			return where;
 		}
 
-		@Value
-		class LocationIdSize {
-			private int fkLocation;
-			private int count;
+		private SelectSeekStep1<Record, Timestamp> orderBy(SelectConditionStep<Record> where) {
+			return where.orderBy(Pictures.PICTURES.CREATED_ON.desc());
+		}
+
+		private ResultQuery<Record> limit(Integer maxRows, SelectSeekStep1<Record, Timestamp> selectSeekStep) {
+			if (maxRows != null) {
+				return selectSeekStep.limit(maxRows);
+			} else {
+				return selectSeekStep;
+			}
 		}
 	}
 }

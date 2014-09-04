@@ -35,7 +35,7 @@ public class UpdatesResource {
 	}
 
 	private List<MailImage> getPictures(HttpServletRequest request) {
-		List<Record> recordList = UpdatesDao.INSTANCE.getPictures(2, Community.get(request));
+		List<Record> recordList = UpdatesDao.INSTANCE.getPictures(10, Community.get(request));
 		return BeanMappingProvider.INSTANCE.mapListCustomDto(recordList, MailImage.class);
 	}
 
