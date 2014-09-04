@@ -143,14 +143,18 @@ public enum UpdatesDao {
 			if (firstRec == null) {
 				firstRec = query(0, numberOfPictures, null);
 			}
-			result.add(firstRec);
+			if (firstRec != null) {
+				result.add(firstRec);
 
-			Record secondRec = query(1, numberOfPictures, firstRec.getValue(Location.LOCATION.ID));
-			if (secondRec == null) {
-				secondRec = query(0, numberOfPictures, firstRec.getValue(Location.LOCATION.ID));
+				Record secondRec = query(1, numberOfPictures, firstRec.getValue(Location.LOCATION.ID));
+				if (secondRec == null) {
+					secondRec = query(0, numberOfPictures, firstRec.getValue(Location.LOCATION.ID));
+				}
+				if (secondRec != null) {
+					result.add(secondRec);
+				}
+
 			}
-			result.add(secondRec);
-
 			return result;
 		}
 
