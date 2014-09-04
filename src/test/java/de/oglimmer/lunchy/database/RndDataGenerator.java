@@ -13,11 +13,13 @@ import de.oglimmer.lunchy.database.dao.OfficeDao;
 import de.oglimmer.lunchy.database.dao.PictureDao;
 import de.oglimmer.lunchy.database.dao.ReviewDao;
 import de.oglimmer.lunchy.database.dao.UserDao;
+import de.oglimmer.lunchy.database.dao.UserPictureVoteDao;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
+import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.services.DateCalculation;
@@ -147,7 +149,17 @@ public class RndDataGenerator {
 			pic.setFkUser(fkCreator);
 			pic.setUpVotes(0);
 			PictureDao.INSTANCE.store(pic);
+			getPicVote(fkCommunity, fkCreator, pic.getId());
 		}
+	}
+
+	public void getPicVote(int fkCommunity, int fkCreator, int fkPicture) {
+		UsersPicturesVotesRecord rec = new UsersPicturesVotesRecord();
+		rec.setCreatedOn(DateCalculation.INSTANCE.getNow());
+		rec.setFkCommunity(fkCommunity);
+		rec.setFkPicture(fkPicture);
+		rec.setFkUser(fkCreator);
+		UserPictureVoteDao.INSTANCE.store(rec);
 	}
 
 	private static final String[] TAGS = { "Foo", "Bar", "Chicken", "All the good stuff", "Even More", "Other stuff", "Whatever",

@@ -9,8 +9,10 @@ import de.oglimmer.lunchy.database.dao.OfficeDao;
 import de.oglimmer.lunchy.database.dao.PictureDao;
 import de.oglimmer.lunchy.database.dao.ReviewDao;
 import de.oglimmer.lunchy.database.dao.UserDao;
+import de.oglimmer.lunchy.database.dao.UserPictureVoteDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
+import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
 import de.oglimmer.lunchy.rest.dto.LocationCreateInput;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.rest.dto.Office;
@@ -72,6 +74,13 @@ public abstract class TestDbLoad {
 	public void testPicture() {
 		for (Object reviewRec : PictureDao.INSTANCE.getListByParent(46)) {
 			System.out.println(BeanMappingProvider.INSTANCE.map(reviewRec, PictureUpdateInput.class));
+		}
+	}
+
+	@Test
+	public void testUserPictureVote() {
+		for (Object reviewRec : UserPictureVoteDao.INSTANCE.getListByParent(1, 1)) {
+			System.out.println(BeanMappingProvider.INSTANCE.map(reviewRec, UsersPicturesVotesRecord.class));
 		}
 	}
 
