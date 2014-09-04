@@ -139,23 +139,24 @@ public enum UpdatesDao {
 
 		public List<Record> queryTwoOfLatest(int numberOfPictures) {
 			List<Record> result = new ArrayList<>();
-			Record firstRec = query(1, numberOfPictures, null);
-			if (firstRec == null) {
-				firstRec = query(0, numberOfPictures, null);
-			}
-			if (firstRec != null) {
-				result.add(firstRec);
-
-				Record secondRec = query(1, numberOfPictures, firstRec.getValue(Location.LOCATION.ID));
-				if (secondRec == null) {
-					secondRec = query(0, numberOfPictures, firstRec.getValue(Location.LOCATION.ID));
-				}
-				if (secondRec != null) {
-					result.add(secondRec);
-				}
-
+			Record first = addPic(numberOfPictures, result, null);
+			if (first != null) {
+				addPic(numberOfPictures, result, first.getValue(Location.LOCATION.ID));
 			}
 			return result;
+		}
+
+		private Record addPic(int numberOfPictures, List<Record> result, Integer forbiddenFkLocation) {
+			int minimumUpVote = 1;
+			Record rec = query(minimumUpVote, numberOfPictures, forbiddenFkLocation);
+			if (rec == null) {
+				minimumUpVote = 0;
+				rec = query(minimumUpVote, numberOfPictures, forbiddenFkLocation);
+			}
+			if (rec != null) {
+				result.add(rec);
+			}
+			return rec;
 		}
 
 		public List<Record> querySince(Timestamp from, int minNumberOfPictures) {
