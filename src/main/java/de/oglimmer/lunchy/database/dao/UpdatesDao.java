@@ -57,10 +57,10 @@ public enum UpdatesDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public List<Record> getPictures(int numberOfItems, int fkCommunity) {
+	public List<Record> getPictures(int fkCommunity) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DaoBackend.getContext(conn);
-			return new RetrievePictureLogic(create, fkCommunity).queryLatest(numberOfItems);
+			return new RetrievePictureLogic(create, fkCommunity).queryTwoOfLatest(15);
 		}
 	}
 
@@ -137,7 +137,7 @@ public enum UpdatesDao {
 		private DSLContext create;
 		private int fkCommunity;
 
-		public List<Record> queryLatest(int numberOfPictures) {
+		public List<Record> queryTwoOfLatest(int numberOfPictures) {
 			List<Record> result = new ArrayList<>();
 			Record firstRec = query(1, numberOfPictures, null);
 			if (firstRec == null) {
@@ -165,7 +165,10 @@ public enum UpdatesDao {
 
 		private Record query(int voteLimit, Integer maxRows, Integer notFromLocation) {
 			Result<Record> recList = query(voteLimit, maxRows, notFromLocation, null);
-			return recList.get((int) (Math.random() * recList.size()));
+			if (recList.isNotEmpty()) {
+				return recList.get((int) (Math.random() * recList.size()));
+			}
+			return null;
 		}
 
 		private Result<Record> query(int voteLimit, Condition cond) {
