@@ -68,6 +68,7 @@ public enum SessionProvider {
 		loginResponse.setSuccess(true);
 		loginResponse.setFkOffice(user.getFkBaseOffice());
 		loginResponse.setUserId(user.getId());
+		loginResponse.setPermissions(user.getPermissions());
 		if (setToken) {
 			loginResponse.setLongTimeToken(user.getLongTimeToken());
 		}

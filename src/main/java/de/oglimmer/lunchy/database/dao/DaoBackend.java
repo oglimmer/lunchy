@@ -61,10 +61,14 @@ enum DaoBackend {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public <R extends Record> void delete(Table<R> table, Field<Integer> field, int id, int fkCommunity) {
+	public <R extends Record> void delete(Table<R> table, Field<Integer> field, int id, Integer fkCommunity) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = getContext(conn);
-			create.delete(table).where(field.equal(id).and("fk_Community=?", fkCommunity)).execute();
+			Condition cond = field.equal(id);
+			if (fkCommunity != null) {
+				cond = cond.and("fk_Community=?", fkCommunity);
+			}
+			create.delete(table).where(cond).execute();
 		}
 	}
 

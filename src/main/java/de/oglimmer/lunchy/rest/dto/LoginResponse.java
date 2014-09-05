@@ -10,4 +10,5 @@ public class LoginResponse {
 	private String longTimeToken;
 	private String errorMsg;
 	private String companyName;
+	private Integer permissions;
 }

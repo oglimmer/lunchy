@@ -14,6 +14,13 @@
                 <li ng-show="Authetication.loggedIn" ng-class="getClass('/add')"><a href="#/add">Add</a></li>
 			</ul>
             <ul class="nav navbar-nav navbar-right">
+                <li ng-show="Authetication.permissions==2" class="dropdown" ng-class="getClass('/user')">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#/user">Users</a></li>
+                        <li><a href="#/office">Offices</a></li>
+                    </ul>
+                </li>
                 <li ng-hide="Authetication.loggedIn"><a href="" ng-click="login()">Login/Register</a></li>
                 <li ng-show="Authetication.loggedIn" ng-class="getClass('/settings')"><a href="#/settings">Settings</a></li>
                 <li ng-show="Authetication.loggedIn"><a href="" ng-click="logout()">Log out</a></li>

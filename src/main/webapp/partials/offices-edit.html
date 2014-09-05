@@ -1,0 +1,55 @@
+<div class="container">
+
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+    <form novalidate name="officesForm" class="form-horizontal">
+        <fieldset>
+            <legend>Office</legend>
+            <div class="row form-group">
+                <label for="name" class="col-md-2 control-label">Name</label>
+                <div class="col-md-10">
+                    <input type="text" id="name" class="form-control" ng-model="data.name" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="geoLat" class="col-md-2 control-label">Lat</label>
+                <div class="col-md-10">
+                    <input type="number"  id="geoLat" class="form-control" ng-model="data.geoLat" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="geoLng" class="col-md-2 control-label">Lng</label>
+                <div class="col-md-10">
+                    <input type="number" id="geoLng" class="form-control" ng-model="data.geoLng" required />
+                    <span class="help-block">To get lat/lng go to <a href="https://www.google.de/maps" target="_blank">google-maps</a>
+                        and find your office location. Then get the coordinates from the address bar, it looks like https://www.google.de/maps/@50.1083762,8.6870005,15z - this
+                        would mean: lat:50.1083762, lng:8.6870005 and zoomfactor: 15</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="zoomfactor" class="col-md-2 control-label">Zoomfactor</label>
+                <div class="col-md-10">
+                    <input type="number" id="zoomfactor" class="form-control" ng-model="data.zoomfactor" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="country" class="col-md-2 control-label">Country</label>
+                <div class="col-md-10">
+                    <input type="text" id="country" class="form-control" ng-model="data.country" />
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-md-8 col-md-offset-2">
+                    <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+                    <button type="button" class="btn btn-primary" ng-click="saveOffice()" ng-disabled="officesForm.$invalid">Save</button>
+                </div>
+                <div class="col-md-2 pull-right">
+                    <button ng-show="data.id" type="button" class="btn btn-danger" ng-click="deleteOffice()">Delete this office</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+
+</div>

@@ -1,0 +1,25 @@
+<div class="container">
+
+    <table ng-table="tableParams" class="table table-striped" show-filter="false">
+        <tr ng-repeat="item in $data" ng-click="rowclick(item)">
+            <td data-title="'Name'" sortable="'name'">
+                {{item.name}}
+            </td>
+            <td data-title="'Lat'" sortable="'geoLat'">
+                {{item.geoLat}}
+            </td>
+            <td data-title="'Lng'" sortable="'geoLng'" >
+                {{item.geoLng}}
+            </td>
+            <td data-title="'Zoom'" sortable="'zoomfactor'">
+                {{item.zoomfactor}}
+            </td>
+            <td data-title="'Country'" sortable="'country'">
+                {{item.country}}
+            </td>
+        </tr>
+    </table>
+
+    <button type="button" class="btn btn-default" ng-click="newOffice()">Add new Office</button>
+
+</div>

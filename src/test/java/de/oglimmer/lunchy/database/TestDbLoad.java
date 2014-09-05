@@ -15,7 +15,7 @@ import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
 import de.oglimmer.lunchy.rest.dto.LocationCreateInput;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
-import de.oglimmer.lunchy.rest.dto.Office;
+import de.oglimmer.lunchy.rest.dto.OfficeResponse;
 import de.oglimmer.lunchy.rest.dto.PictureUpdateInput;
 import de.oglimmer.lunchy.rest.dto.ReviewUpdateInput;
 import de.oglimmer.lunchy.rest.dto.ReviewUpdateResponse;
@@ -66,7 +66,7 @@ public abstract class TestDbLoad {
 	@Test
 	public void testOffice() {
 		for (Object officeRec : OfficeDao.INSTANCE.getListByParent(1)) {
-			System.out.println(BeanMappingProvider.INSTANCE.map(officeRec, Office.class));
+			System.out.println(BeanMappingProvider.INSTANCE.map(officeRec, OfficeResponse.class));
 		}
 	}
 

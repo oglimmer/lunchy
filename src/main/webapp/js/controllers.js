@@ -661,29 +661,29 @@ controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Aut
 	}
 }]).
 controller('LunchyControllerUser', ['$scope', 'UserDao', 'ngTableParams', '$filter', function($scope, UserDao, ngTableParams, $filter) {
-	
-	var dataHolder = null;
-	$scope.lineEdit = {};
-	$scope.activeRow = null;
-	
-	function deactivateEdit() {
-		if($scope.activeRow != null) {
-			$scope.lineEdit[$scope.activeRow] = false;
-			$scope.activeRow = null;
-		}		
-	}
-	
-	$scope.rowclick = function(item) {
-		deactivateEdit();
-		$scope.activeRow = item.id;
-		$scope.lineEdit[item.id] = true;
-	}
-	
-	$scope.changePermission = function(item, newPerm) {
-		item.permissions = newPerm;
-		UserDao.savePermission({id:item.id}, {permissions:item.permissions});
-		deactivateEdit();			
-	}
+
+    var dataHolder = null;
+    $scope.lineEdit = {};
+    $scope.activeRow = null;
+
+    function deactivateEdit() {
+        if($scope.activeRow != null) {
+            $scope.lineEdit[$scope.activeRow] = false;
+            $scope.activeRow = null;
+        }
+    }
+
+    $scope.rowclick = function(item) {
+        deactivateEdit();
+        $scope.activeRow = item.id;
+        $scope.lineEdit[item.id] = true;
+    }
+
+    $scope.changePermission = function(item, newPerm) {
+        item.permissions = newPerm;
+        UserDao.savePermission({id:item.id}, {permissions:item.permissions});
+        deactivateEdit();
+    }
 
     function initTable(data) {
         dataHolder = data;
@@ -708,17 +708,107 @@ controller('LunchyControllerUser', ['$scope', 'UserDao', 'ngTableParams', '$filt
             }
         });
     }
-	
-	UserDao.query(function (data) {
+
+    UserDao.query(function (data) {
         initTable(data);
-	}, function() {
+    }, function() {
         initTable([]);
     });
 
-	$scope.$on('userLoggedIn', function(event) {
-		UserDao.query(function (data) {
-			dataHolder = data;
-			$scope.tableParams.reload();
-		});
-	});
+    $scope.$on('userLoggedIn', function(event) {
+        UserDao.query(function (data) {
+            if(typeof($scope.tableParams) === 'undefined') {
+                initTable(data);
+            } else {
+                dataHolder = data;
+                $scope.tableParams.reload();
+            }
+        });
+    });
+}]).
+controller('LunchyControllerOffice', ['$scope', 'ngTableParams', '$filter', 'OfficesDao', '$location', function($scope, ngTableParams, $filter, OfficesDao, $location) {
+
+        var dataHolder = null;
+
+        $scope.rowclick = function(item) {
+            $location.path("office-edit/"+item.id);
+        };
+
+        function initTable(data) {
+            dataHolder = data;
+            $scope.tableParams = new ngTableParams({
+                page: 1,
+                count: 10,
+                sorting: {
+                    name: 'asc'
+                }
+            }, {
+                total: dataHolder.length,
+                getData: function($defer, params) {
+
+                    var filterData = $filter('filter')(dataHolder, params.filter());
+
+                    var orderedData = $filter('orderBy')(filterData, params.orderBy());
+
+                    var pagedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
+
+                    params.total(filterData.length);
+                    return $defer.resolve(pagedData);
+                }
+            });
+        }
+
+        OfficesDao.query(function (data) {
+            initTable(data);
+        }, function() {
+            initTable([]);
+        });
+
+        $scope.$on('userLoggedIn', function(event) {
+            OfficesDao.query(function (data) {
+                if(typeof($scope.tableParams) === 'undefined') {
+                    initTable(data);
+                } else {
+                    dataHolder = data;
+                    $scope.tableParams.reload();
+                }
+            });
+        });
+
+        $scope.newOffice = function() {
+            $location.path("office-edit/");
+        }
+
+}]).
+controller('LunchyControllerOfficeEdit', ['$scope', 'OfficesDao', '$stateParams', '$location', function($scope, OfficesDao, $stateParams, $location) {
+
+        $scope.data = {};
+        $scope.alerts = [];
+
+        if($stateParams.officeId!="") {
+            OfficesDao.get({id: $stateParams.officeId}, function (officeResponse) {
+                $scope.data = officeResponse;
+            });
+        }
+
+        $scope.cancel = function() {
+            $location.path("office");
+        };
+
+        $scope.saveOffice = function() {
+            OfficesDao.save($scope.data, function(successResult) {
+                $location.path("office");
+            }, function(failResult) {
+                $scope.alerts.push({type:'danger', msg: 'Error while saving user: ' + failResult.statusText});
+            });
+        };
+
+        $scope.deleteOffice = function() {
+            OfficesDao.delete({id:$scope.data.id}, function(successResult) {
+                $location.path("office");
+            }, function(failResult) {
+                $scope.alerts.push({type:'danger', msg: 'This office has already locations or users set it as their base office. It cannot be deleted anymore.'});
+            });
+        }
+
 }]);

@@ -15,6 +15,7 @@ import org.jooq.impl.DSL;
 
 import de.oglimmer.lunchy.database.Dao;
 import de.oglimmer.lunchy.database.connection.DBConn;
+import de.oglimmer.lunchy.database.generated.tables.Offices;
 import de.oglimmer.lunchy.database.generated.tables.Users;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 
@@ -44,6 +45,10 @@ public enum OfficeDao implements Dao<OfficesRecord> {
 	@Override
 	public List<?> getListByParent(int fkCommunity) {
 		return DB.query(OFFICES, OFFICES.FK_COMMUNITY.equal(fkCommunity), OFFICES.NAME.asc(), OfficesRecord.class);
+	}
+
+	public void delete(int id, int fkCommunity) {
+		DB.delete(Offices.OFFICES, Offices.OFFICES.ID, id, null);
 	}
 
 }

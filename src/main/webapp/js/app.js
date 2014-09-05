@@ -41,11 +41,21 @@ config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRou
 	      templateUrl: 'partials/passwordReset.html',
 	      controller : 'LunchyControllerPasswordReset'
 		}).
-		state('user', {
-	      url: '/user',
-	      templateUrl: 'partials/users.html',
-	      controller : 'LunchyControllerUser'
-		}).
+        state('user', {
+            url: '/user',
+            templateUrl: 'partials/users.html',
+            controller : 'LunchyControllerUser'
+        }).
+        state('office', {
+            url: '/office',
+            templateUrl: 'partials/offices.html',
+            controller : 'LunchyControllerOffice'
+        }).
+        state('offices-edit', {
+            url: '/office-edit/:officeId',
+            templateUrl: 'partials/offices-edit.html',
+            controller : 'LunchyControllerOfficeEdit'
+        }).
 	    state('add', {
 	      url: '/add',
 	      templateUrl: 'partials/add-location.html',
@@ -191,11 +201,13 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 	return {
 		loggedIn: false,
 		fkBaseOffice: -1,
+        permissions:-1,
 		
 		logInUser: function(loginResponse) {
 			if(loginResponse.success) {
 				this.loggedIn = true;
 				this.fkBaseOffice = loginResponse.fkOffice;
+                this.permissions = loginResponse.permissions;
 				$rootScope.$broadcast('userLoggedIn', []);
 			} else {
 				console.error("logInUser was called but response didnt succeed.");
