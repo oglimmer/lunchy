@@ -626,5 +626,9 @@
     <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1409779727457-7">
         <dropUniqueConstraint constraintName="email_2" tableName="users"/>
     </changeSet>
+
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1410033703274-1">
+        <addUniqueConstraint columnNames="domain" constraintName="uniq_domain" deferrable="false" disabled="false" initiallyDeferred="false" tableName="communities"/>
+    </changeSet>
         
 </databaseChangeLog>
