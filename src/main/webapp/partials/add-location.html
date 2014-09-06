@@ -3,7 +3,7 @@
 
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 	
-    <form class="form-horizontal" name="addLocation" novalidate>
+    <form class="form-horizontal" name="addLocation" novalidate ng-submit="submitAdd()">
         <fieldset>
             <legend>Adding a new location</legend>
             <div class="row form-group">
