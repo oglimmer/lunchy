@@ -143,25 +143,29 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
                 }
             },
 
-            checkLoggedIn: function() {
+            login: function() {
                 var thiz = this;
-                if(thiz.loggedIn) {
-                    return $q.when(thiz);
+                var longTimeToken = getLongTimeToken();
+                return LoginDao.check({longTimeToken:longTimeToken}).$promise
+                    .then(function(successResp) {
+                        CommunityService.setCompanyName(successResp.companyName);
+                        if(successResp.success) {
+                            thiz.logInUser(successResp);
+                            return $q.when(thiz);
+                        } else {
+                            return $q.reject({ authenticated: false });
+                        }
+                    }, function(errorResp) {
+                        return $q.reject({ authenticated: false });
+                    });
+            },
+
+            checkLoggedIn: function() {
+                if(this.loggedIn) {
+                    return $q.when(this);
                 } else {
                     this._loadDefaultOffice();
-                    var longTimeToken = getLongTimeToken();
-                    return LoginDao.check({longTimeToken:longTimeToken}).$promise
-                        .then(function(successResp) {
-                            CommunityService.setCompanyName(successResp.companyName);
-                            if(successResp.success) {
-                                thiz.logInUser(successResp);
-                                return $q.when(thiz);
-                            } else {
-                                return $q.reject({ authenticated: false });
-                            }
-                        }, function(errorResp) {
-                            return $q.reject({ authenticated: false });
-                        });
+                    return this.login();
                 }
             },
 

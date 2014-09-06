@@ -121,6 +121,12 @@ run(['$rootScope', '$location', 'Authetication', 'LoginDao', '$timeout', '$windo
 		}
 	});
 
+    // this is need for mobile devices. A user could open the page and then close the app.
+    // When he comes back (maybe after days) the server-side session would be gone, so re-created it on "pageShow"
+    $window.addEventListener("pageshow", function(evt){
+        Authetication.login();
+    }, false);
+
 	Authetication.checkLoggedIn();
 
 	
