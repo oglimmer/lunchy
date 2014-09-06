@@ -11,12 +11,12 @@
             <fieldset>
                 <div class="row form-group">
                     <div class="col-sm-offset-3 col-sm-6">
-                        <input class="form-control" type="email" placeholder="email" name="email" ng-model="login.email" required focus="true"/>
+                        <input class="form-control" type="email" placeholder="email" name="email" ng-model="login.email" required focus="true" ly-enter="submitLogin()"/>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-sm-offset-3 col-sm-6">
-                        <input class="form-control" type="password" placeholder="password" name="password" ng-model="login.password" required />
+                        <input class="form-control" type="password" placeholder="password" name="password" ng-model="login.password" required ly-enter="submitLogin()" />
                     </div>
                 </div>
                 <div class="row form-group">
