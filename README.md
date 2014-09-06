@@ -22,6 +22,18 @@ LET IT RUN AGAINST A LOCAL HSQLDB
 2.) Browse to http://localhost:8080 
 
 
+TESTING THE PORTAL PAGE
+======================= 
+
+1.) add to /etc/hosts
+```
+127.0.0.1 	localhost.lunchylunch.local
+127.0.0.1 	lunchylunch.local
+```
+
+2.) Browse http://lunchylunch.local:8080 to see the portal page
+
+3.) Browse http://localhost.lunchylunch.local:8080 to see the user space created via the setup
 
 TIPS FOR DEV
 ============

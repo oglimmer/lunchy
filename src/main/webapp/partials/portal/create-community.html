@@ -1,0 +1,101 @@
+<div class="container">
+
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+
+    <form novalidate name="communityForm" class="form-horizontal">
+        <fieldset>
+            <legend>Space properties</legend>
+            <div class="row form-group">
+                <label for="spaceName" class="col-md-2 control-label">Space name</label>
+                <div class="col-md-10">
+                    <input type="text" id="spaceName" class="form-control" placeholder="space name" ng-model="data.spaceName" required focus="true" />
+                    <span class="help-block">This is usually your company name.</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="domain" class="col-md-2 control-label">Sub domain</label>
+                <div class="col-md-9">
+                    <input type="text" name="domain" id="domain" class="form-control" placeholder="sub domain" ng-model="data.domain" ng-model-options="{ debounce: 250 }" required unique="domain" ng-pattern="/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]$/" />
+                    <span class="help-block">Needs to be a single simple word without any special characters with at least 3 characters. It will be used to form the domain name
+                        for your space, e.g. for demo.lunchylunchy.com you would enter "demo". This cannot be changed after space creation!</span>
+                </div>
+                <div class="col-md-1">
+                    <span ng-show="!communityForm.domain.$error.required && !communityForm.domain.$error.unique && !communityForm.domain.$error.pattern">✔</span>
+                </div>
+            </div>
+
+            <legend>Admin user properties</legend>
+            <div class="row form-group">
+                <label for="email" class="col-md-2 control-label">Admin email</label>
+                <div class="col-md-10">
+                    <input class="form-control" type="email" id="email" placeholder="email" name="email" ng-model="data.email" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="displayname" class="col-md-2 control-label">Admin screen name</label>
+                <div class="col-md-10">
+                    <input class="form-control" type="text" id="displayname" placeholder="screen name" name="displayname" ng-model="data.displayname" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="password" class="col-md-2 control-label">Admin password</label>
+                <div class="col-md-10">
+                    <input class="form-control" type="password" id="password" placeholder="password" name="password" ng-model="data.password" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="confirm_password" class="col-md-2 control-label">Password verification</label>
+                <div class="col-md-10">
+                    <input class="form-control" type="password" id="confirm_password" placeholder="password" name="confirm_password" ng-model="data.confirm_password" ui-validate=" '$value==data.password' " ui-validate-watch=" 'data.password' " />
+                </div>
+            </div>
+
+            <legend>First Office properties</legend>
+            <div class="row form-group">
+                <label for="officeName" class="col-md-2 control-label">Office name</label>
+                <div class="col-md-10">
+                    <input type="text" id="officeName" class="form-control" placeholder="office name" ng-model="data.officeName" required />
+                    <span class="help-block">This is the name of your first office, usually this contains the city name, if you don't know what to put here use something like HQ.</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="geoLat" class="col-md-2 control-label">Latitude</label>
+                <div class="col-md-10">
+                    <input type="number"  id="geoLat" class="form-control" placeholder="office latitude" ng-model="data.geoLat" required />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="geoLng" class="col-md-2 control-label">Longitude</label>
+                <div class="col-md-10">
+                    <input type="number" id="geoLng" class="form-control" placeholder="office longitude" ng-model="data.geoLng" required />
+                    <span class="help-block">To get lat/lng for your first office go to <a href="https://www.google.de/maps" target="_blank">google-maps</a>
+                        and find your office location. Then get the coordinates from the address bar, it looks like https://www.google.de/maps/@50.1083762,8.6870005,15z - this
+                        would mean: lat:50.1083762, lng:8.6870005 and zoomfactor: 15</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="zoomfactor" class="col-md-2 control-label">Zoomfactor</label>
+                <div class="col-md-10">
+                    <input type="number" id="zoomfactor" class="form-control" placeholder="office map zoom factor" ng-model="data.zoomfactor" required />
+                    <span class="help-block">Zoom factor for google maps. A 13 is always a good start.</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="country" class="col-md-2 control-label">Country</label>
+                <div class="col-md-10">
+                    <input type="text" id="country" class="form-control" ng-model="data.country" />
+                    <span class="help-block">The country this office is located in. It will be used to resolve geo-locations later on.</span>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-md-8 col-md-offset-2">
+                    <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+                    <button type="button" class="btn btn-primary" ng-click="saveCommunity()" ng-disabled="communityForm.$invalid">Create Space</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+
+</div>

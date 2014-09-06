@@ -81,7 +81,7 @@ public class CommunityFilter implements Filter {
 	}
 
 	private boolean isCallToPlatformPage(String servletPath) {
-		return "/index.jsp".equals(servletPath);
+		return "/index.jsp".equals(servletPath) || "/".equals(servletPath);
 	}
 
 	private boolean isCallWithoutCommunitySubdomain(String domain) {

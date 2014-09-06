@@ -29,6 +29,7 @@ import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.SessionProvider;
+import de.oglimmer.lunchy.rest.UserProvider;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
 import de.oglimmer.lunchy.rest.dto.ResultParam;
 import de.oglimmer.lunchy.rest.dto.UserAdminResponse;
@@ -142,18 +143,12 @@ public class UserResource extends BaseResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public LoginResponse createAndLogin(@Context HttpServletRequest request, UserCreateInput input) {
-		UsersRecord user = new UsersRecord();
-		user.setFkCommunity(Community.get(request));
-		user.setPassword(BCrypt.hashpw(input.getPassword(), BCrypt.gensalt()));
-		user.setCreatedOn(new Timestamp(new Date().getTime()));
-		user.setLastLogin(new Timestamp(new Date().getTime()));
-		user.setPermissions(0);
-		user.setLastEmailUpdate(DateCalculation.INSTANCE.getOneWeekAgo());
-		// set email update via input dto to avoid overwriting it with null
-		input.setEmailUpdates(0);
-		Email.INSTANCE.sendWelcome(input.getEmail(), input.getDisplayname(), Community.get(request));
-
-		return store(request, user, input);
+		UsersRecord user = UserProvider.INSTANCE.makeNew(request, input);
+		// HACK: avoid overwriting
+		input.setEmailUpdates(user.getEmailUpdates());
+		copyDtoToRec(user, input);
+		UserProvider.INSTANCE.sendEmail(user);
+		return UserProvider.INSTANCE.storeAndLogin(request, user);
 	}
 
 	@POST
@@ -171,27 +166,10 @@ public class UserResource extends BaseResource {
 			if (input.getPassword() != null && !input.getPassword().trim().isEmpty()) {
 				user.setPassword(BCrypt.hashpw(input.getPassword(), BCrypt.gensalt()));
 			}
-			result = store(request, user, input);
+			copyDtoToRec(user, input);
+			result = UserProvider.INSTANCE.storeAndLogin(request, user);
 		}
 		return result;
-	}
-
-	private LoginResponse store(HttpServletRequest request, UsersRecord userRec, UserUpdateInput inputDto) {
-		try {
-			copyDtoToRec(userRec, inputDto);
-
-			UserDao.INSTANCE.store(userRec);
-			return SessionProvider.INSTANCE.createSession(userRec, request.getSession(true), false);
-
-		} catch (org.jooq.exception.DataAccessException e) {
-			if (e.getCause() instanceof com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException) {
-				LoginResponse result = new LoginResponse();
-				result.setErrorMsg("User already exists");
-				return result;
-			} else {
-				throw e;
-			}
-		}
 	}
 
 	private void copyDtoToRec(UsersRecord user, UserUpdateInput input) {
@@ -203,16 +181,7 @@ public class UserResource extends BaseResource {
 
 	private void handleEmailUpdates(UsersRecord user, UserUpdateInput input) {
 		if (input.getEmailUpdates() != null) {
-			setEmailUpdates(user, input.getEmailUpdates());
-		}
-	}
-
-	private void setEmailUpdates(UsersRecord user, Integer newEmailUpdate) {
-		user.setEmailUpdates(newEmailUpdate);
-		if (user.getEmailUpdates() == 1) {
-			user.setNextEmailUpdate(DateCalculation.INSTANCE.getNever());
-		} else {
-			user.setNextEmailUpdate(DateCalculation.INSTANCE.getNextMonday());
+			UserProvider.INSTANCE.setEmailUpdates(user, input.getEmailUpdates());
 		}
 	}
 

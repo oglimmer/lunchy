@@ -3,20 +3,29 @@
 /* Directives */
 
 angular.module('LunchyApp.directives', []).
-directive('unique', ['UserDao', function (UserDao){ 
+directive('unique', ['UserDao','CommunityDao', function (UserDao, CommunityDao){
    return {
       require: 'ngModel',
       link: function(scope, elem, attr, ngModel) {
           var fieldName = attr.unique;
-          if(fieldName!="email") {
-        	  console.log("unique needs to be email"); return;
+          if(fieldName!="email" && fieldName!="domain") {
+        	  console.log("unique needs to be email/domain"); return;
           }
           
           function checkAgainstServer(value) {
         	  if(typeof(value)!='undefined' && value != ""){
-	        	  UserDao.lookup({id:value}, function(result) {	        		  
-	        		  ngModel.$setValidity('unique', !result.success);
-	        	  });
+                  var dao;
+                  switch (fieldName) {
+                      case "email":
+                          dao = UserDao;
+                          break;
+                      case "domain":
+                          dao = CommunityDao;
+                          break;
+                  }
+                  dao.lookup({id:value}, function(result) {
+                      ngModel.$setValidity('unique', !result.success);
+                  });
         	  }
         	  return true;
           }
