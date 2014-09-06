@@ -6,8 +6,8 @@
 			</button>
 			<a class="navbar-brand" href="#">Lunchy</a>
 		</div>
-		<div class="navbar-collapse collapse" ng-class="!navCollapsed && 'in'">
-			<ul class="nav navbar-nav" ng-click="navCollapsed=true">
+		<div class="navbar-collapse collapse" ng-class="!navCollapsed && 'in'" ng-click="navCollapsed=true">
+			<ul class="nav navbar-nav">
 				<li ng-class="getClass('/updates')"><a href="#/updates">Latest updates</a></li>
 				<li ng-class="getClass('/browse')"><a href="#/browse">Browse</a></li>
 				<li ng-class="getClass('/list')"><a href="#/list">List</a></li>
