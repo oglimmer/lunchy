@@ -62,7 +62,7 @@ public class UserResource extends BaseResource {
 		if (input.getPermissions() == 0 || input.getPermissions() == 1) {
 			UsersRecord user = UserDao.INSTANCE.getById(id, Community.get(request));
 			if (user != null) {
-				if (user.getPermissions() != input.getPermissions()) {
+				if (user.getPermissions() != input.getPermissions() && user.getPermissions() != 2) {
 					user.setPermissions(input.getPermissions());
 					UserDao.INSTANCE.store(user);
 					SecurityProvider.INSTANCE.updateCache(user.getId());
