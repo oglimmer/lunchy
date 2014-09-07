@@ -6,7 +6,7 @@
 
     <div id='polaroid'>
         <figure ng-repeat="pic in data">
-            <a ng-href="#/view/{{ pic.id }}">
+            <a ng-href="#/view/{{ pic.id }}?pic={{ pic.pictureId }}">
                 <img ng-src="rest/pictures/{{ pic.filename }}?size={{ windowWidth }}" />
                 <figcaption ng-show="pic.caption">
                     {{ pic.caption }}

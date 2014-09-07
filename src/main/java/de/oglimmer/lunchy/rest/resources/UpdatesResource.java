@@ -19,9 +19,9 @@ import org.jooq.Record;
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.beanMapping.DozerAdapter;
 import de.oglimmer.lunchy.database.dao.UpdatesDao;
+import de.oglimmer.lunchy.rest.dto.MailImage;
 import de.oglimmer.lunchy.rest.dto.UpdatesQuery;
 import de.oglimmer.lunchy.services.Community;
-import de.oglimmer.lunchy.services.EmailUpdatesNotifier.MailImage;
 
 @Path("updates")
 public class UpdatesResource {
@@ -78,7 +78,7 @@ public class UpdatesResource {
 		qrr.setText("New picture for " + update.getValue("officialName") + " in " + update.getValue("city") + " by "
 				+ update.getValue("user"));
 		qrr.setIcon("glyphicon-picture");
-		qrr.setRef("view/" + update.getValue("id"));
+		qrr.setRef("view/" + update.getValue("id") + "?pic=" + update.getValue("pictureId"));
 	}
 
 	private void createResultRowUser(DozerAdapter update, UpdatesQuery qrr) {

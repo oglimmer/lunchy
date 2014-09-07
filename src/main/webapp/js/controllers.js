@@ -164,9 +164,8 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'Offic
 	}
 	
 }]).
-controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao', 'OfficesDao', 'TagService',
-        function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao, OfficesDao, TagService) {
-
+controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao', 'OfficesDao', 'TagService', '$location',
+        function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao, OfficesDao, TagService, $location) {
 
             // permissions
             $scope.allowedToEditPermission = false;
@@ -212,7 +211,6 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                 if(_.isUndefined(activePicture)){
                     return;
                 }
-                console.log(activePicture.id+"/"+newState);
                 if(newState) {
                     $scope.picVotes = _.without($scope.picVotes, activePicture.id);
                     PicturesDao.vote({id: activePicture.id}, {direction: 'down'});
@@ -287,6 +285,11 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                 setPictures(pictures);
                 if(pictures.length > 0) {
                     $scope.tabs.active = [false, false, true, false];
+                }
+                if($location.search().pic) {
+                    _.each($scope.childScopeHolder.pictures, function(picture) {
+                        picture.active = (picture.id == $location.search().pic);
+                    });
                 }
             });
 

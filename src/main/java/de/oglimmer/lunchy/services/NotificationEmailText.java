@@ -4,9 +4,9 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.rest.dto.MailImage;
 import de.oglimmer.lunchy.rest.dto.UpdatesQuery;
 import de.oglimmer.lunchy.rest.resources.PictureResource;
-import de.oglimmer.lunchy.services.EmailUpdatesNotifier.MailImage;
 
 public enum NotificationEmailText {
 	INSTANCE;
@@ -46,7 +46,8 @@ public enum NotificationEmailText {
 			boolean evenRow = false;
 			for (MailImage mi : images) {
 				body.append("<div " + (evenRow ? "style='float: right;'" : "") + ">");
-				body.append("<a class='plain' href='" + Email.INSTANCE.getUrl(rec.getFkCommunity()) + "/#/view/" + mi.getId() + "'>");
+				body.append("<a class='plain' href='" + Email.INSTANCE.getUrl(rec.getFkCommunity()) + "/#/view/" + mi.getId() + "?pic="
+						+ mi.getPictureId() + "'>");
 				addImage(body, mi, rec.getFkCommunity());
 				if (mi.getCaption() != null && !mi.getCaption().isEmpty()) {
 					body.append("<div class='caption'>" + mi.getDisplayname() + ": " + mi.getCaption() + "</div>");
@@ -60,7 +61,7 @@ public enum NotificationEmailText {
 			body.append("</div>");
 			body.append(BR);
 			body.append(MessageFormat.format(middle_text, getHtmlUrl(rec.getFkCommunity())));
-			body.append(BR);			
+			body.append(BR);
 			body.append("<ul>");
 			for (UpdatesQuery up : updates) {
 				body.append("<li><a class='plain' href='" + Email.INSTANCE.getUrl(rec.getFkCommunity()) + "/#/" + up.getRef() + "'>")

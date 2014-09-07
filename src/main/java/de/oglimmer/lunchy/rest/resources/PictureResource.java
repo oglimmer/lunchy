@@ -37,12 +37,12 @@ import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRe
 import de.oglimmer.lunchy.rest.MemoryBaseImageScaler;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.UploadImageScaler;
+import de.oglimmer.lunchy.rest.dto.MailImage;
 import de.oglimmer.lunchy.rest.dto.PictureCreateInput;
 import de.oglimmer.lunchy.rest.dto.PictureResponse;
 import de.oglimmer.lunchy.rest.dto.PictureUpdateInput;
 import de.oglimmer.lunchy.services.Community;
 import de.oglimmer.lunchy.services.DateCalculation;
-import de.oglimmer.lunchy.services.EmailUpdatesNotifier.MailImage;
 import de.oglimmer.lunchy.services.FileServices;
 import de.oglimmer.lunchy.services.LunchyProperties;
 

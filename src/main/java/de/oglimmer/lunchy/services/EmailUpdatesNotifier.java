@@ -9,7 +9,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,10 +16,10 @@ import org.jooq.Record;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.beanMapping.DozerAdapter;
-import de.oglimmer.lunchy.beanMapping.RestDto;
 import de.oglimmer.lunchy.database.dao.UpdatesDao;
 import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.rest.dto.MailImage;
 import de.oglimmer.lunchy.rest.dto.UpdatesQuery;
 import de.oglimmer.lunchy.rest.resources.UpdatesResource;
 
@@ -112,18 +111,6 @@ public enum EmailUpdatesNotifier {
 
 		log.debug("Next update for {} is {}", rec.getEmail(), DateFormat.getDateTimeInstance().format(nextUpdate.getTime()));
 		return new Timestamp(nextUpdate.getTime().getTime());
-	}
-
-	@Data
-	@RestDto
-	public static class MailImage {
-		private String displayname;
-		private String officialName;
-		private String city;
-		private String caption;
-		private String filename;
-		private String id;
-		private Timestamp voteCreatedOn;
 	}
 
 }

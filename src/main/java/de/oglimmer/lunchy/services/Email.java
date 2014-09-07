@@ -11,8 +11,8 @@ import org.apache.commons.mail.HtmlEmail;
 
 import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.rest.dto.MailImage;
 import de.oglimmer.lunchy.rest.dto.UpdatesQuery;
-import de.oglimmer.lunchy.services.EmailUpdatesNotifier.MailImage;
 
 @Slf4j
 public enum Email {

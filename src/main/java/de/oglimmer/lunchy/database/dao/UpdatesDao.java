@@ -13,7 +13,7 @@ import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.JoinType;
 import org.jooq.Record;
-import org.jooq.Record7;
+import org.jooq.Record8;
 import org.jooq.Result;
 import org.jooq.ResultQuery;
 import org.jooq.SelectConditionStep;
@@ -101,47 +101,48 @@ public enum UpdatesDao {
 					createLocationQuery().union(createReviewQuery()).union(createUserQuery()).union(createPictureQuery()));
 		}
 
-		private SelectConditionStep<Record7<String, String, String, String, String, Integer, Timestamp>> createPictureQuery() {
-			SelectConditionStep<Record7<String, String, String, String, String, Integer, Timestamp>> pictureSelect = create
+		private SelectConditionStep<Record8<String, String, String, String, String, Integer, Timestamp, Integer>> createPictureQuery() {
+			SelectConditionStep<Record8<String, String, String, String, String, Integer, Timestamp, Integer>> pictureSelect = create
 					.select(DSL.val("P").as("type"), Location.LOCATION.OFFICIAL_NAME, Location.LOCATION.CITY,
 							Users.USERS.DISPLAYNAME.as("user"), DSL.val("N").as("update_Type"), Location.LOCATION.ID,
-							Pictures.PICTURES.CREATED_ON).from(Location.LOCATION).join(Pictures.PICTURES, JoinType.JOIN)
-					.on(Location.LOCATION.ID.equal(Pictures.PICTURES.FK_LOCATION)).join(Users.USERS, JoinType.JOIN)
-					.on(Pictures.PICTURES.FK_USER.equal(Users.USERS.ID)).where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity));
+							Pictures.PICTURES.CREATED_ON, Pictures.PICTURES.ID.as("picture_Id")).from(Location.LOCATION)
+					.join(Pictures.PICTURES, JoinType.JOIN).on(Location.LOCATION.ID.equal(Pictures.PICTURES.FK_LOCATION))
+					.join(Users.USERS, JoinType.JOIN).on(Pictures.PICTURES.FK_USER.equal(Users.USERS.ID))
+					.where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity));
 			return pictureSelect;
 		}
 
-		private SelectConditionStep<Record7<String, String, String, String, String, Integer, Timestamp>> createUserQuery() {
-			SelectConditionStep<Record7<String, String, String, String, String, Integer, Timestamp>> usersSelect = create
+		private SelectConditionStep<Record8<String, String, String, String, String, Integer, Timestamp, Integer>> createUserQuery() {
+			SelectConditionStep<Record8<String, String, String, String, String, Integer, Timestamp, Integer>> usersSelect = create
 					.select(DSL.val("U").as("type"), DSL.val("").as("official_Name"), DSL.val("").as("city"),
-							Users.USERS.DISPLAYNAME.as("user"), DSL.val("N").as("update_Type"), Users.USERS.ID, Users.USERS.CREATED_ON)
-					.from(Users.USERS).where(Users.USERS.FK_COMMUNITY.equal(fkCommunity));
+							Users.USERS.DISPLAYNAME.as("user"), DSL.val("N").as("update_Type"), Users.USERS.ID, Users.USERS.CREATED_ON,
+							DSL.val(0).as("picture_Id")).from(Users.USERS).where(Users.USERS.FK_COMMUNITY.equal(fkCommunity));
 			return usersSelect;
 		}
 
-		private SelectConditionStep<Record7<String, String, String, String, String, Integer, Timestamp>> createReviewQuery() {
-			SelectConditionStep<Record7<String, String, String, String, String, Integer, Timestamp>> reviewsSelect = create
+		private SelectConditionStep<Record8<String, String, String, String, String, Integer, Timestamp, Integer>> createReviewQuery() {
+			SelectConditionStep<Record8<String, String, String, String, String, Integer, Timestamp, Integer>> reviewsSelect = create
 					.select(DSL.val("R").as("type"),
 							Location.LOCATION.OFFICIAL_NAME,
 							Location.LOCATION.CITY,
 							Users.USERS.DISPLAYNAME.as("user"),
 							DSL.decode().value(Reviews.REVIEWS.CREATED_ON).when(Reviews.REVIEWS.LAST_UPDATE, "N").otherwise("U")
-									.as("update_Type"), Location.LOCATION.ID, Reviews.REVIEWS.LAST_UPDATE).from(Location.LOCATION)
-					.join(Reviews.REVIEWS, JoinType.JOIN).on(Location.LOCATION.ID.equal(Reviews.REVIEWS.FK_LOCATION))
-					.join(Users.USERS, JoinType.JOIN).on(Reviews.REVIEWS.FK_USER.equal(Users.USERS.ID))
-					.where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity));
+									.as("update_Type"), Location.LOCATION.ID, Reviews.REVIEWS.LAST_UPDATE, DSL.val(0).as("picture_Id"))
+					.from(Location.LOCATION).join(Reviews.REVIEWS, JoinType.JOIN)
+					.on(Location.LOCATION.ID.equal(Reviews.REVIEWS.FK_LOCATION)).join(Users.USERS, JoinType.JOIN)
+					.on(Reviews.REVIEWS.FK_USER.equal(Users.USERS.ID)).where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity));
 			return reviewsSelect;
 		}
 
-		private SelectConditionStep<Record7<String, String, String, String, String, Integer, Timestamp>> createLocationQuery() {
-			SelectConditionStep<Record7<String, String, String, String, String, Integer, Timestamp>> locationSelect = create
+		private SelectConditionStep<Record8<String, String, String, String, String, Integer, Timestamp, Integer>> createLocationQuery() {
+			SelectConditionStep<Record8<String, String, String, String, String, Integer, Timestamp, Integer>> locationSelect = create
 					.select(DSL.val("L").as("type"),
 							Location.LOCATION.OFFICIAL_NAME,
 							Location.LOCATION.CITY,
 							DSL.val("").as("user"),
 							DSL.decode().value(Location.LOCATION.CREATED_ON).when(Location.LOCATION.LAST_UPDATE, "N").otherwise("U")
-									.as("update_Type"), Location.LOCATION.ID, Location.LOCATION.LAST_UPDATE).from(Location.LOCATION)
-					.where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity));
+									.as("update_Type"), Location.LOCATION.ID, Location.LOCATION.LAST_UPDATE, DSL.val(0).as("picture_Id"))
+					.from(Location.LOCATION).where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity));
 			return locationSelect;
 		}
 	}
@@ -217,8 +218,8 @@ public enum UpdatesDao {
 		}
 
 		private SelectSelectStep<Record> select() {
-			return create.select().select(Location.LOCATION.ID, Location.LOCATION.OFFICIAL_NAME, Location.LOCATION.CITY,
-					Users.USERS.DISPLAYNAME, Pictures.PICTURES.FILENAME, Pictures.PICTURES.CAPTION,
+			return create.select().select(Pictures.PICTURES.ID.as("picture_Id"), Location.LOCATION.ID, Location.LOCATION.OFFICIAL_NAME,
+					Location.LOCATION.CITY, Users.USERS.DISPLAYNAME, Pictures.PICTURES.FILENAME, Pictures.PICTURES.CAPTION,
 					UsersPicturesVotes.USERS_PICTURES_VOTES.CREATED_ON.as("vote_Created_On"));
 		}
 
