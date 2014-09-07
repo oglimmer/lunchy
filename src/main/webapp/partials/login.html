@@ -11,7 +11,7 @@
             <fieldset>
                 <div class="row form-group">
                     <div class="col-sm-offset-3 col-sm-6">
-                        <input class="form-control" type="email" placeholder="email" name="email" ng-model="login.email" required focus="true" ly-enter="submitLogin()"/>
+                        <input class="form-control" type="email" placeholder="email" name="email" ng-model="login.email" required focus="initShowMode,0" ly-enter="submitLogin()"/>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -34,7 +34,7 @@
                 <button class="btn btn-info" ng-click="register()">Register account</button>
             </div>
             <div class="col-sm-4 v-center no-selection">
-                <div class="v-content"><input type="checkbox" ng-model="login.keepMeLoggedIn" /><span ng-click="login.keepMeLoggedIn=!login.keepMeLoggedIn"> Keep me logged in </span></div>
+                <div class="v-content"><input type="checkbox" ng-model="login.keepMeLoggedIn" ly-enter="submitLogin()" /><span ng-click="login.keepMeLoggedIn=!login.keepMeLoggedIn"> Keep me logged in </span></div>
             </div>
             <div class="col-sm-2">
                 <button class="btn btn-primary" ng-click="submitLogin()" ng-disabled="loginForm.$invalid">Log me in</button>
@@ -58,7 +58,7 @@
             <fieldset>
                 <div class="row">
                     <div class="col-sm-8 col-sm-offset-2">
-                        <input type="email" class="form-control" ng-model="passReset.email" placeholder="email" focus="true" required>
+                        <input type="email" class="form-control" ng-model="passReset.email" placeholder="email" focus="initShowMode,1" required>
                     </div>
                 </div>
                 <div class="row">
@@ -89,7 +89,7 @@
                 <div class="row form-group">
                     <label for="email" class="col-sm-4 control-label">Email</label>
                     <div class="col-sm-6">
-                        <input class="form-control" type="email" id="email" placeholder="email" name="email" ng-model="newUser.email" ng-model-options="{ debounce: 1000 }" required unique="email" focus="true" />
+                        <input class="form-control" type="email" id="email" placeholder="email" name="email" ng-model="newUser.email" ng-model-options="{ debounce: 1000 }" required unique="email" focus="initShowMode,2" />
                     </div>
                     <div class="col-sm-2">
                         <span ng-show="!registerForm.email.$error.required && !registerForm.email.$error.email && !registerForm.email.$error.unique">✔</span>

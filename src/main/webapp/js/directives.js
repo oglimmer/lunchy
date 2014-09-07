@@ -45,14 +45,26 @@ directive('unique', ['UserDao','CommunityDao', function (UserDao, CommunityDao){
       }
    };
 }]).
+    /*
+ * Focus supports two kinds of attributes.
+ * A) true - as soon as the element which uses focus becomes active it gets the focus
+ * B) variable,value - the variable must be on the scope and will be watched, as soon as it gets the value the element gets the focus
+ */
 directive('focus', function($timeout) {
+    function reeval(val){
+        if(/^(true|false|null|undefined|NaN)$/i.test(val)) return eval(val);
+        if(parseFloat(val)+''== val) return parseFloat(val);
+        return val;
+    }
 	return {
-		scope : {
-			trigger : '@focus'
-		},
-		link : function(scope, element) {
-			scope.$watch('trigger', function(value) {
-				if (value === "true") {
+		link : function(scope, element, attrs) {
+            var config = attrs.focus.split(",");
+            var triggerValue = true;
+            if(config.length>1) {
+                triggerValue = config[1];
+            }
+			scope.$watch(config[0], function(value) {
+				if (value == reeval(triggerValue) ) {
 					$timeout(function() {
 						element[0].focus();
 					});

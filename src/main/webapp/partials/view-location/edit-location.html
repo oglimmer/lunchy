@@ -2,7 +2,7 @@
     <fieldset>
         <legend>Edit {{data.officialName}} in {{data.city}}</legend>
         <div class="row form-group">
-            <label for="data.fkOffice" class="col-md-2 control-label">Office</label>
+            <label for="fkOffice" class="col-md-2 control-label">Office</label>
             <div class="col-md-10">
                 <select class="form-control" ng-model="data.fkOffice">
                     <option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==data.fkOffice">{{office.name}}</option>
@@ -10,20 +10,20 @@
             </div>
         </div>
         <div class="row form-group" ng-class="{'has-error': editLocation.officialName.$invalid}">
-            <label for="data.officialName" class="col-md-2 control-label required">Official name</label>
+            <label for="officialName" class="col-md-2 control-label required">Official name</label>
             <div class="col-md-10">
                 <input type="text" class="form-control" name="officialName" ng-model="data.officialName" placeholder="Official name" focus="true"  required>
             </div>
         </div>
         <div class="row form-group">
-            <label for="data.streetName" class="col-md-2 control-label">{{ companyName }} name</label>
+            <label for="streetName" class="col-md-2 control-label">{{ companyName }} name</label>
             <div class="col-md-10">
                 <input type="text" class="form-control" ng-model="data.streetName" placeholder="{{ companyName }} name" >
                 <span ng-hide="editableButton" class="help-block">Separate multiple names by comma.</span>
             </div>
         </div>
         <div class="row form-group" ng-class="{'has-error': editLocation.address.$invalid || editLocation.city.$invalid}">
-            <label for="data.address" class="col-md-2 control-label required">Address</label>
+            <label for="address" class="col-md-2 control-label required">Address</label>
             <div class="col-md-4">
                 <input type="text" class="form-control" name="address" ng-model="data.address" placeholder="Street" ng-disabled="data.geoMovedManually" required>
             </div>
@@ -39,22 +39,22 @@
         </div>
 
         <div class="row form-group">
-            <label for="data.url" class="col-md-2 control-label">Webpage</label>
+            <label for="url" class="col-md-2 control-label">Webpage</label>
             <div class="col-md-10">
                 <input type="text" class="form-control" ng-model="data.url" placeholder="http://www.the-restaurant.de" >
             </div>
         </div>
 
         <div class="row form-group">
-            <label for="data.comment" class="col-md-2 control-label">Comment</label>
+            <label for="comment" class="col-md-2 control-label">Comment</label>
             <div class="col-md-10">
-                <textarea class="form-control" rows="3" ng-model="data.comment" ></textarea>
+                <textarea class="form-control" rows="3" ng-model="data.comment" focus="editLocationMode,true"></textarea>
                 <span ng-hide="editableButton" class="help-block">Describe the location without judging it. Your personal opinions should go into a review.</span>
             </div>
         </div>
 
         <div class="row form-group">
-            <label for="data.tags" class="col-md-2 control-label">Tags</label>
+            <label for="tags" class="col-md-2 control-label">Tags</label>
             <div class="col-md-10">
                 <tag-input autocomplete='allTags' taglist='data.tags'></tag-input>
                 <span class="help-block">Use the up/down cursor keys to scroll all available entries.</span>
