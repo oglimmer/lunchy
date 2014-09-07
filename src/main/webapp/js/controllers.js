@@ -280,19 +280,22 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                 })
             }
 
+            // we don't want to a transition when a direct pic should be shown
+            $scope.carouselNoTransition = true;
             // load all pictures
             LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
                 setPictures(pictures);
                 if(pictures.length > 0) {
                     $scope.tabs.active = [false, false, true, false];
                 }
+                if($location.search().pic) {
+                    _.each(pictures, function(picture) {
+                        picture.active = (picture.id == $location.search().pic);
+                    });
+                }
                 $timeout(function() {
-                    if($location.search().pic) {
-                        _.each(pictures, function(picture) {
-                            picture.active = (picture.id == $location.search().pic);
-                            console.log(picture.active);
-                        });
-                    }
+                    // need to be async ($currentTransition get stuck on scope otherwise)
+                    $scope.carouselNoTransition = false;
                 })
             });
 
