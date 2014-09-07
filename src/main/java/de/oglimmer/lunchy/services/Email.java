@@ -57,7 +57,7 @@ public enum Email {
 		send(to, subject, body, null);
 	}
 
-	private void send(final String to, final String subject, String body, String htmlBody) {		
+	private void send(final String to, final String subject, String body, final String htmlBody) {
 		try {
 			final HtmlEmail email = setup();
 			email.addTo(to);
@@ -71,6 +71,7 @@ public enum Email {
 					public void run() {
 						try {
 							log.debug("Email (truely) sent to {} with subject {}", to, subject);
+							log.trace(htmlBody);
 							email.send();
 						} catch (EmailException e) {
 							log.error("Failed to send email", e);

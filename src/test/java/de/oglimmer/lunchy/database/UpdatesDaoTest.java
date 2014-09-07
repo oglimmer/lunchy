@@ -26,7 +26,7 @@ public class UpdatesDaoTest {
 	public void getPicturesFrom() {
 		DBConn.INSTANCE.setupDriver();
 
-		List<Record> list = UpdatesDao.INSTANCE.getPictures(DateCalculation.INSTANCE.getOneWeekAgo(), 1);
+		List<Record> list = UpdatesDao.INSTANCE.getPictures(DateCalculation.INSTANCE.getOneWeekAgo(), 1, 5);
 		System.out.println(list);
 
 	}

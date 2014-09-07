@@ -49,7 +49,8 @@ public enum LunchyProperties {
 	}
 
 	public String getSmtpFrom() {
-		return prop.getProperty("smtp.from", System.getProperty("lunchy.smtp.from", "\"Lunchy-Updates\" <lunchy-updates@junta-online.net>"));
+		return prop
+				.getProperty("smtp.from", System.getProperty("lunchy.smtp.from", "\"Lunchy-Updates\" <lunchy-updates@junta-online.net>"));
 	}
 
 	public String getDbUser() {
@@ -94,6 +95,11 @@ public enum LunchyProperties {
 
 	public String getRuntimePassword() {
 		return prop.getProperty("runtime.password");
+	}
+
+	public long getEmailNotifierUpdateFrequence() {
+		return Integer.parseInt(prop.getProperty("email.notification.updateFrequence",
+				System.getProperty("lunchy.email.notification.updateFrequence", "300")));
 	}
 
 }

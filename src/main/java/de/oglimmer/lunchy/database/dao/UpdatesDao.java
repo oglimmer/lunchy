@@ -49,10 +49,10 @@ public enum UpdatesDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public List<Record> getPictures(Timestamp from, int fkCommunity) {
+	public List<Record> getPictures(Timestamp from, int fkCommunity, int numberOfItems) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DaoBackend.getContext(conn);
-			return new RetrievePictureLogic(create, fkCommunity).querySince(from, 3);
+			return new RetrievePictureLogic(create, fkCommunity).querySince(from, 3, 5);
 		}
 	}
 
@@ -159,13 +159,22 @@ public enum UpdatesDao {
 			return rec;
 		}
 
-		public List<Record> querySince(Timestamp from, int minNumberOfPictures) {
+		public List<Record> querySince(Timestamp from, int minNumberOfPictures, int maxNumberOfItems) {
 			Condition cond = Pictures.PICTURES.CREATED_ON.greaterThan(from);
 			List<Record> result = query(1, cond);
 			if (result.size() < minNumberOfPictures) {
 				result = query(0, cond);
 			}
+			if (result.size() > maxNumberOfItems) {
+				reduceListSize(maxNumberOfItems, result);
+			}
 			return result;
+		}
+
+		private void reduceListSize(int maxNumberOfItems, List<Record> result) {
+			while (result.size() > maxNumberOfItems) {
+				result.remove((int) (Math.random() * result.size()));
+			}
 		}
 
 		private Record query(int voteLimit, Integer maxRows, Integer notFromLocation) {

@@ -46,6 +46,10 @@ import de.oglimmer.lunchy.services.LunchyProperties;
 @Path("pictures")
 public class PictureResource {
 
+	private static final int SMALL_PIC_SIZE = 200;
+	private static final int LARGE_PIC_SIZE = 464;
+	public static final int SMALL_PIC_BOUNDRY = 767;
+
 	@SneakyThrows(value = IOException.class)
 	@GET
 	@Path("{filename}")
@@ -57,7 +61,8 @@ public class PictureResource {
 		String mediaType = FileServices.getMediaTypeFromFileExtension(filename);
 		InputStream is = new FileInputStream(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
 		if (screenWidth != null) {
-			MemoryBaseImageScaler imageScaler = new MemoryBaseImageScaler(screenWidth < 767 ? 200 : 464, 9999, Scalr.Method.SPEED, is);
+			MemoryBaseImageScaler imageScaler = new MemoryBaseImageScaler(
+					screenWidth < SMALL_PIC_BOUNDRY ? SMALL_PIC_SIZE : LARGE_PIC_SIZE, 9999, Scalr.Method.SPEED, is);
 			is = imageScaler.getScaledInputStream(FileServices.getFileType(filename));
 		}
 		return Response.ok(is, mediaType).build();

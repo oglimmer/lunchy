@@ -36,9 +36,10 @@ public enum EmailUpdatesNotifier {
 
 	public void startUp() {
 		if (LunchyProperties.INSTANCE.isEmailNotificationEnabled()) {
-			log.debug("Starting EmailUpdatesNotifier...");
+			log.debug("Starting EmailUpdatesNotifier ({})...", LunchyProperties.INSTANCE.getEmailNotifierUpdateFrequence());
 			executorService = Executors.newSingleThreadScheduledExecutor();
-			executorService.scheduleAtFixedRate(new Check(), 0, 5, TimeUnit.MINUTES);
+			executorService.scheduleAtFixedRate(new Check(), 0, LunchyProperties.INSTANCE.getEmailNotifierUpdateFrequence(),
+					TimeUnit.SECONDS);
 		}
 	}
 
@@ -90,7 +91,7 @@ public enum EmailUpdatesNotifier {
 	}
 
 	List<MailImage> buildPictures(UsersRecord user) {
-		List<Record> list = UpdatesDao.INSTANCE.getPictures(user.getLastEmailUpdate(), user.getFkCommunity());
+		List<Record> list = UpdatesDao.INSTANCE.getPictures(user.getLastEmailUpdate(), user.getFkCommunity(), 5);
 		return BeanMappingProvider.INSTANCE.mapListCustomDto(list, MailImage.class);
 	}
 
