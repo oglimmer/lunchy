@@ -12,8 +12,8 @@
         <figure ng-repeat="pic in latestPictures">
             <a ng-href="#/view/{{ pic.id }}">
                 <img ng-src="rest/pictures/{{ pic.filename }}?size={{ windowWidth }}" />
-                <figcaption ng-show="pic.caption != ''">{{ pic.caption }}</figcaption>
-                <figcaption ng-show="pic.caption == ''">{{ pic.officialName }}</figcaption>
+                <figcaption ng-show="pic.caption">{{ pic.caption }}</figcaption>
+                <figcaption ng-hide="pic.caption">{{ pic.officialName }} in {{ pic.city }}</figcaption>
             </a>
         </figure>
     </div>

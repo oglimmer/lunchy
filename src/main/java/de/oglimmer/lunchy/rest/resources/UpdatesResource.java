@@ -26,6 +26,12 @@ import de.oglimmer.lunchy.services.EmailUpdatesNotifier.MailImage;
 @Path("updates")
 public class UpdatesResource {
 
+	/**
+	 * Offers latest updates as text items for Pictures, Reviews, Locations and Users and 2 random pictures.
+	 * 
+	 * @param request
+	 * @return
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public QueryResponse query(@Context HttpServletRequest request) {

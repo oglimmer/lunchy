@@ -28,6 +28,7 @@ import de.oglimmer.lunchy.database.generated.tables.Location;
 import de.oglimmer.lunchy.database.generated.tables.Pictures;
 import de.oglimmer.lunchy.database.generated.tables.Reviews;
 import de.oglimmer.lunchy.database.generated.tables.Users;
+import de.oglimmer.lunchy.database.generated.tables.UsersPicturesVotes;
 
 public enum UpdatesDao {
 	INSTANCE;
@@ -61,6 +62,20 @@ public enum UpdatesDao {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DaoBackend.getContext(conn);
 			return new RetrievePictureLogic(create, fkCommunity).queryTwoOfLatest(15);
+		}
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public List<Record> getPictures(int fkCommunity, Integer startPos, Integer numberOfRecords, Integer userId) {
+		try (Connection conn = DBConn.INSTANCE.get()) {
+			DSLContext create = DaoBackend.getContext(conn);
+			if (startPos == null) {
+				startPos = 0;
+			}
+			if (numberOfRecords == null) {
+				numberOfRecords = 8;
+			}
+			return new RetrievePictureLogic(create, fkCommunity).queryLatest(startPos, numberOfRecords, userId);
 		}
 	}
 
@@ -137,13 +152,17 @@ public enum UpdatesDao {
 		private DSLContext create;
 		private int fkCommunity;
 
-		public List<Record> queryTwoOfLatest(int numberOfPictures) {
+		public List<Record> queryTwoOfLatest(int numberOfPicturesToConsider) {
 			List<Record> result = new ArrayList<>();
-			Record first = addPic(numberOfPictures, result, null);
+			Record first = addPic(numberOfPicturesToConsider, result, null);
 			if (first != null) {
-				addPic(numberOfPictures, result, first.getValue(Location.LOCATION.ID));
+				addPic(numberOfPicturesToConsider, result, first.getValue(Location.LOCATION.ID));
 			}
 			return result;
+		}
+
+		public List<Record> queryLatest(int startPos, int limit, Integer userId) {
+			return query(0, startPos, limit, null, null, userId);
 		}
 
 		private Record addPic(int numberOfPictures, List<Record> result, Integer forbiddenFkLocation) {
@@ -178,7 +197,7 @@ public enum UpdatesDao {
 		}
 
 		private Record query(int voteLimit, Integer maxRows, Integer notFromLocation) {
-			Result<Record> recList = query(voteLimit, maxRows, notFromLocation, null);
+			Result<Record> recList = query(voteLimit, null, maxRows, notFromLocation, null, null);
 			if (recList.isNotEmpty()) {
 				return recList.get((int) (Math.random() * recList.size()));
 			}
@@ -186,22 +205,33 @@ public enum UpdatesDao {
 		}
 
 		private Result<Record> query(int voteLimit, Condition cond) {
-			return query(voteLimit, null, null, cond);
+			return query(voteLimit, null, null, null, cond, null);
 		}
 
-		private Result<Record> query(int voteLimit, Integer maxRows, Integer notFromLocation, Condition cond) {
-			return limit(maxRows, orderBy(where(voteLimit, notFromLocation, cond, from(select())))).fetch();
+		private Result<Record> query(int voteLimit, Integer startPos, Integer maxRows, Integer notFromLocation, Condition cond,
+				Integer userId) {
+			if (userId == null) {
+				userId = -1;
+			}
+			return limit(startPos, maxRows, orderBy(where(voteLimit, notFromLocation, cond, from(select(), userId)))).fetch();
 		}
 
 		private SelectSelectStep<Record> select() {
 			return create.select().select(Location.LOCATION.ID, Location.LOCATION.OFFICIAL_NAME, Location.LOCATION.CITY,
-					Users.USERS.DISPLAYNAME, Pictures.PICTURES.FILENAME, Pictures.PICTURES.CAPTION);
+					Users.USERS.DISPLAYNAME, Pictures.PICTURES.FILENAME, Pictures.PICTURES.CAPTION,
+					UsersPicturesVotes.USERS_PICTURES_VOTES.CREATED_ON.as("vote_Created_On"));
 		}
 
-		private SelectOnConditionStep<Record> from(SelectSelectStep<Record> select) {
-			return select.from(Location.LOCATION).join(Pictures.PICTURES, JoinType.JOIN)
-					.on(Location.LOCATION.ID.equal(Pictures.PICTURES.FK_LOCATION)).join(Users.USERS, JoinType.JOIN)
-					.on(Pictures.PICTURES.FK_USER.equal(Users.USERS.ID));
+		private SelectOnConditionStep<Record> from(SelectSelectStep<Record> select, int userId) {
+			return select
+					.from(Location.LOCATION)
+					.join(Pictures.PICTURES, JoinType.JOIN)
+					.on(Location.LOCATION.ID.equal(Pictures.PICTURES.FK_LOCATION))
+					.join(Users.USERS, JoinType.JOIN)
+					.on(Pictures.PICTURES.FK_USER.equal(Users.USERS.ID))
+					.leftOuterJoin(UsersPicturesVotes.USERS_PICTURES_VOTES)
+					.on(UsersPicturesVotes.USERS_PICTURES_VOTES.FK_USER.equal(userId).and(
+							UsersPicturesVotes.USERS_PICTURES_VOTES.FK_PICTURE.equal(Pictures.PICTURES.ID)));
 		}
 
 		private SelectConditionStep<Record> where(int voteLimit, Integer notFromLocation, Condition cond,
@@ -223,9 +253,12 @@ public enum UpdatesDao {
 			return where.orderBy(Pictures.PICTURES.CREATED_ON.desc());
 		}
 
-		private ResultQuery<Record> limit(Integer maxRows, SelectSeekStep1<Record, Timestamp> selectSeekStep) {
+		private ResultQuery<Record> limit(Integer startPos, Integer maxRows, SelectSeekStep1<Record, Timestamp> selectSeekStep) {
 			if (maxRows != null) {
-				return selectSeekStep.limit(maxRows);
+				if (startPos == null) {
+					startPos = 0;
+				}
+				return selectSeekStep.limit(startPos, maxRows);
 			} else {
 				return selectSeekStep;
 			}

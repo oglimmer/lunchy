@@ -12,6 +12,8 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.Result;
+import org.jooq.Select;
+import org.jooq.SelectSeekStep1;
 import org.jooq.SortField;
 import org.jooq.Table;
 import org.jooq.UpdatableRecord;
@@ -82,11 +84,26 @@ enum DaoBackend {
 		}
 	}
 
-	@SneakyThrows(value = SQLException.class)
 	public <R extends Record> List<R> query(Table<R> table, Condition condition, SortField<?> orderedBy, Class<R> clazz) {
+		return query(table, condition, orderedBy, null, null, clazz);
+	}
+
+	@SneakyThrows(value = SQLException.class)
+	public <R extends Record> List<R> query(Table<R> table, Condition condition, SortField<?> orderedBy, Integer startPos, Integer limit,
+			Class<R> clazz) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = getContext(conn);
-			Result<Record> result = create.select().from(table).where(condition).orderBy(orderedBy).fetch();
+			SelectSeekStep1<Record, ?> selectUntilOrderBy = create.select().from(table).where(condition).orderBy(orderedBy);
+			Select<Record> select;
+			if (limit != null) {
+				if (startPos == null) {
+					startPos = 0;
+				}
+				select = selectUntilOrderBy.limit(startPos, limit);
+			} else {
+				select = selectUntilOrderBy;
+			}
+			Result<Record> result = select.fetch();
 			List<R> resultList = new ArrayList<>();
 			for (Record rec : result) {
 				rec.attach(null);

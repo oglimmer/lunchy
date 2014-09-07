@@ -123,6 +123,7 @@ public enum EmailUpdatesNotifier {
 		private String caption;
 		private String filename;
 		private String id;
+		private Timestamp voteCreatedOn;
 	}
 
 }

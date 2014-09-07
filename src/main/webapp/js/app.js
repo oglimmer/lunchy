@@ -36,6 +36,11 @@ config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRou
             templateUrl: 'partials/list-locations.html',
             controller: 'LunchyControllerListLocations'
         }).
+        state('pictures', {
+            url: '/pictures/:startPos',
+            templateUrl: 'partials/pictures.html',
+            controller: 'LunchyControllerPictures'
+        }).
         state('passwordReset', {
             url: '/passwordReset',
             templateUrl: 'partials/passwordReset.html',

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -25,9 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.imgscalr.Scalr;
+import org.jooq.Record;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.PictureDao;
+import de.oglimmer.lunchy.database.dao.UpdatesDao;
 import de.oglimmer.lunchy.database.dao.UserPictureVoteDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
@@ -39,6 +42,7 @@ import de.oglimmer.lunchy.rest.dto.PictureResponse;
 import de.oglimmer.lunchy.rest.dto.PictureUpdateInput;
 import de.oglimmer.lunchy.services.Community;
 import de.oglimmer.lunchy.services.DateCalculation;
+import de.oglimmer.lunchy.services.EmailUpdatesNotifier.MailImage;
 import de.oglimmer.lunchy.services.FileServices;
 import de.oglimmer.lunchy.services.LunchyProperties;
 
@@ -53,19 +57,37 @@ public class PictureResource {
 	@SneakyThrows(value = IOException.class)
 	@GET
 	@Path("{filename}")
-	public Response load(@PathParam("filename") String filename, @QueryParam("size") Integer screenWidth) {
+	public Response load(@PathParam("filename") String filename, @QueryParam("size") String screenWidth) {
 		// NEVER REMOVE THIS!!! SECURITY check to avoid reading all files on the filesystem
 		if (filename.contains("..") || filename.contains("/")) {
 			throw new RuntimeException("Illegal filename:" + filename);
 		}
 		String mediaType = FileServices.getMediaTypeFromFileExtension(filename);
 		InputStream is = new FileInputStream(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
-		if (screenWidth != null) {
-			MemoryBaseImageScaler imageScaler = new MemoryBaseImageScaler(
-					screenWidth < SMALL_PIC_BOUNDRY ? SMALL_PIC_SIZE : LARGE_PIC_SIZE, 9999, Scalr.Method.SPEED, is);
+		if (screenWidth != null && !screenWidth.trim().isEmpty()) {
+			int screenWidthInt = convertScreenWidth(screenWidth);
+			MemoryBaseImageScaler imageScaler = new MemoryBaseImageScaler(screenWidthInt < SMALL_PIC_BOUNDRY ? SMALL_PIC_SIZE
+					: LARGE_PIC_SIZE, 9999, Scalr.Method.SPEED, is);
 			is = imageScaler.getScaledInputStream(FileServices.getFileType(filename));
 		}
 		return Response.ok(is, mediaType).build();
+	}
+
+	private int convertScreenWidth(String screenWidth) {
+		try {
+			return Integer.parseInt(screenWidth);
+		} catch (NumberFormatException e) {
+			return SMALL_PIC_BOUNDRY;
+		}
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<MailImage> queryPictures(@Context HttpServletRequest request, @QueryParam("startPos") Integer startPos,
+			@QueryParam("numberOfRecords") Integer numberOfRecords) {
+		List<Record> recordList = UpdatesDao.INSTANCE.getPictures(Community.get(request), startPos, numberOfRecords,
+				SessionProvider.INSTANCE.getLoggedInUserId(request));
+		return BeanMappingProvider.INSTANCE.mapListCustomDto(recordList, MailImage.class);
 	}
 
 	@POST

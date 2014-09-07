@@ -1,0 +1,31 @@
+<div class="container">
+
+    <span class="btn btn-default" ng-click="back()"> Back </span>
+    <span>Page {{ (startPos / numberOfRecords)+1 }}</span>
+    <span class="btn btn-default" ng-click="next()"> Next </span>
+
+    <div id='polaroid'>
+        <figure ng-repeat="pic in data">
+            <a ng-href="#/view/{{ pic.id }}">
+                <img ng-src="rest/pictures/{{ pic.filename }}?size={{ windowWidth }}" />
+                <figcaption ng-show="pic.caption">
+                    {{ pic.caption }}
+                    <span ng-show="pic.voteCreatedOn" style="font-family: Arial">
+                        <span tooltip-placement="bottom" tooltip="Voted on {{ pic.voteCreatedOn | date }}">
+                            <span class="glyphicon glyphicon-star"></span>
+                        </span>
+                    </span>
+                </figcaption>
+                <figcaption ng-hide="pic.caption">
+                    {{ pic.officialName }} in {{ pic.city }}
+                    <span ng-show="pic.voteCreatedOn" style="font-family: Arial">
+                        <span tooltip-placement="bottom" tooltip="Voted on {{ pic.voteCreatedOn | date }}">
+                            <span class="glyphicon glyphicon-star"></span>
+                        </span>
+                    </span>
+                </figcaption>
+            </a>
+        </figure>
+    </div>
+
+</div>
