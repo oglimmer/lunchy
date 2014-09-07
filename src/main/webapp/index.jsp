@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" session="false" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" session="false" %><%@ taglib prefix="lunchy" uri="http://oglimmer.de/lunchy/tags" %>
 <!DOCTYPE html>
 <html lang="en" ng-app="LunchyApp" class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:ng="http://angularjs.org">
 <head>
@@ -15,5 +15,13 @@
 	<div ui-view></div>
 
     <jsp:include page="partials/jsp-includes/body.jsp" />
+
+    <lunchy:script src="js/app.js"/>
+    <lunchy:script src="js/services.js"/>
+    <lunchy:script src="js/controllers.js"/>
+    <lunchy:script src="js/filters.js"/>
+    <lunchy:script src="js/directives.js"/>
+    <lunchy:script src="js/compiled_coffee.js"/>
+
 </body>
 </html>

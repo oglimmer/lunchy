@@ -286,11 +286,14 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                 if(pictures.length > 0) {
                     $scope.tabs.active = [false, false, true, false];
                 }
-                if($location.search().pic) {
-                    _.each($scope.childScopeHolder.pictures, function(picture) {
-                        picture.active = (picture.id == $location.search().pic);
-                    });
-                }
+                $timeout(function() {
+                    if($location.search().pic) {
+                        _.each(pictures, function(picture) {
+                            picture.active = (picture.id == $location.search().pic);
+                            console.log(picture.active);
+                        });
+                    }
+                })
             });
 
             // load all offices (for this community)
