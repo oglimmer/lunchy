@@ -41,6 +41,8 @@ abstract public class ImageScaler {
 		if (isScalingNeeded()) {
 			calcDimAndScale();
 			return true;
+		} else {
+			scaledImage = originalImage;
 		}
 		return false;
 	}
