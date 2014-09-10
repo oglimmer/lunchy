@@ -118,7 +118,7 @@ config(['flowFactoryProvider', function (flowFactoryProvider) {
   // Can be used with different implementations of Flow.js
   // flowFactoryProvider.factory = fustyFlowFactory;
 }]).
-run(['$rootScope', '$location', 'Authetication', 'LoginDao', '$timeout', '$window', function($rootScope, $location, Authetication, LoginDao, $timeout, $window) {
+run(['$rootScope', 'Authetication', 'LoginDao', '$window', '$interval', function($rootScope, Authetication, LoginDao, $window, $interval) {
 
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, eventObj) {
 		if (eventObj.authenticated === false) {
@@ -139,8 +139,8 @@ run(['$rootScope', '$location', 'Authetication', 'LoginDao', '$timeout', '$windo
 		if(Authetication.loggedIn){
 			LoginDao.check();
 		}
-		$timeout(keepAlive, 1000*60*5);
+		
 	}
-	keepAlive();
+	$interval(keepAlive, 1000*60*5);
 	
 }]);
