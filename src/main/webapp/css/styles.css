@@ -221,7 +221,6 @@ figure, figcaption {
 }
 #polaroid figure{
     -pie-background: linear-gradient(#ede1c9, #fef8e2 20%, #f2ebde 60%);
-    behavior: url(assets/pie/PIE.htc);
     position:relative;
     padding-top:10px;
     padding-right:10px;
