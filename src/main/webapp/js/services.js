@@ -305,13 +305,12 @@ factory('PasswordStrengthService', ['$rootScope', function ($rootScope) {
 		}		
 	}
 	
-	return {
-		create: function(emptyAllowed) {
-			var clone = _.clone(this);
-			clone.reset(emptyAllowed);
-			return clone;
-		},
-		reset: function(emptyAllowed) {
+	var PasswordStrengthService = function(emptyAllowed) {
+		
+		this.passStrength = null;
+		this.passStrengthClass = null;
+		
+		this.reset= function(emptyAllowed) {
 			var str, strCla;
 			if(emptyAllowed) {
 				str = -1;
@@ -322,8 +321,9 @@ factory('PasswordStrengthService', ['$rootScope', function ($rootScope) {
 			}
 			this.passStrength = createStrengthText(str);;
 			this.passStrengthClass = strCla;			
-		},
-		changed : function(val, emptyAllowed) {			
+		};
+		
+		this.changed= function(val, emptyAllowed) {			
 			if(typeof(val)==='undefined' || val == ""){
 				if(emptyAllowed) {
 					this.reset(emptyAllowed);
@@ -337,6 +337,14 @@ factory('PasswordStrengthService', ['$rootScope', function ($rootScope) {
 			this.passStrengthClass = createStrengthButtonClass(result.score);
 			
 			return result.score != 0;
-		}
+		};
+		
+		this.reset(emptyAllowed);
+	};
+	
+	return {
+		create: function(emptyAllowed) {
+			return new PasswordStrengthService(emptyAllowed);
+		}		
 	};
 }]);
