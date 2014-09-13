@@ -16,7 +16,7 @@
 			</ul>
             <ul class="nav navbar-nav navbar-right">
                 <li ng-show="Authetication.permissions==2" class="dropdown" ng-class="getClass('/user')">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <span class="caret"></span></a>
+                    <a ng-click="$event.stopPropagation()" href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#/user">Users</a></li>
                         <li><a href="#/office">Offices</a></li>
