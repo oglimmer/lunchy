@@ -119,9 +119,10 @@
                     <label for="password" class="col-sm-4 control-label">Password</label>
                     <div class="col-sm-6">
                         <input class="form-control" type="password" id="password" placeholder="password" name="password" ng-model="newUser.password" required />
+                        <span class="help-block">Password complexity: <password-strength ng-model="newUser.password" /></span>
                     </div>
                     <div class="col-sm-2">
-                        <span ng-show="!registerForm.password.$error.required">✔</span>
+                        <span ng-show="!registerForm.password.$error.required && !registerForm.$error.passwordStrength">✔</span>
                     </div>
                 </div>
                 <div class="row form-group">

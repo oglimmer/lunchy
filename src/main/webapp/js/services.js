@@ -274,4 +274,69 @@ factory('CommunityService', ['$rootScope', function ($rootScope) {
             $rootScope.companyName = val;
         }
     };
+}]).
+factory('PasswordStrengthService', ['$rootScope', function ($rootScope) {
+
+	function createStrengthText(number) {
+		switch(number) {
+		case -1:
+			return "n/a";
+		case 0:
+			return "Too simple";
+		case 1:
+			return "Simple";
+		case 2:
+			return "Good";
+		case 3:
+			return "Strong";
+		case 4:
+			return "Ultra strong";
+		}
+	}
+	function createStrengthButtonClass(number) {
+		switch(number) {
+		case 0:
+			return { 'label':true, 'label-danger': true};
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			return { 'label':true, 'label-success': true};
+		}		
+	}
+	
+	return {
+		create: function(emptyAllowed) {
+			var clone = _.clone(this);
+			clone.reset(emptyAllowed);
+			return clone;
+		},
+		reset: function(emptyAllowed) {
+			var str, strCla;
+			if(emptyAllowed) {
+				str = -1;
+				strCla = {};
+			} else {
+				str = 0;
+				strCla = {'label':true};				
+			}
+			this.passStrength = createStrengthText(str);;
+			this.passStrengthClass = strCla;			
+		},
+		changed : function(val, emptyAllowed) {			
+			if(typeof(val)==='undefined' || val == ""){
+				if(emptyAllowed) {
+					this.reset(emptyAllowed);
+					return this.passStrength != 0;
+				} else {
+					val="";
+				}
+			}
+			var result = zxcvbn(val);
+			this.passStrength = createStrengthText(result.score);
+			this.passStrengthClass = createStrengthButtonClass(result.score);
+			
+			return result.score != 0;
+		}
+	};
 }]);

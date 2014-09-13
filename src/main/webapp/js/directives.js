@@ -147,4 +147,25 @@ directive('lyEnter', function() {
             });
         }
     };
-});
+}).
+directive('passwordStrength', ['PasswordStrengthService', function(PasswordStrengthService) {
+    return {
+      restrict: 'E',
+      require: 'ngModel',
+      scope: {
+    	  password: '=ngModel'
+      },
+      link: function(scope, element, attrs, ngModel) {    	      	 
+    	  var allowNull = false;
+    	  if(attrs.allowNull) {
+    		  allowNull = true;
+    	  }
+    	  scope.pss = PasswordStrengthService.create(allowNull); 
+    	  scope.$watch("password", function(val) {
+    		  var validity = scope.pss.changed(val, allowNull);    		  
+    		  ngModel.$setValidity('passwordStrength', validity);
+    	  });
+      },
+      template: '<span ng-class="pss.passStrengthClass">{{ pss.passStrength }}</span>'
+    };
+}]);

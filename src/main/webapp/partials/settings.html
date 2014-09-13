@@ -43,7 +43,9 @@
                 <label for="password" class="col-md-2 control-label">New password</label>
                 <div class="col-md-10">
                     <input type="password" id="password" class="form-control" ng-model="data.password" >
-                    <span class="help-block">If left blank no new password will be set</span>
+                    <span class="help-block">If left blank no new password will be set. Password complexity: 
+                    	<password-strength ng-model="data.password" allow-null="true" />
+                    </span>
                 </div>
             </div>
             <div class="row form-group">
