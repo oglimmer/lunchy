@@ -82,19 +82,29 @@ public class LoginResource {
 		private LoginResponse check() {
 			SessionCheck sessionCheck = new SessionCheck();
 			if (sessionCheck.isValid()) {
-				return getResponse(sessionCheck.getUser());
+				return getSuccessResponse(sessionCheck.getUser());
 			}
 			LongTimeTokenCheck lttCheck = new LongTimeTokenCheck();
 			if (lttCheck.isValid()) {
-				return getResponse(lttCheck.getUser());
+				return getSuccessResponse(lttCheck.getUser());
 			}
-			return new LoginResponse();
+			return getNoSuccessResponse();
 		}
 
-		public LoginResponse getResponse(UsersRecord user) {
+		private LoginResponse getNoSuccessResponse() {
+			LoginResponse noSuccessResp = new LoginResponse();
+			setCompanyName(noSuccessResp);
+			return noSuccessResp;
+		}
+
+		public LoginResponse getSuccessResponse(UsersRecord user) {
 			LoginResponse resp = sessionProvider.createSession(user, request.getSession(true), false);
-			resp.setCompanyName(CommunityDao.INSTANCE.getById(Community.get(request)).getName());
+			setCompanyName(resp);
 			return resp;
+		}
+
+		private void setCompanyName(LoginResponse resp) {
+			resp.setCompanyName(CommunityDao.INSTANCE.getById(Community.get(request)).getName());
 		}
 
 		class SessionCheck {
