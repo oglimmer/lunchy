@@ -3,10 +3,12 @@
 
 	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 
+	<h4>{{ data.officialName }}</h4>
+
 	<div class="form-group">
 
         <tabset justified="true" ng-show="showTabMode">
-            <tab heading="{{ data.officialName }}" active="tabs.active[0]" disabled="tabs.disabled[0]">
+            <tab heading="Information" active="tabs.active[0]" disabled="tabs.disabled[0]">
                 <div ng-include="'partials/view-location/base-data.html'"></div>
             </tab>
             <tab heading="Reviews ({{ reviews.length }})" active="tabs.active[1]" disabled="tabs.disabled[1]">
