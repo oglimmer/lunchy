@@ -1,8 +1,10 @@
 <div class="container">
 
-    <span class="btn btn-default" ng-click="back()"> Back </span>
-    <span>Page {{ (startPos / numberOfRecords)+1 }}</span>
-    <span class="btn btn-default" ng-click="next()"> Next </span>
+	<div class="col-md-4 col-md-offset-4">
+	    <span class="btn btn-default" ng-click="back()"> &lt; Back </span>
+	    <span>Page {{ (startPos / numberOfRecords)+1 }}</span>
+	    <span class="btn btn-default" ng-click="next()"> Next &gt; </span>
+    </div>
 
     <div id='polaroid'>
         <figure ng-repeat="pic in data">
