@@ -37,53 +37,49 @@ controller('LunchyControllerUpdates', ['$scope', 'UpdatesDao', '$window', functi
         });
 
 }]).
-controller('LunchyControllerLogin', ['$scope', '$modalInstance', 'LoginDao', '$timeout', 'Authetication', 'StorageService', function ($scope, $modalInstance, LoginDao, $timeout, Authetication, StorageService) {
+controller('LunchyControllerLogin', ['$scope', '$modalInstance', 'LoginDao', '$timeout', 'Authetication', 'StorageService', 'AlertPaneService', function ($scope, $modalInstance, LoginDao, $timeout, Authetication, StorageService, AlertPaneService) {
+	AlertPaneService.add($scope);
+	
+    $scope.initShowMode = 0;
+    $scope.$modalInstance = $modalInstance;
+    $scope.login = {};
 
-        $scope.initShowMode = 0;
+    $scope.passwordForgotten = function() {
         $scope.alerts = [];
-        $scope.$modalInstance = $modalInstance;
-        $scope.login = {};
+        $scope.initShowMode = 1;
+    }
 
-        $scope.passwordForgotten = function() {
-            $scope.alerts = [];
-            $scope.initShowMode = 1;
-        }
+    $scope.register = function() {
+        $scope.alerts = [];
+        $scope.initShowMode = 2;
+    }
 
-        $scope.register = function() {
-            $scope.alerts = [];
-            $scope.initShowMode = 2;
-        }
+    $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    }
 
-        $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
-        }
-
-        $scope.closeAlert = function(index) {
-            $scope.alerts.splice(index, 1);
-        };
-
-        $scope.submitLogin = function() {
-            $scope.alerts = [];
-            LoginDao.login({email: $scope.login.email, password: $scope.login.password, keepLoggedIn: $scope.login.keepMeLoggedIn}, function(data) {
-                if(data.success) {
-                    Authetication.logInUser(data);
-                    $scope.password = "";
-                    if(data.longTimeToken != null && data.longTimeToken != "") {
-                        StorageService.save('longTimeToken', data.longTimeToken);
-                    }
-                    $modalInstance.close('ok');
-                } else {
-                    $scope.alerts.push({type:'danger',msg:data.errorMsg});
+    $scope.submitLogin = function() {
+        $scope.alerts = [];
+        LoginDao.login({email: $scope.login.email, password: $scope.login.password, keepLoggedIn: $scope.login.keepMeLoggedIn}, function(data) {
+            if(data.success) {
+                Authetication.logInUser(data);
+                $scope.password = "";
+                if(data.longTimeToken != null && data.longTimeToken != "") {
+                    StorageService.save('longTimeToken', data.longTimeToken);
                 }
-            });
-        };
+                $modalInstance.close('ok');
+            } else {
+                $scope.alerts.push({type:'danger',msg:data.errorMsg});
+            }
+        });
+    };
 
-        // Firefox password manager sets user/pass and angularJS is not informed.
-        $scope.init = function() {
-            $timeout(function() {
-                $('input[ng-model]').trigger('input');
-            }, 100);
-        };
+    // Firefox password manager sets user/pass and angularJS is not informed.
+    $scope.init = function() {
+        $timeout(function() {
+            $('input[ng-model]').trigger('input');
+        }, 100);
+    };
 	
 }]).
 controller('LunchyControllerLoginRegister', ['$scope', 'UserDao', 'OfficesDao', function ($scope, UserDao, OfficesDao) {
@@ -116,13 +112,10 @@ controller('LunchyControllerLoginPassReset', ['$scope', 'UserDao', function ($sc
 	}
 	
 }]).
-controller('LunchyControllerPasswordReset', ['$scope', 'UserDao', '$location', function ($scope, UserDao, $location) {
+controller('LunchyControllerPasswordReset', ['$scope', 'UserDao', '$location', 'AlertPaneService', function ($scope, UserDao, $location, AlertPaneService) {
+	AlertPaneService.add($scope);
+
 	$scope.data = {};
-	$scope.alerts = [];
-	
-	$scope.closeAlert = function(index) {
-		$scope.alerts.splice(index, 1);
-	};
 	
 	$scope.savePassword = function() {
 		UserDao.resetPassword({id:($location.search()).token}, {password:$scope.data.password}, function(result) {
@@ -135,10 +128,10 @@ controller('LunchyControllerPasswordReset', ['$scope', 'UserDao', '$location', f
 	}
 	
 }]).
-controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'OfficesDao', 'Authetication', 'TagService', function ($scope, $location, LocationsDao, OfficesDao, Authetication, TagService) {
+controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'OfficesDao', 'Authetication', 'TagService', 'AlertPaneService', function ($scope, $location, LocationsDao, OfficesDao, Authetication, TagService, AlertPaneService) {
+	AlertPaneService.add($scope);
 	
 	$scope.data = {};
-	$scope.alerts = [];
 	
 	$scope.allTags = [];
 	TagService.get().then(function(data) {
@@ -150,10 +143,6 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'Offic
 		$scope.data.fkOffice = Authetication.fkBaseOffice;
 	});
 	
-	$scope.closeAlert = function(index) {
-		$scope.alerts.splice(index, 1);
-	};
-	
 	$scope.submitAdd = function() {				
 		var newLoc = new LocationsDao($scope.data);
 		newLoc.$save(function(result) {
@@ -164,8 +153,9 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'Offic
 	}
 	
 }]).
-controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao', 'OfficesDao', 'TagService', '$location',
-        function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao, OfficesDao, TagService, $location) {
+controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao', 'OfficesDao', 'TagService', '$location', 'AlertPaneService',
+        function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao, OfficesDao, TagService, $location, AlertPaneService) {
+			AlertPaneService.add($scope);
 
             // permissions
             $scope.allowedToEditPermission = false;
@@ -239,8 +229,6 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                 $scope.allTags = data;
             });
 
-            // all alerts currently shown
-            $scope.alerts = [];
             // data of review in creation
             $scope.newReview = {
                     fkLocation:$stateParams.locationId,
@@ -383,10 +371,6 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             $scope.hoveringOut = function() {
                 setRatingExplained($scope.newReview.rating);
             }
-
-            $scope.closeAlert = function(index) {
-                $scope.alerts.splice(index, 1);
-            };
 
             $scope.editLocationStart = function() {
                 $scope.showTabMode = false;
@@ -640,22 +624,19 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	});
 	
 }]).
-controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Authetication', function($scope, UserDao, OfficesDao, Authetication) {
+controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Authetication', 'AlertPaneService', function($scope, UserDao, OfficesDao, Authetication, AlertPaneService) {
+	AlertPaneService.add($scope);
+
 	$scope.data = UserDao.current();
-	$scope.alerts = [];
 	
 	OfficesDao.query(function(offices) {
 		$scope.offices = offices;
 	});	
 	
-	$scope.closeAlert = function(index) {
-		$scope.alerts.splice(index, 1);
-	};
-	
 	$scope.saveEdit = function() {
+		$scope.alerts = [];
 		UserDao.save($scope.data, function(result) {
 			if(!result.success) {
-				$scope.alerts = [];
 				$scope.alerts.push({type:'danger', msg: 'Error while saving user: ' + result.errorMsg});
 			} else {
 				$scope.alerts = [ {type:'success', msg: 'Settings saved.'} ];
@@ -705,13 +686,9 @@ controller('LunchyControllerUser', ['$scope', 'UserDao', 'ngTableParams', '$filt
         }, {
             total: dataHolder.length,
             getData: function($defer, params) {
-
                 var filterData = $filter('filter')(dataHolder, params.filter());
-
                 var orderedData = $filter('orderBy')(filterData, params.orderBy());
-
                 var pagedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
                 params.total(filterData.length);
                 return $defer.resolve(pagedData);
             }
@@ -720,20 +697,8 @@ controller('LunchyControllerUser', ['$scope', 'UserDao', 'ngTableParams', '$filt
 
     UserDao.query(function (data) {
         initTable(data);
-    }, function() {
-        initTable([]);
     });
 
-    $scope.$on('userLoggedIn', function(event) {
-        UserDao.query(function (data) {
-            if(typeof($scope.tableParams) === 'undefined') {
-                initTable(data);
-            } else {
-                dataHolder = data;
-                $scope.tableParams.reload();
-            }
-        });
-    });
 }]).
 controller('LunchyControllerOffice', ['$scope', 'ngTableParams', '$filter', 'OfficesDao', '$location', function($scope, ngTableParams, $filter, OfficesDao, $location) {
 
@@ -742,6 +707,10 @@ controller('LunchyControllerOffice', ['$scope', 'ngTableParams', '$filter', 'Off
         $scope.rowclick = function(item) {
             $location.path("office-edit/"+item.id);
         };
+        
+        $scope.newOffice = function() {
+            $location.path("office-edit/");
+        }
 
         function initTable(data) {
             dataHolder = data;
@@ -754,13 +723,9 @@ controller('LunchyControllerOffice', ['$scope', 'ngTableParams', '$filter', 'Off
             }, {
                 total: dataHolder.length,
                 getData: function($defer, params) {
-
                     var filterData = $filter('filter')(dataHolder, params.filter());
-
                     var orderedData = $filter('orderBy')(filterData, params.orderBy());
-
                     var pagedData = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
-
                     params.total(filterData.length);
                     return $defer.resolve(pagedData);
                 }
@@ -769,56 +734,38 @@ controller('LunchyControllerOffice', ['$scope', 'ngTableParams', '$filter', 'Off
 
         OfficesDao.query(function (data) {
             initTable(data);
-        }, function() {
-            initTable([]);
         });
-
-        $scope.$on('userLoggedIn', function(event) {
-            OfficesDao.query(function (data) {
-                if(typeof($scope.tableParams) === 'undefined') {
-                    initTable(data);
-                } else {
-                    dataHolder = data;
-                    $scope.tableParams.reload();
-                }
-            });
-        });
-
-        $scope.newOffice = function() {
-            $location.path("office-edit/");
-        }
-
 }]).
-controller('LunchyControllerOfficeEdit', ['$scope', 'OfficesDao', '$stateParams', '$location', function($scope, OfficesDao, $stateParams, $location) {
+controller('LunchyControllerOfficeEdit', ['$scope', 'OfficesDao', '$stateParams', '$location', 'AlertPaneService', function($scope, OfficesDao, $stateParams, $location, AlertPaneService) {
+	AlertPaneService.add($scope);
 
-        $scope.data = {};
-        $scope.alerts = [];
+    $scope.data = {};
 
-        if($stateParams.officeId!="") {
-            OfficesDao.get({id: $stateParams.officeId}, function (officeResponse) {
-                $scope.data = officeResponse;
-            });
-        }
+    if($stateParams.officeId!="") {
+        OfficesDao.get({id: $stateParams.officeId}, function (officeResponse) {
+            $scope.data = officeResponse;
+        });
+    }
 
-        $scope.cancel = function() {
+    $scope.cancel = function() {
+        $location.path("office");
+    };
+
+    $scope.saveOffice = function() {
+        OfficesDao.save($scope.data, function(successResult) {
             $location.path("office");
-        };
+        }, function(failResult) {
+            $scope.alerts.push({type:'danger', msg: 'Error while saving user: ' + failResult.statusText});
+        });
+    };
 
-        $scope.saveOffice = function() {
-            OfficesDao.save($scope.data, function(successResult) {
-                $location.path("office");
-            }, function(failResult) {
-                $scope.alerts.push({type:'danger', msg: 'Error while saving user: ' + failResult.statusText});
-            });
-        };
-
-        $scope.deleteOffice = function() {
-            OfficesDao.delete({id:$scope.data.id}, function(successResult) {
-                $location.path("office");
-            }, function(failResult) {
-                $scope.alerts.push({type:'danger', msg: 'This office has already locations or users set it as their base office. It cannot be deleted anymore.'});
-            });
-        }
+    $scope.deleteOffice = function() {
+        OfficesDao.delete({id:$scope.data.id}, function(successResult) {
+            $location.path("office");
+        }, function(failResult) {
+            $scope.alerts.push({type:'danger', msg: 'This office has already locations or users set it as their base office. It cannot be deleted anymore.'});
+        });
+    }
 
 }]).
 controller('LunchyControllerPictures', ['$scope', 'PicturesDao', '$stateParams', '$window', '$location', function($scope, PicturesDao, $stateParams, $window, $location) {

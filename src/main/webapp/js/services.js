@@ -347,4 +347,14 @@ factory('PasswordStrengthService', ['$rootScope', function ($rootScope) {
 			return new PasswordStrengthService(emptyAllowed);
 		}		
 	};
+}]).
+factory('AlertPaneService', ['$rootScope', function ($rootScope) {
+	return {
+		add: function($scope) {
+			$scope.alerts = [];
+			$scope.closeAlert = function(index) {
+				$scope.alerts.splice(index, 1);
+			};
+		}
+	};
 }]);
