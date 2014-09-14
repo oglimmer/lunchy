@@ -15,21 +15,22 @@ import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
 public enum CommunityDao {
 	INSTANCE;
 
-	private LoadingCache<String, CommunitiesRecord> userRecordCache = CacheBuilder
-			.newBuilder().expireAfterWrite(5, TimeUnit.MINUTES)
-			.build(new CacheLoader<String, CommunitiesRecord>() {
+	private LoadingCache<String, CommunitiesRecord> userRecordCache = CacheBuilder.newBuilder()
+			.expireAfterWrite(5, TimeUnit.MINUTES).build(new CacheLoader<String, CommunitiesRecord>() {
 				public CommunitiesRecord load(String domain) {
-					return DB.fetchOn(COMMUNITIES,
-							COMMUNITIES.DOMAIN.equalIgnoreCase(domain));
+					return DB.fetchOn(COMMUNITIES, COMMUNITIES.DOMAIN.equalIgnoreCase(domain));
 				}
 			});
+
+	public CommunitiesRecord getByDomainNoCache(String domain) {
+		return DB.fetchOn(COMMUNITIES, COMMUNITIES.DOMAIN.equalIgnoreCase(domain));
+	}
 
 	public CommunitiesRecord getByDomain(String domain) {
 		try {
 			return userRecordCache.get(domain);
 		} catch (ExecutionException e) {
-			return DB.fetchOn(COMMUNITIES,
-					COMMUNITIES.DOMAIN.equalIgnoreCase(domain));
+			return getByDomainNoCache(domain);
 		}
 	}
 

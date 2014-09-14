@@ -1,5 +1,5 @@
 <div class="navbar navbar-default" role="navigation">
-	<div class="container">
+	<div class="container" ng-controller="LunchyControllerMenu">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle " data-toggle="collapse" data-target=".navbar-collapse" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
 				<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
@@ -12,19 +12,19 @@
 				<li ng-class="getClass('/browse')"><a href="#/browse">Browse</a></li>
 				<li ng-class="getClass('/list')"><a href="#/list">List</a></li>
                 <li ng-class="getClass('/pictures')"><a href="#/pictures/1">Pics</a></li>
-                <li ng-show="Authetication.loggedIn" ng-class="getClass('/add')"><a href="#/add">Add</a></li>
+                <li ng-show="authetication.loggedIn" ng-class="getClass('/add')"><a href="#/add">Add</a></li>
 			</ul>
             <ul class="nav navbar-nav navbar-right">
-                <li ng-show="Authetication.permissions==2" class="dropdown" ng-class="getClass('/user')">
+                <li ng-show="authetication.permissions==2" class="dropdown" ng-class="getClass('/user')">
                     <a ng-click="$event.stopPropagation()" href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#/user">Users</a></li>
                         <li><a href="#/office">Offices</a></li>
                     </ul>
                 </li>
-                <li ng-hide="Authetication.loggedIn"><a href="" ng-click="login()">Login/Register</a></li>
-                <li ng-show="Authetication.loggedIn" ng-class="getClass('/settings')"><a href="#/settings">Settings</a></li>
-                <li ng-show="Authetication.loggedIn"><a href="" ng-click="logout()">Log out</a></li>
+                <li ng-hide="authetication.loggedIn"><a href="" ng-click="login()">Login/Register</a></li>
+                <li ng-show="authetication.loggedIn" ng-class="getClass('/settings')"><a href="#/settings">Settings</a></li>
+                <li ng-show="authetication.loggedIn"><a href="" ng-click="logout()">Log out</a></li>
             </ul>
 		</div>
 		<!--/.navbar-collapse -->

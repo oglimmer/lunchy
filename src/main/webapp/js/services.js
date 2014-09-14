@@ -159,6 +159,12 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
                         return $q.reject({ authenticated: false });
                     });
             },
+            
+            logout: function() {
+            	this.loggedIn = false;
+            	this.permissions = 0;
+            	LoginDao.logout();
+            },
 
             checkLoggedIn: function() {
                 if(this.loggedIn) {
@@ -275,7 +281,7 @@ factory('CommunityService', ['$rootScope', function ($rootScope) {
         }
     };
 }]).
-factory('PasswordStrengthService', ['$rootScope', function ($rootScope) {
+factory('PasswordStrengthService', [function () {
 
 	function createStrengthText(number) {
 		switch(number) {
@@ -332,7 +338,11 @@ factory('PasswordStrengthService', ['$rootScope', function ($rootScope) {
 					val="";
 				}
 			}
-			var result = zxcvbn(val);
+			// zxcvbn is loaded async, therefore don't expect it here
+			var result = {score:0};
+			if(typeof(zxcvbn)!=='undefined') {
+				result = zxcvbn(val);
+			}
 			this.passStrength = createStrengthText(result.score);
 			this.passStrengthClass = createStrengthButtonClass(result.score);
 			

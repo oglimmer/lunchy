@@ -27,8 +27,8 @@ public class CommunityResource extends BaseResource {
 	@OPTIONS
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{domain}")
-	public ResultParam checkByEmail(@Context HttpServletRequest request, @PathParam("domain") String domain) {
-		CommunitiesRecord community = CommunityDao.INSTANCE.getByDomain(domain);
+	public ResultParam checkByDomainName(@Context HttpServletRequest request, @PathParam("domain") String domain) {
+		CommunitiesRecord community = CommunityDao.INSTANCE.getByDomainNoCache(domain);
 		ResultParam rp = new ResultParam();
 		if (community != null) {
 			rp.setSuccess(true);

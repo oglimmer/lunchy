@@ -3,41 +3,43 @@
 /* Controllers */
 
 angular.module('LunchyApp.controllers', []).
-controller('LunchyControllerMain', ['$scope', 'LoginDao', 'UserDao', 'UpdatesDao', '$location', 'Authetication', '$modal',
-        function($scope, LoginDao, UserDao, UpdatesDao, $location, Authetication, $modal) {
+controller('LunchyControllerMain', ['$scope', 'Authetication', function($scope, Authetication) {
 
-            $scope.Authetication = Authetication;
+	$scope.authetication = Authetication;
+   
+}]).
+controller('LunchyControllerMenu', ['$scope', '$location', function($scope, $location) {
+	
+	$scope.login = function() {
+		$scope.authetication.showLogin();
+	};
+	
+	$scope.logout = function() {		
+		$scope.authetication.logout();
+		$location.path("/");
+	};
 
-            $scope.logout = function() {
-                LoginDao.logout();
-                $scope.Authetication.loggedIn = false;
-                $location.path("/");
-            };
-
-            $scope.login = function() {
-                $scope.Authetication.showLogin();
-            };
-
-            $scope.getClass = function(path) {
-                if ($location.path().substr(0, path.length) == path) {
-                    return "active"
-                } else {
-                    return ""
-                }
-            };
+	$scope.getClass = function(path) {
+        if ($location.path().substr(0, path.length) == path) {
+            return "active"
+        } else {
+            return ""
+        }
+    };
 
 }]).
 controller('LunchyControllerUpdates', ['$scope', 'UpdatesDao', '$window', function($scope, UpdatesDao, $window) {
 
-        $scope.windowWidth = $window.innerWidth;
-
-        UpdatesDao.query(function(updatesResponse) {
-            $scope.latestUpdates = updatesResponse.latestUpdates;
-            $scope.latestPictures = updatesResponse.latestPictures;
-        });
+	$scope.windowWidth = $window.innerWidth;
+	
+	UpdatesDao.query(function(updatesResponse) {
+	    $scope.latestUpdates = updatesResponse.latestUpdates;
+	    $scope.latestPictures = updatesResponse.latestPictures;
+	});
 
 }]).
-controller('LunchyControllerLogin', ['$scope', '$modalInstance', 'LoginDao', '$timeout', 'Authetication', 'StorageService', 'AlertPaneService', function ($scope, $modalInstance, LoginDao, $timeout, Authetication, StorageService, AlertPaneService) {
+controller('LunchyControllerLogin', ['$scope', '$modalInstance', 'LoginDao', '$timeout', 'Authetication', 'StorageService', 'AlertPaneService', 
+                                     function ($scope, $modalInstance, LoginDao, $timeout, Authetication, StorageService, AlertPaneService) {
 	AlertPaneService.add($scope);
 	
     $scope.initShowMode = 0;
@@ -153,10 +155,177 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'Offic
 	}
 	
 }]).
+controller('LunchyControllerViewEditLocation', ['$scope', 'LocationsDao', 'TagService', 
+	function ($scope, LocationsDao, TagService) {
+
+    // available tags in auto-completion
+    $scope.allTags = [];
+
+    // load all tags
+    TagService.get().then(function(data) {
+        $scope.allTags = data;
+    });
+
+    $scope.editLocationSave = function() {
+        LocationsDao.save($scope.data, function(result) {
+            $scope.tabs.active = [true, false, false, false];
+            $scope.showView();
+        }, function(result) {
+            $scope.alerts.push({type:'danger', msg: 'Error while saving location: ' + result.statusText});
+        });
+    };
+
+	
+}]).
+controller('LunchyControllerViewAddPicture', ['$scope', 'LocationsDao', 'PicturesDao', '$stateParams',
+	function ($scope, LocationsDao, PicturesDao, $stateParams) {
+	
+	$scope.addPictureSave = function() {
+        if($scope.childScopeHolder.$flow.files.length>0) {
+            var f1 = $scope.childScopeHolder.$flow.files[0];
+            if(!f1.isUploading() && f1.size < 1024*1024*15) {
+                var newPic = new PicturesDao({fkLocation: $stateParams.locationId, caption: $scope.childScopeHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
+                newPic.$save(function(pic) {
+                    LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
+                    	$scope.setPictures(pictures);
+                    });
+                });
+                $scope.childScopeHolder.$flow.cancel();
+                $scope.childScopeHolder.picCaption = "";
+                $scope.showView();
+            }
+        }
+    }	
+	
+	
+}]).
+controller('LunchyControllerViewModifyReview', ['$scope', 'ReviewDao',
+	function ($scope, ReviewDao) {
+	
+	$scope.modifyReviewSave = function() {		
+		$scope.alerts = [];
+        var newReview = new ReviewDao($scope.newReview);
+        newReview.$save(function(result) {
+            if($scope.childScopeHolder.usersReview==null) {
+                $scope.childScopeHolder.reviewButton = "Edit Review";
+            } else {            	
+                $scope.childScopeHolder.reviews = _.filter($scope.childScopeHolder.reviews, function(review) { return review.id !== result.id; });                
+            }
+            $scope.data.turnAroundTime = result.locationTurnAroundTime;            
+            $scope.childScopeHolder.reviews.splice(0, 0, result);            
+            $scope.childScopeHolder.usersReview = result.id;
+            $scope.tabs.active = [false, true, false, false];
+            $scope.showView();
+        }, function(result) {
+            if(result.status==409) {
+                $scope.alerts.push({type:'danger', msg: 'Location was already reviewed by this user! Refresh this page!'});
+            } else {
+                $scope.alerts.push({type:'danger', msg: 'Error while saving review: ' + result.statusText});
+            }
+        });
+    }
+
+    $scope.hoveringOver = function(val) {
+        setRatingExplained(val);
+    }
+
+    $scope.hoveringOut = function() {
+   		setRatingExplained($scope.newReview.rating);
+    }
+    
+    $scope.$watch('newReview.rating', function() {
+        setRatingExplained($scope.newReview.rating);
+    });
+    
+    function setRatingExplained(val) {
+        switch(val) {
+        case 1:
+            $scope.newReview.ratingExplained = "I will never go there again!";
+            break;
+        case 2:
+            $scope.newReview.ratingExplained = "Not amongst my favorites, but I would eventually join.";
+            break;
+        case 3:
+            $scope.newReview.ratingExplained = "Liked it - somehow. Go there again.";
+            break;
+        case 4:
+            $scope.newReview.ratingExplained = "Nice place, happy to do it again";
+            break;
+        case 5:
+            $scope.newReview.ratingExplained = "One of my favorites! Couldn't get enough!";
+            break;
+        }
+    }     
+	
+}]).
+controller('LunchyControllerViewMap', ['$scope', function ($scope) {
+	
+	function createMap() {
+		return {
+            center : {
+                latitude : $scope.data.geoLat,
+                longitude : $scope.data.geoLng
+            },
+            zoom : 13
+        };
+	}
+	
+	function createMarker() {
+		return {
+            id:$scope.data.id,
+            coords: {
+                latitude: $scope.data.geoLat,
+                longitude: $scope.data.geoLng
+            },
+            events: {
+                dragend: function(marker, eventName, args) {
+                    $scope.marker.newPosition = marker.getPosition();
+                    $scope.$apply(function() {
+                        if($scope.allowedToEditPermission) {
+                            $scope.marker.pinMoved = true;
+                        }
+                    })
+                }
+            },
+            markerOptions: {
+                title: $scope.data.officialName,
+                draggable:true
+            },
+            pinMoved : false
+        };
+	}
+	
+	function createOffice() {
+		var officeObj = _.find($scope.offices, function(off) { return off.id == $scope.data.fkOffice; });
+		return [{
+            coords: {
+                latitude: officeObj.geoLat,
+                longitude: officeObj.geoLng
+            },
+            markerOptions: {
+                title: "Office " + officeObj.name
+            },
+            id: 'officeMarker'
+        }];
+	}
+	
+	// create map data
+    $scope.mapSelected = function() {
+        $scope.map = createMap();
+        $scope.marker = createMarker();        
+        $scope.officeMarker = createOffice();
+        $scope.mapTabShown = true;
+    };	
+	
+}]).
 controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao', 'OfficesDao', 'TagService', '$location', 'AlertPaneService',
         function ($scope, $stateParams, LocationsDao, ReviewDao, Authetication, $timeout, PicturesDao, OfficesDao, TagService, $location, AlertPaneService) {
 			AlertPaneService.add($scope);
 
+			/* ### DATA ### */
+            // generic scope holder
+            $scope.childScopeHolder = {};
+			
             // permissions
             $scope.allowedToEditPermission = false;
 
@@ -166,7 +335,32 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             $scope.editLocationMode = false;
             $scope.modifyReviewMode = false;
             $scope.addPictureMode = false;
-            $scope.reviewButton = "Add Review";
+            $scope.childScopeHolder.reviewButton = "Add Review";
+            
+            // vote for current picture
+            $scope.childScopeHolder.currentPicVoted = 0;
+
+            // reference to review from current-user
+            $scope.childScopeHolder.usersReview = null;
+
+            // tabs state variable
+            $scope.tabs = {};
+            $scope.tabs.active = [true, false, false, false];
+            $scope.tabs.disabled = [false, false, false, false];
+            
+            // we don't want to a transition when a direct pic should be shown
+            $scope.carouselNoTransition = true;
+            
+            // data container for new/edit review
+            $scope.newReview = {
+                fkLocation:$stateParams.locationId,
+                comment:'',
+                favoriteMeal:'',
+                rating:1,
+                ratingExplained:'none'
+            };
+
+            /* ### PRIVATE METHODS ### */
 
             function onSlideChanged() {
                 var activePicture = _.find($scope.childScopeHolder.pictures, function(pic) { return pic.active; });
@@ -180,22 +374,19 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             // check user permission/hasReviews
             function getlocationStatusForCurrentUser() {
                 $scope.showButtonsMode= true;
-                LocationsDao.locationStatusForCurrentUser({"id": $stateParams.locationId }, function (result) {
+                LocationsDao.locationStatusForCurrentUser({"id": $stateParams.locationId }, function (result) {                	
                     $scope.allowedToEditPermission = result.allowedToEdit;
                     if(result.hasReview) {
-                        $scope.usersReview = result.fkReview;
-                        $scope.reviewButton = "Edit Review";
+                        $scope.childScopeHolder.usersReview = result.fkReview;
+                        $scope.childScopeHolder.reviewButton = "Edit Review";
                     }
                     $scope.picVotes = result.pictureVotes;
                     onSlideChanged();
                 });
-            };
+            };                  
 
-            // generic scope holder
-            $scope.childScopeHolder = {};
-
-            // vote for current picture
-            $scope.childScopeHolder.currentPicVoted = 0;
+            /* ### SCOPE BUTTON METHODS ### */
+            
             $scope.picVoteClicked = function(newState) {
                 var activePicture = _.find($scope.childScopeHolder.pictures, function(pic) { return pic.active; });
                 if(_.isUndefined(activePicture)){
@@ -208,169 +399,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                     $scope.picVotes = _.union($scope.picVotes, [activePicture.id]);
                     PicturesDao.vote({id: activePicture.id}, {direction: 'up'});
                 }
-            };
-
-            // load location base-data
-            LocationsDao.get({ "id": $stateParams.locationId }, function(loadLocationResponse) {
-                $scope.data = loadLocationResponse;
-                $scope.initialGeoMovedManually = loadLocationResponse.geoMovedManually;
-            } );
-            // load location reviews
-            LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
-                $scope.reviews = reviews;
-                if(reviews.length>0 && !$scope.tabs.active[2]) {
-                    $scope.tabs.active = [false, true, false, false];
-                }
-            });
-            // available tags in auto-completion
-            $scope.allTags = [];
-            // load all tags
-            TagService.get().then(function(data) {
-                $scope.allTags = data;
-            });
-
-            // data of review in creation
-            $scope.newReview = {
-                    fkLocation:$stateParams.locationId,
-                    comment:'',
-                    favoriteMeal:'',
-                    rating:1,
-                    ratingExplained:'none'
-            };
-            // reference to review from current-user
-            $scope.usersReview = null;
-
-
-
-
-            Authetication.checkLoggedIn().then(function(data) {
-                if(data.loggedIn){
-                    getlocationStatusForCurrentUser();
-                };
-            });
-            $scope.$on('userLoggedIn', function(event) {
-                getlocationStatusForCurrentUser();
-            });
-
-            // tabs state variable
-            $scope.tabs = {};
-            $scope.tabs.active = [true, false, false, false];
-            $scope.tabs.disabled = [false, false, false, false];
-
-            function setPictures(pictures) {
-                $scope.childScopeHolder.pictures = pictures;
-                angular.forEach(pictures, function(obj, idx) {
-                    $scope.$watch("childScopeHolder.pictures["+idx+"].active", function(val) {
-                        if(val) {
-                            onSlideChanged();
-                        }
-                    });
-                })
-            }
-
-            // we don't want to a transition when a direct pic should be shown
-            $scope.carouselNoTransition = true;
-            // load all pictures
-            LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
-                setPictures(pictures);
-                if(pictures.length > 0) {
-                    $scope.tabs.active = [false, false, true, false];
-                }
-                if($location.search().pic) {
-                    _.each(pictures, function(picture) {
-                        picture.active = (picture.id == $location.search().pic);
-                    });
-                }
-                $timeout(function() {
-                    // need to be async ($currentTransition get stuck on scope otherwise)
-                    $scope.carouselNoTransition = false;
-                })
-            });
-
-            // load all offices (for this community)
-            OfficesDao.query(function(offices) {
-                $scope.offices = offices;
-            });
-
-            // create map data
-            $scope.mapSelected = function() {
-                $scope.map = {
-                    center : {
-                        latitude : $scope.data.geoLat,
-                        longitude : $scope.data.geoLng
-                    },
-                    zoom : 13
-                };
-                $scope.marker = {
-                    id:$scope.data.id,
-                    coords: {
-                        latitude: $scope.data.geoLat,
-                        longitude: $scope.data.geoLng
-                    },
-                    events: {
-                        dragend: function(marker, eventName, args) {
-                            $scope.marker.newPosition = marker.getPosition();
-                            $scope.$apply(function() {
-                                if($scope.allowedToEditPermission) {
-                                    $scope.marker.pinMoved = true;
-                                }
-                            })
-                        }
-                    },
-                    markerOptions: {
-                        title: $scope.data.officialName,
-                        draggable:true
-                    },
-                    pinMoved : false
-                }
-                angular.forEach($scope.offices, function(off) {
-                    if(off.id == $scope.data.fkOffice){
-                        $scope.officeMarker = [{
-                            coords: {
-                                latitude: off.geoLat,
-                                longitude: off.geoLng
-                            },
-                            markerOptions: {
-                                title: "Office " + off.name
-                            },
-                            id: 'officeMarker'
-                        }];
-                    }
-                })
-                $scope.mapTabShown = true;
-            };
-
-            function setRatingExplained(val) {
-                switch(val) {
-                case 1:
-                    $scope.newReview.ratingExplained = "I will never go there again!";
-                    break;
-                case 2:
-                    $scope.newReview.ratingExplained = "Not amongst my favorites, but I would eventually join.";
-                    break;
-                case 3:
-                    $scope.newReview.ratingExplained = "Liked it - somehow. Go there again.";
-                    break;
-                case 4:
-                    $scope.newReview.ratingExplained = "Nice place, happy to do it again";
-                    break;
-                case 5:
-                    $scope.newReview.ratingExplained = "One of my favorites! Couldn't get enough!";
-                    break;
-                }
-            }
-
-            $scope.$watch('newReview.rating', function() {
-                setRatingExplained($scope.newReview.rating);
-            });
-
-            $scope.hoveringOver = function(val) {
-                setRatingExplained(val);
-            }
-
-            $scope.hoveringOut = function() {
-                setRatingExplained($scope.newReview.rating);
-            }
+            };         
 
             $scope.editLocationStart = function() {
                 $scope.showTabMode = false;
@@ -379,11 +408,9 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             };
 
             $scope.modifyReviewStart = function() {
-                angular.forEach($scope.reviews, function(rev, idx) {
-                    if(rev.id == $scope.usersReview) {
-                        $scope.newReview = angular.copy(rev);
-                    }
-                });
+            	if($scope.childScopeHolder.usersReview != null) {
+                	$scope.newReview = angular.copy(_.find($scope.childScopeHolder.reviews, function(rev) { return rev.id == $scope.childScopeHolder.usersReview; }));                	
+            	}
                 $scope.showTabMode = false;
                 $scope.modifyReviewMode = true;
                 $scope.showButtonsMode= false;
@@ -411,6 +438,9 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                     $scope.childScopeHolder.$flow.cancel();
                 }
             };
+            
+            /* ### Scope helper methods ### */
+            
             $scope.showView = function() {
                 $scope.showTabMode = true;
                 $scope.editLocationMode = false;
@@ -418,58 +448,72 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                 $scope.addPictureMode = false;
                 $scope.showButtonsMode= true;
                 $scope.tabs.disabled = [false, false, false, false];
+            };                   
+
+            $scope.setPictures = function(pictures) {
+                $scope.childScopeHolder.pictures = pictures;
+                angular.forEach(pictures, function(obj, idx) {
+                    $scope.$watch("childScopeHolder.pictures["+idx+"].active", function(val) {
+                        if(val) {
+                            onSlideChanged();
+                        }
+                    });
+                })
             };
 
-            $scope.editLocationSave = function() {
-                LocationsDao.save($scope.data, function(result) {
-                    $scope.tabs.active = [true, false, false, false];
-                    $scope.showView();
-                }, function(result) {
-                    $scope.alerts.push({type:'danger', msg: 'Error while saving location: ' + result.statusText});
-                });
-            };
+            /* ### Scope watches ### */          
+            
+            $scope.$on('userLoggedIn', function(event) {
+                getlocationStatusForCurrentUser();
+            });
+            
+            /* ### RUN ### */
 
-            $scope.modifyReviewSave = function() {
-                var newReview = new ReviewDao($scope.newReview);
-                newReview.$save(function(result) {
-                    if($scope.usersReview==null) {
-                        $scope.reviewButton = "Edit Review";
-                    } else {
-                        $scope.reviews = _.filter($scope.reviews, function(review) { return review.id !== result.id; });
-                    }
-                    $scope.data.turnAroundTime = result.locationTurnAroundTime;
-                    $scope.reviews.splice(0, 0, result);
-                    $scope.usersReview = result.id;
+            // load location base-data
+            LocationsDao.get({ "id": $stateParams.locationId }, function(loadLocationResponse) {
+                $scope.data = loadLocationResponse;
+                $scope.initialGeoMovedManually = loadLocationResponse.geoMovedManually;
+            } );
+            
+            // load location reviews
+            LocationsDao.queryReviews({"id": $stateParams.locationId }, function (reviews) {
+                $scope.childScopeHolder.reviews = reviews;
+                if(reviews.length>0 && !$scope.tabs.active[2]) {
                     $scope.tabs.active = [false, true, false, false];
-                    $scope.showView();
-                }, function(result) {
-                    if(result.status==409) {
-                        $scope.alerts.push({type:'danger', msg: 'Location was already reviewed by this user! Refresh this page!'});
-                    } else {
-                        $scope.alerts.push({type:'danger', msg: 'Error while saving review: ' + result.statusText});
-                    }
-                });
-            }
-            $scope.addPictureSave = function() {
-                if($scope.childScopeHolder.$flow.files.length>0) {
-                    var f1 = $scope.childScopeHolder.$flow.files[0];
-                    if(!f1.isUploading() && f1.size < 1024*1024*15) {
-                        var newPic = new PicturesDao({fkLocation: $stateParams.locationId, caption: $scope.childScopeHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
-                        newPic.$save(function(pic) {
-                            LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
-                                setPictures(pictures);
-                            });
-                        });
-                        $scope.childScopeHolder.$flow.cancel();
-                        $scope.childScopeHolder.picCaption = "";
-                        $scope.showView();
-                    }
+                }                
+            });
+            
+            // load all pictures
+            LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
+            	$scope.setPictures(pictures);
+                if(pictures.length > 0) {
+                    $scope.tabs.active = [false, false, true, false];
                 }
-            }
+                if($location.search().pic) {
+                    _.each(pictures, function(picture) {
+                        picture.active = (picture.id == $location.search().pic);
+                    });
+                }
+                $timeout(function() {
+                    // need to be async ($currentTransition get stuck on scope otherwise)
+                    $scope.carouselNoTransition = false;
+                })
+            });
+
+            // load all offices (for this community)
+            OfficesDao.query(function(offices) {
+                $scope.offices = offices;
+            });
+
+            Authetication.checkLoggedIn().then(function(data) {
+                if(data.loggedIn){
+                    getlocationStatusForCurrentUser();
+                };
+            });
 	
 }]).
-controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$location', '$window', 'LocationsDao', 'OfficesDao', 'Authetication',
-                                                function($scope, $stateParams, $location, $window, LocationsDao, OfficesDao, Authetication) {
+controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$location', '$window', 'OfficesDao', 'Authetication',
+                                                function($scope, $stateParams, $location, $window, OfficesDao, Authetication) {
 
 	if(typeof($stateParams.officeId)==='undefined') {
 		$location.path('/browse/'+Authetication.fkBaseOffice);
@@ -478,27 +522,25 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	$scope.selectedOffice = $stateParams.officeId;
 	
 	$scope.officeMarker = [];
-	OfficesDao.query(function(offices) {
-		$scope.offices = offices;
-		angular.forEach(offices, function(off) {
-			if(off.id == $scope.selectedOffice){
-				$scope.officeMarker = [{
-					coords: {
-						latitude: off.geoLat,
-						longitude: off.geoLng
-					},
-					markerOptions: {
-						title: "Office " + off.name
-					},
-                    id: 'officeMarker'
-				}];
-			}
-		})
-	});
-	
 	$scope.map = {
 		loaded:false
-	};
+	};	
+	
+	OfficesDao.query(function(offices) {
+		$scope.offices = offices;
+		
+		var off = _.find(offices, function(off) { return off.id == $scope.selectedOffice; });
+		$scope.officeMarker = [{
+			coords: {
+				latitude: off.geoLat,
+				longitude: off.geoLng
+			},
+			markerOptions: {
+				title: "Office " + off.name
+			},
+            id: 'officeMarker'
+		}];			
+	});
 	
 	OfficesDao.get({id:$scope.selectedOffice}).$promise.then(function(office) {			
 		$scope.map = {
@@ -529,28 +571,25 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	
 	OfficesDao.locations({id: $scope.selectedOffice}, function (locations) {
 		$scope.markers = [];
-		angular.forEach(locations, function(loc, idx) {			
-			if(loc.geoLat != null && loc.geoLng != null) {			
-				$scope.markers.push({
-				    id:loc.id,
-				    coords: {
-				        latitude: loc.geoLat,
-				        longitude: loc.geoLng
-				    },
-				    title: loc.officialName,
-				    events: {
-				    	click: function (marker, eventName, args) {
-			                //console.log('marker clicked:'+loc.officialName+"/"+loc.id);
-			                $scope.$apply(function() {
-			                	$location.path("/view/"+loc.id);
-			                });
-			            }			            
-			        },
-			        markerOptions: {
-				    	title: loc.officialName+" ("+loc.numberOfReviews+"/"+loc.avgRating+"/"+(loc.reviewed?"X":"-")+")"
-				    }
-				});
-			}			
+		var loc = _.find(locations, function(loc) { return loc.geoLat != null && loc.geoLng != null; });
+		$scope.markers.push({
+		    id:loc.id,
+		    coords: {
+		        latitude: loc.geoLat,
+		        longitude: loc.geoLng
+		    },
+		    title: loc.officialName,
+		    events: {
+		    	click: function (marker, eventName, args) {
+	                //console.log('marker clicked:'+loc.officialName+"/"+loc.id);
+	                $scope.$apply(function() {
+	                	$location.path("/view/"+loc.id);
+	                });
+	            }			            
+	        },
+	        markerOptions: {
+		    	title: loc.officialName+" ("+loc.numberOfReviews+"/"+loc.avgRating+"/"+(loc.reviewed?"X":"-")+")"
+		    }
 		});
 	});
 
