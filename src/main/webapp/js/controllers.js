@@ -368,7 +368,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             return;
         }
         var activePicIsVoted = _.find($scope.picVotes, function(vote) { return vote == activePicture.id });
-        $scope.childScopeHolder.currentPicVoted = activePicIsVoted !== null;
+        $scope.childScopeHolder.currentPicVoted = !_.isUndefined(activePicIsVoted);
     }
 
     // check user permission/hasReviews
