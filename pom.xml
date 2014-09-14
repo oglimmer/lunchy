@@ -136,7 +136,7 @@
 					<value>true</value>
 				</property>
 			</activation>
-			<build>	
+			<build>
 			</build>
 			<dependencies>
 				<dependency>
@@ -222,6 +222,44 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.searls</groupId>
+				<artifactId>jasmine-maven-plugin</artifactId>
+				<version>2.0-alpha-01</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<jsSrcDir>src/main/webapp/js</jsSrcDir>
+					<jsTestSrcDir>src/test/js</jsTestSrcDir>
+					<webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName> 
+					<!-- 	<webDriverClassName>org.openqa.selenium.firefox.FirefoxDriver</webDriverClassName>
+					<webDriverClassName>org.openqa.selenium.chrome.ChromeDriver</webDriverClassName>  -->
+					<preloadSources>
+						<source>webjars/jquery/2.1.1/jquery.min.js</source>
+						<source>webjars/jquery-ui/1.11.1/jquery-ui.min.js</source>
+						<source>webjars/angularjs/1.3.0-beta.19/angular.min.js</source>
+						<source>webjars/angularjs/1.3.0-beta.19/angular-resource.min.js</source>
+						<source>webjars/angularjs/1.3.0-beta.19/angular-route.min.js</source>
+						<source>webjars/angularjs/1.3.0-beta.19/angular-touch.min.js</source>
+						<source>webjars/angularjs/1.3.0-beta.19/angular-sanitize.min.js</source>
+						<source>webjars/angularjs/1.3.0-beta.19/angular-cookies.min.js</source>
+						<source>webjars/angular-ui-utils/0.1.1/ui-utils.min.js</source>
+						<source>webjars/angular-ui-router/0.2.11/angular-ui-router.min.js</source>
+						<source>webjars/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.min.js</source>
+						<source>webjars/ng-table/0.3.3/ng-table.min.js</source>
+						<source>webjars/ng-flow/2.4.0/ng-flow-standalone.min.js</source>
+						<source>webjars/zxcvbn/1.0/zxcvbn.js</source>
+						<source>webjars/lodash/2.4.1-6/lodash.underscore.min.js</source>
+						<source>http://maps.googleapis.com/maps/api/js?sensor=false</source>
+						<source>src/main/webapp/js/ext/angular-google-maps.1.2.0.min.js</source>
+					</preloadSources>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
@@ -433,7 +471,7 @@
 			<artifactId>liquibase-core</artifactId>
 			<version>3.2.2</version>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 	</dependencies>
 
 </project>
