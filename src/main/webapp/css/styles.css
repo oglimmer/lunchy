@@ -179,7 +179,8 @@ figure, figcaption {
         font-size:1.7em;
     }
 }
-#polaroid figure:nth-child(even) {
+#polaroid figure:nth-child(even),
+#polaroid figure.odd {
     -webkit-transform:rotate(2deg);
     -moz-transform: rotate(2deg);
     -o-transform: rotate(2deg);
@@ -204,7 +205,8 @@ figure, figcaption {
     -o-transform: rotate(-12deg);
     -ms-transform: rotate(-12deg);
 }
-#polaroid figure:nth-child(even):before {
+#polaroid figure:nth-child(even):before,
+#polaroid figure.odd:before {
     left:150px;
     top: -15px;
     width: 55px;

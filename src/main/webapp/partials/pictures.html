@@ -6,28 +6,32 @@
 	    <span class="btn btn-default" ng-click="next()"> Next &gt; </span>
     </div>
 
-    <div id='polaroid'>
-        <figure ng-repeat="pic in data">
-            <a ng-href="#/view/{{ pic.id }}?pic={{ pic.pictureId }}">
-                <img ng-src="rest/pictures/{{ pic.filename }}?size={{ windowWidth }}" />
-                <figcaption ng-show="pic.caption">
-                    {{ pic.caption }}
-                    <span ng-show="pic.voteCreatedOn" style="font-family: Arial">
-                        <span tooltip-placement="bottom" tooltip="Voted on {{ pic.voteCreatedOn | date }}">
-                            <span class="glyphicon glyphicon-star"></span>
-                        </span>
-                    </span>
-                </figcaption>
-                <figcaption ng-hide="pic.caption">
-                    {{ pic.officialName }} in {{ pic.city }}
-                    <span ng-show="pic.voteCreatedOn" style="font-family: Arial">
-                        <span tooltip-placement="bottom" tooltip="Voted on {{ pic.voteCreatedOn | date }}">
-                            <span class="glyphicon glyphicon-star"></span>
-                        </span>
-                    </span>
-                </figcaption>
-            </a>
-        </figure>
-    </div>
+	<div ng-repeat="rows in data | partition:2" class="row">
+		<div ng-repeat="pic in rows" class="col-md-6">
+			<div id='polaroid'>
+				<figure ng-class="{odd: $odd }">
+					<a ng-href="#/view/{{ pic.id }}?pic={{ pic.pictureId }}">
+		                <img ng-src="rest/pictures/{{ pic.filename }}?size={{ windowWidth }}" />
+		                <figcaption ng-show="pic.caption">
+		                    {{ pic.caption }}
+		                    <span ng-show="pic.voteCreatedOn" style="font-family: Arial">
+		                        <span tooltip-placement="bottom" tooltip="Voted on {{ pic.voteCreatedOn | date }}">
+		                            <span class="glyphicon glyphicon-star"></span>
+		                        </span>
+		                    </span>
+		                </figcaption>
+		                <figcaption ng-hide="pic.caption">
+                    		{{ pic.officialName }} in {{ pic.city }}
+                    		<span ng-show="pic.voteCreatedOn" style="font-family: Arial">
+                        		<span tooltip-placement="bottom" tooltip="Voted on {{ pic.voteCreatedOn | date }}">
+                            		<span class="glyphicon glyphicon-star"></span>
+                        		</span>
+                    		</span>
+                		</figcaption>                
+		            </a>
+				</figure>
+			</div>
+		</div>
+	</div>
 
 </div>
