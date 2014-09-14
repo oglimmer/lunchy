@@ -23,7 +23,7 @@
                         </div>
                     </slide>
                 </carousel>
-                <div class="top17" ng-show="showButtonsMode">
+                <div class="top17" ng-show="showButtonsMode && childScopeHolder.pictures.length > 0">
                     <div class="btn btn-success pull-right" btn-checkbox ng-model="childScopeHolder.currentPicVoted" ng-click="picVoteClicked(childScopeHolder.currentPicVoted)">
                         <span class="glyphicon glyphicon-thumbs-up" style="font-size: 22px"></span>
                     </div>
