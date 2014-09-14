@@ -571,25 +571,27 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	
 	OfficesDao.locations({id: $scope.selectedOffice}, function (locations) {
 		$scope.markers = [];
-		var loc = _.find(locations, function(loc) { return loc.geoLat != null && loc.geoLng != null; });
-		$scope.markers.push({
-		    id:loc.id,
-		    coords: {
-		        latitude: loc.geoLat,
-		        longitude: loc.geoLng
-		    },
-		    title: loc.officialName,
-		    events: {
-		    	click: function (marker, eventName, args) {
-	                //console.log('marker clicked:'+loc.officialName+"/"+loc.id);
-	                $scope.$apply(function() {
-	                	$location.path("/view/"+loc.id);
-	                });
-	            }			            
-	        },
-	        markerOptions: {
-		    	title: loc.officialName+" ("+loc.numberOfReviews+"/"+loc.avgRating+"/"+(loc.reviewed?"X":"-")+")"
-		    }
+		var validLocations = _.filter(locations, function(loc) { return loc.geoLat != null && loc.geoLng != null; });
+		_.each(validLocations, function(loc) {
+			$scope.markers.push({
+			    id:loc.id,
+			    coords: {
+			        latitude: loc.geoLat,
+			        longitude: loc.geoLng
+			    },
+			    title: loc.officialName,
+			    events: {
+			    	click: function (marker, eventName, args) {
+		                //console.log('marker clicked:'+loc.officialName+"/"+loc.id);
+		                $scope.$apply(function() {
+		                	$location.path("/view/"+loc.id);
+		                });
+		            }			            
+		        },
+		        markerOptions: {
+			    	title: loc.officialName+" ("+loc.numberOfReviews+"/"+loc.avgRating+"/"+(loc.reviewed?"X":"-")+")"
+			    }
+			});
 		});
 	});
 
