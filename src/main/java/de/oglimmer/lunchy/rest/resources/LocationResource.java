@@ -171,8 +171,8 @@ public class LocationResource extends BaseResource {
 		}
 
 		private boolean addressChanged(LocationRecord locationRec) {
-			return !locationDto.getAddress().equals(locationRec.getAddress()) || !locationDto.getCity().equals(locationRec.getCity())
-					|| !locationDto.getZip().equals(locationRec.getZip());
+			return !locationDto.getAddress().equals(locationRec.getAddress())
+					|| !locationDto.getCity().equals(locationRec.getCity()) || !locationDto.getZip().equals(locationRec.getZip());
 		}
 
 		private LocationResponse updateRec(LocationRecord locationRec) {
@@ -185,8 +185,8 @@ public class LocationResource extends BaseResource {
 		private void updateGeoData(LocationRecord locationRec) {
 			if (!keepManuallyUpdatedGeoData) {
 				try {
-					String address = locationRec.getAddress() + "," + (locationRec.getZip() != null ? locationRec.getZip() : "") + " "
-							+ locationRec.getCity() + "," + locationRec.getCountry();
+					String address = locationRec.getAddress() + "," + (locationRec.getZip() != null ? locationRec.getZip() : "")
+							+ " " + locationRec.getCity() + "," + locationRec.getCountry();
 
 					final Geocoder geocoder = new Geocoder();
 					GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(address).getGeocoderRequest();
@@ -213,19 +213,26 @@ public class LocationResource extends BaseResource {
 	class LocationStatusForCurrentUserLogic {
 
 		final private HttpServletRequest request;
-		final private int id;
-		private LocationStatusResponse result = new LocationStatusResponse();
+		final private int locationId;
+		private LocationStatusResponse result;
+		private Integer userId;
 
 		public LocationStatusResponse status() {
+			init();
 			checkUserReview();
 			checkUserCanEdit();
 			checkPictureVotes();
 			return result;
 		}
 
+		private void init() {
+			result = new LocationStatusResponse();
+			userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
+			assert userId != null;
+		}
+
 		private void checkPictureVotes() {
-			Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
-			List<Record> list = UserPictureVoteDao.INSTANCE.getListByParent(id, userId);
+			List<Record> list = UserPictureVoteDao.INSTANCE.getListByParent(locationId, userId);
 			List<Integer> picVoteList = new ArrayList<>();
 			for (Record rec : list) {
 				UsersPicturesVotesRecord upvr = (UsersPicturesVotesRecord) rec;
@@ -236,8 +243,7 @@ public class LocationResource extends BaseResource {
 
 		private void checkUserCanEdit() {
 			result.setAllowedToEdit(true);
-			LocationRecord locRec = LocationDao.INSTANCE.getById(id, Community.get(request));
-			Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
+			LocationRecord locRec = LocationDao.INSTANCE.getById(locationId, Community.get(request));
 			if (locRec.getFkUser() != userId) {
 				try {
 					SecurityProvider.INSTANCE.checkConfirmedUser(request);
@@ -248,8 +254,7 @@ public class LocationResource extends BaseResource {
 		}
 
 		private void checkUserReview() {
-			Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
-			Integer reviewId = ReviewDao.INSTANCE.hasUserReview(id, userId);
+			Integer reviewId = ReviewDao.INSTANCE.hasUserReview(locationId, userId);
 			if (reviewId != null) {
 				result.setHasReview(true);
 				result.setFkReview(reviewId);
