@@ -16,4 +16,5 @@ public class MailImage {
 	private String id;
 	private String pictureId;
 	private Timestamp voteCreatedOn;
+	private Integer upVotes;
 }

@@ -395,9 +395,11 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
         if(newState) {
             $scope.picVotes = _.without($scope.picVotes, activePicture.id);
             PicturesDao.vote({id: activePicture.id}, {direction: 'down'});
+            activePicture.upVotes--;
         } else {
             $scope.picVotes = _.union($scope.picVotes, [activePicture.id]);
             PicturesDao.vote({id: activePicture.id}, {direction: 'up'});
+            activePicture.upVotes++;
         }
     };         
 

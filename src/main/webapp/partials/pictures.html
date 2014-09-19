@@ -1,9 +1,11 @@
 <div class="container">
 
-	<div class="col-md-4 col-md-offset-4">
-	    <span class="btn btn-default" ng-click="back()"> &lt; Back </span>
-	    <span>Page {{ (startPos / numberOfRecords)+1 }}</span>
-	    <span class="btn btn-default" ng-click="next()"> Next &gt; </span>
+	<div class="row">
+		<div class="col-centered col-xs-3">
+		    <span class="btn btn-default" ng-click="back()"> &lt; Back </span>
+		    <span>Page {{ (startPos / numberOfRecords)+1 }}</span>
+		    <span class="btn btn-default" ng-click="next()"> Next &gt; </span>
+	    </div>
     </div>
 
 	<div ng-repeat="rows in data | partition:2" class="row">
@@ -13,7 +15,7 @@
 					<a ng-href="#/view/{{ pic.id }}?pic={{ pic.pictureId }}">
 		                <img ng-src="rest/pictures/{{ pic.filename }}?size={{ windowWidth }}" />
 		                <figcaption ng-show="pic.caption">
-		                    {{ pic.caption }}
+		                    ({{pic.upVotes}}) {{ pic.caption }}
 		                    <span ng-show="pic.voteCreatedOn" style="font-family: Arial">
 		                        <span tooltip-placement="bottom" tooltip="Voted on {{ pic.voteCreatedOn | date }}">
 		                            <span class="glyphicon glyphicon-star"></span>
@@ -21,7 +23,7 @@
 		                    </span>
 		                </figcaption>
 		                <figcaption ng-hide="pic.caption">
-                    		{{ pic.officialName }} in {{ pic.city }}
+                    		({{pic.upVotes}}) {{ pic.officialName }} in {{ pic.city }}
                     		<span ng-show="pic.voteCreatedOn" style="font-family: Arial">
                         		<span tooltip-placement="bottom" tooltip="Voted on {{ pic.voteCreatedOn | date }}">
                             		<span class="glyphicon glyphicon-star"></span>
