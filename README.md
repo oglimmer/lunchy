@@ -35,6 +35,15 @@ TESTING THE PORTAL PAGE
 
 3.) Browse http://localhost.lunchylunch.local:8080 to see the user space created via the setup
 
+
+RUNNING THE E2E TESTS
+===================== 
+
+1.) install protractor http://angular.github.io/protractor/#/
+
+2.) run e2e-test.sh
+
+
 TIPS FOR DEV
 ============
 
