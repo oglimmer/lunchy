@@ -38,7 +38,7 @@ public class UploadImageScaler {
 	}
 
 	public void saveToDisk() throws IOException {
-		scaler.saveToDisk();
+		scaler.overwriteToDisk();
 	}
 
 }

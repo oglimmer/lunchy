@@ -1,6 +1,8 @@
 package de.oglimmer.lunchy.rest.resources;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -34,7 +36,7 @@ import de.oglimmer.lunchy.database.dao.UpdatesDao;
 import de.oglimmer.lunchy.database.dao.UserPictureVoteDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
-import de.oglimmer.lunchy.rest.MemoryBaseImageScaler;
+import de.oglimmer.lunchy.rest.DiskBasedImageScaler;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.UploadImageScaler;
 import de.oglimmer.lunchy.rest.dto.MailImage;
@@ -63,14 +65,46 @@ public class PictureResource {
 			throw new RuntimeException("Illegal filename:" + filename);
 		}
 		String mediaType = FileServices.getMediaTypeFromFileExtension(filename);
-		InputStream is = new FileInputStream(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
+		InputStream inputStream;
 		if (screenWidth != null && !screenWidth.trim().isEmpty()) {
-			int screenWidthInt = convertScreenWidth(screenWidth);
-			MemoryBaseImageScaler imageScaler = new MemoryBaseImageScaler(screenWidthInt < SMALL_PIC_BOUNDRY ? SMALL_PIC_SIZE
-					: LARGE_PIC_SIZE, 9999, Scalr.Method.SPEED, is);
-			is = imageScaler.getScaledInputStream(FileServices.getFileType(filename));
+			inputStream = getScaledImageStream(filename, screenWidth);
+		} else {
+			inputStream = new FileInputStream(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
 		}
-		return Response.ok(is, mediaType).build();
+		return Response.ok(inputStream, mediaType).build();
+	}
+
+	private InputStream getScaledImageStream(String filename, String screenWidth) throws IOException, FileNotFoundException {
+		int screenWidthInt = convertScreenWidth(screenWidth);
+		int scaledWidth = screenWidthInt < SMALL_PIC_BOUNDRY ? SMALL_PIC_SIZE : LARGE_PIC_SIZE;
+
+		File customScaledFile = new File(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename + "_"
+				+ scaledWidth + FileServices.getFileExtension(filename));
+		if (!customScaledFile.exists()) {
+			String picToLoad = getOriginalFilename(filename);
+			if (!new File(picToLoad).exists()) {
+				picToLoad = getDefauledScaledFilename(filename);
+			}
+			scaleAndSave(scaledWidth, customScaledFile, picToLoad);
+		}
+		return new FileInputStream(customScaledFile);
+	}
+
+	private synchronized void scaleAndSave(int scaledWidth, File scaledFile, String originalFile) throws IOException {
+		DiskBasedImageScaler dbis = new DiskBasedImageScaler(originalFile, scaledWidth, 9999, Scalr.Method.ULTRA_QUALITY);
+		dbis.scale();
+		dbis.saveToDisk(scaledFile);
+	}
+
+	private String getDefauledScaledFilename(String filename) {
+		String originalFile;
+		originalFile = LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename;
+		return originalFile;
+	}
+
+	private String getOriginalFilename(String filename) {
+		return LunchyProperties.INSTANCE.getBackupDestinationPath() + "/" + filename + "_original"
+				+ FileServices.getFileExtension(filename);
 	}
 
 	private int convertScreenWidth(String screenWidth) {

@@ -14,26 +14,28 @@ import de.oglimmer.lunchy.services.FileServices;
 
 public class DiskBasedImageScaler extends ImageScaler {
 
-	private String filename;
-	private File originalFile;
+	private File fullQualOriginalFile;
 
-	public DiskBasedImageScaler(String filename, int maxWidth, int maxHeight, Method method) {
+	public DiskBasedImageScaler(String fullQualFilename, int maxWidth, int maxHeight, Method method) {
 		super(maxWidth, maxHeight, method);
-		this.filename = filename;
-		this.originalFile = new File(filename);
+		this.fullQualOriginalFile = new File(fullQualFilename);
 	}
 
-	public void saveToDisk() throws IOException {
-		ImageIO.write(scaledImage, FileServices.getFileType(filename), originalFile);
+	public void overwriteToDisk() throws IOException {
+		ImageIO.write(scaledImage, FileServices.getFileType(fullQualOriginalFile.getCanonicalPath()), fullQualOriginalFile);
+	}
+
+	public void saveToDisk(File file) throws IOException {
+		ImageIO.write(scaledImage, FileServices.getFileType(file.getCanonicalPath()), file);
 	}
 
 	@Override
 	protected void loadImage() throws IOException {
-		originalImage = ImageIO.read(originalFile);
+		originalImage = ImageIO.read(fullQualOriginalFile);
 	}
 
 	@Override
 	protected BufferedInputStream getBufferedInputStream() throws FileNotFoundException {
-		return new BufferedInputStream(new FileInputStream(originalFile));
+		return new BufferedInputStream(new FileInputStream(fullQualOriginalFile));
 	}
 }
