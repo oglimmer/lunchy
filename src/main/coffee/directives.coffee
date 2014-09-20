@@ -7,7 +7,7 @@ LunchyApp.directive 'tagInput', ->
     autocomplete: '=autocomplete'
     
   link: ($scope, element, attrs) ->
-
+    
     $scope.defaultWidth = 200
     $scope.tagText = ''
     $scope.placeholder = attrs.placeholder
@@ -50,13 +50,13 @@ LunchyApp.directive 'tagInput', ->
       $scope.inputTags = tagArray.join(',')
        
     # Watch for changes in text field
-    $scope.$watch 'tagText', (newVal, oldVal) ->
-      unless newVal is oldVal and newVal is `undefined`
+    $scope.$watch 'tagText', (newVal, oldVal) ->      
+      unless newVal is oldVal and newVal is `undefined`        
         
         tempEl = $("<span>" + newVal + "</span>").appendTo("body")
         $scope.inputWidth = tempEl.width() + 5
         $scope.inputWidth = $scope.defaultWidth if $scope.inputWidth < $scope.defaultWidth
-        tempEl.remove()
+        tempEl.remove()        
 
     element.bind "keydown", (e) ->
       key = e.which
@@ -72,4 +72,9 @@ LunchyApp.directive 'tagInput', ->
         e.preventDefault()
         $scope.$apply 'addTag()'
 
-  template: "<div class='tag-input-ctn form-control'><div class='input-tag' data-ng-repeat=\"tag in tagArray() track by $index\">{{tag}}<div class='delete-tag' data-ng-click='deleteTag($index)'>&times;</div></div><input type='text' autocomplete='off' data-ng-style='{width: inputWidth}' data-ng-model='tagText' placeholder='{{placeholder}}'/></div>"
+    $scope.focus = ->
+      $(element).find('input').select()
+      return true
+
+  template: "<div class='tag-input-ctn form-control' style='height:auto !important' ng-click='focus()'><div class='input-tag' data-ng-repeat=\"tag in tagArray() track by $index\">{{tag}}<div class='delete-tag' data-ng-click='deleteTag($index)'>&times;</div></div><input type='text' autocomplete='off' data-ng-style='{width: inputWidth}' data-ng-model='tagText' placeholder='{{placeholder}}'/></div>"
+

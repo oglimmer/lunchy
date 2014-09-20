@@ -21,12 +21,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.id.uuid.UUID;
 import org.imgscalr.Scalr;
 import org.jooq.Record;
 
@@ -65,54 +66,8 @@ public class PictureResource {
 			throw new RuntimeException("Illegal filename:" + filename);
 		}
 		String mediaType = FileServices.getMediaTypeFromFileExtension(filename);
-		InputStream inputStream;
-		if (screenWidth != null && !screenWidth.trim().isEmpty()) {
-			inputStream = getScaledImageStream(filename, screenWidth);
-		} else {
-			inputStream = new FileInputStream(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename);
-		}
+		InputStream inputStream = new InputStreamProvider(filename, screenWidth).getInputStream();
 		return Response.ok(inputStream, mediaType).build();
-	}
-
-	private InputStream getScaledImageStream(String filename, String screenWidth) throws IOException, FileNotFoundException {
-		int screenWidthInt = convertScreenWidth(screenWidth);
-		int scaledWidth = screenWidthInt < SMALL_PIC_BOUNDRY ? SMALL_PIC_SIZE : LARGE_PIC_SIZE;
-
-		File customScaledFile = new File(LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename + "_"
-				+ scaledWidth + FileServices.getFileExtension(filename));
-		if (!customScaledFile.exists()) {
-			String picToLoad = getOriginalFilename(filename);
-			if (!new File(picToLoad).exists()) {
-				picToLoad = getDefauledScaledFilename(filename);
-			}
-			scaleAndSave(scaledWidth, customScaledFile, picToLoad);
-		}
-		return new FileInputStream(customScaledFile);
-	}
-
-	private synchronized void scaleAndSave(int scaledWidth, File scaledFile, String originalFile) throws IOException {
-		DiskBasedImageScaler dbis = new DiskBasedImageScaler(originalFile, scaledWidth, 9999, Scalr.Method.ULTRA_QUALITY);
-		dbis.scale();
-		dbis.saveToDisk(scaledFile);
-	}
-
-	private String getDefauledScaledFilename(String filename) {
-		String originalFile;
-		originalFile = LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename;
-		return originalFile;
-	}
-
-	private String getOriginalFilename(String filename) {
-		return LunchyProperties.INSTANCE.getBackupDestinationPath() + "/" + filename + "_original"
-				+ FileServices.getFileExtension(filename);
-	}
-
-	private int convertScreenWidth(String screenWidth) {
-		try {
-			return Integer.parseInt(screenWidth);
-		} catch (NumberFormatException e) {
-			return SMALL_PIC_BOUNDRY;
-		}
 	}
 
 	@GET
@@ -134,7 +89,7 @@ public class PictureResource {
 		rec.setFkCommunity(Community.get(request));
 		rec.setFkUser(SessionProvider.INSTANCE.getLoggedInUserId(request));
 		rec.setCreatedOn(new Timestamp(new Date().getTime()));
-		rec.setFilename(RandomStringUtils.randomAlphanumeric(32) + FileServices.getFileExtension(inputDto.getOriginalFilename()));
+		rec.setFilename(UUID.randomUUID().toString() + FileServices.getFileExtension(inputDto.getOriginalFilename()));
 		rec.setUpVotes(0);
 
 		BeanMappingProvider.INSTANCE.map(inputDto, rec);
@@ -208,5 +163,64 @@ public class PictureResource {
 	@Data
 	public static class PictureVoteInput {
 		private String direction;
+	}
+
+	@AllArgsConstructor
+	class InputStreamProvider {
+
+		private String filename;
+		private String screenWidth;
+
+		public InputStream getInputStream() throws IOException, FileNotFoundException {
+			if (screenWidth != null && !screenWidth.trim().isEmpty()) {
+				return getScaledImageStream();
+			} else {
+				return new FileInputStream(getDefauledScaledFilename());
+			}
+		}
+
+		private InputStream getScaledImageStream() throws IOException, FileNotFoundException {
+			int screenWidthInt = convertScreenWidth();
+			int scaledWidth = screenWidthInt < SMALL_PIC_BOUNDRY ? SMALL_PIC_SIZE : LARGE_PIC_SIZE;
+
+			File customScaledFile = new File(getCustomScaledFilename(scaledWidth));
+			if (!customScaledFile.exists()) {
+				String picToLoad = getOriginalFilename();
+				if (!new File(picToLoad).exists()) {
+					picToLoad = getDefauledScaledFilename();
+				}
+				scaleAndSave(scaledWidth, customScaledFile, picToLoad);
+			}
+			return new FileInputStream(customScaledFile);
+		}
+
+		private void scaleAndSave(int scaledWidth, File scaledFile, String originalFile) throws IOException {
+			synchronized (PictureResource.class) {
+				DiskBasedImageScaler dbis = new DiskBasedImageScaler(originalFile, scaledWidth, 9999, Scalr.Method.ULTRA_QUALITY);
+				dbis.scale();
+				dbis.saveToDisk(scaledFile);
+			}
+		}
+
+		private String getDefauledScaledFilename() {
+			return LunchyProperties.INSTANCE.getPictureDestinationPath() + "/" + filename;
+		}
+
+		private String getOriginalFilename() {
+			return LunchyProperties.INSTANCE.getBackupDestinationPath() + "/" + filename + "_original"
+					+ FileServices.getFileExtension(filename);
+		}
+
+		private String getCustomScaledFilename(int scaledWidth) {
+			return getDefauledScaledFilename() + "_" + scaledWidth + FileServices.getFileExtension(filename);
+		}
+
+		private int convertScreenWidth() {
+			try {
+				return Integer.parseInt(screenWidth);
+			} catch (NumberFormatException e) {
+				return SMALL_PIC_BOUNDRY;
+			}
+		}
 	}
 }

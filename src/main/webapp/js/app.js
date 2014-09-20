@@ -41,6 +41,11 @@ config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRou
             templateUrl: 'partials/pictures.html',
             controller: 'LunchyControllerPictures'
         }).
+        state('finder', {
+            url: '/finder',
+            templateUrl: 'partials/finder.html',
+            controller: 'LunchyControllerFinder'
+        }).
         state('passwordReset', {
             url: '/passwordReset',
             templateUrl: 'partials/passwordReset.html',

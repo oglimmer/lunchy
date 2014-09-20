@@ -836,4 +836,15 @@ controller('LunchyControllerPictures', ['$scope', 'PicturesDao', '$stateParams',
         $scope.data = queryResult;
     });
 
+}]).
+controller('LunchyControllerFinder', ['$scope', 'TagService', function($scope, TagService) {
+	
+	$scope.data = {};
+	
+	$scope.allTags = [];
+	TagService.get().then(function(data) {
+		$scope.allTags = data;
+		$scope.data.inclTags = data.join();
+	});
+	
 }]);

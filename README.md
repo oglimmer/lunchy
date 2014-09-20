@@ -47,5 +47,5 @@ RUNNING THE E2E TESTS
 TIPS FOR DEV
 ============
 
-- install coffee-script (https://www.npmjs.org/package/coffee-script)
+- install coffee-script (https://www.npmjs.org/package/coffee-script) and run `coffee -o webapp/js  -cw coffee/ coffee -o webapp/js  -cw coffee/` from src/main
 

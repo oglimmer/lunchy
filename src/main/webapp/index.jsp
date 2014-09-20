@@ -21,7 +21,7 @@
     <lunchy:script src="js/controllers.js"/>
     <lunchy:script src="js/filters.js"/>
     <lunchy:script src="js/directives.js"/>
-    <lunchy:script src="js/compiled_coffee.js"/>
+    <lunchy:script src="js/directives_coffee.js"/>
 
 </body>
 </html>

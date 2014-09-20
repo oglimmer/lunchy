@@ -1,4 +1,5 @@
-<% String RELEASE = (false ? "min." : ""); %>
+<%@page import="de.oglimmer.lunchy.services.LunchyVersion"%>
+<% String RELEASE = (!"?".equals(LunchyVersion.INSTANCE.getCommit()) ? "min." : ""); %>
 
 
         <script src="webjars/jquery/2.1.1/jquery.<%=RELEASE%>js"></script><!-- popover -->

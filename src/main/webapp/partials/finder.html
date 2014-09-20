@@ -1,0 +1,49 @@
+
+<div class="container">
+
+	<form class="form-horizontal" novalidate name="editLocation"
+		ng-controller="LunchyControllerViewEditLocation">
+		<fieldset>
+			<legend>What could I eat today?</legend>
+
+			<div class="row form-group">
+				<label for="tags" class="col-md-2 control-label">Incl. Tags</label>
+				<div class="col-md-10">
+					<tag-input autocomplete='allTags' taglist='data.inclTags'></tag-input>
+					<span class="help-block">Use the up/down cursor keys to scroll all available entries.</span>
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<label for="tags" class="col-md-2 control-label">Excl. Tags</label>
+				<div class="col-md-10">
+					<tag-input autocomplete='allTags' taglist='data.exclTags'></tag-input>
+					<span class="help-block">Use the up/down cursor keys to scroll all available entries.</span>
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<label for="tags" class="col-md-2 control-label">Partner</label>
+				<div class="col-md-10">
+					<tag-input autocomplete='allPartner' taglist='data.partner'></tag-input>
+					<span class="help-block">Use the up/down cursor keys to scroll all available entries.</span>
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<label for="maxTime" class="col-md-2 control-label">Max time</label>
+				<div class="col-md-10">
+					<input type="number" class="form-control" id="maxTime" name="maxTime" ng-model="data.maxTime" placeholder="e.g. 20">
+				</div>
+			</div>
+
+			<div class="row form-group">
+				<div class="col-md-10 col-md-offset-2">
+					<button type="button" class="btn btn-primary" ng-click="search()">Advise!</button>
+				</div>
+			</div>
+
+		</fieldset>
+	</form>
+
+</div>
