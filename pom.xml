@@ -200,16 +200,14 @@
 				<groupId>com.theoryinpractise</groupId>
 				<artifactId>coffee-maven-plugin</artifactId>
 				<version>1.4.10</version>
-				<configuration>
+				<configuration>					
 					<coffeeOutputDirectory>${basedir}/src/main/webapp/js</coffeeOutputDirectory>
 					<coffeeJoinSets>
 						<joinSet>
-							<id>compiled_coffee</id>
+							<id>directives_coffee</id>
 							<fileSet>
 								<directory>${basedir}/src/main/coffee</directory>
-								<includes>
-									<include>**/*.coffee</include>
-								</includes>
+								<includes><include>directives_coffee.coffee</include></includes>
 							</fileSet>
 						</joinSet>
 					</coffeeJoinSets>
