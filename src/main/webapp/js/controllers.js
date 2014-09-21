@@ -279,10 +279,10 @@ controller('LunchyControllerViewMap', ['$scope', function ($scope) {
             },
             events: {
                 dragend: function(marker, eventName, args) {
-                    $scope.marker.newPosition = marker.getPosition();
+                	$scope.childScopeHolder.marker.newPosition = marker.getPosition();
                     $scope.$apply(function() {
                         if($scope.allowedToEditPermission) {
-                            $scope.marker.pinMoved = true;
+                        	$scope.childScopeHolder.marker.pinMoved = true;
                         }
                     })
                 }
@@ -312,7 +312,7 @@ controller('LunchyControllerViewMap', ['$scope', function ($scope) {
 	// create map data
     $scope.mapSelected = function() {
         $scope.map = createMap();
-        $scope.marker = createMarker();        
+        $scope.childScopeHolder.marker = createMarker();        
         $scope.officeMarker = createOffice();
         $scope.mapTabShown = true;
     };	
@@ -374,7 +374,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
     // check user permission/hasReviews
     function getlocationStatusForCurrentUser() {
         $scope.showButtonsMode= true;
-        LocationsDao.locationStatusForCurrentUser({"id": $stateParams.locationId }, function (result) {                	
+        LocationsDao.locationStatusForCurrentUser({"id": $stateParams.locationId }, function (result) {
             $scope.allowedToEditPermission = result.allowedToEdit;
             if(result.hasReview) {
                 $scope.childScopeHolder.usersReview = result.fkReview;
@@ -427,10 +427,10 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 
     $scope.saveMovedPin = function() {
         LocationsDao.updatePosition({ "id": $stateParams.locationId }, {
-            lat: $scope.marker.newPosition.lat(),
-            lng: $scope.marker.newPosition.lng()
+            lat: $scope.childScopeHolder.marker.newPosition.lat(),
+            lng: $scope.childScopeHolder.marker.newPosition.lng()
         });
-        $scope.marker.pinMoved = false;
+        $scope.childScopeHolder.marker.pinMoved = false;
     };
 
     $scope.cancelEdit = function() {
