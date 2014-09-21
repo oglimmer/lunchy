@@ -30,39 +30,96 @@ public class CommunityFilter implements Filter {
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+			ServletException {
 		HttpServletRequest httpReq = (HttpServletRequest) request;
 		HttpServletResponse httpResp = (HttpServletResponse) response;
 
-		String domain = request.getServerName();
-		String servletPath = httpReq.getServletPath();// index.jsp or /rest
-		String pathInfo = httpReq.getPathInfo();// null or /runtime/dbpool
+		FilterProcessor fp = new FilterProcessor(httpReq, httpResp);
+		fp.doFilter(chain);
+	}
 
-		if (isCallToRuntimeRestInterface(servletPath, pathInfo)) {
-			chain.doFilter(request, response);
-		} else if (isCallWithoutCommunitySubdomain(domain)) {
-			if (isCallToPlatformPage(servletPath)) {
-				httpResp.sendRedirect("portal.jsp");
+	class FilterProcessor {
+
+		private HttpServletRequest request;
+		private HttpServletResponse response;
+
+		private String domain;
+		private String servletPath;
+		private String pathInfo;
+
+		public FilterProcessor(HttpServletRequest httpReq, HttpServletResponse httpResp) {
+			this.request = httpReq;
+			this.response = httpResp;
+			domain = httpReq.getServerName();
+			servletPath = httpReq.getServletPath();// index.jsp or /rest
+			pathInfo = httpReq.getPathInfo();// null or /runtime/dbpool
+		}
+
+		public void doFilter(FilterChain chain) throws IOException, ServletException {
+			if (isCallToRuntimeRestInterface()) {
+				processCallToRuntime(chain);
+			} else if (isCallWithoutCommunitySubdomain()) {
+				processCallWithoutCommunitySubdomain(chain);
+			} else if (isCallToPortalPage()) {
+				processCallToPortalPage();
 			} else {
-				chain.doFilter(request, response);
-			}
-		} else if (isCallToPortalPage(servletPath)) {
-			httpResp.sendRedirect("./");
-		} else {
-			CommunitiesRecord community = getCommunity(domain);
-			if (community != null) {
-				Community.set(httpReq, community);
-				chain.doFilter(request, response);
-			} else {
-				String redirect = httpReq.getScheme() + "://" + removeSubDomains(domain)
-						+ (request.getServerPort() != 80 ? ":" + request.getServerPort() : "");
-				httpResp.sendRedirect(redirect);
+				processCallToCommunityDomain(chain);
 			}
 		}
 
+		private void processCallToCommunityDomain(FilterChain chain) throws IOException, ServletException {
+			CommunitiesRecord community = getCommunity();
+			if (community != null) {
+				Community.set(request, community);
+				processCallToRuntime(chain);
+			} else {
+				String redirect = request.getScheme() + "://" + removeSubDomains(domain)
+						+ (request.getServerPort() != 80 ? ":" + request.getServerPort() : "");
+				response.sendRedirect(redirect);
+			}
+		}
+
+		private void processCallToPortalPage() throws IOException {
+			response.sendRedirect("./");
+		}
+
+		private void processCallWithoutCommunitySubdomain(FilterChain chain) throws IOException, ServletException {
+			if (isCallToPlatformPage()) {
+				response.sendRedirect("portal.jsp");
+			} else {
+				processCallToRuntime(chain);
+			}
+		}
+
+		private void processCallToRuntime(FilterChain chain) throws IOException, ServletException {
+			chain.doFilter(request, response);
+		}
+
+		private CommunitiesRecord getCommunity() {
+			String subdomain = domain.indexOf('.') > -1 ? domain.substring(0, domain.indexOf('.')) : domain;
+			CommunitiesRecord community = CommunityDao.INSTANCE.getByDomain(subdomain);
+			return community;
+		}
+
+		private boolean isCallToPortalPage() {
+			return "/portal.jsp".equals(servletPath);
+		}
+
+		private boolean isCallToPlatformPage() {
+			return "/index.jsp".equals(servletPath) || "/".equals(servletPath);
+		}
+
+		private boolean isCallWithoutCommunitySubdomain() {
+			return CharMatcher.is('.').countIn(domain) == 1 || domain.startsWith("www.");
+		}
+
+		private boolean isCallToRuntimeRestInterface() {
+			return "/rest".equals(servletPath) && pathInfo.startsWith("/runtime");
+		}
 	}
 
-	String removeSubDomains(String domain) {
+	static String removeSubDomains(String domain) {
 		String[] arr = domain.split("\\.");
 		if (arr.length == 1) {
 			return arr[0];
@@ -70,25 +127,4 @@ public class CommunityFilter implements Filter {
 		return arr[arr.length - 2] + "." + arr[arr.length - 1];
 	}
 
-	private CommunitiesRecord getCommunity(String domain) {
-		String subdomain = domain.indexOf('.') > -1 ? domain.substring(0, domain.indexOf('.')) : domain;
-		CommunitiesRecord community = CommunityDao.INSTANCE.getByDomain(subdomain);
-		return community;
-	}
-
-	private boolean isCallToPortalPage(String servletPath) {
-		return "/portal.jsp".equals(servletPath);
-	}
-
-	private boolean isCallToPlatformPage(String servletPath) {
-		return "/index.jsp".equals(servletPath) || "/".equals(servletPath);
-	}
-
-	private boolean isCallWithoutCommunitySubdomain(String domain) {
-		return CharMatcher.is('.').countIn(domain) == 1 || domain.startsWith("www.");
-	}
-
-	private boolean isCallToRuntimeRestInterface(String servletPath, String pathInfo) {
-		return "/rest".equals(servletPath) && pathInfo.startsWith("/runtime");
-	}
 }
