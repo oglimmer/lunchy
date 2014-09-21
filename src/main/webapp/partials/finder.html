@@ -9,16 +9,16 @@
 			<div class="row form-group">
 				<label for="tags" class="col-md-2 control-label">Incl. Tags</label>
 				<div class="col-md-10">
-					<tag-input autocomplete='allTags' taglist='data.inclTags' inputdisabled='true'></tag-input>
-					<span class="help-block">Remove items you don't want to eat. <a href="javascript:void(null);" ng-click="removeAll()">Remove all</a></span>
+					<tag-input taglist='data.inclTags' inputdisabled='true'></tag-input>
+					<span class="help-block">Only locations which offer one of those will be shown. <a href="javascript:void(null);" ng-click="removeAll()">Remove all</a></span>
 				</div>
 			</div>
 
 			<div class="row form-group">
 				<label for="tags" class="col-md-2 control-label">Excl. Tags</label>
 				<div class="col-md-10">
-					<tag-input autocomplete='allTags' taglist='data.exclTags' inputdisabled='true'></tag-input>
-					<span class="help-block">Remove items from this list you removed from the include list by accident.</span>
+					<tag-input taglist='data.exclTags' inputdisabled='true'></tag-input>
+					<span class="help-block">List of available tags.</span>
 				</div>
 			</div>
 
@@ -26,7 +26,7 @@
 				<label for="tags" class="col-md-2 control-label">Partner</label>
 				<div class="col-md-10">
 					<tag-input autocomplete='allPartner' taglist='data.partner'></tag-input>
-					<span class="help-block">Use the up/down cursor keys to scroll all available entries.</span>
+					<span class="help-block">Use the up/down cursor keys to scroll all available partners.</span>
 				</div>
 			</div>
 
@@ -34,6 +34,7 @@
 				<label for="maxTime" class="col-md-2 control-label">Max time</label>
 				<div class="col-md-10">
 					<input type="number" class="form-control" id="maxTime" name="maxTime" ng-model="data.maxTime" placeholder="e.g. 20">
+					<span class="help-block">Only locations with an average turn around time of less will be shown.</span>
 				</div>
 			</div>
 
