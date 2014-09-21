@@ -837,7 +837,9 @@ controller('LunchyControllerPictures', ['$scope', 'PicturesDao', '$stateParams',
     });
 
 }]).
-controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', function($scope, TagService, UserDao) {
+controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'FinderDao', '$timeout', function($scope, TagService, UserDao, FinderDao, $timeout) {
+	
+	var ignoreWatched=false;
 	
 	$scope.data = {
 			inclTags: "",
@@ -864,7 +866,7 @@ controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', functio
 	}
 	
 	$scope.$watch('data.inclTags', function(newVal, oldVal) {		
-		if(_.isUndefined(newVal)||_.isUndefined(oldVal)){
+		if(_.isUndefined(newVal)||_.isUndefined(oldVal)||ignoreWatched){
 			return;
 		}
 		var newVal = newVal.split(",");
@@ -876,7 +878,7 @@ controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', functio
 		})		
 	});
 	$scope.$watch('data.exclTags', function(newVal, oldVal) {
-		if(_.isUndefined(newVal)||_.isUndefined(oldVal)){
+		if(_.isUndefined(newVal)||_.isUndefined(oldVal)||ignoreWatched){
 			return;
 		}
 		var newVal = newVal.split(",");
@@ -889,7 +891,19 @@ controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', functio
 	});
 	
 	$scope.search = function() {
-		
+		FinderDao.query($scope.data, function(result) {
+			console.log(result);
+			$scope.resultData = result;
+		});
 	};
+	
+	$scope.removeAll = function() {
+		ignoreWatched=true;
+		$scope.data.exclTags = add($scope.data.exclTags, $scope.data.inclTags); 
+		$scope.data.inclTags = "";
+		$timeout(function() {
+			ignoreWatched=false;
+		},100);
+	}
 	
 }]);

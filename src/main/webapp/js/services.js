@@ -102,6 +102,9 @@ factory('ReviewDao', ['$resource', function($resource) {
 factory('TagDao', ['$resource', function($resource) {
     return $resource('rest/tags');
 }]).
+factory('FinderDao', ['$resource', function($resource) {
+	return $resource('rest/finder');
+}]).
 factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 'CommunityService', '$cookies',
     function($modal, $q, LoginDao, $rootScope, StorageService, OfficesDao, CommunityService, $cookies) {
 

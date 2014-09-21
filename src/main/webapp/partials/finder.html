@@ -10,7 +10,7 @@
 				<label for="tags" class="col-md-2 control-label">Incl. Tags</label>
 				<div class="col-md-10">
 					<tag-input autocomplete='allTags' taglist='data.inclTags' inputdisabled='true'></tag-input>
-					<span class="help-block">Remove items you don't want to eat.</span>
+					<span class="help-block">Remove items you don't want to eat. <a href="javascript:void(null);" ng-click="removeAll()">Remove all</a></span>
 				</div>
 			</div>
 
@@ -46,7 +46,19 @@
 		</fieldset>
 	</form>
 	
-	<div class="row">
+	<h2 ng-show="resultData">Result</h2>
+	<div ng-repeat="section in resultData">
+		<h3>Agreed rating: {{section.minRating}}</h3>
+		<div ng-repeat="rows in section.sectionLines | partition:2" class="row">
+			<div ng-repeat="update in rows" class="col-sm-6">
+				<a href="#/{{update.ref}}">
+					{{update.location.officialName}} in {{update.location.city}} time: {{update.location.turnAroundTime}}   					
+					<ul>
+						<li ng-repeat="rating in update.ratings">{{rating.userName}} {{rating.score}}</li>
+					</ul>
+				</a>
+			</div>
+		</div>
 	</div>
 
 </div>
