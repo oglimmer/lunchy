@@ -28,16 +28,13 @@ public class FinderResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<QueryResponse> query(@Context HttpServletRequest request, @QueryParam(value = "inclTags") String inclTags,
 			@QueryParam(value = "partner") String partner, @QueryParam(value = "maxTime") Integer maxTime) {
-		System.out.println(inclTags);
-		System.out.println(partner);
-		System.out.println(maxTime);
 
 		Set<String> tags = new HashSet<>();
-		if (inclTags != null) {
+		if (inclTags != null && !inclTags.trim().isEmpty()) {
 			tags.addAll(Arrays.asList(inclTags.split(",")));
 		}
 		Set<String> partners = new HashSet<>();
-		if (partner != null) {
+		if (partner != null && !partner.trim().isEmpty()) {
 			partners.addAll(Arrays.asList(partner.split(",")));
 		}
 

@@ -839,8 +839,6 @@ controller('LunchyControllerPictures', ['$scope', 'PicturesDao', '$stateParams',
 }]).
 controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'FinderDao', '$timeout', function($scope, TagService, UserDao, FinderDao, $timeout) {
 	
-	var ignoreWatched=false;
-	
 	$scope.data = {
 			inclTags: "",
 			exclTags: ""
@@ -858,6 +856,9 @@ controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'Finder
 	});
 	
 	function add(listString, element) {
+		if(element==""){
+			return listString;
+		}
 		if(listString.length>0){
 			listString+=',';
 		}
@@ -866,7 +867,7 @@ controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'Finder
 	}
 	
 	$scope.$watch('data.inclTags', function(newVal, oldVal) {		
-		if(_.isUndefined(newVal)||_.isUndefined(oldVal)||ignoreWatched){
+		if(_.isUndefined(newVal)||_.isUndefined(oldVal)){
 			return;
 		}
 		var newVal = newVal.split(",");
@@ -878,7 +879,7 @@ controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'Finder
 		})		
 	});
 	$scope.$watch('data.exclTags', function(newVal, oldVal) {
-		if(_.isUndefined(newVal)||_.isUndefined(oldVal)||ignoreWatched){
+		if(_.isUndefined(newVal)||_.isUndefined(oldVal)){
 			return;
 		}
 		var newVal = newVal.split(",");
@@ -892,18 +893,12 @@ controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'Finder
 	
 	$scope.search = function() {
 		FinderDao.query($scope.data, function(result) {
-			console.log(result);
 			$scope.resultData = result;
 		});
 	};
 	
 	$scope.removeAll = function() {
-		ignoreWatched=true;
-		$scope.data.exclTags = add($scope.data.exclTags, $scope.data.inclTags); 
 		$scope.data.inclTags = "";
-		$timeout(function() {
-			ignoreWatched=false;
-		},100);
-	}
+	};
 	
 }]);
