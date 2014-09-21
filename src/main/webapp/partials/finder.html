@@ -9,16 +9,16 @@
 			<div class="row form-group">
 				<label for="tags" class="col-md-2 control-label">Incl. Tags</label>
 				<div class="col-md-10">
-					<tag-input autocomplete='allTags' taglist='data.inclTags'></tag-input>
-					<span class="help-block">Use the up/down cursor keys to scroll all available entries.</span>
+					<tag-input autocomplete='allTags' taglist='data.inclTags' inputdisabled='true'></tag-input>
+					<span class="help-block">Remove items you don't want to eat.</span>
 				</div>
 			</div>
 
 			<div class="row form-group">
 				<label for="tags" class="col-md-2 control-label">Excl. Tags</label>
 				<div class="col-md-10">
-					<tag-input autocomplete='allTags' taglist='data.exclTags'></tag-input>
-					<span class="help-block">Use the up/down cursor keys to scroll all available entries.</span>
+					<tag-input autocomplete='allTags' taglist='data.exclTags' inputdisabled='true'></tag-input>
+					<span class="help-block">Remove items from this list you removed from the include list by accident.</span>
 				</div>
 			</div>
 
@@ -45,5 +45,8 @@
 
 		</fieldset>
 	</form>
+	
+	<div class="row">
+	</div>
 
 </div>

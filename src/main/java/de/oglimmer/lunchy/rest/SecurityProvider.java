@@ -5,8 +5,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.common.cache.CacheBuilder;
@@ -43,7 +41,7 @@ public enum SecurityProvider {
 		}
 	}
 
-	private boolean checkRightOnSession(HttpServletRequest request, Permission permissionToCheck) {
+	public boolean checkRightOnSession(HttpServletRequest request, Permission permissionToCheck) {
 		Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
 		if (userId != null) {
 			return checkRightOnUser(permissionToCheck, userId);
@@ -71,20 +69,4 @@ public enum SecurityProvider {
 		cb.invalidateAll();
 	}
 
-}
-
-@AllArgsConstructor
-enum Permission {
-	USER(0), CONFIRMED_USER(1), ADMIN(2);
-	@Getter
-	private int val;
-
-	static Permission fromVal(int val) {
-		for (Permission per : values()) {
-			if (per.getVal() == val) {
-				return per;
-			}
-		}
-		return null;
-	}
 }

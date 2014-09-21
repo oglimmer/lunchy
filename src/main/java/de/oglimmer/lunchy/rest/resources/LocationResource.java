@@ -39,9 +39,9 @@ import de.oglimmer.lunchy.database.dao.UserPictureVoteDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
+import de.oglimmer.lunchy.rest.Permission;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.SessionProvider;
-import de.oglimmer.lunchy.rest.UserRightException;
 import de.oglimmer.lunchy.rest.dto.LocationCreateInput;
 import de.oglimmer.lunchy.rest.dto.LocationResponse;
 import de.oglimmer.lunchy.rest.dto.LocationUpdateInput;
@@ -245,11 +245,7 @@ public class LocationResource extends BaseResource {
 			result.setAllowedToEdit(true);
 			LocationRecord locRec = LocationDao.INSTANCE.getById(locationId, Community.get(request));
 			if (locRec.getFkUser() != userId) {
-				try {
-					SecurityProvider.INSTANCE.checkConfirmedUser(request);
-				} catch (UserRightException e) {
-					result.setAllowedToEdit(false);
-				}
+				result.setAllowedToEdit(SecurityProvider.INSTANCE.checkRightOnSession(request, Permission.CONFIRMED_USER));
 			}
 		}
 

@@ -27,12 +27,14 @@ import org.mindrot.jbcrypt.BCrypt;
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.rest.Permission;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.UserProvider;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
 import de.oglimmer.lunchy.rest.dto.ResultParam;
 import de.oglimmer.lunchy.rest.dto.UserAdminResponse;
+import de.oglimmer.lunchy.rest.dto.UserResponse;
 import de.oglimmer.lunchy.services.Community;
 import de.oglimmer.lunchy.services.DateCalculation;
 import de.oglimmer.lunchy.services.Email;
@@ -114,9 +116,11 @@ public class UserResource extends BaseResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<UserAdminResponse> query(@Context HttpServletRequest request) {
-		SecurityProvider.INSTANCE.checkAdmin(request);
-		return query(Community.get(request), UserAdminResponse.class, "User");
+		Class clazz = SecurityProvider.INSTANCE.checkRightOnSession(request, Permission.ADMIN) ? UserAdminResponse.class
+				: UserResponse.class;
+		return query(Community.get(request), clazz, "User");
 	}
 
 	@GET
@@ -126,7 +130,7 @@ public class UserResource extends BaseResource {
 		Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
 		if (userId != null) {
 			UsersRecord user = UserDao.INSTANCE.getById(userId, Community.get(request));
-			return Response.ok(BeanMappingProvider.INSTANCE.map(user, UserResponse.class)).build();
+			return Response.ok(BeanMappingProvider.INSTANCE.map(user, UserSelfResponse.class)).build();
 		}
 		return Response.status(Status.NO_CONTENT).build();
 	}
@@ -134,9 +138,9 @@ public class UserResource extends BaseResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public UserResponse get(@Context HttpServletRequest request, @PathParam("id") Integer id) {
+	public UserSelfResponse get(@Context HttpServletRequest request, @PathParam("id") Integer id) {
 		UsersRecord user = UserDao.INSTANCE.getById(id, Community.get(request));
-		return BeanMappingProvider.INSTANCE.map(user, UserResponse.class);
+		return BeanMappingProvider.INSTANCE.map(user, UserSelfResponse.class);
 	}
 
 	@POST
@@ -211,7 +215,7 @@ public class UserResource extends BaseResource {
 	}
 
 	@Data
-	public static class UserResponse {
+	public static class UserSelfResponse {
 		private Integer id;
 		private String email;
 		private String displayname;

@@ -837,14 +837,59 @@ controller('LunchyControllerPictures', ['$scope', 'PicturesDao', '$stateParams',
     });
 
 }]).
-controller('LunchyControllerFinder', ['$scope', 'TagService', function($scope, TagService) {
+controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', function($scope, TagService, UserDao) {
 	
-	$scope.data = {};
-	
+	$scope.data = {
+			inclTags: "",
+			exclTags: ""
+	};	
 	$scope.allTags = [];
+	$scope.allPartner = [];
+	
 	TagService.get().then(function(data) {
-		$scope.allTags = data;
+		$scope.allTags = data;		 
 		$scope.data.inclTags = data.join();
 	});
+	
+	UserDao.query(function(data) {		
+		$scope.allPartner = _.map(data, function(userObj) { return userObj.displayname.replace(/'/g,'´');; });
+	});
+	
+	function add(listString, element) {
+		if(listString.length>0){
+			listString+=',';
+		}
+		listString+=element;
+		return listString;
+	}
+	
+	$scope.$watch('data.inclTags', function(newVal, oldVal) {		
+		if(_.isUndefined(newVal)||_.isUndefined(oldVal)){
+			return;
+		}
+		var newVal = newVal.split(",");
+		var oldVal = oldVal.split(",");
+		_.each(oldVal, function(ele) {			
+			if(newVal.indexOf(ele)===-1) {				
+				$scope.data.exclTags = add($scope.data.exclTags, ele);
+			}			
+		})		
+	});
+	$scope.$watch('data.exclTags', function(newVal, oldVal) {
+		if(_.isUndefined(newVal)||_.isUndefined(oldVal)){
+			return;
+		}
+		var newVal = newVal.split(",");
+		var oldVal = oldVal.split(",");
+		_.each(oldVal, function(ele) {
+			if(newVal.indexOf(ele)===-1) {
+				$scope.data.inclTags = add($scope.data.inclTags, ele);
+			}
+		})
+	});
+	
+	$scope.search = function() {
+		
+	};
 	
 }]);

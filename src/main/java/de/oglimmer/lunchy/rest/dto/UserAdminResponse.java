@@ -3,13 +3,13 @@ package de.oglimmer.lunchy.rest.dto;
 import java.sql.Timestamp;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class UserAdminResponse {
+@EqualsAndHashCode(callSuper = true)
+public class UserAdminResponse extends UserResponse {
 
-	private Integer id;
 	private String email;
-	private String displayname;
 	private Timestamp createdOn;
 	private Timestamp lastLogin;
 	private Integer permissions;

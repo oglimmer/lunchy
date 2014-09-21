@@ -5,6 +5,7 @@ LunchyApp.directive 'tagInput', ->
   scope: 
     inputTags: '=taglist'
     autocomplete: '=autocomplete'
+    inputDisabled: '=inputdisabled'
     
   link: ($scope, element, attrs) ->
     
@@ -76,5 +77,5 @@ LunchyApp.directive 'tagInput', ->
       $(element).find('input').select()
       return true
 
-  template: "<div class='tag-input-ctn form-control' style='height:auto !important' ng-click='focus()'><div class='input-tag' data-ng-repeat=\"tag in tagArray() track by $index\">{{tag}}<div class='delete-tag' data-ng-click='deleteTag($index)'>&times;</div></div><input type='text' autocomplete='off' data-ng-style='{width: inputWidth}' data-ng-model='tagText' placeholder='{{placeholder}}'/></div>"
+  template: "<div class='tag-input-ctn form-control' style='height:auto !important' ng-click='focus()'><div class='input-tag' data-ng-repeat=\"tag in tagArray() track by $index\">{{tag}}<div class='delete-tag' data-ng-click='deleteTag($index)'>&times;</div></div><input type='text' autocomplete='off' data-ng-disabled='inputDisabled' data-ng-style='{width: inputWidth}' data-ng-model='tagText' placeholder='{{placeholder}}'/></div>"
 
