@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Result;
+import org.jooq.SelectConditionStep;
 
 import de.oglimmer.lunchy.database.connection.DBConn;
 import de.oglimmer.lunchy.database.generated.tables.Location;
@@ -22,8 +23,8 @@ public enum TagDao {
 	INSTANCE;
 
 	@SneakyThrows(value = SQLException.class)
-	public List<String> getAllTags(int fkCommunity) {
-		Set<String> set = createSet(fkCommunity);
+	public List<String> getAllTags(Integer fkOffice, int fkCommunity) {
+		Set<String> set = createSet(fkOffice, fkCommunity);
 		List<String> list = convertSetToSortedList(set);
 		return list;
 	}
@@ -34,17 +35,21 @@ public enum TagDao {
 		return list;
 	}
 
-	private Set<String> createSet(int fkCommunity) throws SQLException {
+	private Set<String> createSet(Integer fkOffice, int fkCommunity) throws SQLException {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DaoBackend.getContext(conn);
-			return queryDatabase(fkCommunity, create);
+			return queryDatabase(fkOffice, fkCommunity, create);
 		}
 	}
 
-	private Set<String> queryDatabase(int fkCommunity, DSLContext create) {
+	private Set<String> queryDatabase(Integer fkOffice, int fkCommunity, DSLContext create) {
 		Set<String> resultSet = new HashSet<>();
-		Result<Record1<String>> result = create.selectDistinct(Location.LOCATION.TAGS).from(Location.LOCATION)
-				.where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity).and(Location.LOCATION.TAGS.notEqual(""))).fetch();
+		SelectConditionStep<Record1<String>> where = create.selectDistinct(Location.LOCATION.TAGS).from(Location.LOCATION)
+				.where(Location.LOCATION.FK_COMMUNITY.equal(fkCommunity).and(Location.LOCATION.TAGS.notEqual("")));
+		if (fkOffice != null) {
+			where = where.and(Location.LOCATION.FK_OFFICE.equal(fkOffice));
+		}
+		Result<Record1<String>> result = where.fetch();
 		for (Record1<String> rec : result) {
 			processRec(resultSet, rec);
 		}

@@ -65,7 +65,7 @@
 							<dependency>
 								<groupId>mysql</groupId>
 								<artifactId>mysql-connector-java</artifactId>
-								<version>5.1.31</version>
+								<version>5.1.32</version>
 							</dependency>
 						</dependencies>
 						<configuration>
@@ -327,7 +327,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>17.0</version>
+			<version>18.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hamcrest</groupId>
@@ -354,7 +354,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.31</version>
+			<version>5.1.32</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -426,12 +426,12 @@
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
-			<version>2.11</version>
+			<version>2.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-moxy</artifactId>
-			<version>2.11</version>
+			<version>2.12</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.dozer</groupId>

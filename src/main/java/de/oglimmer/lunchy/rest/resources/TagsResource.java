@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -15,8 +16,8 @@ public class TagsResource extends BaseResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String query(@Context HttpServletRequest request) {
-		return convertToJson(TagDao.INSTANCE.getAllTags(Community.get(request)));
+	public String query(@Context HttpServletRequest request, @QueryParam(value = "selectedOffice") Integer fkOffice) {
+		return convertToJson(TagDao.INSTANCE.getAllTags(fkOffice, Community.get(request)));
 	}
 
 }

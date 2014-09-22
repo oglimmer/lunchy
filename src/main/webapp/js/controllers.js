@@ -837,18 +837,19 @@ controller('LunchyControllerPictures', ['$scope', 'PicturesDao', '$stateParams',
     });
 
 }]).
-controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'FinderDao', '$timeout', function($scope, TagService, UserDao, FinderDao, $timeout) {
-	
-	$scope.data = {
-			inclTags: "",
-			exclTags: ""
-	};	
-	$scope.allTags = [];
+controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'FinderDao', '$timeout', 'Authetication', 'OfficesDao', 'FinderSearchParameter', function($scope, TagService, UserDao, FinderDao, $timeout, Authetication, OfficesDao, FinderSearchParameter) {
+
+	$scope.data = FinderSearchParameter;
+	if($scope.data.selectedOffice==-1) {
+		$scope.data.selectedOffice = Authetication.fkBaseOffice;
+		TagService.get({selectedOffice:$scope.data.selectedOffice}).then(function(data) {
+			$scope.data.inclTags = data.join();
+		});
+	}
 	$scope.allPartner = [];
 	
-	TagService.get().then(function(data) {
-		$scope.allTags = data;		 
-		$scope.data.inclTags = data.join();
+	OfficesDao.query(function(offices) {
+		$scope.offices = offices;
 	});
 	
 	UserDao.query(function(data) {		
@@ -866,31 +867,6 @@ controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'Finder
 		return listString;
 	}
 	
-	$scope.$watch('data.inclTags', function(newVal, oldVal) {		
-		if(_.isUndefined(newVal)||_.isUndefined(oldVal)){
-			return;
-		}
-		var newVal = newVal.split(",");
-		var oldVal = oldVal.split(",");
-		_.each(oldVal, function(ele) {			
-			if(newVal.indexOf(ele)===-1) {				
-				$scope.data.exclTags = add($scope.data.exclTags, ele);
-			}			
-		})		
-	});
-	$scope.$watch('data.exclTags', function(newVal, oldVal) {
-		if(_.isUndefined(newVal)||_.isUndefined(oldVal)){
-			return;
-		}
-		var newVal = newVal.split(",");
-		var oldVal = oldVal.split(",");
-		_.each(oldVal, function(ele) {
-			if(newVal.indexOf(ele)===-1) {
-				$scope.data.inclTags = add($scope.data.inclTags, ele);
-			}
-		})
-	});
-	
 	$scope.search = function() {
 		FinderDao.query($scope.data, function(result) {
 			$scope.resultData = result;
@@ -898,7 +874,28 @@ controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'Finder
 	};
 	
 	$scope.removeAll = function() {
+		$scope.data.exclTags = add($scope.data.exclTags, $scope.data.inclTags);
 		$scope.data.inclTags = "";
 	};
+
+	$scope.addAll = function() {
+		$scope.data.inclTags = add($scope.data.inclTags, $scope.data.exclTags);
+		$scope.data.exclTags = "";
+	};
+	
+	$scope.selectedOfficeChanged = function() {
+		TagService.get({selectedOffice:$scope.data.selectedOffice}).then(function(data) {
+			$scope.data.inclTags = data.join();
+			$scope.data.exclTags = "";
+		});
+	}
+	
+	$scope.deleteInclTag = function(key) {
+		$scope.data.exclTags = add($scope.data.exclTags, key);
+	}
+	
+	$scope.deleteExclTag = function(key) {
+		$scope.data.inclTags = add($scope.data.inclTags, key);
+	}
 	
 }]);

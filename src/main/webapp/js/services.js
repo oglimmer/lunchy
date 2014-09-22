@@ -272,8 +272,8 @@ factory('StorageService', function ($window) {
 }).
 factory('TagService', ['TagDao', function (TagDao) {
     return {
-        get: function() {
-            return TagDao.query().$promise;
+        get: function(selectedOffice) {
+            return TagDao.query(selectedOffice).$promise;
         }
     };
 }]).
@@ -369,5 +369,13 @@ factory('AlertPaneService', ['$rootScope', function ($rootScope) {
 				$scope.alerts.splice(index, 1);
 			};
 		}
+	};
+}]).
+factory('FinderSearchParameter', [ function () {
+	return {
+		inclTags: "",
+		exclTags: "",
+		partner: "",
+		selectedOffice: -1
 	};
 }]);

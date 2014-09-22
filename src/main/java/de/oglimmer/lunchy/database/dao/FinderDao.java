@@ -36,8 +36,8 @@ public enum FinderDao {
 	INSTANCE;
 
 	public List<QueryResponse> query(Set<String> tags, Set<String> partners, Integer maxTime, int fkCommunity,
-			Integer fkCurrentUser) {
-		Result<LocationRecord> locations = queryLocations(tags, maxTime, fkCommunity);
+			Integer fkCurrentUser, int selectedOffice) {
+		Result<LocationRecord> locations = queryLocations(tags, maxTime, fkCommunity, selectedOffice);
 		Result<Record> reviews = queryReviews(partners, getLocationId(locations), fkCurrentUser);
 
 		Map<Integer, Map<String, Integer>> reviewsByLocation = groupReviewsByLocation(reviews);
@@ -151,7 +151,7 @@ public enum FinderDao {
 	}
 
 	@SneakyThrows(value = SQLException.class)
-	public Result<LocationRecord> queryLocations(Set<String> tags, Integer maxTime, int fkCommunity) {
+	public Result<LocationRecord> queryLocations(Set<String> tags, Integer maxTime, int fkCommunity, int fkOffice) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DaoBackend.getContext(conn);
 
@@ -162,8 +162,10 @@ public enum FinderDao {
 				cond = cond.or(LOCATION.TAGS.like("%" + tag + "%"));
 			}
 
-			return sjs.where(cond)
-					.and(LOCATION.TURN_AROUND_TIME.lessOrEqual(maxTime).and(LOCATION.FK_COMMUNITY.equal(fkCommunity))).fetch();
+			return sjs
+					.where(cond)
+					.and(LOCATION.TURN_AROUND_TIME.lessOrEqual(maxTime).and(
+							LOCATION.FK_COMMUNITY.equal(fkCommunity).and(LOCATION.FK_OFFICE.equal(fkOffice)))).fetch();
 		}
 	}
 

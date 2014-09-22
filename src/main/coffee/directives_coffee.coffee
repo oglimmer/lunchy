@@ -6,6 +6,7 @@ LunchyApp.directive 'tagInput', ->
     inputTags: '=taglist'
     autocomplete: '=autocomplete'
     inputDisabled: '=inputdisabled'
+    deletecallback: '='
     
   link: ($scope, element, attrs) ->
     
@@ -44,11 +45,12 @@ LunchyApp.directive 'tagInput', ->
       $scope.tagText = ""
       
     $scope.deleteTag = (key) ->
+      $scope.deletecallback($scope.tagArray()[key]) if $scope.deletecallback?
       tagArray = $scope.tagArray()
       if tagArray.length > 0 and $scope.tagText.length is 0 and key is `undefined`
         tagArray.pop()
       else tagArray.splice key, 1  unless key is `undefined`
-      $scope.inputTags = tagArray.join(',')
+      $scope.inputTags = tagArray.join(',')      
        
     # Watch for changes in text field
     $scope.$watch 'tagText', (newVal, oldVal) ->      

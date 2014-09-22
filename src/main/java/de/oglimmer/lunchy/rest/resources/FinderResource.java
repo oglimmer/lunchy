@@ -27,7 +27,8 @@ public class FinderResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<QueryResponse> query(@Context HttpServletRequest request, @QueryParam(value = "inclTags") String inclTags,
-			@QueryParam(value = "partner") String partner, @QueryParam(value = "maxTime") Integer maxTime) {
+			@QueryParam(value = "partner") String partner, @QueryParam(value = "maxTime") Integer maxTime,
+			@QueryParam(value = "selectedOffice") Integer selectedOffice) {
 
 		Set<String> tags = new HashSet<>();
 		if (inclTags != null && !inclTags.trim().isEmpty()) {
@@ -43,7 +44,7 @@ public class FinderResource {
 		}
 
 		return FinderDao.INSTANCE.query(tags, partners, maxTime, Community.get(request),
-				SessionProvider.INSTANCE.getLoggedInUserId(request));
+				SessionProvider.INSTANCE.getLoggedInUserId(request), selectedOffice);
 	}
 
 	@Data
