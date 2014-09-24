@@ -48,7 +48,7 @@ LunchyApp.directive 'tagInput', ->
       return if $scope.tagText.length is 0
       tagArray = $scope.tagArray()
       if $scope.acceptautocompleteonly
-        ele = _.find($scope.autocomplete, (ele) -> return ele == $scope.tagText)        
+        ele = _.find($scope.autocomplete, (ele) -> return ele.toLocaleLowerCase() == $scope.tagText.toLocaleLowerCase())
         $scope.tagText = "" if blur && _.isUndefined(ele)
         return if _.isUndefined(ele)
       tagArray.push $scope.tagText
