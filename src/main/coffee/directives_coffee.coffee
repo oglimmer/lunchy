@@ -7,6 +7,7 @@ LunchyApp.directive 'tagInput', ->
     autocomplete: '=autocomplete'
     inputDisabled: '=inputdisabled'
     deletecallback: '='
+    acceptautocompleteonly: '='
     
   link: ($scope, element, attrs) ->
     
@@ -37,9 +38,19 @@ LunchyApp.directive 'tagInput', ->
       $scope.inputTags.split(',').filter (tag) ->
         return tag != ""
     
-    $scope.addTag = ->
+    $scope.addTag = (blur) ->
+      # the 2-way binding doesn't work when hovering over jQuerie's popup menu
+      inputTag = $(element).find('input')
+      if $scope.tagText != inputTag.val()
+        $scope.tagText = inputTag.val() 
+        inputTag.val("") 
+      # hack-end
       return if $scope.tagText.length is 0
       tagArray = $scope.tagArray()
+      if $scope.acceptautocompleteonly
+        ele = _.find($scope.autocomplete, (ele) -> return ele == $scope.tagText)        
+        $scope.tagText = "" if blur && _.isUndefined(ele)
+        return if _.isUndefined(ele)
       tagArray.push $scope.tagText
       $scope.inputTags = tagArray.join(',')
       $scope.tagText = ""
@@ -59,7 +70,7 @@ LunchyApp.directive 'tagInput', ->
         tempEl = $("<span>" + newVal + "</span>").appendTo("body")
         $scope.inputWidth = tempEl.width() + 5
         $scope.inputWidth = $scope.defaultWidth if $scope.inputWidth < $scope.defaultWidth
-        tempEl.remove()        
+        tempEl.remove()  
 
     element.bind "keydown", (e) ->
       key = e.which
@@ -75,9 +86,19 @@ LunchyApp.directive 'tagInput', ->
         e.preventDefault()
         $scope.$apply 'addTag()'
 
+    $(element).find('input').bind "blur", (e) ->      
+      $scope.$apply 'addTag(true)'
+
     $scope.focus = ->
       $(element).find('input').select()
       return true
 
-  template: "<div class='tag-input-ctn form-control' style='height:auto !important' ng-click='focus()'><div class='input-tag' data-ng-repeat=\"tag in tagArray() track by $index\">{{tag}}<div class='delete-tag' data-ng-click='deleteTag($index)'>&times;</div></div><input type='text' autocomplete='off' data-ng-disabled='inputDisabled' data-ng-style='{width: inputWidth}' data-ng-model='tagText' placeholder='{{placeholder}}'/></div>"
-
+  template: "<div class='tag-input-ctn form-control' style='height:auto !important' ng-click='focus()'>" +
+              "<div class='input-tag' data-ng-repeat=\"tag in tagArray() track by $index\">" + 
+                "{{tag}}" +
+                "<div class='delete-tag' data-ng-click='deleteTag($index)'>" +
+                  "&times;" +
+                "</div>" +
+              "</div>" +
+              "<input type='text' autocomplete='off' data-ng-hide='inputDisabled' data-ng-style='{width: inputWidth}' data-ng-model='tagText' placeholder='{{placeholder}}'/>" +
+            "</div>"
