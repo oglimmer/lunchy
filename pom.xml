@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.oglimmer</groupId>
 	<artifactId>lunchy</artifactId>
-	<version>0.6-SNAPSHOT</version>
+	<version>0.6</version>
 	<packaging>war</packaging>
 	<description>Lunchy not only makes lunch easier it also makes your life better! How does it do that? It collects and provides essential information about lunch places.</description>
 
@@ -23,7 +23,7 @@
 		<url>https://github.com/oglimmer/lunchy</url>
 		<connection>scm:git:git://github.com/oglimmer/lunchy.git</connection>
 		<developerConnection>scm:git:git@github.com:oglimmer/lunchy.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>lunchy-0.6</tag>
 	</scm>
 
 	<properties>
@@ -36,7 +36,7 @@
 		<lunchy.db.url>jdbc:mysql://127.0.0.1/</lunchy.db.url>
 		<lunchy.db.schema>oli_lunchy</lunchy.db.schema>
 		<lunchy.db.user>root</lunchy.db.user>
-		<lunchy.db.password></lunchy.db.password>
+		<lunchy.db.password />
 	</properties>
 
 	<profiles>
