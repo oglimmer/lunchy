@@ -38,6 +38,7 @@ import de.oglimmer.lunchy.database.dao.UserPictureVoteDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
 import de.oglimmer.lunchy.rest.DiskBasedImageScaler;
+import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.UploadImageScaler;
 import de.oglimmer.lunchy.rest.dto.MailImage;
@@ -136,6 +137,16 @@ public class PictureResource {
 		}
 	}
 
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}/changeCaption")
+	public void changeCaption(@Context HttpServletRequest request, @PathParam("id") Integer id, PictureChangeCaptionInput input) {
+		SecurityProvider.INSTANCE.checkConfirmedUser(request);
+		PicturesRecord rec = PictureDao.INSTANCE.getById(id, Community.get(request));
+		rec.setCaption(input.getCaption());
+		PictureDao.INSTANCE.store(rec);
+	}
+
 	private PictureResponse storeRec(PicturesRecord rec) {
 		PictureDao.INSTANCE.store(rec);
 		return BeanMappingProvider.INSTANCE.map(rec, PictureResponse.class);
@@ -163,6 +174,11 @@ public class PictureResource {
 	@Data
 	public static class PictureVoteInput {
 		private String direction;
+	}
+
+	@Data
+	public static class PictureChangeCaptionInput {
+		private String caption;
 	}
 
 	@AllArgsConstructor

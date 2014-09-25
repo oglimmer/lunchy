@@ -168,4 +168,30 @@ directive('passwordStrength', ['PasswordStrengthService', function(PasswordStren
       },
       template: '<span ng-class="pss.passStrengthClass">{{ pss.passStrength }}</span>'
     };
+}]).
+directive('pictureEdit', [ function() {
+	return {
+		restrict: 'E',
+		require: 'ngModel',
+		scope: {
+			model: '=ngModel',
+			show: '=ngShow'
+		},
+		link: function(scope, element, attrs, ngModel) {
+			$(element).find('input').bind("blur", function (event) {
+				scope.$apply(function () {
+					scope.show = false;
+				});
+			});
+			element.bind("keydown keypress", function (event) {
+                if (event.which === 13) {
+                    scope.$apply(function () {
+                    	scope.show = false;
+                    });
+                    event.preventDefault();
+                }
+            });
+		},
+		template: '<input type="text" ng-show="show" class="form-control" ng-model="model" focus="show,true" style="position:relative;top:-90px;" />'
+	};
 }]);

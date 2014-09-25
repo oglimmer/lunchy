@@ -359,6 +359,9 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
         rating:1,
         ratingExplained:'none'
     };
+    
+    // edit picture
+    $scope.childScopeHolder.editPicCapVal = null;
 
     /* ### PRIVATE METHODS ### */
 
@@ -441,6 +444,18 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
         }
     };
     
+    $scope.editPicCaptionStart = function() {
+    	if(!$scope.allowedToEditPermission) {
+    		return;
+    	}
+    	var activePicture = _.find($scope.childScopeHolder.pictures, function(pic) { return pic.active; });
+        if(_.isUndefined(activePicture)){
+            return;
+        }
+    	$scope.childScopeHolder.editPicCapVal = activePicture.caption;
+        $scope.childScopeHolder.editPicCap = true;
+    }
+    
     /* ### Scope helper methods ### */
     
     $scope.showView = function() {
@@ -468,6 +483,19 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
     $scope.$on('userLoggedIn', function(event) {
         getlocationStatusForCurrentUser();
     });
+    
+    // edit picture caption end
+    $scope.$watch("childScopeHolder.editPicCap", function(newVal, oldVal) {
+		if(!newVal) {
+			var activePicture = _.find($scope.childScopeHolder.pictures, function(pic) { return pic.active; });
+			if(!_.isUndefined(activePicture)){
+				if(activePicture.caption != $scope.childScopeHolder.editPicCapVal) {
+					activePicture.caption = $scope.childScopeHolder.editPicCapVal;
+					PicturesDao.changeCaption({id:activePicture.id}, {caption: activePicture.caption});
+				}
+	        }
+		}
+	});
     
     /* ### RUN ### */
 
