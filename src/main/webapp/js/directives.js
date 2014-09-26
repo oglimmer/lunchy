@@ -175,23 +175,27 @@ directive('pictureEdit', [ function() {
 		require: 'ngModel',
 		scope: {
 			model: '=ngModel',
-			show: '=ngShow'
+			show: '=ngShow',
+			disable: '=ngDisable'
 		},
 		link: function(scope, element, attrs, ngModel) {
+			scope.copy = angular.copy(scope.model);
 			$(element).find('input').bind("blur", function (event) {
 				scope.$apply(function () {
+					scope.copy = angular.copy(scope.model);
 					scope.show = false;
 				});
 			});
 			element.bind("keydown keypress", function (event) {
                 if (event.which === 13) {
                     scope.$apply(function () {
+                    	scope.model = scope.copy;
                     	scope.show = false;
                     });
                     event.preventDefault();
                 }
             });
 		},
-		template: '<input type="text" ng-show="show" class="form-control" ng-model="model" focus="show,true" style="position:relative;top:-90px;" />'
+		template: '<input type="text" ng-show="show && !disable" class="form-control" ng-model="copy" focus="show,true" />'
 	};
 }]);

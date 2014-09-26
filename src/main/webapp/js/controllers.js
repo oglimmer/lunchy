@@ -186,6 +186,7 @@ controller('LunchyControllerViewAddPicture', ['$scope', 'LocationsDao', 'Picture
             if(!f1.isUploading() && f1.size < 1024*1024*15) {
                 var newPic = new PicturesDao({fkLocation: $stateParams.locationId, caption: $scope.childScopeHolder.picCaption, uniqueId: f1.uniqueIdentifier, originalFilename: f1.name});
                 newPic.$save(function(pic) {
+                	$scope.allowedChangeCaption["pic"+pic.id] = true;
                     LocationsDao.queryPictures({"id": $stateParams.locationId }, function (pictures) {
                     	$scope.setPictures(pictures);
                     });
@@ -327,7 +328,8 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
     $scope.childScopeHolder = {};
 	
     // permissions
-    $scope.allowedToEditPermission = false;
+    $scope.allowedToEditPermission = false;    
+    $scope.allowedChangeCaption = {};
 
     // status of buttons / areas
     $scope.showButtonsMode= false;
@@ -360,9 +362,6 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
         ratingExplained:'none'
     };
     
-    // edit picture
-    $scope.childScopeHolder.editPicCapVal = null;
-
     /* ### PRIVATE METHODS ### */
 
     function onSlideChanged() {
@@ -384,6 +383,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
                 $scope.childScopeHolder.reviewButton = "Edit Review";
             }
             $scope.picVotes = result.pictureVotes;
+            $scope.allowedChangeCaption = result.allowedChangeCaption;
             onSlideChanged();
         });
     }                 
@@ -444,18 +444,6 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
         }
     };
     
-    $scope.editPicCaptionStart = function() {
-    	if(!$scope.allowedToEditPermission) {
-    		return;
-    	}
-    	var activePicture = _.find($scope.childScopeHolder.pictures, function(pic) { return pic.active; });
-        if(_.isUndefined(activePicture)){
-            return;
-        }
-    	$scope.childScopeHolder.editPicCapVal = activePicture.caption;
-        $scope.childScopeHolder.editPicCap = true;
-    }
-    
     /* ### Scope helper methods ### */
     
     $scope.showView = function() {
@@ -469,12 +457,20 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 
     $scope.setPictures = function(pictures) {
         $scope.childScopeHolder.pictures = pictures;
-        angular.forEach(pictures, function(obj, idx) {
+        angular.forEach(pictures, function(obj, idx) {        	
             $scope.$watch("childScopeHolder.pictures["+idx+"].active", function(val) {
                 if(val) {
                     onSlideChanged();
                 }
             });
+            
+            // edit picture caption end
+            $scope.$watch("childScopeHolder.pictures["+idx+"].caption", function(newVal, oldVal) {
+            	if(newVal!=oldVal){
+	        		var activePicture = $scope.childScopeHolder.pictures[idx];
+	        		PicturesDao.save(activePicture);
+            	}
+        	});
         })
     };
 
@@ -483,19 +479,6 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
     $scope.$on('userLoggedIn', function(event) {
         getlocationStatusForCurrentUser();
     });
-    
-    // edit picture caption end
-    $scope.$watch("childScopeHolder.editPicCap", function(newVal, oldVal) {
-		if(!newVal) {
-			var activePicture = _.find($scope.childScopeHolder.pictures, function(pic) { return pic.active; });
-			if(!_.isUndefined(activePicture)){
-				if(activePicture.caption != $scope.childScopeHolder.editPicCapVal) {
-					activePicture.caption = $scope.childScopeHolder.editPicCapVal;
-					PicturesDao.changeCaption({id:activePicture.id}, {caption: activePicture.caption});
-				}
-	        }
-		}
-	});
     
     /* ### RUN ### */
 

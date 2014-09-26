@@ -58,10 +58,6 @@ factory('PicturesDao', ['$resource', function($resource) {
         'vote': {
             method: 'POST',
             url: 'rest/pictures/:id/vote'
-        },
-        'changeCaption': {
-        	method: 'POST',
-        	url: 'rest/pictures/:id/changeCaption'
         }
     });
 }]).

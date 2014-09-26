@@ -38,6 +38,7 @@ import de.oglimmer.lunchy.database.dao.UserPictureVoteDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
 import de.oglimmer.lunchy.rest.DiskBasedImageScaler;
+import de.oglimmer.lunchy.rest.Permission;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.UploadImageScaler;
@@ -108,8 +109,12 @@ public class PictureResource {
 	@Path("{id}")
 	public PictureResponse update(@Context HttpServletRequest request, @PathParam("id") Integer id, PictureUpdateInput inputDto) {
 		PicturesRecord rec = PictureDao.INSTANCE.getById(id, Community.get(request));
-		BeanMappingProvider.INSTANCE.map(inputDto, rec);
-		return storeRec(rec);
+		if (SecurityProvider.INSTANCE.checkRightOnSession(request, Permission.ADMIN)
+				|| SessionProvider.INSTANCE.getLoggedInUserId(request) == rec.getFkUser()) {
+			BeanMappingProvider.INSTANCE.map(inputDto, rec);
+			return storeRec(rec);
+		}
+		return null;
 	}
 
 	@POST
@@ -135,16 +140,6 @@ public class PictureResource {
 		} else {
 			log.warn("vote called for {} with direction {} but user {}'s vote didn't match", id, inputDto.getDirection(), userId);
 		}
-	}
-
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("{id}/changeCaption")
-	public void changeCaption(@Context HttpServletRequest request, @PathParam("id") Integer id, PictureChangeCaptionInput input) {
-		SecurityProvider.INSTANCE.checkConfirmedUser(request);
-		PicturesRecord rec = PictureDao.INSTANCE.getById(id, Community.get(request));
-		rec.setCaption(input.getCaption());
-		PictureDao.INSTANCE.store(rec);
 	}
 
 	private PictureResponse storeRec(PicturesRecord rec) {

@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -17,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +37,14 @@ import com.google.code.geocoder.model.LatLng;
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.LocationDao;
 import de.oglimmer.lunchy.database.dao.OfficeDao;
+import de.oglimmer.lunchy.database.dao.PictureDao;
 import de.oglimmer.lunchy.database.dao.ReviewDao;
 import de.oglimmer.lunchy.database.dao.UserPictureVoteDao;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
+import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
+import de.oglimmer.lunchy.rest.MapAdapterStringBoolean;
 import de.oglimmer.lunchy.rest.Permission;
 import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.SessionProvider;
@@ -120,6 +126,8 @@ public class LocationResource extends BaseResource {
 		private boolean allowedToEdit;
 		private Integer fkReview;
 		private List<Integer> pictureVotes;
+		@XmlJavaTypeAdapter(MapAdapterStringBoolean.class)
+		private Map<String, Boolean> allowedChangeCaption;
 	}
 
 	@Data
@@ -222,6 +230,7 @@ public class LocationResource extends BaseResource {
 			checkUserReview();
 			checkUserCanEdit();
 			checkPictureVotes();
+			checkAllowedChangeCaption();
 			return result;
 		}
 
@@ -229,6 +238,14 @@ public class LocationResource extends BaseResource {
 			result = new LocationStatusResponse();
 			userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
 			assert userId != null;
+		}
+
+		private void checkAllowedChangeCaption() {
+			Map<String, Boolean> map = new HashMap<>();
+			for (PicturesRecord pic : PictureDao.INSTANCE.getListByParent(locationId)) {
+				map.put("pic" + pic.getId(), pic.getFkUser() == userId);
+			}
+			result.setAllowedChangeCaption(map);
 		}
 
 		private void checkPictureVotes() {

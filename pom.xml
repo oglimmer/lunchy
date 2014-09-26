@@ -200,7 +200,7 @@
 				<groupId>com.theoryinpractise</groupId>
 				<artifactId>coffee-maven-plugin</artifactId>
 				<version>1.4.10</version>
-				<configuration>					
+				<configuration>
 					<coffeeOutputDirectory>${basedir}/src/main/webapp/js</coffeeOutputDirectory>
 					<coffeeJoinSets>
 						<joinSet>
@@ -235,9 +235,9 @@
 				<configuration>
 					<jsSrcDir>src/main/webapp/js</jsSrcDir>
 					<jsTestSrcDir>src/test/js</jsTestSrcDir>
-					<webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName> 
-					<!-- 	<webDriverClassName>org.openqa.selenium.firefox.FirefoxDriver</webDriverClassName>
-					<webDriverClassName>org.openqa.selenium.chrome.ChromeDriver</webDriverClassName>  -->
+					<webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
+					<!-- <webDriverClassName>org.openqa.selenium.firefox.FirefoxDriver</webDriverClassName> 
+						<webDriverClassName>org.openqa.selenium.chrome.ChromeDriver</webDriverClassName> -->
 					<preloadSources>
 						<source>webjars/jquery/2.1.1/jquery.min.js</source>
 						<source>webjars/jquery-ui/1.11.1/jquery-ui.min.js</source>
@@ -432,6 +432,17 @@
 			<groupId>org.glassfish.jersey.media</groupId>
 			<artifactId>jersey-media-moxy</artifactId>
 			<version>2.12</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.persistence</groupId>
+					<artifactId>org.eclipse.persistence.moxy</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>org.eclipse.persistence.moxy</artifactId>
+			<version>2.5.2</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.dozer</groupId>
