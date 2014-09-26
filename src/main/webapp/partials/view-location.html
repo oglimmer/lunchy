@@ -19,8 +19,8 @@
                     <slide ng-repeat="pic in childScopeHolder.pictures" active="pic.active">
                         <img ng-src="./rest/pictures/{{pic.filename}}" style="margin:auto;"/>
                         <div class="carousel-caption">
-                            <p class="removeOnExtraSmall" ng-click="childScopeHolder.editPicCap[$index]=!childScopeHolder.editPicCap[$index]" ng-hide="childScopeHolder.editPicCap[$index] && allowedChangeCaption['pic'+pic.id] == true">({{pic.upVotes}}) {{pic.caption}} by {{pic.creationUser}}</p>
-                            <picture-edit ng-show="childScopeHolder.editPicCap[$index]" ng-disable="allowedChangeCaption['pic'+pic.id] != true" ng-model="pic.caption" />
+                            <p class="removeOnExtraSmall" ng-click="childScopeHolder.editPicCap[$index]=!childScopeHolder.editPicCap[$index]" ng-hide="childScopeHolder.editPicCap[$index] && allowedChangeCaption['pic'+pic.id]">({{pic.upVotes}}) {{pic.caption}} by {{pic.creationUser}}</p>
+                            <picture-edit ng-show="childScopeHolder.editPicCap[$index]" ng-disable="!allowedChangeCaption['pic'+pic.id]" ng-model="pic.caption" />
                         </div>
                     </slide>
                 </carousel>                
@@ -41,7 +41,7 @@
             </tab>
         </tabset>
 
-	</div>		  
+	</div>
 
 	<div ng-show="editLocationMode" ng-include="'partials/view-location/edit-location.html'"></div>
 
