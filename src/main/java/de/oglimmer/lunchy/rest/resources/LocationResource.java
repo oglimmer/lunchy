@@ -241,9 +241,10 @@ public class LocationResource extends BaseResource {
 		}
 
 		private void checkAllowedChangeCaption() {
+			boolean isAdmin = SecurityProvider.INSTANCE.checkRightOnSession(request, Permission.ADMIN);
 			Map<String, Boolean> map = new HashMap<>();
 			for (PicturesRecord pic : PictureDao.INSTANCE.getListByParent(locationId)) {
-				map.put("pic" + pic.getId(), pic.getFkUser() == userId);
+				map.put("pic" + pic.getId(), pic.getFkUser() == userId || isAdmin);
 			}
 			result.setAllowedChangeCaption(map);
 		}
