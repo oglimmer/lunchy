@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.security;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -12,6 +12,8 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 import de.oglimmer.lunchy.database.dao.UserDao;
+import de.oglimmer.lunchy.rest.SessionProvider;
+import de.oglimmer.lunchy.rest.UserRightException;
 
 @Slf4j
 public enum SecurityProvider {

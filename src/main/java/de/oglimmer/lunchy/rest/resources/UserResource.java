@@ -27,17 +27,17 @@ import org.mindrot.jbcrypt.BCrypt;
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
-import de.oglimmer.lunchy.rest.Permission;
-import de.oglimmer.lunchy.rest.SecurityProvider;
+import de.oglimmer.lunchy.email.EmailProvider;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.UserProvider;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
 import de.oglimmer.lunchy.rest.dto.ResultParam;
 import de.oglimmer.lunchy.rest.dto.UserAdminResponse;
 import de.oglimmer.lunchy.rest.dto.UserResponse;
-import de.oglimmer.lunchy.services.Community;
-import de.oglimmer.lunchy.services.DateCalculation;
-import de.oglimmer.lunchy.services.Email;
+import de.oglimmer.lunchy.security.Permission;
+import de.oglimmer.lunchy.security.SecurityProvider;
+import de.oglimmer.lunchy.services.CommunityService;
+import de.oglimmer.lunchy.services.DateCalcService;
 
 @Path("users")
 public class UserResource extends BaseResource {
@@ -46,7 +46,7 @@ public class UserResource extends BaseResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{email}")
 	public ResultParam checkByEmail(@Context HttpServletRequest request, @PathParam("email") String email) {
-		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email, Community.get(request));
+		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email, CommunityService.get(request));
 		ResultParam rp = new ResultParam();
 		if (user != null) {
 			rp.setSuccess(true);
@@ -62,7 +62,7 @@ public class UserResource extends BaseResource {
 		SecurityProvider.INSTANCE.checkAdmin(request);
 		ResultParam rp = new ResultParam();
 		if (input.getPermissions() == 0 || input.getPermissions() == 1) {
-			UsersRecord user = UserDao.INSTANCE.getById(id, Community.get(request));
+			UsersRecord user = UserDao.INSTANCE.getById(id, CommunityService.get(request));
 			if (user != null) {
 				if (user.getPermissions() != input.getPermissions() && user.getPermissions() != 2) {
 					user.setPermissions(input.getPermissions());
@@ -79,13 +79,13 @@ public class UserResource extends BaseResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{email}/sendPasswordLink")
 	public ResultParam sendPasswordLink(@Context HttpServletRequest request, @PathParam("email") String email) {
-		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email, Community.get(request));
+		UsersRecord user = UserDao.INSTANCE.getUserByEmail(email, CommunityService.get(request));
 		ResultParam rp = new ResultParam();
 		if (user != null) {
 			user.setPasswordResetToken(RandomStringUtils.randomAlphanumeric(128));
 			user.setPasswordResetTimestamp(new Timestamp(new Date().getTime()));
 			UserDao.INSTANCE.store(user);
-			Email.INSTANCE.sendPasswordLink(user);
+			EmailProvider.INSTANCE.sendPasswordLink(user);
 			rp.setSuccess(true);
 		}
 		return rp;
@@ -95,16 +95,16 @@ public class UserResource extends BaseResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{token}/resetPassword")
 	public ResultParam resetPassword(@Context HttpServletRequest request, @PathParam("token") String token, PasswordInput input) {
-		UsersRecord user = UserDao.INSTANCE.getUserByToken(token, Community.get(request));
+		UsersRecord user = UserDao.INSTANCE.getUserByToken(token, CommunityService.get(request));
 		ResultParam rp = new ResultParam();
 		if (user != null) {
-			if (DateCalculation.INSTANCE.youngerThan(user.getPasswordResetTimestamp(), Calendar.HOUR_OF_DAY, 24)) {
+			if (DateCalcService.youngerThan(user.getPasswordResetTimestamp(), Calendar.HOUR_OF_DAY, 24)) {
 				user.setPasswordResetToken(null);
 				user.setPasswordResetTimestamp(null);
 				user.setPassword(BCrypt.hashpw(input.getPassword(), BCrypt.gensalt()));
 				UserDao.INSTANCE.store(user);
 				rp.setSuccess(true);
-				Email.INSTANCE.sendPasswordResetDone(user);
+				EmailProvider.INSTANCE.sendPasswordResetDone(user);
 			} else {
 				rp.setErrorMsg("Token too old");
 			}
@@ -120,7 +120,7 @@ public class UserResource extends BaseResource {
 	public List<UserAdminResponse> query(@Context HttpServletRequest request) {
 		Class clazz = SecurityProvider.INSTANCE.checkRightOnSession(request, Permission.ADMIN) ? UserAdminResponse.class
 				: UserResponse.class;
-		return query(Community.get(request), clazz, "User");
+		return query(CommunityService.get(request), clazz, "User");
 	}
 
 	@GET
@@ -129,7 +129,7 @@ public class UserResource extends BaseResource {
 	public Response current(@Context HttpServletRequest request) {
 		Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
 		if (userId != null) {
-			UsersRecord user = UserDao.INSTANCE.getById(userId, Community.get(request));
+			UsersRecord user = UserDao.INSTANCE.getById(userId, CommunityService.get(request));
 			return Response.ok(BeanMappingProvider.INSTANCE.map(user, UserSelfResponse.class)).build();
 		}
 		return Response.status(Status.NO_CONTENT).build();
@@ -139,7 +139,7 @@ public class UserResource extends BaseResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public UserSelfResponse get(@Context HttpServletRequest request, @PathParam("id") Integer id) {
-		UsersRecord user = UserDao.INSTANCE.getById(id, Community.get(request));
+		UsersRecord user = UserDao.INSTANCE.getById(id, CommunityService.get(request));
 		return BeanMappingProvider.INSTANCE.map(user, UserSelfResponse.class);
 	}
 
@@ -162,7 +162,7 @@ public class UserResource extends BaseResource {
 	public LoginResponse updateAndLogin(@Context HttpServletRequest request, @PathParam("id") Integer id, UserUpdateInput input) {
 		LoginResponse result;
 
-		UsersRecord user = UserDao.INSTANCE.getById(id, Community.get(request));
+		UsersRecord user = UserDao.INSTANCE.getById(id, CommunityService.get(request));
 		if (user == null || !BCrypt.checkpw(input.getCurrentpassword(), user.getPassword())) {
 			result = new LoginResponse();
 			result.setErrorMsg("Password wrong");

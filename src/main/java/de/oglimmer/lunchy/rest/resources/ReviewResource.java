@@ -20,12 +20,12 @@ import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.ReviewDao;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 import de.oglimmer.lunchy.rest.SessionProvider;
-import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.dto.ReviewCreateInput;
 import de.oglimmer.lunchy.rest.dto.ReviewResponse;
 import de.oglimmer.lunchy.rest.dto.ReviewUpdateInput;
 import de.oglimmer.lunchy.rest.dto.ReviewUpdateResponse;
-import de.oglimmer.lunchy.services.Community;
+import de.oglimmer.lunchy.security.SecurityProvider;
+import de.oglimmer.lunchy.services.CommunityService;
 
 @Path("reviews")
 public class ReviewResource extends BaseResource {
@@ -42,7 +42,7 @@ public class ReviewResource extends BaseResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public Response update(@Context HttpServletRequest request, @PathParam("id") int id, ReviewUpdateInput reviewDto) {
-		ReviewsRecord reviewRec = ReviewDao.INSTANCE.getById(id, Community.get(request));
+		ReviewsRecord reviewRec = ReviewDao.INSTANCE.getById(id, CommunityService.get(request));
 		copyDtoToRec(reviewDto, reviewRec);
 		if (reviewRec.getFkUser() != SessionProvider.INSTANCE.getLoggedInUserId(request)) {
 			throw new RuntimeException("Wrong user");
@@ -57,7 +57,7 @@ public class ReviewResource extends BaseResource {
 		ReviewsRecord reviewRec = new ReviewsRecord();
 		copyDtoToRec(reviewDto, reviewRec);
 
-		reviewRec.setFkCommunity(Community.get(request));
+		reviewRec.setFkCommunity(CommunityService.get(request));
 		reviewRec.setFkUser(SessionProvider.INSTANCE.getLoggedInUserId(request));
 		reviewRec.setCreatedOn(new Timestamp(new Date().getTime()));
 
@@ -68,7 +68,7 @@ public class ReviewResource extends BaseResource {
 	@Path("{id}")
 	public void delete(@Context HttpServletRequest request, @PathParam("id") int id) {
 		SecurityProvider.INSTANCE.checkAdmin(request);
-		ReviewDao.INSTANCE.delete(id, Community.get(request));
+		ReviewDao.INSTANCE.delete(id, CommunityService.get(request));
 	}
 
 	private void copyDtoToRec(ReviewUpdateInput reviewDto, ReviewsRecord reviewRec) {

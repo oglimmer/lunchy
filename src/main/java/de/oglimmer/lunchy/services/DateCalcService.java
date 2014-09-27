@@ -5,16 +5,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public enum DateCalculation {
-	INSTANCE;
+public class DateCalcService {
 
-	public Calendar findNever() {
+	private DateCalcService() {
+	}
+
+	public static Calendar findNever() {
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.set(2038, 0, 19, 0, 0, 0);// largest date in mysql 2038-01-19
 		return cal;
 	}
 
-	public Calendar findNextMonday() {
+	public static Calendar findNextMonday() {
 		Calendar cal = GregorianCalendar.getInstance();
 
 		cal.set(Calendar.HOUR_OF_DAY, 7);
@@ -28,21 +30,21 @@ public enum DateCalculation {
 		return cal;
 	}
 
-	public Timestamp getOneWeekAgo() {
+	public static Timestamp getOneWeekAgo() {
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.add(Calendar.DAY_OF_YEAR, -7);
 		return new Timestamp(cal.getTime().getTime());
 	}
 
-	public Timestamp getNever() {
+	public static Timestamp getNever() {
 		return new Timestamp(findNever().getTime().getTime());
 	}
 
-	public Timestamp getNextMonday() {
+	public static Timestamp getNextMonday() {
 		return new Timestamp(findNextMonday().getTime().getTime());
 	}
 
-	public boolean youngerThan(Date date, int field, int units) {
+	public static boolean youngerThan(Date date, int field, int units) {
 		Calendar now = GregorianCalendar.getInstance();
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.setTime(date);
@@ -50,7 +52,7 @@ public enum DateCalculation {
 		return now.before(cal);
 	}
 
-	public Timestamp getNow() {
+	public static Timestamp getNow() {
 		return new Timestamp(new Date().getTime());
 	}
 }

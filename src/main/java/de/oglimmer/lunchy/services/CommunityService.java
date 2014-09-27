@@ -4,7 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
 
-public class Community {
+public class CommunityService {
+
+	private CommunityService() {
+	}
 
 	public static int get(HttpServletRequest request) {
 		return ((CommunitiesRecord) request.getAttribute("community")).getId();

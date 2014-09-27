@@ -1,11 +1,11 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.image;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.imgscalr.Scalr;
 
-import de.oglimmer.lunchy.services.FileServices;
+import de.oglimmer.lunchy.services.FileService;
 import de.oglimmer.lunchy.services.LunchyProperties;
 
 public class UploadImageScaler {
@@ -29,8 +29,8 @@ public class UploadImageScaler {
 		if (path == null) {
 			path = LunchyProperties.INSTANCE.getPictureDestinationPath();
 		}
-		File backupFile = new File(path + "/" + filename + "_original" + FileServices.getFileExtension(filename));
-		FileServices.move(originalFile, backupFile);
+		File backupFile = new File(path + "/" + filename + "_original" + FileService.getFileExtension(filename));
+		FileService.move(originalFile, backupFile);
 	}
 
 	public boolean scale() throws IOException {

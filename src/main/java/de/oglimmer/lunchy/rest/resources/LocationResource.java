@@ -45,15 +45,15 @@ import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
 import de.oglimmer.lunchy.rest.MapAdapterStringBoolean;
-import de.oglimmer.lunchy.rest.Permission;
-import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.dto.LocationCreateInput;
 import de.oglimmer.lunchy.rest.dto.LocationResponse;
 import de.oglimmer.lunchy.rest.dto.LocationUpdateInput;
 import de.oglimmer.lunchy.rest.dto.PictureResponse;
 import de.oglimmer.lunchy.rest.dto.ReviewResponse;
-import de.oglimmer.lunchy.services.Community;
+import de.oglimmer.lunchy.security.Permission;
+import de.oglimmer.lunchy.security.SecurityProvider;
+import de.oglimmer.lunchy.services.CommunityService;
 
 @Slf4j
 @Path("locations")
@@ -106,7 +106,7 @@ public class LocationResource extends BaseResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}/updatePosition")
 	public void updatePosition(@Context HttpServletRequest request, @PathParam("id") int id, LocationPositionUpdate locationDto) {
-		LocationRecord loc = LocationDao.INSTANCE.getById(id, Community.get(request));
+		LocationRecord loc = LocationDao.INSTANCE.getById(id, CommunityService.get(request));
 		loc.setGeoLat(locationDto.getLat());
 		loc.setGeoLng(locationDto.getLng());
 		loc.setGeoMovedManually((byte) 1);
@@ -117,7 +117,7 @@ public class LocationResource extends BaseResource {
 	@Path("{id}")
 	public void delete(@Context HttpServletRequest request, @PathParam("id") int id) {
 		SecurityProvider.INSTANCE.checkAdmin(request);
-		LocationDao.INSTANCE.delete(id, Community.get(request));
+		LocationDao.INSTANCE.delete(id, CommunityService.get(request));
 	}
 
 	@Data
@@ -150,7 +150,7 @@ public class LocationResource extends BaseResource {
 		}
 
 		public LocationResponse update(Integer id) {
-			LocationRecord locationRec = copyDtoToRecord(LocationDao.INSTANCE.getById(id, Community.get(request)));
+			LocationRecord locationRec = copyDtoToRecord(LocationDao.INSTANCE.getById(id, CommunityService.get(request)));
 			if (locationRec.getFkUser() != SessionProvider.INSTANCE.getLoggedInUserId(request)) {
 				SecurityProvider.INSTANCE.checkConfirmedUser(request);
 			}
@@ -158,11 +158,11 @@ public class LocationResource extends BaseResource {
 		}
 
 		private void addInitialData(LocationRecord locationRec) {
-			locationRec.setFkCommunity(Community.get(request));
+			locationRec.setFkCommunity(CommunityService.get(request));
 			locationRec.setFkUser(SessionProvider.INSTANCE.getLoggedInUserId(request));
 			locationRec.setCreatedOn(new Timestamp(new Date().getTime()));
 			locationRec.setGeoMovedManually((byte) 0);
-			OfficesRecord office = OfficeDao.INSTANCE.getById(locationRec.getFkOffice(), Community.get(request));
+			OfficesRecord office = OfficeDao.INSTANCE.getById(locationRec.getFkOffice(), CommunityService.get(request));
 			locationRec.setCountry(office.getCountry());
 		}
 
@@ -261,7 +261,7 @@ public class LocationResource extends BaseResource {
 
 		private void checkUserCanEdit() {
 			result.setAllowedToEdit(true);
-			LocationRecord locRec = LocationDao.INSTANCE.getById(locationId, Community.get(request));
+			LocationRecord locRec = LocationDao.INSTANCE.getById(locationId, CommunityService.get(request));
 			if (locRec.getFkUser() != userId) {
 				result.setAllowedToEdit(SecurityProvider.INSTANCE.checkRightOnSession(request, Permission.CONFIRMED_USER));
 			}

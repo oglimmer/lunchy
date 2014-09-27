@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.image;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 
 import org.imgscalr.Scalr.Method;
 
-import de.oglimmer.lunchy.services.FileServices;
+import de.oglimmer.lunchy.services.FileService;
 
 public class DiskBasedImageScaler extends ImageScaler {
 
@@ -22,11 +22,11 @@ public class DiskBasedImageScaler extends ImageScaler {
 	}
 
 	public void overwriteToDisk() throws IOException {
-		ImageIO.write(scaledImage, FileServices.getFileType(fullQualOriginalFile.getCanonicalPath()), fullQualOriginalFile);
+		ImageIO.write(scaledImage, FileService.getFileType(fullQualOriginalFile.getCanonicalPath()), fullQualOriginalFile);
 	}
 
 	public void saveToDisk(File file) throws IOException {
-		ImageIO.write(scaledImage, FileServices.getFileType(file.getCanonicalPath()), file);
+		ImageIO.write(scaledImage, FileService.getFileType(file.getCanonicalPath()), file);
 	}
 
 	@Override

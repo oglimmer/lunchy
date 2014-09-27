@@ -25,13 +25,13 @@ import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.LocationDao;
 import de.oglimmer.lunchy.database.dao.OfficeDao;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
-import de.oglimmer.lunchy.rest.SecurityProvider;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
 import de.oglimmer.lunchy.rest.dto.OfficeCreateInput;
 import de.oglimmer.lunchy.rest.dto.OfficeResponse;
 import de.oglimmer.lunchy.rest.dto.OfficeUpdateInput;
-import de.oglimmer.lunchy.services.Community;
+import de.oglimmer.lunchy.security.SecurityProvider;
+import de.oglimmer.lunchy.services.CommunityService;
 
 @Path("offices")
 public class OfficeResource extends BaseResource {
@@ -39,7 +39,7 @@ public class OfficeResource extends BaseResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<OfficeResponse> queryOffices(@Context HttpServletRequest request) {
-		return query(Community.get(request), OfficeResponse.class);
+		return query(CommunityService.get(request), OfficeResponse.class);
 	}
 
 	@GET
@@ -53,7 +53,7 @@ public class OfficeResource extends BaseResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("defaultOffice")
 	public DefaultOfficeResponse getDefaultOffice(@Context HttpServletRequest request) {
-		return new DefaultOfficeResponse(true, OfficeDao.INSTANCE.getDefaultOffice(Community.get(request)));
+		return new DefaultOfficeResponse(true, OfficeDao.INSTANCE.getDefaultOffice(CommunityService.get(request)));
 	}
 
 	@GET
@@ -63,7 +63,7 @@ public class OfficeResource extends BaseResource {
 		Integer fkUser = SessionProvider.INSTANCE.getLoggedInUserId(request);
 		List<LocationQuery> resultList = new ArrayList<>();
 		for (Record rec : LocationDao.INSTANCE.getList(fkUser, id)) {
-			resultList.add(LocationQuery.getInstance(rec, Community.get(request)));
+			resultList.add(LocationQuery.getInstance(rec, CommunityService.get(request)));
 		}
 		return resultList;
 	}
@@ -89,7 +89,7 @@ public class OfficeResource extends BaseResource {
 	@Path("{id}")
 	public void delete(@Context HttpServletRequest request, @PathParam("id") int id) {
 		SecurityProvider.INSTANCE.checkAdmin(request);
-		OfficeDao.INSTANCE.delete(id, Community.get(request));
+		OfficeDao.INSTANCE.delete(id, CommunityService.get(request));
 	}
 
 	@Data
@@ -113,12 +113,12 @@ public class OfficeResource extends BaseResource {
 		}
 
 		public OfficeResponse update(Integer id) {
-			OfficesRecord locationRec = copyDtoToRecord(OfficeDao.INSTANCE.getById(id, Community.get(request)));
+			OfficesRecord locationRec = copyDtoToRecord(OfficeDao.INSTANCE.getById(id, CommunityService.get(request)));
 			return updateRec(locationRec);
 		}
 
 		private void addInitialData(OfficesRecord locationRec) {
-			locationRec.setFkCommunity(Community.get(request));
+			locationRec.setFkCommunity(CommunityService.get(request));
 			if (locationRec.getCountry() == null) {
 				locationRec.setCountry("");
 			}

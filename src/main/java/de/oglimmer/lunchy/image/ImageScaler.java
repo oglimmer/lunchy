@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.rest;
+package de.oglimmer.lunchy.image;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;

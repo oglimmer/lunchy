@@ -6,7 +6,10 @@ import java.nio.file.Files;
 
 import javax.ws.rs.core.MediaType;
 
-public class FileServices {
+public class FileService {
+
+	private FileService() {
+	}
 
 	public static void move(String uniqueId, String filename) throws IOException {
 		File file = new File(LunchyProperties.INSTANCE.getTmpPath() + "/" + uniqueId);
@@ -39,7 +42,7 @@ public class FileServices {
 	}
 
 	public static String getMediaTypeFromFileExtension(String filename) {
-		String fileExt = FileServices.getFileExtension(filename);
+		String fileExt = FileService.getFileExtension(filename);
 		String mt;
 		switch (fileExt) {
 		case ".jpg":

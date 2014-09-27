@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.google.gson.JsonObject;
 
 @Slf4j
-public class MBeanServies {
+public class MBeanService {
 
 	private static MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 

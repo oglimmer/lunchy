@@ -11,14 +11,14 @@ import com.google.gson.JsonPrimitive;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.DaoFactory;
-import de.oglimmer.lunchy.services.Community;
+import de.oglimmer.lunchy.services.CommunityService;
 
 public abstract class BaseResource {
 
 	private static final String[] KEYS = { "Response", "UpdateInput", "CreateInput" };
 
 	protected Response get(HttpServletRequest request, int id, Class<?> clazz) {
-		Object rec = DaoFactory.INSTANCE.getDao(getDaoName(clazz)).getById(id, Community.get(request));
+		Object rec = DaoFactory.INSTANCE.getDao(getDaoName(clazz)).getById(id, CommunityService.get(request));
 		if (rec == null) {
 			return Response.status(Status.NOT_FOUND).build();
 		}

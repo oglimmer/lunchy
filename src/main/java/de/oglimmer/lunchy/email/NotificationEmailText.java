@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.services;
+package de.oglimmer.lunchy.email;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -8,8 +8,7 @@ import de.oglimmer.lunchy.rest.dto.MailImage;
 import de.oglimmer.lunchy.rest.dto.UpdatesQuery;
 import de.oglimmer.lunchy.rest.resources.PictureResource;
 
-public enum NotificationEmailText {
-	INSTANCE;
+public class NotificationEmailText {
 
 	private static String CR = "\r\n";
 	private static String BR = "<br/>";
@@ -29,8 +28,9 @@ public enum NotificationEmailText {
 	private static final String unsubscribe_line = "To unsubscribe from this email change your settings at {0}";
 	private static final String no_updates = "Nothing happened this week :( - visit lunchy now and enter new locations, reviews and pictures!";
 
-	public String getHtml(UsersRecord rec, List<UpdatesQuery> updates, List<MailImage> images) {
-		StringBuilder body = new StringBuilder("<html><head><style>" + HEAD_STYLE + "</style></head><body style='" + BODY_STYLE + "'>");
+	public static String getHtml(UsersRecord rec, List<UpdatesQuery> updates, List<MailImage> images) {
+		StringBuilder body = new StringBuilder("<html><head><style>" + HEAD_STYLE + "</style></head><body style='" + BODY_STYLE
+				+ "'>");
 		body.append("<div style='" + CONTENT_DIV_STYLE + "'>");
 		body.append("<h2>" + MessageFormat.format(greeting, rec.getDisplayname()) + "</h2>").append(BR);
 		if (updates.isEmpty()) {
@@ -46,13 +46,14 @@ public enum NotificationEmailText {
 			boolean evenRow = false;
 			for (MailImage mi : images) {
 				body.append("<div " + (evenRow ? "style='float: right;'" : "") + ">");
-				body.append("<a class='plain' href='" + Email.INSTANCE.getUrl(rec.getFkCommunity()) + "/#/view/" + mi.getId() + "?pic="
-						+ mi.getPictureId() + "'>");
+				body.append("<a class='plain' href='" + EmailProvider.INSTANCE.getUrl(rec.getFkCommunity()) + "/#/view/"
+						+ mi.getId() + "?pic=" + mi.getPictureId() + "'>");
 				addImage(body, mi, rec.getFkCommunity());
 				if (mi.getCaption() != null && !mi.getCaption().isEmpty()) {
 					body.append("<div class='caption'>" + mi.getDisplayname() + ": " + mi.getCaption() + "</div>");
 				} else {
-					body.append("<div class='caption'>" + mi.getDisplayname() + " made this at " + mi.getOfficialName() + "</div>");
+					body.append("<div class='caption'>" + mi.getDisplayname() + " made this at " + mi.getOfficialName()
+							+ "</div>");
 				}
 				body.append("</a>");
 				body.append("</div>");
@@ -64,8 +65,9 @@ public enum NotificationEmailText {
 			body.append(BR);
 			body.append("<ul>");
 			for (UpdatesQuery up : updates) {
-				body.append("<li><a class='plain' href='" + Email.INSTANCE.getUrl(rec.getFkCommunity()) + "/#/" + up.getRef() + "'>")
-						.append(up.getText()).append("</a></li>");
+				body.append(
+						"<li><a class='plain' href='" + EmailProvider.INSTANCE.getUrl(rec.getFkCommunity()) + "/#/" + up.getRef()
+								+ "'>").append(up.getText()).append("</a></li>");
 			}
 			body.append("</ul>");
 		}
@@ -85,25 +87,25 @@ public enum NotificationEmailText {
 		return body.toString();
 	}
 
-	private Object getHtmlUrl(int fkCommunity) {
-		String link = Email.INSTANCE.getUrl(fkCommunity);
-		String domain = Email.INSTANCE.getDomain(fkCommunity);
+	private static Object getHtmlUrl(int fkCommunity) {
+		String link = EmailProvider.INSTANCE.getUrl(fkCommunity);
+		String domain = EmailProvider.INSTANCE.getDomain(fkCommunity);
 		return "<a href='" + link + "'>" + domain + "</a>";
 	}
 
-	public String getText(UsersRecord rec, List<UpdatesQuery> updates, List<MailImage> images) {
+	public static String getText(UsersRecord rec, List<UpdatesQuery> updates, List<MailImage> images) {
 		StringBuilder body = new StringBuilder();
 		body.append(MessageFormat.format(greeting, rec.getDisplayname())).append(CR);
 		body.append(CR);
 		if (updates.isEmpty()) {
 			body.append(CR + no_updates + CR);
 		} else {
-			body.append(MessageFormat.format(top_intro1, Email.INSTANCE.getUrl(rec.getFkCommunity())));
+			body.append(MessageFormat.format(top_intro1, EmailProvider.INSTANCE.getUrl(rec.getFkCommunity())));
 			body.append(CR);
 			body.append(MessageFormat.format(top_intro2, images.size()));
 			body.append(CR);
 			body.append(CR);
-			body.append(MessageFormat.format(middle_text, Email.INSTANCE.getUrl(rec.getFkCommunity())));
+			body.append(MessageFormat.format(middle_text, EmailProvider.INSTANCE.getUrl(rec.getFkCommunity())));
 			body.append(CR);
 			body.append(CR);
 			for (UpdatesQuery up : updates) {
@@ -111,7 +113,7 @@ public enum NotificationEmailText {
 			}
 		}
 		body.append(CR);
-		body.append(MessageFormat.format(end_text1, Email.INSTANCE.getUrl(rec.getFkCommunity())));
+		body.append(MessageFormat.format(end_text1, EmailProvider.INSTANCE.getUrl(rec.getFkCommunity())));
 		body.append(CR);
 		body.append(CR);
 		body.append(end_text2);
@@ -121,16 +123,16 @@ public enum NotificationEmailText {
 		body.append(sender).append(CR);
 		body.append(CR);
 		body.append(CR);
-		body.append(MessageFormat.format(unsubscribe_line, Email.INSTANCE.getUrl(rec.getFkCommunity())));
+		body.append(MessageFormat.format(unsubscribe_line, EmailProvider.INSTANCE.getUrl(rec.getFkCommunity())));
 		return body.toString();
 	}
 
-	private void addImage(StringBuilder body, MailImage mi, int fkCommunity) {
+	private static void addImage(StringBuilder body, MailImage mi, int fkCommunity) {
 		body.append("<img src=\"" + getBasePicUrl(fkCommunity) + mi.getFilename() + "?size=" + PictureResource.SMALL_PIC_BOUNDRY
 				+ "\" class='food' />");
 	}
 
-	private String getBasePicUrl(int fkCommunity) {
-		return Email.INSTANCE.getUrl(fkCommunity) + "/rest/pictures/";
+	private static String getBasePicUrl(int fkCommunity) {
+		return EmailProvider.INSTANCE.getUrl(fkCommunity) + "/rest/pictures/";
 	}
 }

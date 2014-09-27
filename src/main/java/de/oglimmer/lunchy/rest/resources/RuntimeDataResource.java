@@ -12,10 +12,10 @@ import com.google.gson.JsonObject;
 
 import de.oglimmer.lunchy.database.connection.DBConn;
 import de.oglimmer.lunchy.database.dao.UserDao;
-import de.oglimmer.lunchy.rest.SecurityProvider;
-import de.oglimmer.lunchy.services.EmailUpdatesNotifier;
+import de.oglimmer.lunchy.email.EmailUpdatesNotifier;
+import de.oglimmer.lunchy.security.SecurityProvider;
 import de.oglimmer.lunchy.services.LunchyProperties;
-import de.oglimmer.lunchy.services.MBeanServies;
+import de.oglimmer.lunchy.services.MBeanService;
 
 @Path("runtime")
 public class RuntimeDataResource {
@@ -42,7 +42,7 @@ public class RuntimeDataResource {
 	public String queryRest(@Context HttpServletRequest request) {
 		checkRuntimePassword(request);
 		JsonObject data = new JsonObject();
-		MBeanServies.copyAllNodes("org.glassfish.jersey:*,subType=Uris,executionTimes=*", data, "detail=");
+		MBeanService.copyAllNodes("org.glassfish.jersey:*,subType=Uris,executionTimes=*", data, "detail=");
 		return data.toString();
 	}
 

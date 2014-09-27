@@ -16,7 +16,7 @@ import com.google.common.base.CharMatcher;
 
 import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
-import de.oglimmer.lunchy.services.Community;
+import de.oglimmer.lunchy.services.CommunityService;
 
 @WebFilter(urlPatterns = "/*")
 public class CommunityFilter implements Filter {
@@ -71,7 +71,7 @@ public class CommunityFilter implements Filter {
 		private void processCallToCommunityDomain(FilterChain chain) throws IOException, ServletException {
 			CommunitiesRecord community = getCommunity();
 			if (community != null) {
-				Community.set(request, community);
+				CommunityService.set(request, community);
 				processCallToRuntime(chain);
 			} else {
 				String redirect = request.getScheme() + "://" + removeSubDomains(domain)

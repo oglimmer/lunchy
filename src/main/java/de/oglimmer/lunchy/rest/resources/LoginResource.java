@@ -27,8 +27,8 @@ import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
-import de.oglimmer.lunchy.services.Community;
-import de.oglimmer.lunchy.services.DateCalculation;
+import de.oglimmer.lunchy.services.CommunityService;
+import de.oglimmer.lunchy.services.DateCalcService;
 
 @Path("login")
 public class LoginResource {
@@ -52,7 +52,7 @@ public class LoginResource {
 
 	@DELETE
 	public void logout(@Context HttpServletRequest request) {
-		UsersRecord user = sessionProvider.getLoggedInUser(request, Community.get(request));
+		UsersRecord user = sessionProvider.getLoggedInUser(request, CommunityService.get(request));
 		if (user != null) {
 			sessionProvider.removeToken(user);
 			sessionProvider.destroySession(request.getSession(false));
@@ -104,7 +104,7 @@ public class LoginResource {
 		}
 
 		private void setCompanyName(LoginResponse resp) {
-			resp.setCompanyName(CommunityDao.INSTANCE.getById(Community.get(request)).getName());
+			resp.setCompanyName(CommunityDao.INSTANCE.getById(CommunityService.get(request)).getName());
 		}
 
 		class SessionCheck {
@@ -117,7 +117,7 @@ public class LoginResource {
 			}
 
 			private void loadUserFromSessionAttr() {
-				user = sessionProvider.getLoggedInUser(request, Community.get(request));
+				user = sessionProvider.getLoggedInUser(request, CommunityService.get(request));
 			}
 		}
 
@@ -140,7 +140,7 @@ public class LoginResource {
 			}
 
 			private boolean isLongTimeTokenYoungerThan3Month() {
-				return DateCalculation.INSTANCE.youngerThan(user.getLongTimeTimestamp(), Calendar.MONTH, 3);
+				return DateCalcService.youngerThan(user.getLongTimeTimestamp(), Calendar.MONTH, 3);
 			}
 
 			private boolean userFound() {
@@ -152,7 +152,7 @@ public class LoginResource {
 			}
 
 			private void tryToLoadUserByToken() {
-				user = UserDao.INSTANCE.getByLongTimeToken(longTimeToken, Community.get(request));
+				user = UserDao.INSTANCE.getByLongTimeToken(longTimeToken, CommunityService.get(request));
 			}
 
 		}
@@ -177,7 +177,7 @@ public class LoginResource {
 		}
 
 		private UsersRecord getUserFromInput() {
-			return UserDao.INSTANCE.getUserByEmail(input.getEmail(), Community.get(request));
+			return UserDao.INSTANCE.getUserByEmail(input.getEmail(), CommunityService.get(request));
 		}
 
 		private LoginResponse processUserLogin(UsersRecord user) {

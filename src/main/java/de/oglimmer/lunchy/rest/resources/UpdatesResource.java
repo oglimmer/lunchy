@@ -21,7 +21,7 @@ import de.oglimmer.lunchy.beanMapping.DozerAdapter;
 import de.oglimmer.lunchy.database.dao.UpdatesDao;
 import de.oglimmer.lunchy.rest.dto.MailImage;
 import de.oglimmer.lunchy.rest.dto.UpdatesQuery;
-import de.oglimmer.lunchy.services.Community;
+import de.oglimmer.lunchy.services.CommunityService;
 
 @Path("updates")
 public class UpdatesResource {
@@ -41,13 +41,13 @@ public class UpdatesResource {
 	}
 
 	private List<MailImage> getPictures(HttpServletRequest request) {
-		List<Record> recordList = UpdatesDao.INSTANCE.getPictures(Community.get(request));
+		List<Record> recordList = UpdatesDao.INSTANCE.getPictures(CommunityService.get(request));
 		return BeanMappingProvider.INSTANCE.mapListCustomDto(recordList, MailImage.class);
 	}
 
 	private List<UpdatesQuery> getQueryUpdates(HttpServletRequest request) {
 		List<UpdatesQuery> resultList = new ArrayList<>();
-		for (Record update : UpdatesDao.INSTANCE.get(10, Community.get(request))) {
+		for (Record update : UpdatesDao.INSTANCE.get(10, CommunityService.get(request))) {
 			resultList.add(createResultRow(new DozerAdapter(update)));
 		}
 		return resultList;

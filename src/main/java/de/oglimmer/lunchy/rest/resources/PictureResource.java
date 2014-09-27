@@ -37,18 +37,18 @@ import de.oglimmer.lunchy.database.dao.UpdatesDao;
 import de.oglimmer.lunchy.database.dao.UserPictureVoteDao;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
-import de.oglimmer.lunchy.rest.DiskBasedImageScaler;
-import de.oglimmer.lunchy.rest.Permission;
-import de.oglimmer.lunchy.rest.SecurityProvider;
+import de.oglimmer.lunchy.image.DiskBasedImageScaler;
+import de.oglimmer.lunchy.image.UploadImageScaler;
 import de.oglimmer.lunchy.rest.SessionProvider;
-import de.oglimmer.lunchy.rest.UploadImageScaler;
 import de.oglimmer.lunchy.rest.dto.MailImage;
 import de.oglimmer.lunchy.rest.dto.PictureCreateInput;
 import de.oglimmer.lunchy.rest.dto.PictureResponse;
 import de.oglimmer.lunchy.rest.dto.PictureUpdateInput;
-import de.oglimmer.lunchy.services.Community;
-import de.oglimmer.lunchy.services.DateCalculation;
-import de.oglimmer.lunchy.services.FileServices;
+import de.oglimmer.lunchy.security.Permission;
+import de.oglimmer.lunchy.security.SecurityProvider;
+import de.oglimmer.lunchy.services.CommunityService;
+import de.oglimmer.lunchy.services.DateCalcService;
+import de.oglimmer.lunchy.services.FileService;
 import de.oglimmer.lunchy.services.LunchyProperties;
 
 @Slf4j
@@ -67,7 +67,7 @@ public class PictureResource {
 		if (filename.contains("..") || filename.contains("/")) {
 			throw new RuntimeException("Illegal filename:" + filename);
 		}
-		String mediaType = FileServices.getMediaTypeFromFileExtension(filename);
+		String mediaType = FileService.getMediaTypeFromFileExtension(filename);
 		InputStream inputStream = new InputStreamProvider(filename, screenWidth).getInputStream();
 		return Response.ok(inputStream, mediaType).build();
 	}
@@ -76,7 +76,7 @@ public class PictureResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<MailImage> queryPictures(@Context HttpServletRequest request, @QueryParam("startPos") Integer startPos,
 			@QueryParam("numberOfRecords") Integer numberOfRecords) {
-		List<Record> recordList = UpdatesDao.INSTANCE.getPictures(Community.get(request), startPos, numberOfRecords,
+		List<Record> recordList = UpdatesDao.INSTANCE.getPictures(CommunityService.get(request), startPos, numberOfRecords,
 				SessionProvider.INSTANCE.getLoggedInUserId(request));
 		return BeanMappingProvider.INSTANCE.mapListCustomDto(recordList, MailImage.class);
 	}
@@ -88,10 +88,10 @@ public class PictureResource {
 	public PictureResponse create(@Context HttpServletRequest request, PictureCreateInputWithTmp inputDto) {
 		PicturesRecord rec = new PicturesRecord();
 
-		rec.setFkCommunity(Community.get(request));
+		rec.setFkCommunity(CommunityService.get(request));
 		rec.setFkUser(SessionProvider.INSTANCE.getLoggedInUserId(request));
 		rec.setCreatedOn(new Timestamp(new Date().getTime()));
-		rec.setFilename(UUID.randomUUID().toString() + FileServices.getFileExtension(inputDto.getOriginalFilename()));
+		rec.setFilename(UUID.randomUUID().toString() + FileService.getFileExtension(inputDto.getOriginalFilename()));
 		rec.setUpVotes(0);
 
 		BeanMappingProvider.INSTANCE.map(inputDto, rec);
@@ -108,7 +108,7 @@ public class PictureResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public PictureResponse update(@Context HttpServletRequest request, @PathParam("id") Integer id, PictureUpdateInput inputDto) {
-		PicturesRecord rec = PictureDao.INSTANCE.getById(id, Community.get(request));
+		PicturesRecord rec = PictureDao.INSTANCE.getById(id, CommunityService.get(request));
 		if (SecurityProvider.INSTANCE.checkRightOnSession(request, Permission.ADMIN)
 				|| SessionProvider.INSTANCE.getLoggedInUserId(request) == rec.getFkUser()) {
 			BeanMappingProvider.INSTANCE.map(inputDto, rec);
@@ -121,22 +121,22 @@ public class PictureResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}/vote")
 	public void vote(@Context HttpServletRequest request, @PathParam("id") Integer id, PictureVoteInput inputDto) {
-		PicturesRecord rec = PictureDao.INSTANCE.getById(id, Community.get(request));
+		PicturesRecord rec = PictureDao.INSTANCE.getById(id, CommunityService.get(request));
 		Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
 		UsersPicturesVotesRecord vote = UserPictureVoteDao.INSTANCE.getByParents(id, userId);
 		if ("up".equalsIgnoreCase(inputDto.getDirection()) && vote == null) {
 			vote = new UsersPicturesVotesRecord();
-			vote.setFkCommunity(Community.get(request));
+			vote.setFkCommunity(CommunityService.get(request));
 			vote.setFkPicture(id);
 			vote.setFkUser(userId);
-			vote.setCreatedOn(DateCalculation.INSTANCE.getNow());
+			vote.setCreatedOn(DateCalcService.getNow());
 			UserPictureVoteDao.INSTANCE.store(vote);
 			rec.setUpVotes(rec.getUpVotes() + 1);
 			PictureDao.INSTANCE.store(rec);
 		} else if ("down".equalsIgnoreCase(inputDto.getDirection()) && vote != null) {
 			rec.setUpVotes(rec.getUpVotes() - 1);
 			PictureDao.INSTANCE.store(rec);
-			UserPictureVoteDao.INSTANCE.delete(vote.getId(), Community.get(request));
+			UserPictureVoteDao.INSTANCE.delete(vote.getId(), CommunityService.get(request));
 		} else {
 			log.warn("vote called for {} with direction {} but user {}'s vote didn't match", id, inputDto.getDirection(), userId);
 		}
@@ -156,7 +156,7 @@ public class PictureResource {
 	}
 
 	private void moveFromTmpToPermanentDir(String fromFileName, String toFileName) throws IOException {
-		FileServices.move(fromFileName, toFileName);
+		FileService.move(fromFileName, toFileName);
 	}
 
 	@Data
@@ -219,11 +219,11 @@ public class PictureResource {
 
 		private String getOriginalFilename() {
 			return LunchyProperties.INSTANCE.getBackupDestinationPath() + "/" + filename + "_original"
-					+ FileServices.getFileExtension(filename);
+					+ FileService.getFileExtension(filename);
 		}
 
 		private String getCustomScaledFilename(int scaledWidth) {
-			return getDefauledScaledFilename() + "_" + scaledWidth + FileServices.getFileExtension(filename);
+			return getDefauledScaledFilename() + "_" + scaledWidth + FileService.getFileExtension(filename);
 		}
 
 		private int convertScreenWidth() {

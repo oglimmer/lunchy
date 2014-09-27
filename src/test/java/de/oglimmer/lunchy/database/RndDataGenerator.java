@@ -22,7 +22,7 @@ import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.dto.LocationQuery;
-import de.oglimmer.lunchy.services.DateCalculation;
+import de.oglimmer.lunchy.services.DateCalcService;
 
 public class RndDataGenerator {
 
@@ -76,7 +76,7 @@ public class RndDataGenerator {
 			user.setLastLogin(new Timestamp(new Date().getTime()));
 			user.setEmailUpdates(0);
 			user.setLastEmailUpdate(new Timestamp(new Date().getTime()));
-			user.setNextEmailUpdate(DateCalculation.INSTANCE.getNever());
+			user.setNextEmailUpdate(DateCalcService.getNever());
 			user.setPassword("not-set");
 			user.setPermissions(1);
 			UserDao.INSTANCE.store(user);
@@ -155,7 +155,7 @@ public class RndDataGenerator {
 
 	public void getPicVote(int fkCommunity, int fkCreator, int fkPicture) {
 		UsersPicturesVotesRecord rec = new UsersPicturesVotesRecord();
-		rec.setCreatedOn(DateCalculation.INSTANCE.getNow());
+		rec.setCreatedOn(DateCalcService.getNow());
 		rec.setFkCommunity(fkCommunity);
 		rec.setFkPicture(fkPicture);
 		rec.setFkUser(fkCreator);

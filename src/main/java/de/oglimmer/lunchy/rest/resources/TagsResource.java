@@ -9,7 +9,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import de.oglimmer.lunchy.database.dao.TagDao;
-import de.oglimmer.lunchy.services.Community;
+import de.oglimmer.lunchy.services.CommunityService;
 
 @Path("tags")
 public class TagsResource extends BaseResource {
@@ -17,7 +17,7 @@ public class TagsResource extends BaseResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String query(@Context HttpServletRequest request, @QueryParam(value = "selectedOffice") Integer fkOffice) {
-		return convertToJson(TagDao.INSTANCE.getAllTags(fkOffice, Community.get(request)));
+		return convertToJson(TagDao.INSTANCE.getAllTags(fkOffice, CommunityService.get(request)));
 	}
 
 }

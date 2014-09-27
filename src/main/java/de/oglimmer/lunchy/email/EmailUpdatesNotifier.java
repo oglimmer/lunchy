@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.services;
+package de.oglimmer.lunchy.email;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -22,6 +22,8 @@ import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.dto.MailImage;
 import de.oglimmer.lunchy.rest.dto.UpdatesQuery;
 import de.oglimmer.lunchy.rest.resources.UpdatesResource;
+import de.oglimmer.lunchy.services.DateCalcService;
+import de.oglimmer.lunchy.services.LunchyProperties;
 
 @Slf4j
 @ToString(exclude = "executorService")
@@ -59,12 +61,12 @@ public enum EmailUpdatesNotifier {
 				for (UsersRecord rec : list) {
 					if (UserDao.INSTANCE.updateLastEmailUpdateTimeStamp(rec)) {
 						emailsSent++;
-						log.debug("{} will get update, last was {}, next is {}", rec.getEmail(),
-								DateFormat.getDateTimeInstance().format(rec.getLastEmailUpdate()),
+						log.debug("{} will get update, last was {}, next is {}", rec.getEmail(), DateFormat.getDateTimeInstance()
+								.format(rec.getLastEmailUpdate()),
 								DateFormat.getDateTimeInstance().format(rec.getNextEmailUpdate()));
 						List<UpdatesQuery> updates = buildUpdates(rec);
 						List<MailImage> images = buildPictures(rec);
-						Email.INSTANCE.sendUpdates(rec, updates, images);
+						EmailProvider.INSTANCE.sendUpdates(rec, updates, images);
 						rec.setNextEmailUpdate(calcNextUpdate(rec));
 						UserDao.INSTANCE.store(rec);
 					} else {
@@ -99,10 +101,10 @@ public enum EmailUpdatesNotifier {
 		Calendar nextUpdate = null;
 		switch (rec.getEmailUpdates()) {
 		case 0:
-			nextUpdate = DateCalculation.INSTANCE.findNextMonday();
+			nextUpdate = DateCalcService.findNextMonday();
 			break;
 		case 1:
-			nextUpdate = DateCalculation.INSTANCE.findNever();
+			nextUpdate = DateCalcService.findNever();
 			log.error("User {} had EmailUpdate=1 but was selected for email sending", rec.getEmail());
 			break;
 		default:

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 import de.oglimmer.lunchy.database.dao.FinderDao;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.dto.LocationResponse;
-import de.oglimmer.lunchy.services.Community;
+import de.oglimmer.lunchy.services.CommunityService;
 
 @Path("finder")
 public class FinderResource {
@@ -43,7 +43,7 @@ public class FinderResource {
 			maxTime = Integer.MAX_VALUE;
 		}
 
-		return FinderDao.INSTANCE.query(tags, partners, maxTime, Community.get(request),
+		return FinderDao.INSTANCE.query(tags, partners, maxTime, CommunityService.get(request),
 				SessionProvider.INSTANCE.getLoggedInUserId(request), selectedOffice);
 	}
 

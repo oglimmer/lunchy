@@ -23,7 +23,7 @@ import com.google.gson.JsonObject;
 import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
 import de.oglimmer.lunchy.services.LunchyProperties;
-import de.oglimmer.lunchy.services.MBeanServies;
+import de.oglimmer.lunchy.services.MBeanService;
 
 @Slf4j
 public enum DBConn {
@@ -93,7 +93,7 @@ public enum DBConn {
 
 	public JsonObject getDriverStats() {
 		JsonObject data = new JsonObject();
-		MBeanServies.copyAllAttributes("org.apache.commons.pool2:type=GenericObjectPool,name=pool", data);
+		MBeanService.copyAllAttributes("org.apache.commons.pool2:type=GenericObjectPool,name=pool", data);
 		return data;
 	}
 

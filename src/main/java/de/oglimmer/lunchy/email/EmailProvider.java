@@ -1,4 +1,4 @@
-package de.oglimmer.lunchy.services;
+package de.oglimmer.lunchy.email;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -13,9 +13,10 @@ import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.dto.MailImage;
 import de.oglimmer.lunchy.rest.dto.UpdatesQuery;
+import de.oglimmer.lunchy.services.LunchyProperties;
 
 @Slf4j
-public enum Email {
+public enum EmailProvider {
 	INSTANCE;
 
 	private static final String DOMAIN = "%s.lunchylunch.com";
@@ -102,8 +103,9 @@ public enum Email {
 	}
 
 	public void sendWelcomeUser(String emailAddress, String name, int fkCommunity) {
-		send(emailAddress, "Welcome to Lunchy", "Hello " + name + "\r\n\r\nYou have successfully registered at lunchy.\r\n\r\nVisit "
-				+ getUrl(fkCommunity) + " to explore lunch places.\r\n\r\nRegards,\r\nOli");
+		send(emailAddress, "Welcome to Lunchy", "Hello " + name
+				+ "\r\n\r\nYou have successfully registered at lunchy.\r\n\r\nVisit " + getUrl(fkCommunity)
+				+ " to explore lunch places.\r\n\r\nRegards,\r\nOli");
 	}
 
 	public void sendWelcomeAdmin(String name, int fkCommunity) {
@@ -120,8 +122,8 @@ public enum Email {
 	public void sendUpdates(UsersRecord rec, List<UpdatesQuery> updates, List<MailImage> images) {
 		String subject = "Lunchy weekly email updates";
 		log.debug("Ready to send email to " + rec.getEmail() + " from " + rec.getLastEmailUpdate());
-		send(rec.getEmail(), subject, NotificationEmailText.INSTANCE.getText(rec, updates, images),
-				NotificationEmailText.INSTANCE.getHtml(rec, updates, images));
+		send(rec.getEmail(), subject, NotificationEmailText.getText(rec, updates, images),
+				NotificationEmailText.getHtml(rec, updates, images));
 	}
 
 }
