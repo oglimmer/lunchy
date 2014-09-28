@@ -16,6 +16,8 @@
 	</appender>
 	
 	<logger name="de.oglimmer" level="debug"></logger>
+	
+	<logger name="de.oglimmer.lunchy.web.servlet.CommunityFilter" level="info"></logger>
 	 
 	<root level="info">
 		<appender-ref ref="STDOUT" />

@@ -12,12 +12,15 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.google.common.base.CharMatcher;
 
 import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
 import de.oglimmer.lunchy.services.CommunityService;
 
+@Slf4j
 @WebFilter(urlPatterns = "/*")
 public class CommunityFilter implements Filter {
 
@@ -39,7 +42,7 @@ public class CommunityFilter implements Filter {
 		fp.doFilter(chain);
 	}
 
-	class FilterProcessor {
+	static class FilterProcessor {
 
 		private HttpServletRequest request;
 		private HttpServletResponse response;
@@ -54,6 +57,7 @@ public class CommunityFilter implements Filter {
 			domain = httpReq.getServerName();
 			servletPath = httpReq.getServletPath();// index.jsp or /rest
 			pathInfo = httpReq.getPathInfo();// null or /runtime/dbpool
+			log.debug("domain={}, servletPath={}, pathInfo={}", domain, servletPath, pathInfo);
 		}
 
 		public void doFilter(FilterChain chain) throws IOException, ServletException {
@@ -98,8 +102,7 @@ public class CommunityFilter implements Filter {
 
 		private CommunitiesRecord getCommunity() {
 			String subdomain = domain.indexOf('.') > -1 ? domain.substring(0, domain.indexOf('.')) : domain;
-			CommunitiesRecord community = CommunityDao.INSTANCE.getByDomain(subdomain);
-			return community;
+			return CommunityDao.INSTANCE.getByDomain(subdomain);
 		}
 
 		private boolean isCallToPortalPage() {
