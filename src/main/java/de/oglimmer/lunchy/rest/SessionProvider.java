@@ -1,8 +1,5 @@
 package de.oglimmer.lunchy.rest;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 

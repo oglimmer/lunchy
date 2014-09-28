@@ -1,8 +1,5 @@
 package de.oglimmer.lunchy.rest.resources;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
