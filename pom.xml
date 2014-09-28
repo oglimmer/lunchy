@@ -358,11 +358,6 @@
 			<version>5.1.32</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-dbcp2</artifactId>
-			<version>2.0.1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.mindrot</groupId>
 			<artifactId>jbcrypt</artifactId>
 			<version>0.3m</version>
@@ -486,6 +481,11 @@
 			<groupId>org.littleshoot</groupId>
 			<artifactId>littleshoot-commons-id</artifactId>
 			<version>1.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5-pre8</version>
 		</dependency>
 	</dependencies>
 

@@ -38,13 +38,32 @@ public class MBeanService {
 		}
 	}
 
-	public static void copyAllAttributes(String objectName, JsonObject targetObject) {
+	public static ObjectName getPoolDSJMXName() {
 		try {
-			ObjectName objName = new ObjectName(objectName);
-			copyAllAttributes(objName, targetObject);
-		} catch (MalformedObjectNameException e) {
+			ObjectName registryName = new ObjectName("com.mchange.v2.c3p0:type=C3P0Registry,name=C3P0DBConnection");
+			MBeanInfo registry = mbs.getMBeanInfo(registryName);
+			for (MBeanAttributeInfo mba : registry.getAttributes()) {
+				if ("AllIdentityTokens".equals(mba.getName())) {
+					String[] identityTokens = (String[]) mbs.getAttribute(registryName, mba.getName());
+					for (String identityToken : identityTokens) {
+
+						try {
+							ObjectName objName = new ObjectName("com.mchange.v2.c3p0:type=PooledDataSource,identityToken="
+									+ identityToken + ",name=poolDS");
+							mbs.getMBeanInfo(objName);
+							return objName;
+						} catch (InstanceNotFoundException e) {
+							// there are not valid identityTokens in the list of the registry. as we try them all, this is
+							// expected and needs to be ignored
+						}
+					}
+				}
+			}
+		} catch (MalformedObjectNameException | IntrospectionException | InstanceNotFoundException | AttributeNotFoundException
+				| ReflectionException | MBeanException e) {
 			log.error("Failed to query mbean", e);
 		}
+		return null;
 	}
 
 	public static void copyAllAttributes(ObjectName on, JsonObject targetObject) {
@@ -61,10 +80,11 @@ public class MBeanService {
 				} else if (attValue instanceof String) {
 					targetObject.addProperty(mbai.getName(), (String) attValue);
 				} else {
-					targetObject.addProperty("OBJECT:" + mbai.getName(), attValue.toString());
+					targetObject.addProperty("OBJECT:" + mbai.getName(), attValue != null ? attValue.toString() : "null");
 				}
 			}
-		} catch (InstanceNotFoundException | IntrospectionException | ReflectionException | AttributeNotFoundException | MBeanException e) {
+		} catch (InstanceNotFoundException | IntrospectionException | ReflectionException | AttributeNotFoundException
+				| MBeanException e) {
 			log.error("Failed to query mbean", e);
 		}
 	}

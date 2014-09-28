@@ -6,20 +6,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
 
+import javax.sql.DataSource;
+
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.dbcp2.ConnectionFactory;
-import org.apache.commons.dbcp2.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp2.PoolableConnection;
-import org.apache.commons.dbcp2.PoolableConnectionFactory;
-import org.apache.commons.dbcp2.PoolingDriver;
-import org.apache.commons.pool2.ObjectPool;
-import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.jooq.SQLDialect;
 
 import com.google.gson.JsonObject;
+import com.mchange.v2.c3p0.DataSources;
 import com.mysql.jdbc.AbandonedConnectionCleanupThread;
 
 import de.oglimmer.lunchy.services.LunchyProperties;
@@ -32,19 +28,20 @@ public enum DBConn {
 	@Getter
 	private SQLDialect sqlDialect;
 	private String registeredDriver = "uninitialized";
+	private DataSource pooledDS;
 
 	@SneakyThrows(value = SQLException.class)
 	public Connection getUnPooled() {
 		setupEnv();
-		log.debug("Creating single-use-con for {} with user {}",
-				LunchyProperties.INSTANCE.getDbServerUrl() + LunchyProperties.INSTANCE.getDbSchema(), LunchyProperties.INSTANCE.getDbUser());
+		log.debug("Creating single-use-con for {} with user {}", LunchyProperties.INSTANCE.getDbServerUrl()
+				+ LunchyProperties.INSTANCE.getDbSchema(), LunchyProperties.INSTANCE.getDbUser());
 		return DriverManager.getConnection(LunchyProperties.INSTANCE.getDbServerUrl() + LunchyProperties.INSTANCE.getDbSchema(),
 				LunchyProperties.INSTANCE.getDbUser(), LunchyProperties.INSTANCE.getDbPassword());
 	}
 
 	@SneakyThrows(value = SQLException.class)
 	public Connection get() {
-		return DriverManager.getConnection("jdbc:apache:commons:dbcp:lunchyDataStore");
+		return pooledDS.getConnection();
 	}
 
 	private void setupEnv() {
@@ -68,32 +65,23 @@ public enum DBConn {
 		}
 	}
 
-	@SneakyThrows(value = { SQLException.class, ClassNotFoundException.class })
+	@SneakyThrows(value = { SQLException.class })
 	public void setupDriver() {
 		setupEnv();
 		log.debug("Creating con-pool for {} with user {}",
-				LunchyProperties.INSTANCE.getDbServerUrl() + LunchyProperties.INSTANCE.getDbSchema(), LunchyProperties.INSTANCE.getDbUser());
+				LunchyProperties.INSTANCE.getDbServerUrl() + LunchyProperties.INSTANCE.getDbSchema(),
+				LunchyProperties.INSTANCE.getDbUser());
 
-		ConnectionFactory connectionFactory = new DriverManagerConnectionFactory(LunchyProperties.INSTANCE.getDbServerUrl()
-				+ LunchyProperties.INSTANCE.getDbSchema(), LunchyProperties.INSTANCE.getDbUser(), LunchyProperties.INSTANCE.getDbPassword());
+		DataSource unpooledDS = DataSources.unpooledDataSource(LunchyProperties.INSTANCE.getDbServerUrl()
+				+ LunchyProperties.INSTANCE.getDbSchema(), LunchyProperties.INSTANCE.getDbUser(),
+				LunchyProperties.INSTANCE.getDbPassword());
 
-		PoolableConnectionFactory poolableConnectionFactory = new PoolableConnectionFactory(connectionFactory, null);
-
-		ObjectPool<PoolableConnection> connectionPool = new GenericObjectPool<>(poolableConnectionFactory);
-
-		// BUG in apache-dbcp (https://issues.apache.org/jira/browse/DBCP-412)
-		poolableConnectionFactory.setPool(connectionPool);
-
-		Class.forName("org.apache.commons.dbcp2.PoolingDriver");
-		PoolingDriver driver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
-
-		driver.registerPool("lunchyDataStore", connectionPool);
-
+		pooledDS = DataSources.pooledDataSource(unpooledDS, "poolDS");
 	}
 
 	public JsonObject getDriverStats() {
 		JsonObject data = new JsonObject();
-		MBeanService.copyAllAttributes("org.apache.commons.pool2:type=GenericObjectPool,name=pool", data);
+		MBeanService.copyAllAttributes(MBeanService.getPoolDSJMXName(), data);
 		return data;
 	}
 
@@ -101,8 +89,7 @@ public enum DBConn {
 	public void shutdownDriver() {
 		log.debug("Stopping DBConn...");
 		// close pool
-		PoolingDriver driver = (PoolingDriver) DriverManager.getDriver("jdbc:apache:commons:dbcp:");
-		driver.closePool("lunchyDataStore");
+		DataSources.destroy(pooledDS);
 
 		// mysql thread
 		try {
@@ -115,6 +102,7 @@ public enum DBConn {
 		// JdbcDriver
 		Enumeration<Driver> drivers = DriverManager.getDrivers();
 		while (drivers.hasMoreElements()) {
+			log.debug("de-register: {}", drivers);
 			DriverManager.deregisterDriver(drivers.nextElement());
 		}
 	}
