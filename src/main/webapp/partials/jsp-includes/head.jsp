@@ -9,3 +9,4 @@
         <link href="css/bootstrap-theme.min.css" rel="stylesheet"><!-- modal-dialog and more -->
         <link href="webjars/ng-table/0.3.3/ng-table.min.css" rel="stylesheet"><!-- ng-table -->
         <lunchy:style href="css/styles.css"/>
+        <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
