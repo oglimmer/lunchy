@@ -54,6 +54,7 @@ import de.oglimmer.lunchy.rest.dto.ReviewResponse;
 import de.oglimmer.lunchy.security.Permission;
 import de.oglimmer.lunchy.security.SecurityProvider;
 import de.oglimmer.lunchy.services.CommunityService;
+import de.oglimmer.lunchy.services.DateCalcService;
 
 @Slf4j
 @Path("locations")
@@ -184,7 +185,7 @@ public class LocationResource extends BaseResource {
 		}
 
 		private LocationResponse updateRec(LocationRecord locationRec) {
-			locationRec.setLastUpdate(new Timestamp(new Date().getTime()));
+			locationRec.setLastUpdate(DateCalcService.getNow());
 			updateGeoData(locationRec);
 			LocationDao.INSTANCE.store(locationRec);
 			return BeanMappingProvider.INSTANCE.map(locationRec, LocationResponse.class);

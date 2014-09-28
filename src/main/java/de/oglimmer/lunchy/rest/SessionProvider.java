@@ -11,6 +11,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
+import de.oglimmer.lunchy.services.DateCalcService;
 
 public enum SessionProvider {
 	INSTANCE;
@@ -21,7 +22,7 @@ public enum SessionProvider {
 		LoginResponse loginResponse = new LoginResponse();
 		fillResponse(loginResponse, user, setToken);
 		createSession(user, session);
-		user.setLastLogin(new Timestamp(new Date().getTime()));
+		user.setLastLogin(DateCalcService.getNow());
 		UserDao.INSTANCE.store(user);
 		return loginResponse;
 	}
@@ -84,7 +85,7 @@ public enum SessionProvider {
 
 	public void generateToken(UsersRecord user) {
 		if (user.getLongTimeToken() == null) {
-			user.setLongTimeTimestamp(new Timestamp(new Date().getTime()));
+			user.setLongTimeTimestamp(DateCalcService.getNow());
 			user.setLongTimeToken(RandomStringUtils.randomAlphanumeric(128));
 		}
 	}

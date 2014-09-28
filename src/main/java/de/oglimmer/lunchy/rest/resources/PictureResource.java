@@ -90,7 +90,7 @@ public class PictureResource {
 
 		rec.setFkCommunity(CommunityService.get(request));
 		rec.setFkUser(SessionProvider.INSTANCE.getLoggedInUserId(request));
-		rec.setCreatedOn(new Timestamp(new Date().getTime()));
+		rec.setCreatedOn(DateCalcService.getNow());
 		rec.setFilename(UUID.randomUUID().toString() + FileService.getFileExtension(inputDto.getOriginalFilename()));
 		rec.setUpVotes(0);
 

@@ -26,6 +26,7 @@ import de.oglimmer.lunchy.rest.dto.ReviewUpdateInput;
 import de.oglimmer.lunchy.rest.dto.ReviewUpdateResponse;
 import de.oglimmer.lunchy.security.SecurityProvider;
 import de.oglimmer.lunchy.services.CommunityService;
+import de.oglimmer.lunchy.services.DateCalcService;
 
 @Path("reviews")
 public class ReviewResource extends BaseResource {
@@ -59,7 +60,7 @@ public class ReviewResource extends BaseResource {
 
 		reviewRec.setFkCommunity(CommunityService.get(request));
 		reviewRec.setFkUser(SessionProvider.INSTANCE.getLoggedInUserId(request));
-		reviewRec.setCreatedOn(new Timestamp(new Date().getTime()));
+		reviewRec.setCreatedOn(DateCalcService.getNow());
 
 		return store(reviewRec);
 	}
@@ -77,7 +78,7 @@ public class ReviewResource extends BaseResource {
 
 	private Response store(ReviewsRecord reviewRec) {
 		try {
-			reviewRec.setLastUpdate(new Timestamp(new Date().getTime()));
+			reviewRec.setLastUpdate(DateCalcService.getNow());
 			ReviewDao.INSTANCE.store(reviewRec);
 			ReviewUpdateResponse backLocationDto = BeanMappingProvider.INSTANCE.map(reviewRec, ReviewUpdateResponse.class);
 			return Response.ok(backLocationDto).build();

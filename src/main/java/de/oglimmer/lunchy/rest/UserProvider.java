@@ -27,8 +27,8 @@ public enum UserProvider {
 
 	public void makeNew(UsersRecord user, String password) {
 		user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-		user.setCreatedOn(new Timestamp(new Date().getTime()));
-		user.setLastLogin(new Timestamp(new Date().getTime()));
+		user.setCreatedOn(DateCalcService.getNow());
+		user.setLastLogin(DateCalcService.getNow());
 		user.setPermissions(0);
 		user.setLastEmailUpdate(DateCalcService.getOneWeekAgo());
 		user.setEmailUpdates(0);

@@ -5,8 +5,6 @@ import static de.oglimmer.lunchy.database.generated.tables.Users.USERS;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -26,6 +24,7 @@ import de.oglimmer.lunchy.database.Dao;
 import de.oglimmer.lunchy.database.connection.DBConn;
 import de.oglimmer.lunchy.database.generated.tables.Users;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
+import de.oglimmer.lunchy.services.DateCalcService;
 
 @Slf4j
 public enum UserDao implements Dao<UsersRecord> {
@@ -47,7 +46,7 @@ public enum UserDao implements Dao<UsersRecord> {
 	 * 
 	 * @param id
 	 * @return
-	 */	
+	 */
 	public UsersRecord getById(Integer id) {
 		return DB.fetchOn(USERS, USERS.ID.equal(id));
 	}
@@ -93,14 +92,14 @@ public enum UserDao implements Dao<UsersRecord> {
 	}
 
 	public List<UsersRecord> getReadyForNotification() {
-		return DB.query(USERS, USERS.NEXT_EMAIL_UPDATE.lessThan(new Timestamp(new Date().getTime())), USERS.ID.asc(), UsersRecord.class);
+		return DB.query(USERS, USERS.NEXT_EMAIL_UPDATE.lessThan(DateCalcService.getNow()), USERS.ID.asc(), UsersRecord.class);
 	}
 
 	@SneakyThrows(value = SQLException.class)
 	public boolean updateLastEmailUpdateTimeStamp(UsersRecord rec) {
 		try (Connection conn = DBConn.INSTANCE.get()) {
 			DSLContext create = DaoBackend.getContext(conn);
-			int res = create.update(Users.USERS).set(USERS.LAST_EMAIL_UPDATE, new Timestamp(new Date().getTime()))
+			int res = create.update(Users.USERS).set(USERS.LAST_EMAIL_UPDATE, DateCalcService.getNow())
 					.where(USERS.ID.equal(rec.getId()).and(USERS.LAST_EMAIL_UPDATE.eq(rec.getLastEmailUpdate()))).execute();
 			return res > 0;
 		}

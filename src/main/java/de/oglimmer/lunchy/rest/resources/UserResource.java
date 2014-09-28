@@ -83,7 +83,7 @@ public class UserResource extends BaseResource {
 		ResultParam rp = new ResultParam();
 		if (user != null) {
 			user.setPasswordResetToken(RandomStringUtils.randomAlphanumeric(128));
-			user.setPasswordResetTimestamp(new Timestamp(new Date().getTime()));
+			user.setPasswordResetTimestamp(DateCalcService.getNow());
 			UserDao.INSTANCE.store(user);
 			EmailProvider.INSTANCE.sendPasswordLink(user);
 			rp.setSuccess(true);
