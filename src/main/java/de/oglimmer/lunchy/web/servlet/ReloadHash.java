@@ -29,7 +29,7 @@ import de.oglimmer.lunchy.services.LunchyVersion;
 @AllArgsConstructor
 class ReloadHash {
 
-	private static final String PARAMETER_NAME = "reloadHash";
+	private static final String PARAMETER_NAME = "cacheBuster";
 
 	private static LoadingCache<ReloadHash, String> hashCache = CacheBuilder.newBuilder().build(new CacheLoader<ReloadHash, String>() {
 		public String load(ReloadHash key) {
