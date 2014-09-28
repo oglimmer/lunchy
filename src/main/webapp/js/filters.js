@@ -26,7 +26,11 @@ filter('partition', function() {
 filter('bycomma', function () {
     return function(text) {
     	if(typeof(text)!=='undefined') {
-    		return text.split(/,/g);
+    		if(text===null||text.trim()==='') {
+    			return [];
+    		} else {    		
+    			return text.split(/,/g);
+    		}
     	}
     }
 }).
@@ -43,7 +47,7 @@ filter('resolveNameById', function () {
 }).
 filter('numberToNA', function () {
 	return function(number) {
-		if(typeof(number)==='undefined' || number == null || number == "0") {
+		if(typeof(number)==='undefined' || number == Number.POSITIVE_INFINITY || number == Number.NEGATIVE_INFINITY || number == null || number == "0") {
 			return "n/a";
 		}
 		return number;
