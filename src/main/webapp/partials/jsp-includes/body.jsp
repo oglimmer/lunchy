@@ -15,10 +15,10 @@
         <script src="webjars/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.<%=DEBUG%>js"></script><!-- modal-dialog and more -->
         <script src="webjars/ng-table/0.3.3/ng-table.<%=DEBUG%>js"></script><!-- ng-table -->
         <script src="webjars/ng-flow/2.4.0/ng-flow-standalone.<%=DEBUG%>js"></script><!-- file upload -->
-        <script>
-        (function(){var a;a=function(){var a,b;b=document.createElement("script");b.src="webjars/zxcvbn/1.0/zxcvbn.js";b.type="text/javascript";b.async=!0;a=document.getElementsByTagName("script")[0];return a.parentNode.insertBefore(b,a)};null!=window.attachEvent?window.attachEvent("onload",a):window.addEventListener("load",a,!1)}).call(this);
-        </script>
-
+        
         <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script><!-- google-maps -->
         <script src="webjars/lodash/2.4.1-6/lodash.underscore.<%=DEBUG%>js"></script><!-- google-maps && my own code -->
         <script src="js/ext/angular-google-maps.1.2.0.min.js"></script><!-- google-maps -->
+
+        <script>$(function() { $.ajax({ url: "webjars/zxcvbn/1.0/zxcvbn.js", dataType: "script", cache: true }); });</script>
+        
