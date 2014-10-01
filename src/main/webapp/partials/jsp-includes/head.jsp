@@ -4,6 +4,8 @@
         <title>Lunchy</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/html5-boilerplate-main.css" rel="stylesheet" />
+        <link href="webjars/normalize.css/3.0.1/normalize.css" rel="stylesheet" />
         <link href="webjars/jquery-ui/1.11.1/jquery-ui.min.css" rel="stylesheet" /><!-- tag autocomplete -->
         <link href="webjars/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"><!-- modal-dialog and more -->
         <link href="css/bootstrap-theme.min.css" rel="stylesheet"><!-- modal-dialog and more -->

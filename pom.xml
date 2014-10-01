@@ -461,6 +461,16 @@
 			<version>4.2</version>
 		</dependency>
 		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>modernizr</artifactId>
+			<version>2.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>normalize.css</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>
 			<version>0.9.9-RC2</version>
