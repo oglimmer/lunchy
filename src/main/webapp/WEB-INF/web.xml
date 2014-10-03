@@ -7,6 +7,41 @@
 
 	<display-name>Lunchy</display-name>
 
+	<filter>
+       <filter-name>ExpiresFilter</filter-name>
+       <filter-class>org.apache.catalina.filters.ExpiresFilter</filter-class>
+       <init-param>
+          <param-name>ExpiresByType image</param-name>
+          <param-value>access plus 7 days</param-value>
+       </init-param>
+       <init-param>
+          <param-name>ExpiresByType text/css</param-name>
+          <param-value>access plus 7 days</param-value>
+       </init-param>
+       <init-param>
+          <param-name>ExpiresByType application/javascript</param-name>
+          <param-value>access plus 7 days</param-value>
+       </init-param>
+       <init-param>
+          <param-name>ExpiresByType text/html</param-name>
+          <param-value>access plus 1 days</param-value>
+       </init-param>
+       <init-param>
+          <param-name>ExpiresByType application/x-font-woff</param-name>
+          <param-value>access plus 31 days</param-value>
+       </init-param>
+       <init-param>
+          <param-name>ExpiresByType application/font-woff</param-name>
+          <param-value>access plus 31 days</param-value>
+       </init-param>
+    </filter>
+    
+    <filter-mapping>
+       <filter-name>ExpiresFilter</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
