@@ -6,7 +6,7 @@ angular.module('LunchyApp.directives', []).
 directive('unique', ['UserDao','CommunityDao', function (UserDao, CommunityDao){
    return {
       require: 'ngModel',
-      link: function(scope, elem, attr, ngModel) {
+      link: function(scope, elem, attr, ngModelCtrl) {
           var fieldName = attr.unique;
           if(fieldName!="email" && fieldName!="domain") {
         	  console.log("unique needs to be email/domain"); return;
@@ -24,23 +24,23 @@ directive('unique', ['UserDao','CommunityDao', function (UserDao, CommunityDao){
                           break;
                   }
                   dao.lookup({id:value}, function(result) {
-                      ngModel.$setValidity('unique', !result.success);
+                	  ngModelCtrl.$setValidity('unique', !result.success);
                   });
         	  }
         	  return true;
           }
 
           //For DOM -> model validation
-          ngModel.$parsers.unshift(function(value) {
+          ngModelCtrl.$parsers.unshift(function(value) {
              var valid = checkAgainstServer(value);
-             ngModel.$setValidity('unique', valid);
+             ngModelCtrl.$setValidity('unique', valid);
              return valid ? value : undefined;
           });
 
           //For model -> DOM validation
-          ngModel.$formatters.unshift(function(value) {
-             ngModel.$setValidity('unique', checkAgainstServer(value));
-             return value;
+          ngModelCtrl.$formatters.unshift(function(value) {
+        	  ngModelCtrl.$setValidity('unique', checkAgainstServer(value));
+        	  return value;
           });
       }
    };
@@ -103,7 +103,7 @@ directive('lyDisabled', function() {
 directive('lyDynamicname', function() {
 	return {
 		require: 'ngModel',
-		link: function(scope, element, attrs, ngModel) {
+		link: function(scope, element, attrs) {
 			var names = attrs.lyDynamicname.split(";");
 
 			// install a watch on the scope variable referenced by the model
@@ -153,17 +153,18 @@ directive('passwordStrength', ['PasswordStrengthService', function(PasswordStren
       restrict: 'E',
       require: 'ngModel',
       scope: {
-    	  password: '=ngModel'
+    	  // references the password in the model
+    	  ngModel: '='
       },
-      link: function(scope, element, attrs, ngModel) {    	      	 
+      link: function(scope, element, attrs, ngModelCtrl) {    	      	 
     	  var allowNull = false;
     	  if(attrs.allowNull) {
     		  allowNull = true;
     	  }
     	  scope.pss = PasswordStrengthService.create(allowNull); 
-    	  scope.$watch("password", function(val) {
+    	  scope.$watch("ngModel", function(val) {
     		  var validity = scope.pss.changed(val, allowNull);    		  
-    		  ngModel.$setValidity('passwordStrength', validity);
+    		  ngModelCtrl.$setValidity('passwordStrength', validity);
     	  });
       },
       template: '<span ng-class="pss.passStrengthClass">{{ pss.passStrength }}</span>'
@@ -172,30 +173,29 @@ directive('passwordStrength', ['PasswordStrengthService', function(PasswordStren
 directive('pictureEdit', [ function() {
 	return {
 		restrict: 'E',
-		require: 'ngModel',
 		scope: {
-			model: '=ngModel',
-			show: '=ngShow',
-			disable: '=ngDisable'
+			ngModel: '=',
+			ngShow: '=',
+			ngDisable: '='
 		},
-		link: function(scope, element, attrs, ngModel) {
-			scope.copy = angular.copy(scope.model);
+		link: function(scope, element) {
+			scope.clonedNgModel = angular.copy(scope.ngModel);
 			$(element).find('input').bind("blur", function (event) {
 				scope.$apply(function () {
-					scope.copy = angular.copy(scope.model);
-					scope.show = false;
+					scope.clonedNgModel = angular.copy(scope.ngModel);
+					scope.ngShow = false;
 				});
 			});
 			element.bind("keydown keypress", function (event) {
                 if (event.which === 13) {
                     scope.$apply(function () {
-                    	scope.model = scope.copy;
-                    	scope.show = false;
+                    	scope.ngModel = scope.clonedNgModel;
+                    	scope.ngShow = false;
                     });
                     event.preventDefault();
                 }
             });
 		},
-		template: '<input type="text" ng-show="show && !disable" class="form-control" ng-model="copy" focus="show,true" />'
+		template: '<input type="text" ng-show="ngShow && !ngDisable" class="form-control" ng-model="clonedNgModel" focus="ngShow,true" />'
 	};
 }]);
