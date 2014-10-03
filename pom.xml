@@ -65,7 +65,7 @@
 							<dependency>
 								<groupId>mysql</groupId>
 								<artifactId>mysql-connector-java</artifactId>
-								<version>5.1.32</version>
+								<version>5.1.33</version>
 							</dependency>
 						</dependencies>
 						<configuration>
@@ -256,7 +256,7 @@
 						<source>webjars/zxcvbn/1.0/zxcvbn.js</source>
 						<source>webjars/lodash/2.4.1-6/lodash.underscore.js</source>
 						<source>http://maps.googleapis.com/maps/api/js?sensor=false</source>
-						<source>src/main/webapp/js/ext/angular-google-maps.1.2.0.min.js</source>
+						<source>src/main/webapp/js/ext/angular-google-maps.1.2.2.min.js</source>
 					</preloadSources>
 				</configuration>
 			</plugin>
@@ -310,19 +310,19 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.14.4</version>
+			<version>1.14.8</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
-			<version>1.5.5</version>
+			<version>1.5.6</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
-			<version>1.5.5</version>
+			<version>1.5.6</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -355,7 +355,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.32</version>
+			<version>5.1.33</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mindrot</groupId>
@@ -392,7 +392,7 @@
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>angular-ui-bootstrap</artifactId>
-			<version>0.11.0-2</version>
+			<version>0.11.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
@@ -473,7 +473,7 @@
 		<dependency>
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>
-			<version>0.9.9-RC2</version>
+			<version>0.9.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
