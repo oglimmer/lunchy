@@ -1,5 +1,6 @@
 #!/bin/sh
 
+rm -rf e2e-test-logs
 mkdir e2e-test-logs
 
 # start webdriver (with chrome-driver)
@@ -33,10 +34,9 @@ echo "JETTY_PID:"$JETTY_PID
 sleep 1
 
 # execute e2e-test
-{
-	cd src/integration/js
-	protractor protractor-conf.js
-}
+cd src/integration/js
+protractor protractor-conf.js
+cd ../../..
 
 # stop webdriver and jetty
 kill $WEBDRIVER_PID
