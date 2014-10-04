@@ -318,10 +318,11 @@ factory('PasswordStrengthService', [function () {
 		
 		this.passStrength = null;
 		this.passStrengthClass = null;
+		this.emptyAllowed = emptyAllowed ? true : false;
 		
-		this.reset= function(emptyAllowed) {
+		this.reset= function() {
 			var str, strCla;
-			if(emptyAllowed) {
+			if(this.emptyAllowed) {
 				str = -1;
 				strCla = {};
 			} else {
@@ -332,10 +333,10 @@ factory('PasswordStrengthService', [function () {
 			this.passStrengthClass = strCla;			
 		};
 		
-		this.changed= function(val, emptyAllowed) {			
+		this.changed= function(val) {			
 			if(typeof(val)==='undefined' || val == ""){
-				if(emptyAllowed) {
-					this.reset(emptyAllowed);
+				if(this.emptyAllowed) {
+					this.reset(this.emptyAllowed);
 					return this.passStrength != 0;
 				} else {
 					val="";
@@ -352,7 +353,7 @@ factory('PasswordStrengthService', [function () {
 			return result.score != 0;
 		};
 		
-		this.reset(emptyAllowed);
+		this.reset(this.emptyAllowed);
 	};
 	
 	return {

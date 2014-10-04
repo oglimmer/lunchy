@@ -1,4 +1,42 @@
 LunchyApp = angular.module('LunchyApp');
+
+LunchyApp.directive 'pictureEdit', ->
+  restrict: 'E'
+  scope:
+    ngModel: '='
+    ngShow: '='
+    ngDisable: '='
+
+  link: (scope, element) ->
+    scope.clonedNgModel = angular.copy(scope.ngModel)
+    $(element).find('input').bind "blur", (event) ->
+      scope.$apply ->
+        scope.clonedNgModel = angular.copy(scope.ngModel)
+        scope.ngShow = false
+
+    element.bind "keydown keypress", (event) ->
+      if event.which == 13
+        scope.$apply ->
+          scope.ngModel = scope.clonedNgModel
+          scope.ngShow = false
+        event.preventDefault()
+
+  template: '<input type="text" ng-show="ngShow && !ngDisable" class="form-control" ng-model="clonedNgModel" focus="ngShow,true" />'
+
+LunchyApp.directive 'passwordStrength', ['PasswordStrengthService', (PasswordStrengthService) ->
+  restrict: 'E'
+  require: 'ngModel'
+  scope:
+    #references the password in the model
+    ngModel: '='
+
+  link: (scope, element, attrs, ngModelCtrl) ->    
+    scope.pss = PasswordStrengthService.create(attrs.allowNull)
+    scope.$watch "ngModel", (val) ->
+      ngModelCtrl.$setValidity('passwordStrength', scope.pss.changed(val))
+
+  template: '<span ng-class="pss.passStrengthClass">{{ pss.passStrength }}</span>'
+]
   
 LunchyApp.directive 'tagInput', ->
   restrict: 'E'

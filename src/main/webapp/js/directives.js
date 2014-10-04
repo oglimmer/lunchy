@@ -147,55 +147,5 @@ directive('lyEnter', function() {
             });
         }
     };
-}).
-directive('passwordStrength', ['PasswordStrengthService', function(PasswordStrengthService) {
-    return {
-      restrict: 'E',
-      require: 'ngModel',
-      scope: {
-    	  // references the password in the model
-    	  ngModel: '='
-      },
-      link: function(scope, element, attrs, ngModelCtrl) {    	      	 
-    	  var allowNull = false;
-    	  if(attrs.allowNull) {
-    		  allowNull = true;
-    	  }
-    	  scope.pss = PasswordStrengthService.create(allowNull); 
-    	  scope.$watch("ngModel", function(val) {
-    		  var validity = scope.pss.changed(val, allowNull);    		  
-    		  ngModelCtrl.$setValidity('passwordStrength', validity);
-    	  });
-      },
-      template: '<span ng-class="pss.passStrengthClass">{{ pss.passStrength }}</span>'
-    };
-}]).
-directive('pictureEdit', [ function() {
-	return {
-		restrict: 'E',
-		scope: {
-			ngModel: '=',
-			ngShow: '=',
-			ngDisable: '='
-		},
-		link: function(scope, element) {
-			scope.clonedNgModel = angular.copy(scope.ngModel);
-			$(element).find('input').bind("blur", function (event) {
-				scope.$apply(function () {
-					scope.clonedNgModel = angular.copy(scope.ngModel);
-					scope.ngShow = false;
-				});
-			});
-			element.bind("keydown keypress", function (event) {
-                if (event.which === 13) {
-                    scope.$apply(function () {
-                    	scope.ngModel = scope.clonedNgModel;
-                    	scope.ngShow = false;
-                    });
-                    event.preventDefault();
-                }
-            });
-		},
-		template: '<input type="text" ng-show="ngShow && !ngDisable" class="form-control" ng-model="clonedNgModel" focus="ngShow,true" />'
-	};
-}]);
+});
+
