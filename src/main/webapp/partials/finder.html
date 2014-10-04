@@ -18,7 +18,7 @@
 			<div class="row form-group">
 				<label for="tags" class="col-md-2 control-label">Incl. Tags</label>
 				<div class="col-md-10">
-					<tag-input taglist='data.inclTags' inputdisabled='true' deletecallback='deleteInclTag'></tag-input>
+					<tag-input taglist='data.inclTags' inputdisabled='true' deletecallback='deleteInclTag(changedString)'></tag-input>
 					<span class="help-block">Only locations which offer one of those will be shown. <a href="javascript:void(null);" ng-click="removeAll()">Remove all</a></span>
 				</div>
 			</div>
@@ -26,7 +26,7 @@
 			<div class="row form-group">
 				<label for="tags" class="col-md-2 control-label">Excl. Tags</label>
 				<div class="col-md-10">
-					<tag-input taglist='data.exclTags' inputdisabled='true' deletecallback='deleteExclTag'></tag-input>
+					<tag-input taglist='data.exclTags' inputdisabled='true' deletecallback='deleteExclTag(changedString)'></tag-input>
 					<span class="help-block">List of available tags. <a href="javascript:void(null);" ng-click="addAll()">Add all</a></span>
 				</div>
 			</div>

@@ -6,7 +6,7 @@ LunchyApp.directive 'tagInput', ->
     inputTags: '=taglist'
     autocomplete: '=autocomplete'
     inputDisabled: '=inputdisabled'
-    deletecallback: '='
+    deletecallback: '&'
     acceptautocompleteonly: '='
     
   link: ($scope, element, attrs) ->
@@ -56,7 +56,7 @@ LunchyApp.directive 'tagInput', ->
       $scope.tagText = ""
       
     $scope.deleteTag = (key) ->
-      $scope.deletecallback($scope.tagArray()[key]) if $scope.deletecallback?
+      $scope.deletecallback({changedString:$scope.tagArray()[key]})
       tagArray = $scope.tagArray()
       if tagArray.length > 0 and $scope.tagText.length is 0 and key is `undefined`
         tagArray.pop()
