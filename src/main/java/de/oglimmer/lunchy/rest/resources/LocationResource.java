@@ -3,7 +3,6 @@ package de.oglimmer.lunchy.rest.resources;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,7 +146,7 @@ public class LocationResource extends BaseResource {
 		public LocationResponse create() {
 			LocationRecord locationRec = copyDtoToRecord(new LocationRecord());
 			addInitialData(locationRec);
-			return updateRec(locationRec);
+			return updateRec(locationRec, locationRec.getCreatedOn());
 		}
 
 		public LocationResponse update(Integer id) {
@@ -155,13 +154,13 @@ public class LocationResource extends BaseResource {
 			if (locationRec.getFkUser() != SessionProvider.INSTANCE.getLoggedInUserId(request)) {
 				SecurityProvider.INSTANCE.checkConfirmedUser(request);
 			}
-			return updateRec(locationRec);
+			return updateRec(locationRec, null);
 		}
 
 		private void addInitialData(LocationRecord locationRec) {
 			locationRec.setFkCommunity(CommunityService.get(request));
 			locationRec.setFkUser(SessionProvider.INSTANCE.getLoggedInUserId(request));
-			locationRec.setCreatedOn(new Timestamp(new Date().getTime()));
+			locationRec.setCreatedOn(DateCalcService.getNow());
 			locationRec.setGeoMovedManually((byte) 0);
 			OfficesRecord office = OfficeDao.INSTANCE.getById(locationRec.getFkOffice(), CommunityService.get(request));
 			locationRec.setCountry(office.getCountry());
@@ -184,11 +183,18 @@ public class LocationResource extends BaseResource {
 					|| !locationDto.getCity().equals(locationRec.getCity()) || !locationDto.getZip().equals(locationRec.getZip());
 		}
 
-		private LocationResponse updateRec(LocationRecord locationRec) {
-			locationRec.setLastUpdate(DateCalcService.getNow());
+		private LocationResponse updateRec(LocationRecord locationRec, Timestamp lastUpdate) {
+			updateLastUpdate(locationRec, lastUpdate);
 			updateGeoData(locationRec);
 			LocationDao.INSTANCE.store(locationRec);
 			return BeanMappingProvider.INSTANCE.map(locationRec, LocationResponse.class);
+		}
+
+		private void updateLastUpdate(LocationRecord locationRec, Timestamp lastUpdate) {
+			if (lastUpdate == null) {
+				lastUpdate = DateCalcService.getNow();
+			}
+			locationRec.setLastUpdate(lastUpdate);
 		}
 
 		private void updateGeoData(LocationRecord locationRec) {
