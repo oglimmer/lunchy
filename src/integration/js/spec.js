@@ -39,14 +39,14 @@ describe('Lunchy', function() {
 		var pass = element(by.model('login.password'))
 		pass.sendKeys('fooba');
 
-		element(by.buttonText('Log me in')).click();		
+		element(by.buttonText('Log me in')).click();
+		protractor.getInstance().sleep(250);
 	}
 	
 	it('Login / Logout', function() {
 				
 		login();
-		
-		protractor.getInstance().sleep(500);
+				
 		element(by.linkText('Log out')).click();
 
 	});
@@ -55,12 +55,12 @@ describe('Lunchy', function() {
 		
 		login();
 		
-		element(by.linkText('Add')).click();
+		element(by.linkText('Add')).click();		
 		
 		element(by.model('data.officialName')).sendKeys("First Test Location")
 		element(by.model('data.address')).sendKeys("Alexanderplatz 1")
 		element(by.model('data.city')).sendKeys("Berlin")
-		
-		element(by.buttonText('Save')).click();
+				
+		element(by.buttonText('Save')).click();		
 	});
 });
