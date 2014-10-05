@@ -434,6 +434,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             lng: $scope.childScopeHolder.marker.newPosition.lng()
         });
         $scope.childScopeHolder.marker.pinMoved = false;
+        $scope.initialGeoMovedManually = $scope.data.geoMovedManually = true;
     };
 
     $scope.cancelEdit = function() {
