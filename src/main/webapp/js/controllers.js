@@ -624,9 +624,20 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	$scope.selectedOffice = Authetication.fkBaseOffice;
 	var dataHolder = [];
 	
+	var initPage = ListConfig.page;
 	$scope.tableParams = new ngTableParams(ListConfig, {
         total: dataHolder.length,
         getData: function($defer, params) {
+        	
+        	// HACK: seems like the first parameter of ngTableParams doesn't respect page 
+        	if(initPage!=null) {
+        		if(initPage!=params.page()){
+        			console.log("assert failed."+initPage+"!="+params.page());
+        		}
+        		params.page(initPage);
+        		initPage=null;
+        	}
+        	
         	ListConfig.copyParams(params);	        	
         	
   	        var filterParams = angular.copy(params.filter());
