@@ -2,12 +2,12 @@
 
 
 // Declare app level module which depends on filters, and services
-angular.module('LunchyApp', [
+angular.module('LunchyPortalApp', [
   'ngResource', 'ui.router', 'ui.validate', 'ui.bootstrap', 'google-maps', 'ngTable', 'flow', 'ngTouch', 'ngSanitize', 'ngCookies',
   'LunchyApp.filters',
   'LunchyApp.services',
   'LunchyApp.directives',
-  'LunchyApp.controllers'
+  'LunchyPortalApp.controllers'
 ]).
 config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     $stateProvider.

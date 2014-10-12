@@ -199,7 +199,7 @@
 			<plugin>
 				<groupId>com.theoryinpractise</groupId>
 				<artifactId>coffee-maven-plugin</artifactId>
-				<version>1.4.10</version>
+				<version>1.4.11</version>				
 				<configuration>
 					<coffeeOutputDirectory>${basedir}/src/main/webapp/js</coffeeOutputDirectory>
 					<coffeeJoinSets>
@@ -215,8 +215,40 @@
 				<executions>
 					<execution>
 						<id>coffee</id>
+						<phase>process-resources</phase>
 						<goals>
 							<goal>coffee</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.samaxes.maven</groupId>
+				<artifactId>minify-maven-plugin</artifactId>
+				<version>1.7.4</version>
+				<executions>
+					<execution>
+						<id>default-minify</id>
+						<configuration>
+							<closureLanguage>ECMASCRIPT5_STRICT</closureLanguage>
+							<closureCompilationLevel>WHITESPACE_ONLY</closureCompilationLevel>
+							<charset>UTF-8</charset>
+							<cssSourceDir>css</cssSourceDir>
+							<cssSourceFiles>
+								<cssSourceFile>styles.css</cssSourceFile>
+								<cssSourceFile>bootstrap-theme.min.css</cssSourceFile>
+								<cssSourceFile>html5-boilerplate-main.css</cssSourceFile>
+							</cssSourceFiles>
+							<cssFinalFile>style.css</cssFinalFile>
+							<jsSourceDir>js</jsSourceDir>
+							<jsSourceIncludes>
+								<jsSourceInclude>**/*.js</jsSourceInclude>
+							</jsSourceIncludes>
+							<jsFinalFile>script.js</jsFinalFile>
+							<jsEngine>CLOSURE</jsEngine>
+						</configuration>
+						<goals>
+							<goal>minify</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -234,7 +266,12 @@
 				</executions>
 				<configuration>
 					<jsSrcDir>src/main/webapp/js</jsSrcDir>
-					<jsTestSrcDir>src/test/js</jsTestSrcDir>
+					<sourceIncludes>
+						<include>index/*.js</include>
+						<include>portal/*.js</include>
+						<include>*.js</include>
+					</sourceIncludes>
+					<jsTestSrcDir>src/test/js</jsTestSrcDir>					
 					<webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
 					<!-- <webDriverClassName>org.openqa.selenium.firefox.FirefoxDriver</webDriverClassName>  -->
 					<!-- <webDriverClassName>org.openqa.selenium.chrome.ChromeDriver</webDriverClassName>  -->
@@ -260,6 +297,27 @@
 					</preloadSources>
 				</configuration>
 			</plugin>
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-dependency-plugin</artifactId>
+	            <version>2.9</version>
+	            <executions>
+	                <execution>
+	                    <phase>package</phase>
+	                    <goals><goal>copy</goal></goals>
+	                    <configuration>
+	                        <artifactItems>
+	                            <artifactItem>
+	                                <groupId>com.github.jsimone</groupId>
+	                                <artifactId>webapp-runner</artifactId>
+	                                <version>7.0.40.1</version>
+	                                <destFileName>webapp-runner.jar</destFileName>
+	                            </artifactItem>
+	                        </artifactItems>
+	                    </configuration>
+	                </execution>
+	            </executions>
+	        </plugin>
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>

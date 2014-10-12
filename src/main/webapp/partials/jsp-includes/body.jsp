@@ -1,4 +1,7 @@
+<%@page import="de.oglimmer.lunchy.services.FileService"%>
 <%@page import="de.oglimmer.lunchy.services.LunchyVersion"%>
+<%@ taglib prefix="lunchy" uri="http://oglimmer.de/lunchy/tags" %>
+
 <% String DEBUG = (LunchyVersion.INSTANCE.isRunsOnDev() ? "" : "min."); %>
 
 
@@ -22,4 +25,17 @@
         <script src="js/ext/angular-google-maps.1.2.2.min.js"></script><!-- google-maps -->
 
         <script>$(function() { $.ajax({ url: "webjars/zxcvbn/1.0/zxcvbn.js", dataType: "script", cache: true }); });</script>
+        
+        <% if(LunchyVersion.INSTANCE.isRunsOnDev() || !FileService.exists("js/script.min.js", getServletContext()) ) { %>
+		<lunchy:script src="js/index/app.js"/>
+	    <lunchy:script src="js/portal/app.js"/>
+	    <lunchy:script src="js/services.js"/>
+	    <lunchy:script src="js/index/controllers.js"/>
+	    <lunchy:script src="js/portal/controllers.js"/>
+	    <lunchy:script src="js/filters.js"/>
+	    <lunchy:script src="js/directives.js"/>
+	    <lunchy:script src="js/directives_coffee.js"/>
+	    <% } else { %>
+	    <lunchy:script src="js/script.min.js"/>
+	    <% } %>
         

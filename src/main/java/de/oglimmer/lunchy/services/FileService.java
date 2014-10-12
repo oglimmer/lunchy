@@ -4,11 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.core.MediaType;
 
 public class FileService {
 
 	private FileService() {
+	}
+
+	public static boolean exists(String webServedFile, ServletContext jspContext) {
+		String fullQualFileName = jspContext.getRealPath(webServedFile);
+		if (fullQualFileName != null) {
+			File file = new File(fullQualFileName);
+			return file.exists();
+		}
+		return false;
 	}
 
 	public static void move(String uniqueId, String filename) throws IOException {

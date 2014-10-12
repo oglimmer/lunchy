@@ -1,4 +1,4 @@
-LunchyApp = angular.module('LunchyApp');
+LunchyApp = angular.module('LunchyApp.directives')
 
 LunchyApp.directive 'pictureEdit', ->
   restrict: 'E'

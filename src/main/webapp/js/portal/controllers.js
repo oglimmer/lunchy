@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('LunchyApp.controllers', []).
+angular.module('LunchyPortalApp.controllers', []).
 controller('LunchyControllerMain', ['$scope',
         function($scope) {
 
