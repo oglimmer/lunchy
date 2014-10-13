@@ -20,7 +20,7 @@ public enum EmailProvider {
 	INSTANCE;
 
 	private static final String DOMAIN = "%s.lunchylunch.com";
-	private static final String URL = "http://%s/lunchy";
+	private static final String URL = "http://%s";
 
 	private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
