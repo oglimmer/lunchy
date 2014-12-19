@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import lombok.SneakyThrows;
 
@@ -40,58 +41,55 @@ public enum BeanMappingProvider {
 	}
 
 	public <T> T map(Object source, Class<T> destinationClass) {
-		T obj = dbm.map(source, destinationClass);
-		keyResolver.resolve(source, obj);
-		return obj;
+		return createObjectMapping(source, destinationClass);
 	}
 
 	public <T> List<T> mapList(Collection<?> col, Class<T> clazz) {
-		List<T> resultList = new ArrayList<>();
-		for (Object rec : col) {
-			resultList.add(map(rec, clazz));
-		}
-		return resultList;
+		return col.stream().map(rec -> createObjectMapping(rec, clazz)).collect(Collectors.toList());
 	}
 
 	public <T> List<T> mapListCustomDto(Collection<? extends Record> col, Class<T> clazz) {
-		List<T> resultList = new ArrayList<>();
-		for (Record rec : col) {
-			resultList.add(map(new DozerAdapter(rec), clazz));
-		}
-		return resultList;
+		return col.stream().map(rec -> new DozerAdapter(rec)).map(rec -> createObjectMapping(rec, clazz))
+				.collect(Collectors.toList());
+	}
+
+	private <T> T createObjectMapping(Object sourceObject, Class<T> destinationClass) {
+		T resultObject = dbm.map(sourceObject, destinationClass);
+		keyResolver.resolve(sourceObject, resultObject);
+		return resultObject;
 	}
 
 }
 
 /**
- * Creates Dozer mappings for all target classes annotated with @RestDto. It is assumed that the source class is of type DozerAdapter. As
- * this is a generic data container it creates a field mapping for each attribute in the target class.
+ * Creates Dozer mappings for all target classes annotated with @RestDto. It is assumed that the source class is of type
+ * DozerAdapter. As this is a generic data container it creates a field mapping for each attribute in the target class.
  */
 class AutoBeanMappingBuilder extends BeanMappingBuilder {
 	@Override
 	protected void configure() {
 		Reflections ref = new Reflections("de.oglimmer");
 		Set<Class<?>> allRestDtoClasses = ref.getTypesAnnotatedWith(RestDto.class);
-		for (Class<?> clazz : allRestDtoClasses) {
-			handleRestDtoClass(clazz);
-		}
+		allRestDtoClasses.forEach(clazz -> handleRestDtoClass(clazz));
 	}
 
 	private void handleRestDtoClass(Class<?> clazz) {
 		TypeDefinition from = new TypeDefinition(DozerAdapter.class);
 		TypeDefinition to = new TypeDefinition(clazz);
 		TypeMappingBuilder tmb = mapping(from, to);
-		for (Field field : getAllFields(clazz)) {
-			if (!field.isSynthetic()) {
-				ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
-				if (foreignKey == null) {
-					createFields(tmb, field);
-				}
+		ClassFields.getAllDeep(clazz).forEach(field -> handleRestDtoField(tmb, field));
+	}
+
+	private void handleRestDtoField(TypeMappingBuilder tmb, Field field) {
+		if (!field.isSynthetic()) {
+			ForeignKey foreignKey = field.getAnnotation(ForeignKey.class);
+			if (foreignKey == null) {
+				createField(tmb, field);
 			}
 		}
 	}
 
-	private void createFields(TypeMappingBuilder typeMappingBuilder, Field field) {
+	private void createField(TypeMappingBuilder typeMappingBuilder, Field field) {
 		// fieldA (the from) is of type DozerAdapter
 		FieldDefinition fieldA = new FieldDefinition("this");
 		fieldA.mapMethods("getValue", null);
@@ -101,32 +99,28 @@ class AutoBeanMappingBuilder extends BeanMappingBuilder {
 		typeMappingBuilder.fields(fieldA, fieldB);
 	}
 
-	private Set<Field> getAllFields(Class<?> type) {
-		Set<Field> fields = new HashSet<>();
-		for (Class<?> c = type; c != null; c = c.getSuperclass()) {
-			fields.addAll(Arrays.asList(c.getDeclaredFields()));
-		}
-		return fields;
-	}
 };
 
 /**
  * Fields on a target DTO annotated with ForeignKey, needs to get their value from another Record
  */
 class KeyResolver {
+
 	/**
 	 * @param loadedRecord
 	 *            either of type Record or DozerAdapter
 	 * @param targetDto
 	 */
-	@SneakyThrows(value = { IllegalArgumentException.class, IllegalAccessException.class, SecurityException.class,
-			InvocationTargetException.class, NoSuchMethodException.class })
 	public void resolve(Object loadedRecord, Object targetDto) {
-		for (Field fieldOnTargetDto : getAllFields(targetDto.getClass())) {
-			ForeignKey foreignKey = fieldOnTargetDto.getAnnotation(ForeignKey.class);
-			if (foreignKey != null) {
-				setFieldWithForeignKeyAnnotation(loadedRecord, targetDto, fieldOnTargetDto, foreignKey);
-			}
+		Set<Field> allFields = ClassFields.getAllDeep(targetDto.getClass());
+		allFields.forEach(fieldOnTargetDto -> resolveField(loadedRecord, targetDto, fieldOnTargetDto));
+	}
+
+	@SneakyThrows(value = { NoSuchMethodException.class, InvocationTargetException.class, IllegalAccessException.class })
+	private void resolveField(Object loadedRecord, Object targetDto, Field fieldOnTargetDto) {
+		ForeignKey foreignKey = fieldOnTargetDto.getAnnotation(ForeignKey.class);
+		if (foreignKey != null) {
+			setFieldWithForeignKeyAnnotation(loadedRecord, targetDto, fieldOnTargetDto, foreignKey);
 		}
 	}
 
@@ -156,8 +150,8 @@ class KeyResolver {
 		}
 	}
 
-	private Integer getIntValueGeneric(DozerAdapter object, String recordKey) throws IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, NoSuchMethodException, SecurityException {
+	private Integer getIntValueGeneric(DozerAdapter object, String recordKey) throws IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		Method method = object.getClass().getDeclaredMethod("getValue", String.class);
 		return (Integer) method.invoke(object, recordKey);
 	}
@@ -173,11 +167,21 @@ class KeyResolver {
 		return record.getClass().getMethod("get" + StringUtils.capitalize(getterMethodName)).invoke(record);
 	}
 
-	private Set<Field> getAllFields(Class<?> type) {
+}
+
+class ClassFields {
+
+	static Set<Field> getAllDeep(Class<?> type) {
 		Set<Field> fields = new HashSet<>();
-		for (Class<?> c = type; c != null; c = c.getSuperclass()) {
-			fields.addAll(Arrays.asList(c.getDeclaredFields()));
-		}
+		getClassHierachy(type).forEach(clazz -> fields.addAll(Arrays.asList(clazz.getDeclaredFields())));
 		return fields;
+	}
+
+	static private List<Class<?>> getClassHierachy(Class<?> type) {
+		List<Class<?>> listOfAllClasses = new ArrayList<>();
+		for (Class<?> c = type; c != null; c = c.getSuperclass()) {
+			listOfAllClasses.add(c);
+		}
+		return listOfAllClasses;
 	}
 }
