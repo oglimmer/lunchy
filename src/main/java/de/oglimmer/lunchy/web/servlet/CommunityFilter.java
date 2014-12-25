@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.common.base.CharMatcher;
+import com.google.common.cache.CacheLoader.InvalidCacheLoadException;
 
 import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
@@ -73,11 +74,10 @@ public class CommunityFilter implements Filter {
 		}
 
 		private void processCallToCommunityDomain(FilterChain chain) throws IOException, ServletException {
-			CommunitiesRecord community = getCommunity();
-			if (community != null) {
-				CommunityService.set(request, community);
+			try {
+				CommunityService.set(request, getCommunity());
 				processCallToRuntime(chain);
-			} else {
+			} catch (InvalidCacheLoadException e) {
 				String redirect = request.getScheme() + "://" + removeSubDomains(domain)
 						+ (request.getServerPort() != 80 ? ":" + request.getServerPort() : "");
 				response.sendRedirect(redirect);
