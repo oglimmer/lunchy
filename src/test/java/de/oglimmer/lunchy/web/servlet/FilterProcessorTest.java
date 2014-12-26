@@ -29,6 +29,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
+import com.google.common.cache.CacheLoader.InvalidCacheLoadException;
+
 import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
 import de.oglimmer.lunchy.web.servlet.CommunityFilter.FilterProcessor;
@@ -219,7 +221,8 @@ public class FilterProcessorTest {
 
 		// stub methods
 		Whitebox.setInternalState(CommunityDao.class, "INSTANCE", mockInstance);
-		PowerMockito.when(mockInstance.getByDomain(anyString())).thenReturn(null);
+		PowerMockito.when(mockInstance.getByDomain(anyString())).thenThrow(
+				new InvalidCacheLoadException("CacheLoader returned null for key foo."));
 		when(request.getServerName()).thenReturn("foo.lunchylunch.com");
 		when(request.getServletPath()).thenReturn("/index.jsp");
 		when(request.getScheme()).thenReturn("https");
