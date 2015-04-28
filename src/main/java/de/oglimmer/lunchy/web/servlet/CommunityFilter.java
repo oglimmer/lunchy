@@ -62,6 +62,12 @@ public class CommunityFilter implements Filter {
 		}
 
 		public void doFilter(FilterChain chain) throws IOException, ServletException {
+			
+			if ("adtech.lunchylunch.com".equalsIgnoreCase(domain) && !request.isSecure()) {
+				response.sendRedirect("https://adtech.lunchylunch.com");
+				return;
+			}
+			
 			if (isCallToRuntimeRestInterface()) {
 				processCallToRuntime(chain);
 			} else if (isCallWithoutCommunitySubdomain()) {
