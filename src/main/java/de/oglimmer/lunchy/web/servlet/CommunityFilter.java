@@ -63,7 +63,7 @@ public class CommunityFilter implements Filter {
 
 		public void doFilter(FilterChain chain) throws IOException, ServletException {
 			
-			if ("adtech.lunchylunch.com".equalsIgnoreCase(domain) && !request.isSecure()) {
+			if ("adtech.lunchylunch.com".equalsIgnoreCase(domain) && !request.isSecure() && !isCallToPictureRestInterface()) {
 				response.sendRedirect("https://adtech.lunchylunch.com");
 				return;
 			}
@@ -125,6 +125,10 @@ public class CommunityFilter implements Filter {
 
 		private boolean isCallToRuntimeRestInterface() {
 			return "/rest".equals(servletPath) && pathInfo.startsWith("/runtime");
+		}
+
+		private boolean isCallToPictureRestInterface() {
+			return "/rest".equals(servletPath) && pathInfo.startsWith("/pictures");
 		}
 	}
 
