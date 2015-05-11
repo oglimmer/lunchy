@@ -21,6 +21,7 @@ public enum EmailProvider {
 
 	private static final String DOMAIN = "%s.lunchylunch.com";
 	private static final String URL = "http://%s";
+	private static final String URLS = "https://%s";
 
 	private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
@@ -30,7 +31,12 @@ public enum EmailProvider {
 	}
 
 	public String getUrl(int fkCommunity) {
-		return String.format(URL, getDomain(fkCommunity));
+		String domain = getDomain(fkCommunity);
+		if (domain.matches(LunchyProperties.INSTANCE.getSecureDomainPattern())) {
+			return String.format(URLS, domain);
+		} else {
+			return String.format(URL, domain);
+		}
 	}
 
 	public String getDomain(int fkCommunity) {
