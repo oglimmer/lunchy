@@ -102,4 +102,7 @@ public enum LunchyProperties {
 				System.getProperty("lunchy.email.notification.updateFrequence", "300")));
 	}
 
+	public String getSecureDomainPattern() {
+		return prop.getProperty("secure.domain.pattern", "");
+	}
 }

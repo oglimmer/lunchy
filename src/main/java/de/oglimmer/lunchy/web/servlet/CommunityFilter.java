@@ -20,6 +20,7 @@ import com.google.common.cache.CacheLoader.InvalidCacheLoadException;
 import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
 import de.oglimmer.lunchy.services.CommunityService;
+import de.oglimmer.lunchy.services.LunchyProperties;
 
 @Slf4j
 @WebFilter(urlPatterns = "/*")
@@ -62,21 +63,29 @@ public class CommunityFilter implements Filter {
 		}
 
 		public void doFilter(FilterChain chain) throws IOException, ServletException {
-			
-			if ("adtech.lunchylunch.com".equalsIgnoreCase(domain) && !request.isSecure() && !isCallToPictureRestInterface()) {
-				response.sendRedirect("https://adtech.lunchylunch.com");
-				return;
-			}
-			
-			if (isCallToRuntimeRestInterface()) {
-				processCallToRuntime(chain);
-			} else if (isCallWithoutCommunitySubdomain()) {
-				processCallWithoutCommunitySubdomain(chain);
-			} else if (isCallToPortalPage()) {
-				processCallToPortalPage();
+			if (redirectToSecureNeeded()) {
+				redirectToSecure();
 			} else {
-				processCallToCommunityDomain(chain);
+				if (isCallToRuntimeRestInterface()) {
+					processCallToRuntime(chain);
+				} else if (isCallWithoutCommunitySubdomain()) {
+					processCallWithoutCommunitySubdomain(chain);
+				} else if (isCallToPortalPage()) {
+					processCallToPortalPage();
+				} else {
+					processCallToCommunityDomain(chain);
+				}
 			}
+		}
+
+		private boolean redirectToSecureNeeded() {
+			return domain.matches(LunchyProperties.INSTANCE.getSecureDomainPattern()) && !request.isSecure()
+					&& !isCallToPictureRestInterface();
+		}
+
+		private void redirectToSecure() throws IOException {
+			String queryParam = request.getQueryString() != null ? "?" + request.getQueryString() : "";
+			response.sendRedirect("https://" + domain + request.getRequestURI() + queryParam);
 		}
 
 		private void processCallToCommunityDomain(FilterChain chain) throws IOException, ServletException {
