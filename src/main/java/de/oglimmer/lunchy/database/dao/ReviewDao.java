@@ -31,11 +31,18 @@ public enum ReviewDao implements Dao<ReviewsRecord> {
 			public void exec(DSLContext context) {
 				context.update(Location.LOCATION).set(Location.LOCATION.TURN_AROUND_TIME, getSubSelectToCalcAvgTurnAroundTime(context))
 						.where(Location.LOCATION.ID.equal(review.getFkLocation())).execute();
+				// HACK! the line above will set TURN_AROUND_TIME=0 if nobody set any times. As 0 doesn't make any sense, let's update them to null
+				context.update(Location.LOCATION).set(Location.LOCATION.TURN_AROUND_TIME, (Integer) null)
+						.where(Location.LOCATION.TURN_AROUND_TIME.equal(0)).execute();
+				
 			}
 
 			@SuppressWarnings("rawtypes")
 			private Select getSubSelectToCalcAvgTurnAroundTime(DSLContext context) {
-				return context.select(DSL.avg(DSL.isnull(Reviews.REVIEWS.ON_SITE_TIME, 0).add(DSL.isnull(Reviews.REVIEWS.TRAVEL_TIME, 0))))
+				//select ifnull(avg(travel_Time),0)+ifnull(avg(on_Site_Time),0) from reviews where fk_location=?
+				return context
+						.select(DSL.isnull(DSL.avg(Reviews.REVIEWS.ON_SITE_TIME), 0)
+								.add(DSL.isnull(DSL.avg(Reviews.REVIEWS.TRAVEL_TIME), 0)))
 						.from(Reviews.REVIEWS).where(Reviews.REVIEWS.FK_LOCATION.equal(Location.LOCATION.ID));
 			}
 		};

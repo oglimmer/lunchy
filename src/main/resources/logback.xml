@@ -18,6 +18,10 @@
 	<logger name="de.oglimmer" level="debug"></logger>
 	
 	<logger name="de.oglimmer.lunchy.web.servlet.CommunityFilter" level="info"></logger>
+	
+	<!-- 
+	<logger name="org.jooq" level="debug"></logger>
+	 -->
 	 
 	<root level="info">
 		<appender-ref ref="STDOUT" />

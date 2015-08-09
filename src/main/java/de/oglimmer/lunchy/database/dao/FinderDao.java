@@ -162,10 +162,12 @@ public enum FinderDao {
 				cond = cond.or(LOCATION.TAGS.like("%" + tag + "%"));
 			}
 
-			return sjs
-					.where(cond)
-					.and(LOCATION.TURN_AROUND_TIME.lessOrEqual(maxTime).and(
-							LOCATION.FK_COMMUNITY.equal(fkCommunity).and(LOCATION.FK_OFFICE.equal(fkOffice)))).fetch();
+			Condition turnAroundIsNull = LOCATION.TURN_AROUND_TIME.isNull();
+			Condition turnAroundMeetsMaxTime = LOCATION.TURN_AROUND_TIME.lessOrEqual(maxTime);
+			Condition turnAround = turnAroundIsNull.or(turnAroundMeetsMaxTime);
+			Condition fkCommunityCond = LOCATION.FK_COMMUNITY.equal(fkCommunity);
+			Condition fkOfficeCond = LOCATION.FK_OFFICE.equal(fkOffice);
+			return sjs.where(cond).and(turnAround.and(fkCommunityCond.and(fkOfficeCond))).fetch();
 		}
 	}
 
