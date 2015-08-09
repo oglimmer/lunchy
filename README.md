@@ -49,3 +49,8 @@ TIPS FOR DEV
 
 - install coffee-script (https://www.npmjs.org/package/coffee-script) and run `coffee -o webapp/js  -cw coffee/ coffee -o webapp/js  -cw coffee/` from src/main
 
+
+HOW TO RE-CALC THE TURN_ROUND_TIMES ON LOCATION
+===============================================
+update location set turn_around_time = (select ifnull(avg(travel_Time),0)+ifnull(avg(on_Site_Time),0) from reviews where reviews.fk_location=location.id);
+update location set turn_around_time = null where turn_around_time = 0;
