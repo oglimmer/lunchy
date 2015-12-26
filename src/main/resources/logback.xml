@@ -19,6 +19,8 @@
 	
 	<logger name="de.oglimmer.lunchy.web.servlet.CommunityFilter" level="info"></logger>
 	
+	<logger name="com.mchange.v2.c3p0.SQLWarnings" level="warn"></logger>
+		
 	<!-- 
 	<logger name="org.jooq" level="debug"></logger>
 	 -->

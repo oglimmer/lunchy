@@ -33,15 +33,18 @@ public enum DBConn {
 	@SneakyThrows(value = SQLException.class)
 	public Connection getUnPooled() {
 		setupEnv();
-		log.debug("Creating single-use-con for {} with user {}", LunchyProperties.INSTANCE.getDbServerUrl()
-				+ LunchyProperties.INSTANCE.getDbSchema(), LunchyProperties.INSTANCE.getDbUser());
-		return DriverManager.getConnection(LunchyProperties.INSTANCE.getDbServerUrl() + LunchyProperties.INSTANCE.getDbSchema(),
-				LunchyProperties.INSTANCE.getDbUser(), LunchyProperties.INSTANCE.getDbPassword());
+		log.debug("Creating single-use-con for {} with user {}", getConnectionUrl(), LunchyProperties.INSTANCE.getDbUser());
+		return DriverManager.getConnection(getConnectionUrl(), LunchyProperties.INSTANCE.getDbUser(),
+				LunchyProperties.INSTANCE.getDbPassword());
 	}
 
 	@SneakyThrows(value = SQLException.class)
 	public Connection get() {
 		return pooledDS.getConnection();
+	}
+	
+	private String getConnectionUrl() {
+		return LunchyProperties.INSTANCE.getDbServerUrl() + LunchyProperties.INSTANCE.getDbSchema() + "?useSSL=false";
 	}
 
 	private void setupEnv() {
@@ -68,13 +71,10 @@ public enum DBConn {
 	@SneakyThrows(value = { SQLException.class })
 	public void setupDriver() {
 		setupEnv();
-		log.debug("Creating con-pool for {} with user {}",
-				LunchyProperties.INSTANCE.getDbServerUrl() + LunchyProperties.INSTANCE.getDbSchema(),
-				LunchyProperties.INSTANCE.getDbUser());
+		log.debug("Creating con-pool for {} with user {}", getConnectionUrl(), LunchyProperties.INSTANCE.getDbUser());
 
-		DataSource unpooledDS = DataSources.unpooledDataSource(LunchyProperties.INSTANCE.getDbServerUrl()
-				+ LunchyProperties.INSTANCE.getDbSchema(), LunchyProperties.INSTANCE.getDbUser(),
-				LunchyProperties.INSTANCE.getDbPassword());
+		DataSource unpooledDS = DataSources.unpooledDataSource(getConnectionUrl(),
+				LunchyProperties.INSTANCE.getDbUser(), LunchyProperties.INSTANCE.getDbPassword());
 
 		pooledDS = DataSources.pooledDataSource(unpooledDS, "poolDS");
 	}

@@ -385,15 +385,15 @@
 			newColumnName="fk_User" oldColumnName="fkUser" />
 	</changeSet>
 	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-19">
-		<renameColumn tableName="users" columnDataType="TIMESTAMP(19)"
+		<renameColumn tableName="users" columnDataType="TIMESTAMP"
 			newColumnName="last_Login" oldColumnName="lastLogin" />
 	</changeSet>
 	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-20">
-		<renameColumn tableName="reviews" columnDataType="TIMESTAMP(19)"
+		<renameColumn tableName="reviews" columnDataType="TIMESTAMP"
 			newColumnName="last_Update" oldColumnName="lastUpdate" />
 	</changeSet>
 	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408656902906-21">
-		<renameColumn tableName="location" columnDataType="TIMESTAMP(19)"
+		<renameColumn tableName="location" columnDataType="TIMESTAMP"
 			newColumnName="last_Update" oldColumnName="lastUpdate" />
 	</changeSet>
 	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-22">
@@ -560,14 +560,14 @@
     </changeSet>
     <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408917616128-2">
         <addColumn tableName="users">
-            <column name="last_Email_Update" type="TIMESTAMP(19)">
+            <column name="last_Email_Update" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
     </changeSet>
     <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408917616128-3">
         <addColumn tableName="users">
-            <column name="next_Email_Update" type="TIMESTAMP(19)">
+            <column name="next_Email_Update" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
         </addColumn>

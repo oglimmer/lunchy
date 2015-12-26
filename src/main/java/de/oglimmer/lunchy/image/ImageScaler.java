@@ -119,8 +119,8 @@ abstract public class ImageScaler {
 
 	private static int getOrientation(BufferedInputStream bis) throws IOException {
 		try {
-			Metadata metadata = ImageMetadataReader.readMetadata(bis, false);
-			Directory directory = metadata.getDirectory(ExifIFD0Directory.class);
+			Metadata metadata = ImageMetadataReader.readMetadata(bis);
+			Directory directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 			if (directory != null) {
 				return directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
 			}

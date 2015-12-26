@@ -54,3 +54,9 @@ HOW TO RE-CALC THE TURN_ROUND_TIMES ON LOCATION
 ===============================================
 update location set turn_around_time = (select ifnull(avg(travel_Time),0)+ifnull(avg(on_Site_Time),0) from reviews where reviews.fk_location=location.id);
 update location set turn_around_time = null where turn_around_time = 0;
+
+MYSQL COMPLAINS ABOUT DEFAULT VALUE FOR TIMESTAMPS?
+===================================================
+SET GLOBAL ...
+SET SESSION ...
+... sql_mode = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'   

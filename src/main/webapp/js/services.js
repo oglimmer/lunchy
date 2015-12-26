@@ -103,7 +103,13 @@ factory('TagDao', ['$resource', function($resource) {
     return $resource('rest/tags');
 }]).
 factory('FinderDao', ['$resource', function($resource) {
-	return $resource('rest/finder');
+	return $resource('rest/finder', {}, {
+		'queryRandom': {
+			method: 'GET',
+            url: 'rest/finder/random',
+            isArray: true
+		}
+	});
 }]).
 factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 'CommunityService', '$cookies',
     function($modal, $q, LoginDao, $rootScope, StorageService, OfficesDao, CommunityService, $cookies) {
@@ -377,6 +383,6 @@ factory('FinderSearchParameter', [ function () {
 		inclTags: "",
 		exclTags: "",
 		partner: "",
-		selectedOffice: -1
+		selectedOffice: null
 	};
 }]);

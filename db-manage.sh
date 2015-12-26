@@ -4,7 +4,7 @@ STAGING=oli_lunchy_staging
 DEV=oli_lunchy
 DIFF_FILE=/tmp/liquibase_diff.xml
 UPDATE_FILE=/tmp/liquibase_diff.sql
-CLASSPATH=$HOME/.m2/repository/mysql/mysql-connector-java/5.1.31/mysql-connector-java-5.1.31.jar
+CLASSPATH=$HOME/.m2/repository/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar
 
 usage="$(basename "$0") [-d] [-u] [-i] - liquibase wrapper
 

@@ -20,8 +20,8 @@
             <div class="row form-group">
                 <label for="fkBaseOffice" class="col-md-2 control-label">Your office</label>
                 <div class="col-md-10">
-                    <select class="form-control" id="fkBaseOffice" ng-model="data.fkBaseOffice" required>
-                        <option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==data.fkBaseOffice">{{office.name}}</option>
+                    <select class="form-control" id="selectedOffice" ng-options="office.name for office in offices track by office.id"
+                    	 ng-model="data.selectedOffice" required>                        
                     </select>
                 </div>
             </div>

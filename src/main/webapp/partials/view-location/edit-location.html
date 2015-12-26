@@ -4,8 +4,8 @@
         <div class="row form-group">
             <label for="fkOffice" class="col-md-2 control-label">Office</label>
             <div class="col-md-10">
-                <select class="form-control" ng-model="data.fkOffice">
-                    <option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==data.fkOffice">{{office.name}}</option>
+                <select class="form-control" ng-model="data.selectedOffice" 
+                	ng-options="office.name for office in offices track by office.id" ng-change="selectedOfficeChanged()">                    
                 </select>
             </div>
         </div>

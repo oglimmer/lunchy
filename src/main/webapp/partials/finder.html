@@ -9,8 +9,8 @@
             <div class="row form-group">
                 <label for="selectedOffice" class="col-md-2 control-label">Office</label>
                 <div class="col-md-10">
-                    <select class="form-control" id="selectedOffice" ng-model="data.selectedOffice" ng-change="selectedOfficeChanged()">
-                        <option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==data.selectedOffice">{{office.name}}</option>
+                    <select class="form-control" id="selectedOffice" ng-model="data.selectedOffice" 
+                    	ng-change="selectedOfficeChanged()" ng-options="office.name for office in offices track by office.id">                        
                     </select>
                 </div>
             </div>
@@ -48,8 +48,17 @@
 			</div>
 
 			<div class="row form-group">
+				<label for="maxTime" class="col-md-2 control-label">Min rating</label>
+				<div class="col-md-10">
+					<input type="number" class="form-control" id="minRating" name="minRating" ng-model="data.minRating" placeholder="e.g. 4">
+					<span class="help-block">Only locations which match the minimum rating will be shown. Use 0 to show only locations without a complete rating.</span>
+				</div>
+			</div>
+
+			<div class="row form-group">
 				<div class="col-md-10 col-md-offset-2">
 					<button type="button" class="btn btn-primary" ng-click="search()">Advise!</button>
+					<button type="button" class="btn btn-primary" ng-click="searchRandom()">Get me a random one!</button>
 				</div>
 			</div>
 

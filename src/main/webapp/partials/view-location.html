@@ -5,41 +5,41 @@
 
 	<h4>{{ data.officialName }}</h4>
 
-	<div class="form-group">
+	<div class="form-group" ng-controller="LunchyControllerViewTab">
 
-        <tabset justified="true" ng-show="showTabMode">
-            <tab heading="Information" active="tabs.active[0]" disabled="tabs.disabled[0]">
+        <uib-tabset justified="true" ng-show="showTabMode">
+            <uib-tab heading="Information" active="tabs.active[0]" disabled="tabs.disabled[0]">
                 <div ng-include="'partials/view-location/base-data.html'"></div>
-            </tab>
-            <tab heading="Reviews ({{ childScopeHolder.reviews.length }})" active="tabs.active[1]" disabled="tabs.disabled[1]">
+            </uib-tab>
+            <uib-tab heading="Reviews ({{ childScopeHolder.reviews.length }})" active="tabs.active[1]" disabled="tabs.disabled[1]">
                 <div ng-include="'partials/view-location/review-pane.html'"></div>
-            </tab>
-            <tab heading="Pictures ({{ childScopeHolder.pictures.length }})" active="tabs.active[2]" disabled="tabs.disabled[2]">
-                <carousel no-transition="carouselNoTransition">
-                    <slide ng-repeat="pic in childScopeHolder.pictures" active="pic.active">
+            </uib-tab>
+            <uib-tab heading="Pictures ({{ childScopeHolder.pictures.length }})" active="tabs.active[2]" disabled="tabs.disabled[2]">
+                <uib-carousel no-transition="carouselNoTransition">
+                    <uib-slide ng-repeat="pic in childScopeHolder.pictures" active="pic.active">
                         <img ng-src="./rest/pictures/{{pic.filename}}" style="margin:auto;"/>
                         <div class="carousel-caption">
                             <p class="removeOnExtraSmall" ng-click="childScopeHolder.editPicCap[$index]=!childScopeHolder.editPicCap[$index]" ng-hide="childScopeHolder.editPicCap[$index] && allowedChangeCaption['pic'+pic.id]">({{pic.upVotes}}) {{pic.caption}} by {{pic.creationUser}}</p>
                             <picture-edit ng-show="childScopeHolder.editPicCap[$index]" ng-disable="!allowedChangeCaption['pic'+pic.id]" ng-model="pic.caption" />
                         </div>
-                    </slide>
-                </carousel>                
+                    </uib-slide>
+                </uib-carousel>                
                 <div class="top17" ng-show="showButtonsMode && childScopeHolder.pictures.length > 0">
                     <div class="btn btn-success pull-right" btn-checkbox ng-model="childScopeHolder.currentPicVoted" ng-click="picVoteClicked(childScopeHolder.currentPicVoted)">
                         <span class="glyphicon glyphicon-thumbs-up" style="font-size: 22px"></span>
                     </div>
                 </div>
                 <div ng-show="addPictureMode" ng-include="'partials/view-location/add-picture.html'"></div>
-            </tab>
-            <tab heading="Map" ng-click="mapSelected()" active="tabs.active[3]" disabled="tabs.disabled[3]" ng-controller="LunchyControllerViewMap">
+            </uib-tab>
+            <uib-tab heading="Map" select="mapSelected()" active="tabs.active[3]" disabled="tabs.disabled[3]">
                 <div ng-if="mapTabShown">
                     <google-map id="locationMap" center="map.center" zoom="map.zoom" draggable="true" events='map.events'>
                         <marker idKey='childScopeHolder.marker.id' coords='childScopeHolder.marker.coords' options="childScopeHolder.marker.markerOptions" events="childScopeHolder.marker.events" />
                         <marker ng-repeat="marker in officeMarker" idKey='marker.id' coords='marker.coords' options="marker.markerOptions" icon="'images/office.png'"/>
                     </google-map>
                 </div>
-            </tab>
-        </tabset>
+            </uib-tab>
+        </uib-tabset>
 
 	</div>
 

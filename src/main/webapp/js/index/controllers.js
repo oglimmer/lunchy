@@ -132,17 +132,21 @@ controller('LunchyControllerPasswordReset', ['$scope', 'UserDao', '$location', '
 }]).
 controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'OfficesDao', 'Authetication', 'TagService', 'AlertPaneService', function ($scope, $location, LocationsDao, OfficesDao, Authetication, TagService, AlertPaneService) {
 	AlertPaneService.add($scope);
+
+	function loadTags() {
+		TagService.get({selectedOffice:$scope.data.selectedOffice.id}).then(function(data) {
+			$scope.allTags = data;
+		});
+	}
 	
 	$scope.data = {};
-	
+	$scope.data.selectedOffice = null;	
 	$scope.allTags = [];
-	TagService.get().then(function(data) {
-		$scope.allTags = data;
-	});
 	
 	OfficesDao.query(function(offices) {
 		$scope.offices = offices;
-		$scope.data.fkOffice = Authetication.fkBaseOffice;
+		$scope.data.selectedOffice = _.find($scope.offices, function(office) { return office.id == Authetication.fkBaseOffice; });
+		$scope.selectedOfficeChanged();
 	});
 	
 	$scope.submitAdd = function() {				
@@ -154,18 +158,23 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'Offic
 		});			
 	};
 	
+	$scope.selectedOfficeChanged = function() {
+		$scope.fkOffice = $scope.data.selectedOffice.id;
+		loadTags();
+	}
+	
 }]).
 controller('LunchyControllerViewEditLocation', ['$scope', 'LocationsDao', 'TagService', 
-	function ($scope, LocationsDao, TagService) {
+                                                function ($scope, LocationsDao, TagService) {
 
-    // available tags in auto-completion
-    $scope.allTags = [];
-
-    // load all tags
-    TagService.get().then(function(data) {
-        $scope.allTags = data;
-    });
-
+	function loadTags() {		
+		TagService.get({selectedOffice:$scope.data.selectedOffice.id}).then(function(data) {
+			$scope.allTags = data;
+		});
+	}
+	
+	$scope.allTags = [];
+		
     $scope.editLocationSave = function() {
         LocationsDao.save($scope.data, function(result) {
             $scope.tabs.active = [true, false, false, false];
@@ -174,7 +183,18 @@ controller('LunchyControllerViewEditLocation', ['$scope', 'LocationsDao', 'TagSe
             $scope.alerts.push({type:'danger', msg: 'Error while saving location: ' + result.statusText});
         });
     };
-
+	
+	$scope.selectedOfficeChanged = function() {
+		$scope.fkOffice = $scope.data.selectedOffice.id;
+		loadTags();
+	}
+	
+	$scope.$watch('editLocationMode', function(newValue, oldValue) {
+		if(newValue) {	    	
+	    	$scope.data.selectedOffice = _.find($scope.offices, function(office) { return office.id == $scope.data.fkOffice; });
+	    	$scope.selectedOfficeChanged();
+		}
+    });
 	
 }]).
 controller('LunchyControllerViewAddPicture', ['$scope', 'LocationsDao', 'PicturesDao', '$stateParams',
@@ -259,7 +279,7 @@ controller('LunchyControllerViewModifyReview', ['$scope', 'ReviewDao',
     }    
 	
 }]).
-controller('LunchyControllerViewMap', ['$scope', function ($scope) {
+controller('LunchyControllerViewTab', ['$scope', function ($scope) {
 	
 	function createMap() {
 		return {
@@ -613,18 +633,38 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'ngTableParams', 'ListConfig', 'Comparator', 'OfficesDao', 'Authetication',
                                                 function($scope, $location, LocationsDao, $filter, ngTableParams, ListConfig, Comparator, OfficesDao, Authetication) {
 	
-	$scope.rowclick = function(item) {
-		$location.path('/view/'+item.id);
-	};
+	// -- local functions
+	
+	function reloadTableData() {
+		var currentOfficeId = $scope.selectedOffice != null ? $scope.selectedOffice.id : Authetication.fkBaseOffice;
+		OfficesDao.locations({id: currentOfficeId}, function (data) {
+			dataHolder = data;
+			$scope.tableParams.reload();
+		});
+	}
+
+	// -- scope & local attributes	
+
+	$scope.selectedOffice = null;
+	var dataHolder = [];	
+	var initPage = ListConfig.page;
+
+	// -- initial queries
 	
 	OfficesDao.query(function(offices) {
 		$scope.offices = offices;
+		
+		if($scope.selectedOffice==null) {
+			$scope.selectedOffice = _.find($scope.offices, function(office) { return office.id == Authetication.fkBaseOffice; });
+		}	
 	});
+
+	// -- scope methods
 	
-	$scope.selectedOffice = Authetication.fkBaseOffice;
-	var dataHolder = [];
+	$scope.rowclick = function(item) {
+		$location.path('/view/'+item.id);
+	};	
 	
-	var initPage = ListConfig.page;
 	$scope.tableParams = new ngTableParams(ListConfig, {
         total: dataHolder.length,
         getData: function($defer, params) {
@@ -672,14 +712,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
             return $defer.resolve(pagedData);	        	
         }
 	});
-	
-	function reloadTableData() {
-		OfficesDao.locations({id: $scope.selectedOffice}, function (data) {
-			dataHolder = data;
-			$scope.tableParams.reload();
-		});
-	}
-	
+		
 	$scope.$on('userLoggedIn', function(event) {
 		reloadTableData();
 	});
@@ -694,13 +727,16 @@ controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Aut
 	AlertPaneService.add($scope);
 
 	$scope.data = UserDao.current();
+	$scope.data.selectedOffice = null;
 	
 	OfficesDao.query(function(offices) {
 		$scope.offices = offices;
+		$scope.data.selectedOffice = _.find($scope.offices, function(office) { return office.id == $scope.data.fkBaseOffice; });
 	});	
 	
 	$scope.saveEdit = function() {
 		$scope.alerts = [];
+		$scope.data.fkBaseOffice = $scope.data.selectedOffice.id;
 		UserDao.save($scope.data, function(result) {
 			if(!result.success) {
 				$scope.alerts.push({type:'danger', msg: 'Error while saving user: ' + result.errorMsg});
@@ -861,25 +897,17 @@ controller('LunchyControllerPictures', ['$scope', 'PicturesDao', '$stateParams',
 
 }]).
 controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'FinderDao', '$timeout', 'Authetication', 'OfficesDao', 'FinderSearchParameter', function($scope, TagService, UserDao, FinderDao, $timeout, Authetication, OfficesDao, FinderSearchParameter) {
-
-	$scope.data = FinderSearchParameter;
-	if($scope.data.selectedOffice==-1) {
-		$scope.data.selectedOffice = Authetication.fkBaseOffice;
-		TagService.get({selectedOffice:$scope.data.selectedOffice}).then(function(data) {
+	
+	// -- local functions
+	
+	function loadTags() {
+		TagService.get({selectedOffice:$scope.data.selectedOffice.id}).then(function(data) {
 			$scope.data.inclTags = data.join();
+			$scope.data.exclTags = "";
 		});
 	}
-	$scope.allPartner = [];
 	
-	OfficesDao.query(function(offices) {
-		$scope.offices = offices;
-	});
-	
-	UserDao.query(function(data) {		
-		$scope.allPartner = _.map(data, function(userObj) { return userObj.displayname.replace(/'/g,'´');; });
-	});
-	
-	function add(listString, element) {
+	function addTags(listString, element) {
 		if(element==""){
 			return listString;
 		}
@@ -890,35 +918,66 @@ controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'Finder
 		return listString;
 	}
 	
-	$scope.search = function() {
-		FinderDao.query($scope.data, function(result) {
+	function getRestParam() {
+		var restParameters = angular.copy($scope.data);
+		restParameters.selectedOffice = restParameters.selectedOffice.id; 
+		return restParameters;
+	}
+
+	// -- scope & local attributes
+
+	$scope.data = FinderSearchParameter;
+	$scope.allPartner = [];
+
+	// -- initial queries
+	
+	OfficesDao.query(function(offices) {
+		$scope.offices = offices;
+		
+		if($scope.data.selectedOffice==null) {
+			$scope.data.selectedOffice = _.find($scope.offices, function(office) { return office.id == Authetication.fkBaseOffice; });
+			loadTags();
+		}				
+	});
+	
+	UserDao.query(function(data) {		
+		$scope.allPartner = _.map(data, function(userObj) { return userObj.displayname.replace(/'/g,'´');; });
+	});
+
+	// -- scope methods
+	
+	$scope.search = function() {		
+		FinderDao.query(getRestParam(), function(result) {
 			$scope.resultData = result;
 		});
 	};
-	
+
+	$scope.searchRandom = function() {
+		FinderDao.queryRandom(getRestParam(), function(result) {
+			$scope.resultData = result;
+		});
+	};
+
 	$scope.removeAll = function() {
-		$scope.data.exclTags = add($scope.data.exclTags, $scope.data.inclTags);
+		$scope.data.exclTags = addTags($scope.data.exclTags, $scope.data.inclTags);
 		$scope.data.inclTags = "";
 	};
 
 	$scope.addAll = function() {
-		$scope.data.inclTags = add($scope.data.inclTags, $scope.data.exclTags);
+		$scope.data.inclTags = addTags($scope.data.inclTags, $scope.data.exclTags);
 		$scope.data.exclTags = "";
 	};
 	
 	$scope.selectedOfficeChanged = function() {
-		TagService.get({selectedOffice:$scope.data.selectedOffice}).then(function(data) {
-			$scope.data.inclTags = data.join();
-			$scope.data.exclTags = "";
-		});
+		loadTags();
 	}
 	
 	$scope.deleteInclTag = function(key) {
-		$scope.data.exclTags = add($scope.data.exclTags, key);
+		$scope.data.exclTags = addTags($scope.data.exclTags, key);
 	}
 	
 	$scope.deleteExclTag = function(key) {
-		$scope.data.inclTags = add($scope.data.inclTags, key);
+		$scope.data.inclTags = addTags($scope.data.inclTags, key);
 	}
 	
 }]);

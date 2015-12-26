@@ -35,7 +35,7 @@ import de.oglimmer.lunchy.rest.resources.FinderResource.RatingResponse;
 public enum FinderDao {
 	INSTANCE;
 
-	public List<QueryResponse> query(Set<String> tags, Set<String> partners, Integer maxTime, int fkCommunity,
+	public List<QueryResponse> query(Set<String> tags, Set<String> partners, Integer maxTime, Integer selectedMinRating, int fkCommunity,
 			Integer fkCurrentUser, int selectedOffice) {
 		Result<LocationRecord> locations = queryLocations(tags, maxTime, fkCommunity, selectedOffice);
 		Result<Record> reviews = queryReviews(partners, getLocationId(locations), fkCurrentUser);
@@ -48,8 +48,8 @@ public enum FinderDao {
 
 			QueryResponseSectionLine qrsl = new QueryResponseSectionLine();
 			qrsl.setRatings(toList(reviewsByLocation.get(locRec.getId())));
-			int minRating = getMinRating(qrsl.getRatings());
-			if (minRating != 1) {
+			int minRating = getMinRating(qrsl.getRatings());			
+			if (hasNotRating1(minRating) && hasMinimumRating(selectedMinRating, minRating)) {
 
 				qrsl.setLocation(BeanMappingProvider.INSTANCE.map(locRec, LocationResponse.class));
 
@@ -73,6 +73,23 @@ public enum FinderDao {
 		});
 
 		return resultQueryList;
+	}
+
+	private boolean hasMinimumRating(Integer selectedMinRating, int minRating) {
+		return selectedMinRating == null || minRating0(selectedMinRating, minRating)
+				|| minRatingIsHigher(selectedMinRating, minRating);
+	}
+
+	private boolean minRating0(Integer selectedMinRating, int minRating) {
+		return minRating == 0 && selectedMinRating == 0;
+	}
+
+	private boolean minRatingIsHigher(Integer selectedMinRating, int minRating) {
+		return minRating >= selectedMinRating && selectedMinRating != 0;
+	}
+
+	private boolean hasNotRating1(int minRating) {
+		return minRating != 1;
 	}
 
 	private List<RatingResponse> toList(Map<String, Integer> reviews) {
