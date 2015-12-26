@@ -56,7 +56,8 @@ public class UploadServlet extends HttpServlet {
 
 	private void respondChunkNotWritten(HttpServletResponse resp, String flowIdentifier, long flowChunkNumber) throws IOException {
 		log.debug("ID:{} has chunk:{} not yet!", flowIdentifier, flowChunkNumber);
-		resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+		// Must not be one of [404, 415, 500, 501] see https://github.com/flowjs/flow.js#flow
+		resp.sendError(HttpServletResponse.SC_NO_CONTENT);
 	}
 
 	private void respondChunkAlreadyWritten(HttpServletResponse resp, String flowIdentifier, long flowChunkNumber) throws IOException {
