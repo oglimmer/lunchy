@@ -159,7 +159,7 @@ controller('LunchyControllerAdd', ['$scope', '$location', 'LocationsDao', 'Offic
 	};
 	
 	$scope.selectedOfficeChanged = function() {
-		$scope.fkOffice = $scope.data.selectedOffice.id;
+		$scope.data.fkOffice = $scope.data.selectedOffice.id;
 		loadTags();
 	}
 	
@@ -185,7 +185,7 @@ controller('LunchyControllerViewEditLocation', ['$scope', 'LocationsDao', 'TagSe
     };
 	
 	$scope.selectedOfficeChanged = function() {
-		$scope.fkOffice = $scope.data.selectedOffice.id;
+		$scope.data.fkOffice = $scope.data.selectedOffice.id;
 		loadTags();
 	}
 	
