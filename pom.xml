@@ -277,6 +277,7 @@
 					<!-- <webDriverClassName>org.openqa.selenium.chrome.ChromeDriver</webDriverClassName>  -->
 					<preloadSources>
 						<source>webjars/jquery/2.1.4/jquery.js</source>
+						<source>webjars/lodash/3.10.1/lodash.js</source>
 						<source>webjars/jquery-ui/1.11.4/jquery-ui.js</source>
 						<source>webjars/angularjs/1.4.8/angular.js</source>
 						<source>webjars/angularjs/1.4.8/angular-mocks.js</source>
@@ -288,12 +289,11 @@
 						<source>webjars/angular-ui-utils/0.1.1/ui-utils.js</source>
 						<source>webjars/angular-ui-router/0.2.15/angular-ui-router.js</source>
 						<source>webjars/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js</source>
+						<source>webjars/angular-google-maps/2.1.1/angular-google-maps.js</source>
 						<source>webjars/ng-table/0.3.3/ng-table.js</source>
 						<source>webjars/ng-flow/2.6.1/ng-flow-standalone.js</source>
 						<source>webjars/zxcvbn/1.0/zxcvbn.js</source>
-						<source>webjars/lodash/3.10.1/lodash.js</source>
-						<source>http://maps.googleapis.com/maps/api/js?sensor=false</source>
-						<source>src/main/webapp/js/ext/angular-google-maps.1.2.2.min.js</source>
+						<source>http://maps.googleapis.com/maps/api/js</source>
 					</preloadSources>
 				</configuration>
 			</plugin>
