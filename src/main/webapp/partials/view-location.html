@@ -1,7 +1,7 @@
 
 <div class="container">
 
-	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+	<uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
 
 	<h4>{{ data.officialName }}</h4>
 
@@ -25,7 +25,7 @@
                     </uib-slide>
                 </uib-carousel>                
                 <div class="top17" ng-show="showButtonsMode && childScopeHolder.pictures.length > 0">
-                    <div class="btn btn-success pull-right" btn-checkbox ng-model="childScopeHolder.currentPicVoted" ng-click="picVoteClicked(childScopeHolder.currentPicVoted)">
+                    <div class="btn btn-success pull-right" uib-btn-checkbox ng-model="childScopeHolder.currentPicVoted" ng-click="picVoteClicked(childScopeHolder.currentPicVoted)">
                         <span class="glyphicon glyphicon-thumbs-up" style="font-size: 22px"></span>
                     </div>
                 </div>

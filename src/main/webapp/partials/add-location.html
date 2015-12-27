@@ -1,7 +1,7 @@
 
 <div class="container">
 
-	<alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+	<uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert>
 	
     <form class="form-horizontal" name="addLocation" novalidate ng-submit="submitAdd()">
         <fieldset>

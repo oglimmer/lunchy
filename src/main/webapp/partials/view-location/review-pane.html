@@ -4,9 +4,9 @@
         <p class="list-group-item-text" ng-bind-html="review.comment | linky"/>
         <p ng-show="review.favoriteMeal" class="list-group-item-text">My favorite: {{review.favoriteMeal}}</p>
         <p>Turn around time:
-            <span tooltip-placement="bottom" tooltip="Pure travel time" class="dottedUnderline">{{ review.travelTime | numberToNA }}</span> +
-            <span tooltip-placement="bottom" tooltip="Pure on site time" class="dottedUnderline">{{ review.onSiteTime | numberToNA }}</span> =
-            <span tooltip-placement="bottom" tooltip="Turn around time" class="dottedUnderline">{{ review.travelTime+review.onSiteTime | numberToNA }}</span></p>
+            <span tooltip-placement="bottom" uib-tooltip="Pure travel time" class="dottedUnderline">{{ review.travelTime | numberToNA }}</span> +
+            <span tooltip-placement="bottom" uib-tooltip="Pure on site time" class="dottedUnderline">{{ review.onSiteTime | numberToNA }}</span> =
+            <span tooltip-placement="bottom" uib-tooltip="Turn around time" class="dottedUnderline">{{ review.travelTime+review.onSiteTime | numberToNA }}</span></p>
         <p class="list-group-item-text">My rating: {{review.rating}} stars</p>
     </div>
 </div>

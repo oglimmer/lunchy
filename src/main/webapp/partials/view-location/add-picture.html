@@ -11,7 +11,7 @@
         </div>
 
         <div ng-show="transfers.length > 0 && !$flow.isUploading()">
-            <alert type="success">Upload completed! <a href="javascript:void(null);" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</a></alert>
+            <uib-alert type="success">Upload completed! <a href="javascript:void(null);" ng-show="$flow.files.length" ng-click="$flow.cancel()">Remove</a></uib-alert>
             <form class="form-horizontal">
                 <input class="form-control" type="text" ng-model="childScopeHolder.picCaption" placeholder="Put any caption here ..." focus="true" />
             </form>

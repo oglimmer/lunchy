@@ -33,7 +33,7 @@
         <div class="row form-group">
             <label for="rating" class="col-md-2 control-label">Your location rating</label>
             <div class="col-md-10">
-                <rating ng-model="newReview.rating" id="rating" on-hover="hoveringOver(value)" on-leave="hoveringOut()"></rating>
+                <uib-rating ng-model="newReview.rating" id="rating" on-hover="hoveringOver(value)" on-leave="hoveringOut()"></uib-rating>
                 <span class="help-block">{{newReview.ratingExplained}}</span>
             </div>
         </div>

@@ -17,7 +17,7 @@
 		                <figcaption ng-show="pic.caption">
 		                    ({{pic.upVotes}}) {{ pic.caption }}
 		                    <span ng-show="pic.voteCreatedOn" style="font-family: Arial">
-		                        <span tooltip-placement="bottom" tooltip="Voted on {{ pic.voteCreatedOn | date }}">
+		                        <span tooltip-placement="bottom" uib-tooltip="Voted on {{ pic.voteCreatedOn | date }}">
 		                            <span class="glyphicon glyphicon-star"></span>
 		                        </span>
 		                    </span>
@@ -25,7 +25,7 @@
 		                <figcaption ng-hide="pic.caption">
                     		({{pic.upVotes}}) {{ pic.officialName }} in {{ pic.city }}
                     		<span ng-show="pic.voteCreatedOn" style="font-family: Arial">
-                        		<span tooltip-placement="bottom" tooltip="Voted on {{ pic.voteCreatedOn | date }}">
+                        		<span tooltip-placement="bottom" uib-tooltip="Voted on {{ pic.voteCreatedOn | date }}">
                             		<span class="glyphicon glyphicon-star"></span>
                         		</span>
                     		</span>

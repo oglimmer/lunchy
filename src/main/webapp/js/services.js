@@ -111,8 +111,8 @@ factory('FinderDao', ['$resource', function($resource) {
 		}
 	});
 }]).
-factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 'CommunityService', '$cookies',
-    function($modal, $q, LoginDao, $rootScope, StorageService, OfficesDao, CommunityService, $cookies) {
+factory('Authetication', ['$uibModal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 'CommunityService', '$cookies',
+    function($uibModal, $q, LoginDao, $rootScope, StorageService, OfficesDao, CommunityService, $cookies) {
 
         function getLongTimeToken() {
             var longTimeToken = StorageService.get('longTimeToken');
@@ -198,7 +198,7 @@ factory('Authetication', ['$modal', '$q', 'LoginDao', '$rootScope', 'StorageServ
 
             showLogin: function() {
                 var thiz = this;
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl: 'partials/login.html',
                     controller: 'LunchyControllerLogin'
                 });
