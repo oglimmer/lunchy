@@ -339,11 +339,11 @@ controller('LunchyControllerViewTab', ['$scope', function ($scope) {
         $scope.map = createMap();
         $scope.childScopeHolder.marker = createMarker();        
         $scope.officeMarker = createOffice();
-        $scope.mapTabShown = true;
+        $scope.childScopeHolder.mapTabShown = true;
     };	
     
     $scope.mapDeselected = function() {
-    	$scope.mapTabShown = false;
+    	$scope.childScopeHolder.mapTabShown = false;
     };
 	
 }]).
@@ -450,6 +450,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
     };
 
     $scope.addPictureStart = function() {
+    	$scope.childScopeHolder.mapTabShown = false;
         $scope.tabs.disabled = [true, true, false, true];
         $scope.addPictureMode = true;
         $scope.showButtonsMode= false;

@@ -5,16 +5,15 @@
 
 	<h4>{{ data.officialName }}</h4>
 
-	<div class="form-group" ng-controller="LunchyControllerViewTab">
-
-        <uib-tabset justified="true" ng-show="showTabMode">
-            <uib-tab heading="Information" active="tabs.active[0]" disabled="tabs.disabled[0]">
+	<div class="form-group" ng-controller="LunchyControllerViewTab" ng-show="showTabMode">
+        <uib-tabset justified="true">
+            <uib-tab heading="Information" active="tabs.active[0]" disable="tabs.disabled[0]">
                 <div ng-include="'partials/view-location/base-data.html'"></div>
             </uib-tab>
-            <uib-tab heading="Reviews ({{ childScopeHolder.reviews.length }})" active="tabs.active[1]" disabled="tabs.disabled[1]">
+            <uib-tab heading="Reviews ({{ childScopeHolder.reviews.length }})" active="tabs.active[1]" disable="tabs.disabled[1]">
                 <div ng-include="'partials/view-location/review-pane.html'"></div>
             </uib-tab>
-            <uib-tab heading="Pictures ({{ childScopeHolder.pictures.length }})" active="tabs.active[2]" disabled="tabs.disabled[2]">
+            <uib-tab heading="Pictures ({{ childScopeHolder.pictures.length }})" active="tabs.active[2]" disable="tabs.disabled[2]">
                 <uib-carousel no-transition="carouselNoTransition">
                     <uib-slide ng-repeat="pic in childScopeHolder.pictures" active="pic.active">
                         <img ng-src="./rest/pictures/{{pic.filename}}" style="margin:auto;"/>
@@ -31,15 +30,14 @@
                 </div>
                 <div ng-show="addPictureMode" ng-include="'partials/view-location/add-picture.html'"></div>
             </uib-tab>
-            <uib-tab heading="Map" select="mapSelected()" deselect="mapDeselected()" active="tabs.active[3]" disabled="tabs.disabled[3]">
+            <uib-tab heading="Map" select="mapSelected()" deselect="mapDeselected()" active="tabs.active[3]" disable="tabs.disabled[3]">
+            	<!-- ui-gmap-google-map is not working properly inside a uib-tab -->
             </uib-tab>
         </uib-tabset>
-	    <div ng-if="mapTabShown">
-	        <ui-gmap-google-map id="locationMap" center="map.center" zoom="map.zoom" draggable="true" events='map.events'>
-	        	<ui-gmap-marker idKey='childScopeHolder.marker.id' coords='childScopeHolder.marker.coords' options="childScopeHolder.marker.markerOptions" events="childScopeHolder.marker.events" />
-				<ui-gmap-marker ng-repeat="marker in officeMarker" idKey='marker.id' coords='marker.coords' options="marker.markerOptions" />
-	        </ui-gmap-google-map>
-	    </div>
+        <ui-gmap-google-map id="locationMap" center="map.center" zoom="map.zoom" draggable="true" events='map.events' ng-if="childScopeHolder.mapTabShown">
+        	<ui-gmap-marker idKey='childScopeHolder.marker.id' coords='childScopeHolder.marker.coords' options="childScopeHolder.marker.markerOptions" events="childScopeHolder.marker.events" />
+			<ui-gmap-marker ng-repeat="marker in officeMarker" idKey='marker.id' coords='marker.coords' options="marker.markerOptions" />
+        </ui-gmap-google-map>
 	</div>
 
 	<div ng-show="editLocationMode" ng-include="'partials/view-location/edit-location.html'"></div>
