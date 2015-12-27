@@ -7,7 +7,7 @@
 
         <script src="webjars/jquery/2.1.4/jquery.<%=DEBUG%>js"></script><!-- popover -->
         <script src="webjars/lodash/3.10.1/lodash.<%=DEBUG%>js"></script><!-- google-maps && my own code -->
-        <script src="webjars/bootstrap/3.3.6/js/bootstrap.js"></script>
+        <script src="webjars/bootstrap/3.3.6/js/bootstrap.js"></script><!-- dropdown in menu -->
 
         <script src="webjars/jquery-ui/1.11.4/jquery-ui.<%=DEBUG%>js"></script><!-- tag autocomplete -->
         <script src="webjars/angularjs/1.4.8/angular.<%=DEBUG%>js"></script><!-- base -->
