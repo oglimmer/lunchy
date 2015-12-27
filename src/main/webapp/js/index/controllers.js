@@ -310,7 +310,10 @@ controller('LunchyControllerViewTab', ['$scope', function ($scope) {
             },
             markerOptions: {
                 title: $scope.data.officialName,
-                draggable:true
+                draggable:true,
+                labelClass:'marker-labels',
+                labelAnchor:'30 0',
+                labelContent: $scope.data.officialName
             },
             pinMoved : false
         };
@@ -324,7 +327,8 @@ controller('LunchyControllerViewTab', ['$scope', function ($scope) {
                 longitude: officeObj.geoLng
             },
             markerOptions: {
-                title: "Office " + officeObj.name
+                title: "Office " + officeObj.name,
+                icon:'images/office.png'
             },
             id: 'officeMarker'
         }];
@@ -337,6 +341,10 @@ controller('LunchyControllerViewTab', ['$scope', function ($scope) {
         $scope.officeMarker = createOffice();
         $scope.mapTabShown = true;
     };	
+    
+    $scope.mapDeselected = function() {
+    	$scope.mapTabShown = false;
+    };
 	
 }]).
 controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'ReviewDao', 'Authetication', '$timeout', 'PicturesDao', 'OfficesDao', 'TagService', '$location', 'AlertPaneService',
@@ -570,7 +578,8 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 				longitude: off.geoLng
 			},
 			markerOptions: {
-				title: "Office " + off.name
+				title: "Office " + off.name,
+				icon:'images/office.png'
 			},
             id: 'officeMarker'
 		}];			
@@ -623,7 +632,10 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 		            }			            
 		        },
 		        markerOptions: {
-			    	title: loc.officialName+" ("+loc.numberOfReviews+"/"+loc.avgRating+"/"+(loc.reviewed?"X":"-")+")"
+			    	title: loc.officialName+" ("+loc.numberOfReviews+"/"+loc.avgRating+"/"+(loc.reviewed?"X":"-")+")",
+			    	labelClass:'marker-labels',
+	                labelAnchor:'30 0',
+	                labelContent:loc.officialName	                
 			    }
 			});
 		});
