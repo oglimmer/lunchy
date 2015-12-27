@@ -1,7 +1,7 @@
-<div class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default">
 	<div class="container" ng-controller="LunchyControllerMenu">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle " data-toggle="collapse" data-target=".navbar-collapse" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
 				<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 			</button>
 			<a class="navbar-brand" href="#">Lunchy</a>
@@ -15,14 +15,14 @@
                 <li ng-class="getClass('/finder')"><a href="#/finder">Finder</a></li>
                 <li ng-show="authetication.loggedIn" ng-class="getClass('/add')"><a href="#/add">Add</a></li>
 			</ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li ng-show="authetication.permissions==2" class="dropdown" ng-class="getClass('/user')">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#/user">Users</a></li>
-                        <li><a href="#/office">Offices</a></li>
-                    </ul>
-                </li>
+            <ul class="nav navbar-nav navbar-right">            
+            	<li class="dropdown" ng-show="authetication.permissions==2">
+          			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+          			<ul class="dropdown-menu">
+            			<li><a href="#/user">Users</a></li>
+            			<li><a href="#/office">Offices</a></li>
+          			</ul>
+        		</li>            
                 <li ng-hide="authetication.loggedIn"><a href="" ng-click="login()">Login/Register</a></li>
                 <li ng-show="authetication.loggedIn" ng-class="getClass('/settings')"><a href="#/settings">Settings</a></li>
                 <li ng-show="authetication.loggedIn"><a href="" ng-click="logout()">Log out</a></li>
@@ -30,4 +30,4 @@
 		</div>
 		<!--/.navbar-collapse -->
 	</div>
-</div>
+</nav>
