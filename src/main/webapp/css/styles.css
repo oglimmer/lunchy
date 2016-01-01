@@ -231,4 +231,5 @@ figure, figcaption {
 .col-centered {
     float: none;
     margin: 0 auto;
+    white-space: nowrap;
 }
