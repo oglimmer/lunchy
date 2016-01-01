@@ -287,7 +287,7 @@
 						<source>webjars/angularjs/1.4.8/angular-touch.js</source>
 						<source>webjars/angularjs/1.4.8/angular-sanitize.js</source>
 						<source>webjars/angularjs/1.4.8/angular-cookies.js</source>
-						<source>webjars/angular-ui-utils/0.1.1/ui-utils.js</source>
+						<source>webjars/angular-ui-validate/1.2.1/dist/validate.js</source>
 						<source>webjars/angular-ui-router/0.2.15/angular-ui-router.js</source>
 						<source>webjars/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js</source>
 						<source>webjars/angular-google-maps/2.1.1/angular-google-maps.js</source>
