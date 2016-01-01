@@ -38,12 +38,12 @@ controller('LunchyControllerUpdates', ['$scope', 'UpdatesDao', '$window', functi
 	});
 
 }]).
-controller('LunchyControllerLogin', ['$scope', '$modalInstance', 'LoginDao', '$timeout', 'Authetication', 'StorageService', 'AlertPaneService', 
-                                     function ($scope, $modalInstance, LoginDao, $timeout, Authetication, StorageService, AlertPaneService) {
+controller('LunchyControllerLogin', ['$scope', '$uibModalInstance', 'LoginDao', '$timeout', 'Authetication', 'StorageService', 'AlertPaneService', 
+                                     function ($scope, $uibModalInstance, LoginDao, $timeout, Authetication, StorageService, AlertPaneService) {
 	AlertPaneService.add($scope);
 	
     $scope.initShowMode = 0;
-    $scope.$modalInstance = $modalInstance;
+    $scope.$uibModalInstance = $uibModalInstance;
     $scope.login = {};
 
     $scope.passwordForgotten = function() {
@@ -57,7 +57,7 @@ controller('LunchyControllerLogin', ['$scope', '$modalInstance', 'LoginDao', '$t
     };
 
     $scope.cancel = function() {
-        $modalInstance.dismiss('cancel');
+    	$uibModalInstance.dismiss('cancel');
     };
 
     $scope.submitLogin = function() {
@@ -69,7 +69,7 @@ controller('LunchyControllerLogin', ['$scope', '$modalInstance', 'LoginDao', '$t
                 if(data.longTimeToken != null && data.longTimeToken != "") {
                     StorageService.save('longTimeToken', data.longTimeToken);
                 }
-                $modalInstance.close('ok');
+                $uibModalInstance.close('ok');
             } else {
                 $scope.alerts.push({type:'danger',msg:data.errorMsg});
             }
@@ -96,7 +96,7 @@ controller('LunchyControllerLoginRegister', ['$scope', 'UserDao', 'OfficesDao', 
 		var newUser = new UserDao($scope.newUser);
 		newUser.$save(function(result) {
 			if(result.success) {
-                $scope.$modalInstance.close(result);
+                $scope.$uibModalInstance.close(result);
 			} else {
 				$scope.alerts.push({type:'danger',msg:result.errorMsg});
 			}
@@ -110,7 +110,7 @@ controller('LunchyControllerLoginPassReset', ['$scope', 'UserDao', function ($sc
 
 	$scope.submitPassReset = function() {
 		UserDao.sendPasswordLink({id:$scope.passReset.email});
-        $scope.$modalInstance.dismiss('cancel');
+        $scope.$uibModalInstance.dismiss('cancel');
 	};
 	
 }]).
