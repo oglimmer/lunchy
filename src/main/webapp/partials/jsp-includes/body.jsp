@@ -16,7 +16,7 @@
         <script src="webjars/angularjs/1.4.8/angular-touch.<%=DEBUG%>js"></script><!-- touch support -->
         <script src="webjars/angularjs/1.4.8/angular-sanitize.<%=DEBUG%>js"></script><!-- linky -->
         <script src="webjars/angularjs/1.4.8/angular-cookies.<%=DEBUG%>js"></script><!-- cookies -->
-        <script src="webjars/angular-ui-utils/0.1.1/ui-utils.<%=DEBUG%>js"></script><!-- validate -->
+        <script src="webjars/angular-ui-validate/1.2.1/dist/validate.<%=DEBUG%>js"></script><!-- validate -->
         <script src="webjars/angular-ui-router/0.2.15/angular-ui-router.<%=DEBUG%>js"></script><!-- ui-router -->
         <script src="webjars/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.<%=DEBUG%>js"></script><!-- modal-dialog and more -->
         <script src="webjars/angular-google-maps/2.1.1/angular-google-maps.<%=DEBUG%>js"></script><!-- google-maps -->
