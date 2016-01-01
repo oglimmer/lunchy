@@ -1,12 +1,12 @@
 <nav class="navbar navbar-default">
 	<div class="container" ng-controller="LunchyControllerMenu">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+			<button type="button" class="navbar-toggle collapsed" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
 				<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 			</button>
 			<a class="navbar-brand" href="#">Lunchy</a>
 		</div>
-		<div class="navbar-collapse collapse">
+		<div class="navbar-collapse collapse" ng-class="!navCollapsed && 'in'">
 			<ul class="nav navbar-nav">
 				<li ng-class="getClass('/updates')"><a href="#/updates">Home</a></li>
 				<li ng-class="getClass('/browse')"><a href="#/browse">Browse</a></li>
@@ -15,9 +15,9 @@
                 <li ng-class="getClass('/finder')"><a href="#/finder">Finder</a></li>
                 <li ng-show="authetication.loggedIn" ng-class="getClass('/add')"><a href="#/add">Add</a></li>
 			</ul>
-            <ul class="nav navbar-nav navbar-right">            
-            	<li class="dropdown" ng-show="authetication.permissions==2">
-          			<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
+            <ul class="nav navbar-nav navbar-right">                        	
+            	<li class="dropdown" dropdown ng-show="authetication.permissions==2">
+          			<a href="#" dropdown-toggle class="dropdown-toggle">Admin <span class="caret"></span></a>
           			<ul class="dropdown-menu">
             			<li><a href="#/user">Users</a></li>
             			<li><a href="#/office">Offices</a></li>
