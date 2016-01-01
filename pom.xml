@@ -278,7 +278,6 @@
 					<preloadSources>
 						<source>webjars/jquery/2.1.4/jquery.js</source>
 						<source>webjars/lodash/3.10.1/lodash.js</source>
-						<source>webjars/bootstrap/3.3.6/js/bootstrap.js</source>
 						<source>webjars/jquery-ui/1.11.4/jquery-ui.js</source>
 						<source>webjars/angularjs/1.4.8/angular.js</source>
 						<source>webjars/angularjs/1.4.8/angular-mocks.js</source>
