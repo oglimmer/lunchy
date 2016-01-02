@@ -161,10 +161,7 @@ figure, figcaption {
 }
 @media ( max-width :767px) {
     #polaroid figure{
-        width:215px;
-    }
-    #polaroid img {
-        width:200px;
+        width:90%;
     }
     #polaroid figcaption{
         font-size:1.1em;
@@ -172,13 +169,21 @@ figure, figcaption {
 }
 @media ( min-width :767px) {
     #polaroid figure{
-        width:480px
+        width:44%;
     }
     #polaroid figcaption{
         letter-spacing:0.09em;
         font-size:1.7em;
     }
+    .picoverview #polaroid figure{
+        width:98%;
+    }
 }
+
+#polaroid img {
+    width:98%;
+}
+
 #polaroid figure:nth-child(even),
 #polaroid figure.odd {
     -webkit-transform:rotate(2deg);
@@ -226,10 +231,4 @@ figure, figcaption {
     position:relative;
     padding-top:10px;
     padding-right:10px;
-}
-
-.col-centered {
-    float: none;
-    margin: 0 auto;
-    white-space: nowrap;
 }

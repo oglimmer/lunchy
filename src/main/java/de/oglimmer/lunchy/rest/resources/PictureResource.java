@@ -53,8 +53,8 @@ import de.oglimmer.lunchy.services.LunchyProperties;
 @Path("pictures")
 public class PictureResource {
 
-	private static final int SMALL_PIC_SIZE = 200;
-	private static final int LARGE_PIC_SIZE = 464;
+	private static final int SMALL_PIC_SIZE = 650;
+	private static final int LARGE_PIC_SIZE = 650;
 	public static final int SMALL_PIC_BOUNDRY = 767;
 
 	@SneakyThrows(value = IOException.class)
