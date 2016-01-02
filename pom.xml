@@ -290,7 +290,7 @@
 						<source>webjars/angular-ui-router/0.2.15/angular-ui-router.js</source>
 						<source>webjars/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js</source>
 						<source>webjars/angular-google-maps/2.1.1/angular-google-maps.js</source>
-						<source>webjars/ng-table/0.3.3/ng-table.js</source>
+						<source>webjars/ng-table/1.0.0-beta.9/dist/ng-table.js</source>
 						<source>webjars/ng-flow/2.6.1/ng-flow-standalone.js</source>
 						<source>webjars/zxcvbn/1.0/zxcvbn.js</source>
 						<source>http://maps.googleapis.com/maps/api/js</source>
@@ -453,9 +453,9 @@
 			<version>0.14.3</version>
 		</dependency>
 		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>ng-table</artifactId>
-			<version>0.3.3</version>
+	    <groupId>org.webjars.bower</groupId>
+		    <artifactId>ng-table</artifactId>
+		    <version>1.0.0-beta.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>

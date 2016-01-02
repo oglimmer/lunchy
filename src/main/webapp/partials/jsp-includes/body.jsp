@@ -19,7 +19,7 @@
         <script src="webjars/angular-ui-router/0.2.15/angular-ui-router.<%=DEBUG%>js"></script><!-- ui-router -->
         <script src="webjars/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.<%=DEBUG%>js"></script><!-- modal-dialog and more -->
         <script src="webjars/angular-google-maps/2.1.1/angular-google-maps.<%=DEBUG%>js"></script><!-- google-maps -->
-        <script src="webjars/ng-table/0.3.3/ng-table.<%=DEBUG%>js"></script><!-- ng-table -->
+        <script src="webjars/ng-table/1.0.0-beta.9/dist/ng-table.<%=DEBUG%>js"></script><!-- ng-table -->
         <script src="webjars/ng-flow/2.6.1/ng-flow-standalone.<%=DEBUG%>js"></script><!-- file upload -->
         <script src="webjars/modernizr/2.8.3/modernizr.<%=DEBUG%>js"></script>              
         <script src='//maps.googleapis.com/maps/api/js'></script><!-- google-maps -->

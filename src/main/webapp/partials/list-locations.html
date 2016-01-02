@@ -22,29 +22,24 @@
             <td data-title="'Official Name'" sortable="'officialName'" filter="{ 'officialName': 'text' }">
                 {{item.officialName}}
             </td>
-            <td data-title="companyName+' name'" sortable="'streetName'" filter="{ 'streetName': 'text' }">
+            <td data-title="companyName+' name'" sortable="'streetName'" filter="{ 'streetName': 'text' }" ng-if="!onXsDevice">
                 {{item.streetName}}
             </td>
             <td data-title="'Turn around time'" sortable="'turnAroundTime'" filter="{ 'turnAroundTime': 'text' }">
                 {{item.turnAroundTime}}
             </td>
-            <td data-title="'# Reviews'" sortable="'numberOfReviews'" filter="{ 'numberOfReviews': 'text' }">
+            <td data-title="'# Reviews'" sortable="'numberOfReviews'" filter="{ 'numberOfReviews': 'text' }" ng-if="!onXsDevice">
                 {{item.numberOfReviews}}
             </td>
-            <td data-title="'Avg Rating'" sortable="'avgRating'" filter="{ 'avgRating': 'text' }">
+            <td data-title="'Avg Rating'" sortable="'avgRating'" filter="{ 'avgRating': 'text' }" ng-if="!onXsDevice">
                 {{item.avgRating}}
             </td>
-            <td data-title="'Last Rating'" sortable="'lastRating'">
+            <td data-title="'Last Rating'" sortable="'lastRating'" ng-if="!onXsDevice">
                 {{item.lastRating|date:'shortDate'}}
             </td>
-            <td data-title="'Last Update'" sortable="'lastUpdate'">
+            <td data-title="'Last Update'" sortable="'lastUpdate'" ng-if="!onXsDevice">
                 {{item.lastUpdate|date:'shortDate'}}
             </td>
-            <!--
-            <td data-title="'Address'" sortable="'city'" filter="{ 'city': 'text' }">
-                {{item.address}}, {{item.city}}
-            </td>
-             -->
             <td data-title="'Tags'" sortable="'tags'" filter="{ 'tags': 'text' }">
                 <span ng-repeat="tag in item.tags | bycomma track by $index">
                     <span class="label label-default">{{tag}}</span>

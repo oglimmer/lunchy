@@ -643,8 +643,9 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	});
 
 }]).
-controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'ngTableParams', 'ListConfig', 'Comparator', 'OfficesDao', 'Authetication',
-                                                function($scope, $location, LocationsDao, $filter, ngTableParams, ListConfig, Comparator, OfficesDao, Authetication) {
+controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'NgTableParams', 'ListConfig', 'Comparator', 'OfficesDao', 'Authetication',
+                                                function($scope, $location, LocationsDao, $filter, NgTableParams, ListConfig, Comparator, OfficesDao, Authetication) {
+	
 	
 	// -- local functions
 	
@@ -659,6 +660,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	// -- scope & local attributes	
 
 	$scope.selectedOffice = null;
+	$scope.onXsDevice = window.innerWidth<=735;
 	var dataHolder = [];	
 	var initPage = ListConfig.page;
 
@@ -678,11 +680,11 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 		$location.path('/view/'+item.id);
 	};	
 	
-	$scope.tableParams = new ngTableParams(ListConfig, {
+	$scope.tableParams = new NgTableParams(ListConfig, {
         total: dataHolder.length,
         getData: function($defer, params) {
         	
-        	// HACK: seems like the first parameter of ngTableParams doesn't respect page 
+        	// HACK: seems like the first parameter of NgTableParams doesn't respect page 
         	if(initPage!=null) {
         		if(initPage!=params.page()){
         			console.log("assert failed."+initPage+"!="+params.page());
@@ -734,6 +736,16 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
         $scope.tableParams.page(1);
 		reloadTableData();
 	});
+		
+	$(window).on("resize.doResize", function (){
+        $scope.$apply(function(){
+        	$scope.onXsDevice = window.innerWidth<=735;
+        });
+    });
+
+    $scope.$on("$destroy",function (){
+         $(window).off("resize.doResize");
+    });
 	
 }]).
 controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Authetication', 'AlertPaneService', function($scope, UserDao, OfficesDao, Authetication, AlertPaneService) {
