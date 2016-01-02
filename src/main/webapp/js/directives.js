@@ -67,7 +67,7 @@ directive('focus', function($timeout) {
 				if (value == reeval(triggerValue) ) {
 					$timeout(function() {
 						element[0].focus();
-					});
+					}, 100);
 				}
 			});
 		}
