@@ -184,7 +184,7 @@ public enum FinderDao {
 			Condition turnAround = turnAroundIsNull.or(turnAroundMeetsMaxTime);
 			Condition fkCommunityCond = LOCATION.FK_COMMUNITY.equal(fkCommunity);
 			Condition fkOfficeCond = LOCATION.FK_OFFICE.equal(fkOffice);
-			return sjs.where(cond).and(turnAround.and(fkCommunityCond.and(fkOfficeCond))).fetch();
+			return sjs.where(cond).and(LOCATION.ARCHIVED.equal(0)).and(turnAround.and(fkCommunityCond.and(fkOfficeCond))).fetch();
 		}
 	}
 

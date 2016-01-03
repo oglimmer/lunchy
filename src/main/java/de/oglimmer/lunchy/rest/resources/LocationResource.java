@@ -116,14 +116,18 @@ public class LocationResource extends BaseResource {
 	@DELETE
 	@Path("{id}")
 	public void delete(@Context HttpServletRequest request, @PathParam("id") int id) {
-		SecurityProvider.INSTANCE.checkAdmin(request);
-		LocationDao.INSTANCE.delete(id, CommunityService.get(request));
+		if (SecurityProvider.INSTANCE.isAllowedToDeleteLocation(id, request)) {
+			LocationRecord loc = LocationDao.INSTANCE.getById(id, CommunityService.get(request));
+			loc.setArchived(1);
+			LocationDao.INSTANCE.store(loc);
+		}
 	}
 
 	@Data
 	public static class LocationStatusResponse {
 		private boolean hasReview;
 		private boolean allowedToEdit;
+		private boolean allowedToDelete;
 		private Integer fkReview;
 		private List<Integer> pictureVotes;
 		@XmlJavaTypeAdapter(MapAdapterStringBoolean.class)
@@ -236,6 +240,7 @@ public class LocationResource extends BaseResource {
 			init();
 			checkUserReview();
 			checkUserCanEdit();
+			checkUserCanDelete();
 			checkPictureVotes();
 			checkAllowedChangeCaption();
 			return result;
@@ -272,6 +277,10 @@ public class LocationResource extends BaseResource {
 			if (locRec.getFkUser() != userId) {
 				result.setAllowedToEdit(SecurityProvider.INSTANCE.checkRightOnSession(request, Permission.CONFIRMED_USER));
 			}
+		}
+
+		private void checkUserCanDelete() {
+			result.setAllowedToDelete(SecurityProvider.INSTANCE.isAllowedToDeleteLocation(locationId, request));			
 		}
 
 		private void checkUserReview() {

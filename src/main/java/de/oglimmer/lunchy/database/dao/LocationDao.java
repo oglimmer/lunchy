@@ -57,7 +57,7 @@ public enum LocationDao implements Dao<LocationRecord> {
 				}
 
 				return select.from(LOCATION).leftOuterJoin(Reviews.REVIEWS).on(LOCATION.ID.equal(Reviews.REVIEWS.FK_LOCATION))
-						.where(LOCATION.FK_OFFICE.equal(fkOffice)).groupBy(LOCATION.ID).fetch();
+						.where(LOCATION.FK_OFFICE.equal(fkOffice).and(LOCATION.ARCHIVED.equal(0))).groupBy(LOCATION.ID).fetch();
 			}
 		});
 	}

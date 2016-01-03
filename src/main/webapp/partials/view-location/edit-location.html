@@ -72,6 +72,8 @@
                 <button type="button" class="btn btn-default" ng-click="cancelEdit()">Cancel</button>
 
                 <button type="button" class="btn btn-primary" ng-click="editLocationSave()" ng-disabled="editLocation.$invalid">Save</button>
+                
+                <button type="button" class="btn btn-danger pull-right" ng-click="editLocationDelete()" ng-confirm-click="Do you really want to delete this location?" ng-show="allowedToDeletePermission">Delete</button>
             </div>
         </div>
 

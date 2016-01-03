@@ -11,9 +11,12 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+import de.oglimmer.lunchy.database.dao.LocationDao;
 import de.oglimmer.lunchy.database.dao.UserDao;
+import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.UserRightException;
+import de.oglimmer.lunchy.services.CommunityService;
 
 @Slf4j
 public enum SecurityProvider {
@@ -35,6 +38,18 @@ public enum SecurityProvider {
 
 	public void checkConfirmedUser(HttpServletRequest request) {
 		checkRight(request, Permission.CONFIRMED_USER);
+	}
+	
+	public boolean isAllowedToDeleteLocation(int locationId, HttpServletRequest request) {
+		Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
+		if (userId != null) {
+			LocationRecord locRec = LocationDao.INSTANCE.getById(locationId, CommunityService.get(request));
+			if (locRec.getFkUser() == userId
+					|| SecurityProvider.INSTANCE.checkRightOnSession(request, Permission.ADMIN)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void checkRight(HttpServletRequest request, Permission permissionToCheck) {

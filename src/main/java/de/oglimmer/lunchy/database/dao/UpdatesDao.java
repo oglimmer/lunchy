@@ -108,7 +108,7 @@ public enum UpdatesDao {
 							DSL.val("N").as("update_Type"), LOCATION.ID, PICTURES.CREATED_ON, PICTURES.ID.as("picture_Id"))
 					.from(LOCATION).join(PICTURES, JoinType.JOIN).on(LOCATION.ID.equal(PICTURES.FK_LOCATION))
 					.join(USERS, JoinType.JOIN).on(PICTURES.FK_USER.equal(USERS.ID))
-					.where(LOCATION.FK_COMMUNITY.equal(fkCommunity));
+					.where(LOCATION.FK_COMMUNITY.equal(fkCommunity).and(LOCATION.ARCHIVED.equal(0)));
 			return pictureSelect;
 		}
 
@@ -130,7 +130,7 @@ public enum UpdatesDao {
 									.as("update_Type"), LOCATION.ID, REVIEWS.LAST_UPDATE, DSL.val(0).as("picture_Id"))
 					.from(LOCATION).join(REVIEWS, JoinType.JOIN).on(LOCATION.ID.equal(REVIEWS.FK_LOCATION))
 					.join(USERS, JoinType.JOIN).on(REVIEWS.FK_USER.equal(USERS.ID))
-					.where(LOCATION.FK_COMMUNITY.equal(fkCommunity));
+					.where(LOCATION.FK_COMMUNITY.equal(fkCommunity).and(LOCATION.ARCHIVED.equal(0)));
 			return reviewsSelect;
 		}
 
@@ -142,7 +142,7 @@ public enum UpdatesDao {
 							DSL.val("").as("user"),
 							DSL.decode().value(LOCATION.CREATED_ON).when(LOCATION.LAST_UPDATE, "N").otherwise("U")
 									.as("update_Type"), LOCATION.ID, LOCATION.LAST_UPDATE, DSL.val(0).as("picture_Id"))
-					.from(LOCATION).where(LOCATION.FK_COMMUNITY.equal(fkCommunity));
+					.from(LOCATION).where(LOCATION.FK_COMMUNITY.equal(fkCommunity).and(LOCATION.ARCHIVED.equal(0)));
 			return locationSelect;
 		}
 	}
@@ -231,7 +231,7 @@ public enum UpdatesDao {
 
 		private SelectConditionStep<Record> where(int voteLimit, Integer notFromLocation, Condition cond,
 				SelectOnConditionStep<Record> tables) {
-			SelectConditionStep<Record> where = tables.where(LOCATION.FK_COMMUNITY.equal(fkCommunity)).and(
+			SelectConditionStep<Record> where = tables.where(LOCATION.FK_COMMUNITY.equal(fkCommunity).and(LOCATION.ARCHIVED.equal(0))).and(
 					PICTURES.UP_VOTES.greaterOrEqual(voteLimit));
 
 			if (notFromLocation != null) {

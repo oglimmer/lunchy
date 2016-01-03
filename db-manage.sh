@@ -12,11 +12,12 @@ where:
     -h  shows this help text
     -d  diffs dev to staging
     -u  updates staging
-    -i  updates dev"
+    -i  updates dev
+    -c  clear checksum on dev and staging"
 
 cd ${0%/*}
 
-while getopts ':hdui' option; do
+while getopts ':hduic' option; do
   case "$option" in
     h) echo "$usage"
        exit
@@ -27,6 +28,8 @@ while getopts ':hdui' option; do
        ;;
     i) UPDATE_DEV=YES
        ;;
+    c) CLEAR_CHECKSUM=YES
+	   ;;
     :) printf "missing argument for -%s\n" "$OPTARG" >&2
        echo "$usage" >&2
        exit 1
@@ -46,7 +49,7 @@ if [ -n "$DIFF" ]; then
 	
 	rm -f $DIFF_FILE
 		
-	liquibase --driver=com.mysql.jdbc.Driver --classpath=$CLASSPATH --changeLogFile=$DIFF_FILE --url=jdbc:mysql://127.0.0.1/$STAGING --username=root --referenceUrl=jdbc:mysql://127.0.0.1/$DEV --referenceUsername=root diffChangeLog 
+	liquibase --driver=com.mysql.jdbc.Driver --classpath=$CLASSPATH --changeLogFile=$DIFF_FILE --url=jdbc:mysql://127.0.0.1/$STAGING?useSSL=false --username=root --referenceUrl=jdbc:mysql://127.0.0.1/$DEV?useSSL=false --referenceUsername=root diffChangeLog 
 	
 	echo "$DIFF_FILE created. Will now be opened in editor. Copy it to your change file repository" 
 	
@@ -60,7 +63,7 @@ if [ -n "$UPDATE_STAG" ]; then
 	
 	echo "Applying changes to $STAGING to $UPDATE_FILE"
 	
-	liquibase --driver=com.mysql.jdbc.Driver --classpath=$CLASSPATH --changeLogFile=./src/main/resources/all_tables.xml --url=jdbc:mysql://127.0.0.1/$STAGING --username=root updateSQL >$UPDATE_FILE
+	liquibase --driver=com.mysql.jdbc.Driver --classpath=$CLASSPATH --changeLogFile=./src/main/resources/all_tables.xml --url=jdbc:mysql://127.0.0.1/$STAGING?useSSL=false --username=root updateSQL >$UPDATE_FILE
 	
 	mysql -uroot -e "source $UPDATE_FILE"
 	
@@ -75,9 +78,20 @@ if [ -n "$UPDATE_DEV" ]; then
 	
 	echo "Applying changes to $DEV"
 	
-	liquibase --driver=com.mysql.jdbc.Driver --classpath=$CLASSPATH --changeLogFile=./src/main/resources/all_tables.xml --url=jdbc:mysql://127.0.0.1/$DEV --username=root updateSQL | grep DATABASECHANGELOG | while read line ; do
+	liquibase --driver=com.mysql.jdbc.Driver --classpath=$CLASSPATH --changeLogFile=./src/main/resources/all_tables.xml --url=jdbc:mysql://127.0.0.1/$DEV?useSSL=false --username=root updateSQL | grep DATABASECHANGELOG | while read line ; do
    		mysql -uroot -e "$line"
 	done
 		 
 	echo "$DEV.DATABASECHANGELOG was updated (no DDL was executed)." 
+fi 
+
+if [ -n "$CLEAR_CHECKSUM" ]; then
+
+	
+	echo "Clearing checksums on DEV and STAGING"
+	
+	liquibase --driver=com.mysql.jdbc.Driver --classpath=$CLASSPATH --changeLogFile=./src/main/resources/all_tables.xml --url=jdbc:mysql://127.0.0.1/$DEV?useSSL=false --username=root clearCheckSums
+	liquibase --driver=com.mysql.jdbc.Driver --classpath=$CLASSPATH --changeLogFile=./src/main/resources/all_tables.xml --url=jdbc:mysql://127.0.0.1/$STAGING?useSSL=false --username=root clearCheckSums
+		 
+	echo "Done." 
 fi 

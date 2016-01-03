@@ -630,5 +630,13 @@
     <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1410033703274-1">
         <addUniqueConstraint columnNames="domain" constraintName="uniq_domain" deferrable="false" disabled="false" initiallyDeferred="false" tableName="communities"/>
     </changeSet>
+
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1451823870264-1">
+        <addColumn tableName="location">
+            <column defaultValue="0" defaultValueNumeric="0" name="archived" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
         
 </databaseChangeLog>
