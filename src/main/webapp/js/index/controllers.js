@@ -669,7 +669,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	// -- scope & local attributes	
 
 	$scope.selectedOffice = null;
-	$scope.onXsDevice = window.innerWidth<=735;
+	$scope.onXsDevice = window.innerWidth<640;
 	var dataHolder = [];	
 	var initPage = ListConfig.page;
 
@@ -748,7 +748,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 		
 	$(window).on("resize.doResize", function (){
         $scope.$apply(function(){
-        	$scope.onXsDevice = window.innerWidth<=735;
+        	$scope.onXsDevice = window.innerWidth<640;
         });
     });
 
