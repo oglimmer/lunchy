@@ -44,7 +44,12 @@ public enum DBConn {
 	}
 	
 	private String getConnectionUrl() {
-		return LunchyProperties.INSTANCE.getDbServerUrl() + LunchyProperties.INSTANCE.getDbSchema() + "?useSSL=false";
+		String additionalParameter = "";
+		// HACK. avoid mysql warning
+		if("com.mysql.jdbc.Driver".equals(LunchyProperties.INSTANCE.getDbDriver())) {
+			additionalParameter = "?useSSL=false";
+		}
+		return LunchyProperties.INSTANCE.getDbServerUrl() + LunchyProperties.INSTANCE.getDbSchema() + additionalParameter;
 	}
 
 	private void setupEnv() {
