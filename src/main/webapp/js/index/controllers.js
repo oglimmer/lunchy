@@ -387,7 +387,7 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
     $scope.childScopeHolder.reviewButton = "Add Review";
     
     // vote for current picture
-    $scope.childScopeHolder.currentPicVoted = 0;
+    $scope.childScopeHolder.currentPicVoted = false;
 
     // reference to review from current-user
     $scope.childScopeHolder.usersReview = null;
@@ -438,19 +438,20 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
 
     /* ### SCOPE BUTTON METHODS ### */
     
-    $scope.picVoteClicked = function(newState) {
+    $scope.picVoteClicked = function() {
+    	var newStateForPicVoted = $scope.childScopeHolder.currentPicVoted;
         var activePicture = _.find($scope.childScopeHolder.pictures, function(pic) { return pic.active; });
         if(_.isUndefined(activePicture)){
             return;
         }
-        if(newState) {
-            $scope.picVotes = _.without($scope.picVotes, activePicture.id);
-            PicturesDao.vote({id: activePicture.id}, {direction: 'down'});
-            activePicture.upVotes--;
+        if(newStateForPicVoted) {
+        	$scope.picVotes = _.union($scope.picVotes, [activePicture.id]);
+        	PicturesDao.vote({id: activePicture.id}, {direction: 'up'});
+        	activePicture.upVotes++;
         } else {
-            $scope.picVotes = _.union($scope.picVotes, [activePicture.id]);
-            PicturesDao.vote({id: activePicture.id}, {direction: 'up'});
-            activePicture.upVotes++;
+        	$scope.picVotes = _.without($scope.picVotes, activePicture.id);
+        	PicturesDao.vote({id: activePicture.id}, {direction: 'down'});
+        	activePicture.upVotes--;
         }
     };         
 
