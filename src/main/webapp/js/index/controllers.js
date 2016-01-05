@@ -8,13 +8,15 @@ controller('LunchyControllerMain', ['$scope', 'Authetication', function($scope, 
 	$scope.authetication = Authetication;
    
 }]).
-controller('LunchyControllerMenu', ['$scope', '$location', function($scope, $location) {
+controller('LunchyControllerMenu', ['$scope', '$location', '$state', function($scope, $location, $state) {
 	
 	$scope.login = function() {
+		$scope.navCollapsed=!$scope.navCollapsed;
 		$scope.authetication.showLogin();
 	};
 	
 	$scope.logout = function() {		
+		$scope.navCollapsed=!$scope.navCollapsed;
 		$scope.authetication.logout();
 		$location.path("/");
 	};
@@ -26,6 +28,15 @@ controller('LunchyControllerMenu', ['$scope', '$location', function($scope, $loc
             return "";
         }
     };
+    
+    $scope.redirectTo = function(path, param1) {
+    	$scope.navCollapsed=!$scope.navCollapsed;
+    	var param = {};
+    	if(path=="pictures"){
+    		param = {startPos: 1};
+    	}
+    	$state.go(path, param);
+    }
 
 }]).
 controller('LunchyControllerUpdates', ['$scope', 'UpdatesDao', '$window', function($scope, UpdatesDao, $window) {
@@ -665,13 +676,20 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 			$scope.tableParams.reload();
 		});
 	}
+	
+	function detectScreenSizes() {
+		var width=$(window).width();
+		$scope.onXssDevice = width<480;
+		$scope.onXsDevice = width<598;
+		$scope.onMdDevice = width<736;		
+	}
 
 	// -- scope & local attributes	
 
 	$scope.selectedOffice = null;
-	$scope.onXsDevice = window.innerWidth<640;
 	var dataHolder = [];	
 	var initPage = ListConfig.page;
+	detectScreenSizes();
 
 	// -- initial queries
 	
@@ -748,7 +766,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 		
 	$(window).on("resize.doResize", function (){
         $scope.$apply(function(){
-        	$scope.onXsDevice = window.innerWidth<640;
+        	detectScreenSizes();
         });
     });
 

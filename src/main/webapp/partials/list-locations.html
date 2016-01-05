@@ -22,22 +22,22 @@
             <td data-title="'Official Name'" sortable="'officialName'" filter="{ 'officialName': 'text' }">
                 {{item.officialName}}
             </td>
-            <td data-title="companyName+' name'" sortable="'streetName'" filter="{ 'streetName': 'text' }" ng-if="!onXsDevice">
+            <td data-title="companyName+' name'" sortable="'streetName'" filter="{ 'streetName': 'text' }" ng-if="!onMdDevice || !onXsDevice">
                 {{item.streetName}}
             </td>
             <td data-title="'Turn around time'" sortable="'turnAroundTime'" filter="{ 'turnAroundTime': 'text' }">
                 {{item.turnAroundTime}}
             </td>
-            <td data-title="'# Reviews'" sortable="'numberOfReviews'" filter="{ 'numberOfReviews': 'text' }" ng-if="!onXsDevice">
+            <td data-title="'# Reviews'" sortable="'numberOfReviews'" filter="{ 'numberOfReviews': 'text' }" ng-if="!onMdDevice || !onXsDevice">
                 {{item.numberOfReviews}}
             </td>
-            <td data-title="'Avg Rating'" sortable="'avgRating'" filter="{ 'avgRating': 'text' }" ng-if="!onXsDevice">
+            <td data-title="'Avg Rating'" sortable="'avgRating'" filter="{ 'avgRating': 'text' }" ng-if="!onMdDevice || !onXsDevice || !onXssDevice">
                 {{item.avgRating}}
             </td>
-            <td data-title="'Last Rating'" sortable="'lastRating'" ng-if="!onXsDevice">
+            <td data-title="'Last Rating'" sortable="'lastRating'" ng-if="!onMdDevice">
                 {{item.lastRating|date:'shortDate'}}
             </td>
-            <td data-title="'Last Update'" sortable="'lastUpdate'" ng-if="!onXsDevice">
+            <td data-title="'Last Update'" sortable="'lastUpdate'" ng-if="!onMdDevice">
                 {{item.lastUpdate|date:'shortDate'}}
             </td>
             <td data-title="'Tags'" sortable="'tags'" filter="{ 'tags': 'text' }">

@@ -8,23 +8,23 @@
 		</div>
 		<div class="navbar-collapse collapse" ng-class="!navCollapsed && 'in'">
 			<ul class="nav navbar-nav">
-				<li ng-class="getClass('/updates')"><a href="#/updates">Home</a></li>
-				<li ng-class="getClass('/browse')"><a href="#/browse">Browse</a></li>
-				<li ng-class="getClass('/list')"><a href="#/list">List</a></li>
-                <li ng-class="getClass('/pictures')"><a href="#/pictures/1">Pics</a></li>
-                <li ng-class="getClass('/finder')"><a href="#/finder">Finder</a></li>
-                <li ng-show="authetication.loggedIn" ng-class="getClass('/add')"><a href="#/add">Add</a></li>
+				<li ng-class="getClass('/updates')"><a href="" ng-click="redirectTo('updates')">Home</a></li>
+				<li ng-class="getClass('/browse')"><a href="" ng-click="redirectTo('browse')">Browse</a></li>
+				<li ng-class="getClass('/list')"><a href="" ng-click="redirectTo('list')">List</a></li>
+                <li ng-class="getClass('/pictures')"><a href="" ng-click="redirectTo('pictures')">Pics</a></li>
+                <li ng-class="getClass('/finder')"><a href="" ng-click="redirectTo('finder')">Finder</a></li>
+                <li ng-show="authetication.loggedIn" ng-class="getClass('/add')"><a href="" ng-click="redirectTo('add')">Add</a></li>
 			</ul>
             <ul class="nav navbar-nav navbar-right">                        	
-            	<li class="dropdown" dropdown ng-show="authetication.permissions==2">
-          			<a href="#" dropdown-toggle class="dropdown-toggle">Admin <span class="caret"></span></a>
+            	<li class="dropdown" uib-dropdown ng-show="authetication.permissions==2">
+          			<a href="#" uib-dropdown-toggle class="dropdown-toggle">Admin <span class="caret"></span></a>
           			<ul class="dropdown-menu">
-            			<li><a href="#/user">Users</a></li>
-            			<li><a href="#/office">Offices</a></li>
+            			<li><a href="" ng-click="redirectTo('user')">Users</a></li>
+            			<li><a href="" ng-click="redirectTo('office')">Offices</a></li>
           			</ul>
         		</li>            
                 <li ng-hide="authetication.loggedIn"><a href="" ng-click="login()">Login/Register</a></li>
-                <li ng-show="authetication.loggedIn" ng-class="getClass('/settings')"><a href="#/settings">Settings</a></li>
+                <li ng-show="authetication.loggedIn" ng-class="getClass('/settings')"><a href="" ng-click="redirectTo('settings')">Settings</a></li>
                 <li ng-show="authetication.loggedIn"><a href="" ng-click="logout()">Log out</a></li>
             </ul>
 		</div>
