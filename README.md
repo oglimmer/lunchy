@@ -47,7 +47,7 @@ RUNNING THE E2E TESTS
 TIPS FOR DEV
 ============
 
-- install coffee-script (https://www.npmjs.org/package/coffee-script) and run `coffee -o webapp/js  -cw coffee/ coffee -o webapp/js  -cw coffee/` from src/main
+- install coffee-script (https://www.npmjs.org/package/coffee-script) and run `coffee -o webapp/js  -cw coffee/` from src/main
 
 
 HOW TO RE-CALC THE TURN_ROUND_TIMES ON LOCATION
