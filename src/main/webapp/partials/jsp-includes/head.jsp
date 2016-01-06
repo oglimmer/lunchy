@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Lunchy</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <link href="webjars/normalize.css/3.0.2/normalize.css" rel="stylesheet" />
         <link href="webjars/jquery-ui/1.11.4/jquery-ui.min.css" rel="stylesheet" /><!-- tag autocomplete -->
         <link href="webjars/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"><!-- modal-dialog and more -->
