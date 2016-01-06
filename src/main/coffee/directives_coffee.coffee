@@ -127,11 +127,14 @@ LunchyApp.directive 'tagInput', ->
     $(element).find('input').bind "blur", (e) ->      
       $scope.$apply 'addTag(true)'
 
-    $scope.focus = ->
+    $scope.focus = (e) ->
       $(element).find('input').select()
-      return true
+      # BUG: https://github.com/angular/angular.js/issues/6432
+      e.stopPropagation();
+      e.preventDefault();
+      return      
 
-  template: "<div class='tag-input-ctn form-control' style='height:auto !important' ng-click='focus()'>" +
+  template: "<div class='tag-input-ctn form-control' style='height:auto !important' ng-click='focus($event)'>" +
               "<div class='input-tag' data-ng-repeat=\"tag in tagArray() track by $index\">" + 
                 "{{tag}}" +
                 "<div class='delete-tag' data-ng-click='deleteTag($index)'>" +
