@@ -638,5 +638,9 @@
             </column>
         </addColumn>
     </changeSet>
-        
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1452210376684-1">
+        <addColumn tableName="users">
+            <column name="list_view_col_prio" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>        
 </databaseChangeLog>
