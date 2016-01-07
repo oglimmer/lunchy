@@ -778,9 +778,42 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 }]).
 controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Authetication', 'AlertPaneService', function($scope, UserDao, OfficesDao, Authetication, AlertPaneService) {
 	AlertPaneService.add($scope);
+	
+	var itemNames = ["R (Reviewed by myself)", "Official name", $scope.companyName+" name", "Turn around time", "# Reviews", "Avg Rating", "Last Rating", "Last Update", "Tags"];
+	function buildListViewColPrioUI() {
+		var listViewColPrioArr;
+		if(_.isUndefined($scope.data.listViewColPrio) || $scope.data.listViewColPrio == "") {
+			listViewColPrioArr = [0,1,8,3,5,2,4,6,7]; // default prios
+		} else {
+			listViewColPrioArr = $scope.data.listViewColPrio.split(",");
+		}
+		
+		angular.forEach(listViewColPrioArr, function(value) {
+			this.push(itemNames[value]);
+		}, $scope.listViewColPrioItems);			
+	}
+	function buildListViewColPrioDB() {
+		$scope.data.listViewColPrio = "";
+		angular.forEach($scope.listViewColPrioItems, function(listViewColPrioItem) {
+			angular.forEach(itemNames, function(itemName, index) {
+				if(itemName == listViewColPrioItem) {
+					if($scope.data.listViewColPrio != "") {
+						$scope.data.listViewColPrio += ",";
+					}
+					$scope.data.listViewColPrio += index;
+				}
+			});
+		});
+	}
 
-	$scope.data = UserDao.current();
+	$scope.data = {};
 	$scope.data.selectedOffice = null;
+	$scope.listViewColPrioItems = [];
+	
+	UserDao.current(function(loadData) {
+		$scope.data = loadData;
+		buildListViewColPrioUI();
+	});
 	
 	OfficesDao.query(function(offices) {
 		$scope.offices = offices;
@@ -789,6 +822,7 @@ controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Aut
 	
 	$scope.saveEdit = function() {
 		$scope.alerts = [];
+		buildListViewColPrioDB();
 		$scope.data.fkBaseOffice = $scope.data.selectedOffice.id;
 		UserDao.save($scope.data, function(result) {
 			if(!result.success) {
@@ -804,6 +838,10 @@ controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Aut
 			$scope.alerts.push({type:'danger', msg: 'Error while saving user: ' + result.statusText});
 		});		
 	};
+	
+	$scope.dragControlListeners = {	    
+	};
+	
 }]).
 controller('LunchyControllerUser', ['$scope', 'UserDao', 'ngTableParams', '$filter', function($scope, UserDao, ngTableParams, $filter) {
 

@@ -210,6 +210,7 @@ public class UserResource extends BaseResource {
 		private String displayname;
 		private Integer fkBaseOffice;
 		private Integer emailUpdates;
+		private String listViewColPrio;
 	}
 
 	@Data
@@ -220,6 +221,7 @@ public class UserResource extends BaseResource {
 		private Integer fkBaseOffice;
 		// needs to be type String or angular would not === values
 		private String emailUpdates;
+		private String listViewColPrio;
 	}
 
 }

@@ -21,6 +21,7 @@
         <script src="webjars/angular-google-maps/2.1.1/angular-google-maps.<%=DEBUG%>js"></script><!-- google-maps -->
         <script src="webjars/ng-table/1.0.0-beta.9/dist/ng-table.<%=DEBUG%>js"></script><!-- ng-table -->
         <script src="webjars/ng-flow/2.6.1/ng-flow-standalone.<%=DEBUG%>js"></script><!-- file upload -->
+        <script src="webjars/ng-sortable/1.3.2/dist/ng-sortable.<%=DEBUG%>js"></script><!--  -->
         <script src="webjars/modernizr/2.8.3/modernizr.<%=DEBUG%>js"></script>              
         <script src='//maps.googleapis.com/maps/api/js'></script><!-- google-maps -->
 

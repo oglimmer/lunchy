@@ -36,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Users extends TableImpl<UsersRecord> {
 
-	private static final long serialVersionUID = -1076514955;
+	private static final long serialVersionUID = -2059878168;
 
 	/**
 	 * The reference instance of <code>oli_lunchy.users</code>
@@ -130,6 +130,11 @@ public class Users extends TableImpl<UsersRecord> {
 	 * The column <code>oli_lunchy.users.next_Email_Update</code>.
 	 */
 	public final TableField<UsersRecord, Timestamp> NEXT_EMAIL_UPDATE = createField("next_Email_Update", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.users.list_view_col_prio</code>.
+	 */
+	public final TableField<UsersRecord, String> LIST_VIEW_COL_PRIO = createField("list_view_col_prio", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.users</code> table reference
