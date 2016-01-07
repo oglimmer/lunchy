@@ -46,11 +46,11 @@
 				</div>
 			</div>
 
-			<div class="row form-group">
-				<label for="maxTime" class="col-md-2 control-label">Min rating</label>
+			<div class="row form-group" ng-show="authetication.loggedIn">
+				<label for="maxTime" class="col-md-2 control-label">Your min rating</label>
 				<div class="col-md-10">
 					<input type="number" class="form-control" id="minRating" name="minRating" ng-model="data.minRating" placeholder="e.g. 4">
-					<span class="help-block">Only locations which match the minimum rating will be shown. Use 0 to show only locations without a complete rating.</span>
+					<span class="help-block">Only locations which match your rating will be shown. Use 0 to show only locations without a complete rating.</span>
 				</div>
 			</div>
 
