@@ -664,8 +664,58 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	});
 
 }]).
-controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'NgTableParams', 'ListConfig', 'Comparator', 'OfficesDao', 'Authetication', 'UserDao',
-                                                function($scope, $location, LocationsDao, $filter, NgTableParams, ListConfig, Comparator, OfficesDao, Authetication, UserDao) {
+controller('LunchyControllerListLocationsConfig', [ '$scope', 'UserDao', '$uibModalInstance', 'showColumnSettingsConfig',
+                                              function($scope, UserDao, $uibModalInstance, showColumnSettingsConfig) {
+
+	
+	// maps index no to strings (the DB saves only the index)
+	var itemNames = ["R (Reviewed by myself)", "Official name", $scope.companyName+" name", "Turn around time", "Number of Reviews", "Avg Rating", "Last Rating", "Last Update", "Tags"];
+	function buildListViewColPrioUI() {        
+		// translates the array of itemNo into array of itemNames
+		angular.forEach(showColumnSettingsConfig, function(value) {
+			this.push(itemNames[value]);
+		}, $scope.listViewColPrioItems);			
+	}
+	function buildListViewColPrioDB() {
+        // translates the array of itemNames into string with itemNo
+		var listViewColPrioString = "";
+		angular.forEach($scope.listViewColPrioItems, function(listViewColPrioItem) {
+			angular.forEach(itemNames, function(itemName, index) {
+				if(itemName == listViewColPrioItem) {
+					if(listViewColPrioString != "") {
+						listViewColPrioString += ",";
+					}
+					listViewColPrioString += index;
+				}
+			});
+		});
+        if(listViewColPrioString=="0,1,8,3,5,2,4,6,7") {
+        	// save the default prio into the DB as empty
+            return "";
+        } else {
+        	return listViewColPrioString;
+        }
+	}
+
+	$scope.listViewColPrioItems = [];
+	buildListViewColPrioUI();
+	
+	$scope.saveConfig = function() {
+		var listViewColPrioString = buildListViewColPrioDB();
+		UserDao.saveListViewColConfig({listViewColPrio: listViewColPrioString});
+		$uibModalInstance.close(listViewColPrioString);
+	};
+	
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+    };
+
+	$scope.dragControlListeners = {	    
+	};
+
+}]).
+controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'NgTableParams', 'ListConfig', 'Comparator', 'OfficesDao', 'Authetication', 'UserDao', '$uibModal',
+                                                function($scope, $location, LocationsDao, $filter, NgTableParams, ListConfig, Comparator, OfficesDao, Authetication, UserDao, $uibModal) {
 	
 	
 	// -- local functions
@@ -686,6 +736,15 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
             usedWidth += minColWidth[val];
             $scope.showColumnSettings[val] = usedWidth < screenWidth;            
         });
+	}
+	
+	function init(listViewColPrioString) {
+		if(_.isUndefined(listViewColPrioString) || listViewColPrioString == "") {
+            $scope.showColumnSettingsConfig = [0,1,8,3,5,2,4,6,7]; // default prios
+        } else {
+            $scope.showColumnSettingsConfig = listViewColPrioString.split(",");            
+        }		
+        setColVisibility();
 	}
 
 	// -- scope & local attributes	
@@ -708,16 +767,28 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 
      
     UserDao.current(function(loadData) {    
-        if(_.isUndefined(loadData.listViewColPrio) || loadData.listViewColPrio == "") {
-            $scope.showColumnSettingsConfig = [0,1,8,3,5,2,4,6,7]; // default prios
-        } else {
-            $scope.showColumnSettingsConfig = loadData.listViewColPrio.split(",");            
-        }
-        setColVisibility();
+    	init(loadData.listViewColPrio);
     });
 
 
 	// -- scope methods
+    
+    $scope.openConfig = function() {
+    	var modalInstance = $uibModal.open({
+            templateUrl: 'partials/listViewConfig.html?foo='+Math.random(),
+            controller: 'LunchyControllerListLocationsConfig',
+            resolve: {
+            	showColumnSettingsConfig: function() {
+            		return $scope.showColumnSettingsConfig;
+            	}
+            }
+        });
+        modalInstance.result.then(function (result) {            
+            init(result);
+        }, function () {
+            //console.log('Modal dismissed at: ' + new Date());
+        });
+	}
 	
 	$scope.rowclick = function(item) {
 		$location.path('/view/'+item.id);
@@ -794,47 +865,11 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Authetication', 'AlertPaneService', function($scope, UserDao, OfficesDao, Authetication, AlertPaneService) {
 	AlertPaneService.add($scope);
 	
-    // maps index no to strings (the DB saves only the index)
-	var itemNames = ["R (Reviewed by myself)", "Official name", $scope.companyName+" name", "Turn around time", "Number of Reviews", "Avg Rating", "Last Rating", "Last Update", "Tags"];
-	function buildListViewColPrioUI() {
-        // string with itemNo into array of itemNo
-		var listViewColPrioArr;
-		if(_.isUndefined($scope.data.listViewColPrio) || $scope.data.listViewColPrio == "") {
-			listViewColPrioArr = [0,1,8,3,5,2,4,6,7]; // default prios
-		} else {
-			listViewColPrioArr = $scope.data.listViewColPrio.split(",");
-		}
-		// translates the array of itemNo into array of itemNames
-		angular.forEach(listViewColPrioArr, function(value) {
-			this.push(itemNames[value]);
-		}, $scope.listViewColPrioItems);			
-	}
-	function buildListViewColPrioDB() {
-        // translates the array of itemNames into string with itemNo
-		$scope.data.listViewColPrio = "";
-		angular.forEach($scope.listViewColPrioItems, function(listViewColPrioItem) {
-			angular.forEach(itemNames, function(itemName, index) {
-				if(itemName == listViewColPrioItem) {
-					if($scope.data.listViewColPrio != "") {
-						$scope.data.listViewColPrio += ",";
-					}
-					$scope.data.listViewColPrio += index;
-				}
-			});
-		});
-        // save the default prio into the DB as empty
-        if($scope.data.listViewColPrio=="0,1,8,3,5,2,4,6,7") {
-            $scope.data.listViewColPrio = "";
-        }
-	}
-
 	$scope.data = {};
 	$scope.data.selectedOffice = null;
-	$scope.listViewColPrioItems = [];
 	
 	UserDao.current(function(loadData) {
 		$scope.data = loadData;
-		buildListViewColPrioUI();
 	});
 	
 	OfficesDao.query(function(offices) {
@@ -844,7 +879,6 @@ controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Aut
 	
 	$scope.saveEdit = function() {
 		$scope.alerts = [];
-		buildListViewColPrioDB();
 		$scope.data.fkBaseOffice = $scope.data.selectedOffice.id;
 		UserDao.save($scope.data, function(result) {
 			if(!result.success) {
@@ -859,9 +893,6 @@ controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Aut
 		}, function(result) {
 			$scope.alerts.push({type:'danger', msg: 'Error while saving user: ' + result.statusText});
 		});		
-	};
-	
-	$scope.dragControlListeners = {	    
 	};
 	
 }]).

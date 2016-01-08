@@ -43,6 +43,10 @@ factory('UserDao', ['$resource', function($resource) {
         'savePermission': {
             method: 'POST',
             url: 'rest/users/:id/savePermission'
+        },
+        'saveListViewColConfig': {
+            method: 'POST',
+            url: 'rest/users/saveListViewColConfig'
         }
     });
 }]).

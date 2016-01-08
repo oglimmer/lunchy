@@ -14,6 +14,10 @@
         </fieldset>
     </form>
 
+	<div style="margin-top:-35px;z-index:1001;font-size:1.5em;position:relative;top:20px;right:0px;width:100%;text-align:right;">
+		<a href="" ng-click="openConfig()"><img src="images/rotate.svg" style="width:64px;height:64px" alt="Config mobile device UI" /></a>
+	</div>
+
     <table ng-table="tableParams" class="table table-striped" show-filter="true">
         <tr ng-repeat="item in $data" ng-click="rowclick(item)">
             <td data-title="'R'" sortable="'reviewed'" ng-if="authetication.loggedIn && showColumnSettings[0]">

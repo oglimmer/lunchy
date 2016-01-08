@@ -72,6 +72,16 @@ public class UserResource extends BaseResource {
 		}
 		return rp;
 	}
+	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("saveListViewColConfig")
+	public ResultParam saveListViewColConfig(@Context HttpServletRequest request, ListViewColConfigInput input) {
+		UsersRecord userRec = SessionProvider.INSTANCE.getLoggedInUser(request, CommunityService.get(request));
+		userRec.setListViewColPrio(input.getListViewColPrio());
+		UserDao.INSTANCE.store(userRec);
+		return new ResultParam(true, null);
+	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -196,6 +206,11 @@ public class UserResource extends BaseResource {
 	public static class PermissionInput {
 		private Integer permissions;
 	}
+	
+	@Data
+	public static class ListViewColConfigInput {
+		private String listViewColPrio;
+	}
 
 	@Data
 	@EqualsAndHashCode(callSuper = true)
@@ -210,7 +225,6 @@ public class UserResource extends BaseResource {
 		private String displayname;
 		private Integer fkBaseOffice;
 		private Integer emailUpdates;
-		private String listViewColPrio;
 	}
 
 	@Data

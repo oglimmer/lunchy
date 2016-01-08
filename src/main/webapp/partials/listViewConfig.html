@@ -1,0 +1,20 @@
+    <div class="modal-header">
+        <h3 class="modal-title">Configure columns on mobile devices</h3>
+    </div>
+    <div class="modal-body"> 
+    
+    	<span class="help-block">On smaller device screens, the list view will hide columns going up, that means: even on very small devices you will always see the top column. The bottom column on the other hand will only be shown on tables or desktops. Move via drag and drop.</span>
+
+		<ul as-sortable="dragControlListeners" data-ng-model="listViewColPrioItems">
+			<li ng-repeat="item in listViewColPrioItems" as-sortable-item>
+				<div as-sortable-item-handle class="dragHandle">
+					<span class="glyphicon glyphicon-menu-hamburger" /> {{item}}
+				</div>
+			</li>
+		</ul>
+
+    </div>
+    <div class="modal-footer">
+		<button class="btn btn-primary" ng-click="saveConfig()">OK</button>
+   		<button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
