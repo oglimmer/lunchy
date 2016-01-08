@@ -664,8 +664,8 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	});
 
 }]).
-controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'NgTableParams', 'ListConfig', 'Comparator', 'OfficesDao', 'Authetication',
-                                                function($scope, $location, LocationsDao, $filter, NgTableParams, ListConfig, Comparator, OfficesDao, Authetication) {
+controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'NgTableParams', 'ListConfig', 'Comparator', 'OfficesDao', 'Authetication', 'UserDao',
+                                                function($scope, $location, LocationsDao, $filter, NgTableParams, ListConfig, Comparator, OfficesDao, Authetication, UserDao) {
 	
 	
 	// -- local functions
@@ -678,11 +678,14 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 		});
 	}
 	
-	function detectScreenSizes() {
-		var width=$(window).width();
-		$scope.onXssDevice = width<480;
-		$scope.onXsDevice = width<598;
-		$scope.onMdDevice = width<736;		
+	function setColVisibility() {
+        var minColWidth = [46,83,83,83,83,83,77,77,100];
+		var screenWidth=$(window).width();
+        var usedWidth = 0;
+		angular.forEach($scope.showColumnSettingsConfig, function(val) {
+            usedWidth += minColWidth[val];
+            $scope.showColumnSettings[val] = usedWidth < screenWidth;            
+        });
 	}
 
 	// -- scope & local attributes	
@@ -690,7 +693,8 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 	$scope.selectedOffice = null;
 	var dataHolder = [];	
 	var initPage = ListConfig.page;
-	detectScreenSizes();
+	setColVisibility();
+    $scope.showColumnSettings = [false,false,false,false,false,false,false,false,false];
 
 	// -- initial queries
 	
@@ -701,6 +705,17 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 			$scope.selectedOffice = _.find($scope.offices, function(office) { return office.id == Authetication.fkBaseOffice; });
 		}	
 	});
+
+     
+    UserDao.current(function(loadData) {    
+        if(_.isUndefined(loadData.listViewColPrio) || loadData.listViewColPrio == "") {
+            $scope.showColumnSettingsConfig = [0,1,8,3,5,2,4,6,7]; // default prios
+        } else {
+            $scope.showColumnSettingsConfig = loadData.listViewColPrio.split(",");            
+        }
+        setColVisibility();
+    });
+
 
 	// -- scope methods
 	
@@ -767,7 +782,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 		
 	$(window).on("resize.doResize", function (){
         $scope.$apply(function(){
-        	detectScreenSizes();
+        	setColVisibility();
         });
     });
 
@@ -779,20 +794,23 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Authetication', 'AlertPaneService', function($scope, UserDao, OfficesDao, Authetication, AlertPaneService) {
 	AlertPaneService.add($scope);
 	
+    // maps index no to strings (the DB saves only the index)
 	var itemNames = ["R (Reviewed by myself)", "Official name", $scope.companyName+" name", "Turn around time", "# Reviews", "Avg Rating", "Last Rating", "Last Update", "Tags"];
 	function buildListViewColPrioUI() {
+        // string with itemNo into array of itemNo
 		var listViewColPrioArr;
 		if(_.isUndefined($scope.data.listViewColPrio) || $scope.data.listViewColPrio == "") {
 			listViewColPrioArr = [0,1,8,3,5,2,4,6,7]; // default prios
 		} else {
 			listViewColPrioArr = $scope.data.listViewColPrio.split(",");
 		}
-		
+		// translates the array of itemNo into array of itemNames
 		angular.forEach(listViewColPrioArr, function(value) {
 			this.push(itemNames[value]);
 		}, $scope.listViewColPrioItems);			
 	}
 	function buildListViewColPrioDB() {
+        // translates the array of itemNames into string with itemNo
 		$scope.data.listViewColPrio = "";
 		angular.forEach($scope.listViewColPrioItems, function(listViewColPrioItem) {
 			angular.forEach(itemNames, function(itemName, index) {
@@ -804,6 +822,10 @@ controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Aut
 				}
 			});
 		});
+        // save the default prio into the DB as empty
+        if($scope.data.listViewColPrio=="0,1,8,3,5,2,4,6,7") {
+            $scope.data.listViewColPrio = "";
+        }
 	}
 
 	$scope.data = {};

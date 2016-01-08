@@ -16,31 +16,31 @@
 
     <table ng-table="tableParams" class="table table-striped" show-filter="true">
         <tr ng-repeat="item in $data" ng-click="rowclick(item)">
-            <td ng-if="authetication.loggedIn" data-title="'R'" sortable="'reviewed'">
+            <td data-title="'R'" sortable="'reviewed'" ng-if="authetication.loggedIn && showColumnSettings[0]">
                 <span class="glyphicon" ng-class="{'glyphicon-ok':item.reviewed}"></span>
             </td>
-            <td data-title="'Official Name'" sortable="'officialName'" filter="{ 'officialName': 'text' }">
+            <td data-title="'Official Name'" sortable="'officialName'" filter="{ 'officialName': 'text' }" ng-if="showColumnSettings[1]">
                 {{item.officialName}}
             </td>
-            <td data-title="companyName+' name'" sortable="'streetName'" filter="{ 'streetName': 'text' }" ng-if="!onMdDevice || !onXsDevice">
+            <td data-title="companyName+' name'" sortable="'streetName'" filter="{ 'streetName': 'text' }" ng-if="showColumnSettings[2]">
                 {{item.streetName}}
             </td>
-            <td data-title="'Turn around time'" sortable="'turnAroundTime'" filter="{ 'turnAroundTime': 'text' }">
+            <td data-title="'Turn around time'" sortable="'turnAroundTime'" filter="{ 'turnAroundTime': 'text' }" ng-if="showColumnSettings[3]">
                 {{item.turnAroundTime}}
             </td>
-            <td data-title="'# Reviews'" sortable="'numberOfReviews'" filter="{ 'numberOfReviews': 'text' }" ng-if="!onMdDevice || !onXsDevice">
+            <td data-title="'# Reviews'" sortable="'numberOfReviews'" filter="{ 'numberOfReviews': 'text' }" ng-if="showColumnSettings[4]">
                 {{item.numberOfReviews}}
             </td>
-            <td data-title="'Avg Rating'" sortable="'avgRating'" filter="{ 'avgRating': 'text' }" ng-if="!onMdDevice || !onXsDevice || !onXssDevice">
+            <td data-title="'Avg Rating'" sortable="'avgRating'" filter="{ 'avgRating': 'text' }" ng-if="showColumnSettings[5]">
                 {{item.avgRating}}
             </td>
-            <td data-title="'Last Rating'" sortable="'lastRating'" ng-if="!onMdDevice">
+            <td data-title="'Last Rating'" sortable="'lastRating'" ng-if="showColumnSettings[6]">
                 {{item.lastRating|date:'shortDate'}}
             </td>
-            <td data-title="'Last Update'" sortable="'lastUpdate'" ng-if="!onMdDevice">
+            <td data-title="'Last Update'" sortable="'lastUpdate'" ng-if="showColumnSettings[7]">
                 {{item.lastUpdate|date:'shortDate'}}
             </td>
-            <td data-title="'Tags'" sortable="'tags'" filter="{ 'tags': 'text' }">
+            <td data-title="'Tags'" sortable="'tags'" filter="{ 'tags': 'text' }" ng-if="showColumnSettings[8]">
                 <span ng-repeat="tag in item.tags | bycomma track by $index">
                     <span class="label label-default">{{tag}}</span>
                 </span>
