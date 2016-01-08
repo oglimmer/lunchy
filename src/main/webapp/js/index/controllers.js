@@ -795,7 +795,7 @@ controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Aut
 	AlertPaneService.add($scope);
 	
     // maps index no to strings (the DB saves only the index)
-	var itemNames = ["R (Reviewed by myself)", "Official name", $scope.companyName+" name", "Turn around time", "# Reviews", "Avg Rating", "Last Rating", "Last Update", "Tags"];
+	var itemNames = ["R (Reviewed by myself)", "Official name", $scope.companyName+" name", "Turn around time", "Number of Reviews", "Avg Rating", "Last Rating", "Last Update", "Tags"];
 	function buildListViewColPrioUI() {
         // string with itemNo into array of itemNo
 		var listViewColPrioArr;
