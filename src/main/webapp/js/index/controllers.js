@@ -664,8 +664,8 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	});
 
 }]).
-controller('LunchyControllerListLocationsConfig', [ '$scope', 'UserDao', '$uibModalInstance', 'showColumnSettingsConfig',
-                                              function($scope, UserDao, $uibModalInstance, showColumnSettingsConfig) {
+controller('LunchyControllerListLocationsConfig', [ '$scope', 'UserDao', '$uibModalInstance', 'showColumnSettingsConfig', 'Authetication', '$cookies',
+                                              function($scope, UserDao, $uibModalInstance, showColumnSettingsConfig, Authetication, $cookies) {
 
 	
 	// maps index no to strings (the DB saves only the index)
@@ -702,7 +702,13 @@ controller('LunchyControllerListLocationsConfig', [ '$scope', 'UserDao', '$uibMo
 	
 	$scope.saveConfig = function() {
 		var listViewColPrioString = buildListViewColPrioDB();
-		UserDao.saveListViewColConfig({listViewColPrio: listViewColPrioString});
+		Authetication.checkLoggedIn().then(function(data) {
+	        if(data.loggedIn){
+	        	UserDao.saveListViewColConfig({listViewColPrio: listViewColPrioString});
+	        }
+		}, function() {
+			$cookies.put("listViewColPrio", listViewColPrioString)
+		});
 		$uibModalInstance.close(listViewColPrioString);
 	};
 	
@@ -714,8 +720,8 @@ controller('LunchyControllerListLocationsConfig', [ '$scope', 'UserDao', '$uibMo
 	};
 
 }]).
-controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'NgTableParams', 'ListConfig', 'Comparator', 'OfficesDao', 'Authetication', 'UserDao', '$uibModal',
-                                                function($scope, $location, LocationsDao, $filter, NgTableParams, ListConfig, Comparator, OfficesDao, Authetication, UserDao, $uibModal) {
+controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsDao', '$filter', 'NgTableParams', 'ListConfig', 'Comparator', 'OfficesDao', 'Authetication', 'UserDao', '$uibModal', '$cookies',
+                                                function($scope, $location, LocationsDao, $filter, NgTableParams, ListConfig, Comparator, OfficesDao, Authetication, UserDao, $uibModal, $cookies) {
 	
 	
 	// -- local functions
@@ -765,9 +771,16 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
 		}	
 	});
 
-     
-    UserDao.current(function(loadData) {    
-    	init(loadData.listViewColPrio);
+	Authetication.checkLoggedIn().then(function(data) {
+        if(data.loggedIn){
+        	UserDao.current(function(loadData) {    
+            	init(loadData.listViewColPrio);
+            });
+        } else {
+        	init($cookies.get("listViewColPrio"));
+        }
+    }, function() {
+    	init($cookies.get("listViewColPrio"));
     });
 
 

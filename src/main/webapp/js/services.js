@@ -121,7 +121,7 @@ factory('Authetication', ['$uibModal', '$q', 'LoginDao', '$rootScope', 'StorageS
         function getLongTimeToken() {
             var longTimeToken = StorageService.get('longTimeToken');
             if (typeof(longTimeToken) === 'undefined' || longTimeToken == null) {
-                longTimeToken = $cookies.lunchylogintoken;
+                longTimeToken = $cookies.get("lunchylogintoken");
             }
             return longTimeToken;
         }
