@@ -13,9 +13,9 @@ public class NotificationEmailText {
 	private static String CR = "\r\n";
 	private static String BR = "<br/>";
 
-	private static final String HEAD_STYLE = "a {color:black; } a.plain {text-decoration: none; } .caption { margin-bottom: 20px;font-style: italic; } .food { border:2px solid black; } ";
+	private static final String HEAD_STYLE = "a {color:black; } a.plain {text-decoration: none; } .caption { margin-bottom: 20px;font-style: italic; } .food { border:2px solid black; } @media only screen and (max-width: 800px) { .food { width:95%; } } @media only screen and (min-width: 800px) { #main { width:800px; } } ";
 	private static final String BODY_STYLE = "background: rgba(141,215,255,1);background: -moz-linear-gradient(top, rgba(141,215,255,1) 0%, rgba(175,204,220,1) 100%);background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(141,215,255,1)), color-stop(100%, rgba(175,204,220,1)));background: -webkit-linear-gradient(top, rgba(141,215,255,1) 0%, rgba(175,204,220,1) 100%);background: -o-linear-gradient(top, rgba(141,215,255,1) 0%, rgba(175,204,220,1) 100%);background: -ms-linear-gradient(top, rgba(141,215,255,1) 0%, rgba(175,204,220,1) 100%);background: linear-gradient(to bottom, rgba(141,215,255,1) 0%, rgba(175,204,220,1) 100%);filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=\"#8dd7ff\", endColorstr=\"#afccdc\", GradientType=0 );font-family:\"Helvetica Neue\", Helvetica, Arial, sans-serif;font-size:18px";
-	private static final String CONTENT_DIV_STYLE = "width:800px;margin-bottom:50px;padding:0px 20px 20px 20px;background-color:#f6f6ef;margin-left:auto;margin-right:auto;border:3px solid black;border-radius:8px;-webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);";
+	private static final String CONTENT_DIV_STYLE = "margin-bottom:50px;padding:0px 20px 20px 20px;background-color:#f6f6ef;margin-left:auto;margin-right:auto;border:3px solid black;border-radius:8px;-webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);-moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);";
 
 	private static final String greeting = "Hello {0} my hungry friend,";
 	private static final String top_intro1 = "This is the weekly update from {0}.";
@@ -29,9 +29,9 @@ public class NotificationEmailText {
 	private static final String no_updates = "Nothing happened this week :( - visit lunchy now and enter new locations, reviews and pictures!";
 
 	public static String getHtml(UsersRecord rec, List<UpdatesQuery> updates, List<MailImage> images) {
-		StringBuilder body = new StringBuilder("<html><head><style>" + HEAD_STYLE + "</style></head><body style='" + BODY_STYLE
+		StringBuilder body = new StringBuilder("<html><head><meta charset='utf-8'><style>" + HEAD_STYLE + "</style></head><body style='" + BODY_STYLE
 				+ "'>");
-		body.append("<div style='" + CONTENT_DIV_STYLE + "'>");
+		body.append("<div id='main' style='" + CONTENT_DIV_STYLE + "'>");
 		body.append("<h2>" + MessageFormat.format(greeting, rec.getDisplayname()) + "</h2>").append(BR);
 		if (updates.isEmpty()) {
 			body.append(BR + no_updates + BR);
@@ -61,6 +61,7 @@ public class NotificationEmailText {
 			}
 			body.append("</div>");
 			body.append(BR);
+			body.append("<hr style='clear: both;visibility:hidden;'/>");
 			body.append(MessageFormat.format(middle_text, getHtmlUrl(rec.getFkCommunity())));
 			body.append(BR);
 			body.append("<ul>");

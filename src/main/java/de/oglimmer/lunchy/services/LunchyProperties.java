@@ -105,4 +105,9 @@ public enum LunchyProperties {
 	public String getSecureDomainPattern() {
 		return prop.getProperty("secure.domain.pattern", "");
 	}
+	
+	public String getDomain() {
+		return prop.getProperty("app.domain", System.getProperty("lunchy.domain", "%s.lunchylunch.com"));
+	}
+
 }

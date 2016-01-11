@@ -19,7 +19,7 @@ import de.oglimmer.lunchy.services.LunchyProperties;
 public enum EmailProvider {
 	INSTANCE;
 
-	private static final String DOMAIN = "%s.lunchylunch.com";
+	private static final String DOMAIN = LunchyProperties.INSTANCE.getDomain();
 	private static final String URL = "http://%s";
 	private static final String URLS = "https://%s";
 
@@ -96,11 +96,11 @@ public enum EmailProvider {
 				"Lunchy - Reset your password link",
 				"Hello "
 						+ user.getDisplayname()
-						+ "\r\n\r\nYou have requested a link to reset your Lunchy password.\r\n\r\nClick here to reset your password: "
+						+ "<br/><br/>You have requested a link to reset your Lunchy password.<br/><br/>Click here to reset your password: "
 						+ getUrl(user.getFkCommunity())
 						+ "/#/passwordReset?token="
 						+ user.getPasswordResetToken()
-						+ "\r\n\r\nThis link works for 24 hours.\r\n\r\nYou can ignore this email if you haven't requested this link.\r\n\r\nRegards,\r\nOli");
+						+ "<br/><br/>This link works for 24 hours.<br/><br/>You can ignore this email if you haven't requested this link.<br/><br/>Regards,<br/>Oli");
 	}
 
 	public void sendWelcome(String emailAddress, String name, int fkCommunity) {
@@ -110,19 +110,19 @@ public enum EmailProvider {
 
 	public void sendWelcomeUser(String emailAddress, String name, int fkCommunity) {
 		send(emailAddress, "Welcome to Lunchy", "Hello " + name
-				+ "\r\n\r\nYou have successfully registered at lunchy.\r\n\r\nVisit " + getUrl(fkCommunity)
-				+ " to explore lunch places.\r\n\r\nRegards,\r\nOli");
+				+ "<br/><br/>You have successfully registered at lunchy.<br/><br/>Visit " + getUrl(fkCommunity)
+				+ " to explore lunch places.<br/><br/>Regards,<br/>Oli");
 	}
 
 	public void sendWelcomeAdmin(String name, int fkCommunity) {
 		send(CommunityDao.INSTANCE.getById(fkCommunity).getAdminEmail(), "A new user registered to Lunchy",
-				"Hello admin\r\n\r\na new user " + name + " registered at lunchy. Go to " + getUrl(fkCommunity)
-						+ "/#/user and set a permission.\r\n\r\nRegards,\r\nOli");
+				"Hello admin<br/><br/>a new user " + name + " registered at lunchy. Go to " + getUrl(fkCommunity)
+						+ "/#/user and set a permission.<br/><br/>Regards,<br/>Oli");
 	}
 
 	public void sendPasswordResetDone(UsersRecord user) {
 		send(user.getEmail(), "Lunchy - Password reset done", "Hello " + user.getDisplayname()
-				+ "\r\n\r\nYou have successfully reset your Lunchy password.\r\n\r\nRegards,\r\nOli");
+				+ "<br/><br/>You have successfully reset your Lunchy password.<br/><br/>Regards,<br/>Oli");
 	}
 
 	public void sendUpdates(UsersRecord rec, List<UpdatesQuery> updates, List<MailImage> images) {
