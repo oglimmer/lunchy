@@ -788,7 +788,7 @@ controller('LunchyControllerListLocations', [ '$scope', '$location', 'LocationsD
     
     $scope.openConfig = function() {
     	var modalInstance = $uibModal.open({
-            templateUrl: 'partials/listViewConfig.html?foo='+Math.random(),
+            templateUrl: 'partials/list-locations-config.html',
             controller: 'LunchyControllerListLocationsConfig',
             resolve: {
             	showColumnSettingsConfig: function() {
