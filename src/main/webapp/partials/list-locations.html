@@ -5,17 +5,15 @@
         <fieldset>
             <div class="row form-group">
             	<div class="col-sm-1">
-	                <label id="officeLabelListView" for="selectedOffice" class="control-label">Office</label>
-                	<div class="pull-right removeOnNonExtraSmall">
-	                	<a href="" ng-click="openConfig()">
-	                		<img src="images/rotate.svg" style="width:64px;height:64px" alt="Config mobile device UI" />
-	                	</a>
-                	</div>
+	                <label for="selectedOffice" class="control-label">Office</label>
                 </div>
                 <div class="col-sm-11">
-                    <select class="form-control" id="selectedOffice" 
+                    <select class="form-control" id="selectedOffice"
                     	ng-model="selectedOffice" ng-options="office.name for office in offices track by office.id">                        
                     </select>
+                	<a href="" ng-click="openConfig()" class="removeOnNonExtraSmall pull-right">
+                		<img src="images/rotate.svg" style="width:48px;height:48px" alt="Config mobile device UI" />
+                	</a>
                 </div>
             </div>
         </fieldset>

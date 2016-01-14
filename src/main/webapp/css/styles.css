@@ -254,9 +254,9 @@ ul {
 	height:50px;
 }
 
-@media only screen and (max-width: 768px) {
-	#officeLabelListView {
-		position:relative;
-		top:37px;
+@media only screen and (max-width: 767px) {
+	#selectedOffice {
+		display:inline;
+		width:76%;
 	}	
 }
