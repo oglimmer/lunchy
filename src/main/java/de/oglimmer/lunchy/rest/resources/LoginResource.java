@@ -1,7 +1,5 @@
 package de.oglimmer.lunchy.rest.resources;
 
-import java.util.Calendar;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -15,20 +13,17 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import org.mindrot.jbcrypt.BCrypt;
 
-import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.dao.UserDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 import de.oglimmer.lunchy.rest.SessionProvider;
 import de.oglimmer.lunchy.rest.dto.LoginResponse;
+import de.oglimmer.lunchy.rest.resources.helper.LoginCheck;
 import de.oglimmer.lunchy.services.CommunityService;
-import de.oglimmer.lunchy.services.DateCalcService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Path("login")
 public class LoginResource {
@@ -40,7 +35,7 @@ public class LoginResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public LoginResponse check(@Context HttpServletRequest request, @QueryParam(value = "longTimeToken") String longTimeToken) {
-		return new CheckLogic(request, longTimeToken).check();
+		return new LoginCheck(request, longTimeToken).check();
 	}
 
 	@POST
@@ -68,96 +63,7 @@ public class LoginResource {
 		private boolean keepLoggedIn;
 	}
 
-	class CheckLogic {
-
-		private HttpServletRequest request;
-		private String longTimeToken;
-
-		private CheckLogic(HttpServletRequest request, String longTimeToken) {
-			this.request = request;
-			this.longTimeToken = longTimeToken;
-
-		}
-
-		private LoginResponse check() {
-			SessionCheck sessionCheck = new SessionCheck();
-			if (sessionCheck.isValid()) {
-				return getSuccessResponse(sessionCheck.getUser());
-			}
-			LongTimeTokenCheck lttCheck = new LongTimeTokenCheck();
-			if (lttCheck.isValid()) {
-				return getSuccessResponse(lttCheck.getUser());
-			}
-			return getNoSuccessResponse();
-		}
-
-		private LoginResponse getNoSuccessResponse() {
-			LoginResponse noSuccessResp = new LoginResponse();
-			setCompanyName(noSuccessResp);
-			return noSuccessResp;
-		}
-
-		public LoginResponse getSuccessResponse(UsersRecord user) {
-			LoginResponse resp = sessionProvider.createSession(user, request.getSession(true), false);
-			setCompanyName(resp);
-			return resp;
-		}
-
-		private void setCompanyName(LoginResponse resp) {
-			resp.setCompanyName(CommunityDao.INSTANCE.getById(CommunityService.get(request)).getName());
-		}
-
-		class SessionCheck {
-			@Getter
-			private UsersRecord user;
-
-			public boolean isValid() {
-				loadUserFromSessionAttr();
-				return user != null;
-			}
-
-			private void loadUserFromSessionAttr() {
-				user = sessionProvider.getLoggedInUser(request, CommunityService.get(request));
-			}
-		}
-
-		class LongTimeTokenCheck {
-			@Getter
-			private UsersRecord user;
-
-			public boolean isValid() {
-				if (isLongTimeTokenPresent()) {
-					tryToLoadUserByToken();
-					if (userFound()) {
-						if (isLongTimeTokenYoungerThan3Month()) {
-							return true;
-						} else {
-							sessionProvider.removeToken(user);
-						}
-					}
-				}
-				return false;
-			}
-
-			private boolean isLongTimeTokenYoungerThan3Month() {
-				return DateCalcService.youngerThan(user.getLongTimeTimestamp(), Calendar.MONTH, 3);
-			}
-
-			private boolean userFound() {
-				return user != null;
-			}
-
-			private boolean isLongTimeTokenPresent() {
-				return longTimeToken != null;
-			}
-
-			private void tryToLoadUserByToken() {
-				user = UserDao.INSTANCE.getByLongTimeToken(longTimeToken, CommunityService.get(request));
-			}
-
-		}
-
-	}
+	
 
 	@AllArgsConstructor
 	class LoginLogic {
@@ -216,3 +122,4 @@ public class LoginResource {
 	}
 
 }
+

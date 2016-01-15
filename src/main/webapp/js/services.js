@@ -115,29 +115,28 @@ factory('FinderDao', ['$resource', function($resource) {
 		}
 	});
 }]).
-factory('UsageDao', ['$resource', function($resource) {
-	return $resource('rest/usage', {}, {
-		'register': {
+factory('UsageDao', ['$resource', 'StorageService', function($resource, StorageService) {
+	var UsageDaoResource = $resource('rest/usage', {}, {
+		'registerCall': {
 			method: 'POST',
 			url: 'rest/usage/:action/:context',
 			params: {
 				action: "@action",
 				context: "@context"
 			}
-		}
+		}		
 	});
+	
+	UsageDaoResource.register = function(param) {
+		// This method could be called before the session is recreated by the longTimeToken
+		param.longTimeToken = StorageService.getLongTimeToken();
+		this.registerCall(param);
+	};
+	
+	return UsageDaoResource;
 }]).
-factory('Authetication', ['$uibModal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 'CommunityService', '$cookies', 'UsageDao',
-    function($uibModal, $q, LoginDao, $rootScope, StorageService, OfficesDao, CommunityService, $cookies, UsageDao) {
-
-        function getLongTimeToken() {
-            var longTimeToken = StorageService.get('longTimeToken');
-            if (typeof(longTimeToken) === 'undefined' || longTimeToken == null) {
-                longTimeToken = $cookies.get("lunchylogintoken");
-            }
-            return longTimeToken;
-        }
-
+factory('Authetication', ['$uibModal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 'CommunityService', 'UsageDao',
+    function($uibModal, $q, LoginDao, $rootScope, StorageService, OfficesDao, CommunityService, UsageDao) {
 
         return {
             loggedIn: false,
@@ -172,7 +171,7 @@ factory('Authetication', ['$uibModal', '$q', 'LoginDao', '$rootScope', 'StorageS
 
             login: function() {
                 var thiz = this;
-                var longTimeToken = getLongTimeToken();
+                var longTimeToken = StorageService.getLongTimeToken();
                 return LoginDao.check({longTimeToken:longTimeToken}).$promise
                     .then(function(successResp) {
                         CommunityService.setCompanyName(successResp.companyName);
@@ -269,7 +268,7 @@ factory('Comparator', function() {
     };
     return comparator;
 }).
-factory('StorageService', function ($window) {
+factory('StorageService', ['$window', '$cookies', function ($window, $cookies) {
     var localStorage = $window['localStorage'];
     return {
 
@@ -291,9 +290,17 @@ factory('StorageService', function ($window) {
 
         clearAll : function () {
             localStorage.clear();
+        },
+        
+        getLongTimeToken: function() {
+            var longTimeToken = this.get('longTimeToken');
+            if (typeof(longTimeToken) === 'undefined' || longTimeToken == null) {
+                longTimeToken = $cookies.get("lunchylogintoken");
+            }
+            return longTimeToken;
         }
     };
-}).
+}]).
 factory('TagService', ['TagDao', function (TagDao) {
     return {
         get: function(selectedOffice) {
