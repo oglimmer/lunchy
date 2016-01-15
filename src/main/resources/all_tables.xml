@@ -652,7 +652,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="context" type="VARCHAR(255)"/>
-            <column defaultValue="0000-00-00 00:00:00" name="created_On" type="TIMESTAMP">
+            <column name="created_on" type="TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00'">
                 <constraints nullable="false"/>
             </column>
             <column name="ip" type="VARCHAR(255)">
