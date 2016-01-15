@@ -663,4 +663,12 @@
             <column name="user-cookie" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>    
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1452892623342-1">
+        <addColumn tableName="usage_statistics">
+            <column name="domain" type="INT(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    
 </databaseChangeLog>

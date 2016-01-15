@@ -7,9 +7,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 
+import de.oglimmer.lunchy.database.dao.CommunityDao;
 import de.oglimmer.lunchy.database.dao.UsageDao;
 import de.oglimmer.lunchy.database.generated.tables.records.UsageStatisticsRecord;
 import de.oglimmer.lunchy.rest.SessionProvider;
+import de.oglimmer.lunchy.services.CommunityService;
 import de.oglimmer.lunchy.services.CookieService;
 import de.oglimmer.lunchy.services.DateCalcService;
 
@@ -29,6 +31,7 @@ public class UsageResource {
 		usage.setUserId(SessionProvider.INSTANCE.getLoggedInUserId(request));
 		Cookie ltsCookie = CookieService.INSTANCE.getLongTermSessionCookie(request);
 		usage.setUserCookie(ltsCookie != null ? ltsCookie.getValue() : null);
+		usage.setDomain(CommunityService.get(request));
 		UsageDao.INSTANCE.store(usage);
 	}
 

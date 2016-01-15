@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsageStatistics extends TableImpl<UsageStatisticsRecord> {
 
-	private static final long serialVersionUID = 1139421275;
+	private static final long serialVersionUID = 1217307649;
 
 	/**
 	 * The reference instance of <code>oli_lunchy.usage_statistics</code>
@@ -89,6 +89,11 @@ public class UsageStatistics extends TableImpl<UsageStatisticsRecord> {
 	 * The column <code>oli_lunchy.usage_statistics.user-cookie</code>.
 	 */
 	public final TableField<UsageStatisticsRecord, String> USER_COOKIE = createField("user-cookie", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.usage_statistics.domain</code>.
+	 */
+	public final TableField<UsageStatisticsRecord, Integer> DOMAIN = createField("domain", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
 	 * Create a <code>oli_lunchy.usage_statistics</code> table reference
