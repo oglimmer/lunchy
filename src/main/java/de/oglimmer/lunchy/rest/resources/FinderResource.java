@@ -80,12 +80,14 @@ public class FinderResource {
 		int rand = (int) (Math.random() * flatPossibleLoc.size());
 
 		List<QueryResponse> finalResult = new ArrayList<>();
-		List<QueryResponseSectionLine> finalResultSecLine = new ArrayList<>();
-		QueryResponseSectionLine finalResultRespSecLine = flatPossibleLoc.get(rand);
-		finalResultSecLine.add(finalResultRespSecLine);
-		QueryResponse finalResultQueryResp = new QueryResponse(finalResultSecLine,
-				getMinScoreForLoc(possibleLoc, finalResultRespSecLine.getLocation()));
-		finalResult.add(finalResultQueryResp);
+		if (!flatPossibleLoc.isEmpty()) {
+			List<QueryResponseSectionLine> finalResultSecLine = new ArrayList<>();
+			QueryResponseSectionLine finalResultRespSecLine = flatPossibleLoc.get(rand);
+			finalResultSecLine.add(finalResultRespSecLine);
+			QueryResponse finalResultQueryResp = new QueryResponse(finalResultSecLine,
+					getMinScoreForLoc(possibleLoc, finalResultRespSecLine.getLocation()));
+			finalResult.add(finalResultQueryResp);
+		}
 		return finalResult;
 	}
 

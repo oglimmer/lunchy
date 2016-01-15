@@ -11,6 +11,7 @@ import de.oglimmer.lunchy.database.generated.tables.Location;
 import de.oglimmer.lunchy.database.generated.tables.Offices;
 import de.oglimmer.lunchy.database.generated.tables.Pictures;
 import de.oglimmer.lunchy.database.generated.tables.Reviews;
+import de.oglimmer.lunchy.database.generated.tables.UsageStatistics;
 import de.oglimmer.lunchy.database.generated.tables.Users;
 import de.oglimmer.lunchy.database.generated.tables.UsersPicturesVotes;
 
@@ -64,6 +65,11 @@ public class Tables {
 	 * The table oli_lunchy.reviews
 	 */
 	public static final Reviews REVIEWS = de.oglimmer.lunchy.database.generated.tables.Reviews.REVIEWS;
+
+	/**
+	 * The table oli_lunchy.usage_statistics
+	 */
+	public static final UsageStatistics USAGE_STATISTICS = de.oglimmer.lunchy.database.generated.tables.UsageStatistics.USAGE_STATISTICS;
 
 	/**
 	 * The table oli_lunchy.users

@@ -115,8 +115,20 @@ factory('FinderDao', ['$resource', function($resource) {
 		}
 	});
 }]).
-factory('Authetication', ['$uibModal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 'CommunityService', '$cookies',
-    function($uibModal, $q, LoginDao, $rootScope, StorageService, OfficesDao, CommunityService, $cookies) {
+factory('UsageDao', ['$resource', function($resource) {
+	return $resource('rest/usage', {}, {
+		'register': {
+			method: 'POST',
+			url: 'rest/usage/:action/:context',
+			params: {
+				action: "@action",
+				context: "@context"
+			}
+		}
+	});
+}]).
+factory('Authetication', ['$uibModal', '$q', 'LoginDao', '$rootScope', 'StorageService', 'OfficesDao', 'CommunityService', '$cookies', 'UsageDao',
+    function($uibModal, $q, LoginDao, $rootScope, StorageService, OfficesDao, CommunityService, $cookies, UsageDao) {
 
         function getLongTimeToken() {
             var longTimeToken = StorageService.get('longTimeToken');
@@ -131,12 +143,14 @@ factory('Authetication', ['$uibModal', '$q', 'LoginDao', '$rootScope', 'StorageS
             loggedIn: false,
             fkBaseOffice: -1,
             permissions:-1,
+            userId: null,
 
             logInUser: function(loginResponse) {
                 if(loginResponse.success) {
                     this.loggedIn = true;
                     this.fkBaseOffice = loginResponse.fkOffice;
                     this.permissions = loginResponse.permissions;
+                    this.userId = loginResponse.userId;
                     $rootScope.$broadcast('userLoggedIn', []);
                 } else {
                     console.error("logInUser was called but response didnt succeed.");
@@ -174,8 +188,10 @@ factory('Authetication', ['$uibModal', '$q', 'LoginDao', '$rootScope', 'StorageS
             },
             
             logout: function() {
+            	UsageDao.register({action: 'logout', context: this.userId});
             	this.loggedIn = false;
             	this.permissions = 0;
+            	this.userId = null;
             	LoginDao.logout();
             },
 
@@ -207,9 +223,7 @@ factory('Authetication', ['$uibModal', '$q', 'LoginDao', '$rootScope', 'StorageS
                     controller: 'LunchyControllerLogin'
                 });
                 modalInstance.result.then(function (result) {
-                    if(result.success) {
-                        thiz.logInUser(result);
-                    }
+                	UsageDao.register({action: 'login', context: 'ok'});
                 }, function () {
                     //console.log('Modal dismissed at: ' + new Date());
                 });

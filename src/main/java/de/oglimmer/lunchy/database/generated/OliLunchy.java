@@ -11,6 +11,7 @@ import de.oglimmer.lunchy.database.generated.tables.Location;
 import de.oglimmer.lunchy.database.generated.tables.Offices;
 import de.oglimmer.lunchy.database.generated.tables.Pictures;
 import de.oglimmer.lunchy.database.generated.tables.Reviews;
+import de.oglimmer.lunchy.database.generated.tables.UsageStatistics;
 import de.oglimmer.lunchy.database.generated.tables.Users;
 import de.oglimmer.lunchy.database.generated.tables.UsersPicturesVotes;
 
@@ -37,7 +38,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OliLunchy extends SchemaImpl {
 
-	private static final long serialVersionUID = 425122282;
+	private static final long serialVersionUID = -1818388989;
 
 	/**
 	 * The reference instance of <code>oli_lunchy</code>
@@ -67,6 +68,7 @@ public class OliLunchy extends SchemaImpl {
 			Offices.OFFICES,
 			Pictures.PICTURES,
 			Reviews.REVIEWS,
+			UsageStatistics.USAGE_STATISTICS,
 			Users.USERS,
 			UsersPicturesVotes.USERS_PICTURES_VOTES);
 	}

@@ -123,12 +123,21 @@ config(['flowFactoryProvider', function (flowFactoryProvider) {
   // Can be used with different implementations of Flow.js
   // flowFactoryProvider.factory = fustyFlowFactory;
 }]).
-run(['$rootScope', 'Authetication', 'LoginDao', '$window', '$interval', function($rootScope, Authetication, LoginDao, $window, $interval) {
+run(['$rootScope', 'Authetication', 'LoginDao', '$window', '$interval', '$state', 'UsageDao', '$cookies', function($rootScope, Authetication, LoginDao, $window, $interval, $state, UsageDao, $cookies) {
 
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, eventObj) {
 		if (eventObj.authenticated === false) {
             $window.location = "./";
 		}
+	});
+    var initialState = true;
+    $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, eventObj) {
+    	if(initialState) {
+    		initialState = false;
+    		UsageDao.register({action: 'initialState', context: $state.current.name});    		
+    	} else {
+    		UsageDao.register({action: 'menuClick', context: $state.current.name});
+    	}
 	});
 
     // this is need for mobile devices. A user could open the page and then close the app.
@@ -147,5 +156,11 @@ run(['$rootScope', 'Authetication', 'LoginDao', '$window', '$interval', function
 		
 	}
 	$interval(keepAlive, 1000*60*5);
+	
+	var cooValue = $cookies.get("LTS");
+	if(cooValue==null) {
+		cooValue = Math.random();
+	}
+	$cookies.put("LTS", cooValue, {expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1))});
 	
 }]);

@@ -10,6 +10,7 @@ import de.oglimmer.lunchy.database.generated.tables.Location;
 import de.oglimmer.lunchy.database.generated.tables.Offices;
 import de.oglimmer.lunchy.database.generated.tables.Pictures;
 import de.oglimmer.lunchy.database.generated.tables.Reviews;
+import de.oglimmer.lunchy.database.generated.tables.UsageStatistics;
 import de.oglimmer.lunchy.database.generated.tables.Users;
 import de.oglimmer.lunchy.database.generated.tables.UsersPicturesVotes;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
@@ -18,6 +19,7 @@ import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
+import de.oglimmer.lunchy.database.generated.tables.records.UsageStatisticsRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersPicturesVotesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.UsersRecord;
 
@@ -52,6 +54,7 @@ public class Keys {
 	public static final Identity<OfficesRecord, Integer> IDENTITY_OFFICES = Identities0.IDENTITY_OFFICES;
 	public static final Identity<PicturesRecord, Integer> IDENTITY_PICTURES = Identities0.IDENTITY_PICTURES;
 	public static final Identity<ReviewsRecord, Integer> IDENTITY_REVIEWS = Identities0.IDENTITY_REVIEWS;
+	public static final Identity<UsageStatisticsRecord, Integer> IDENTITY_USAGE_STATISTICS = Identities0.IDENTITY_USAGE_STATISTICS;
 	public static final Identity<UsersRecord, Integer> IDENTITY_USERS = Identities0.IDENTITY_USERS;
 	public static final Identity<UsersPicturesVotesRecord, Integer> IDENTITY_USERS_PICTURES_VOTES = Identities0.IDENTITY_USERS_PICTURES_VOTES;
 
@@ -67,6 +70,7 @@ public class Keys {
 	public static final UniqueKey<PicturesRecord> KEY_PICTURES_PRIMARY = UniqueKeys0.KEY_PICTURES_PRIMARY;
 	public static final UniqueKey<ReviewsRecord> KEY_REVIEWS_PRIMARY = UniqueKeys0.KEY_REVIEWS_PRIMARY;
 	public static final UniqueKey<ReviewsRecord> KEY_REVIEWS_FKUSER = UniqueKeys0.KEY_REVIEWS_FKUSER;
+	public static final UniqueKey<UsageStatisticsRecord> KEY_USAGE_STATISTICS_PRIMARY = UniqueKeys0.KEY_USAGE_STATISTICS_PRIMARY;
 	public static final UniqueKey<UsersRecord> KEY_USERS_PRIMARY = UniqueKeys0.KEY_USERS_PRIMARY;
 	public static final UniqueKey<UsersPicturesVotesRecord> KEY_USERS_PICTURES_VOTES_PRIMARY = UniqueKeys0.KEY_USERS_PICTURES_VOTES_PRIMARY;
 	public static final UniqueKey<UsersPicturesVotesRecord> KEY_USERS_PICTURES_VOTES_UNIQUE_USER_PICTURE_VOTE = UniqueKeys0.KEY_USERS_PICTURES_VOTES_UNIQUE_USER_PICTURE_VOTE;
@@ -101,6 +105,7 @@ public class Keys {
 		public static Identity<OfficesRecord, Integer> IDENTITY_OFFICES = createIdentity(Offices.OFFICES, Offices.OFFICES.ID);
 		public static Identity<PicturesRecord, Integer> IDENTITY_PICTURES = createIdentity(Pictures.PICTURES, Pictures.PICTURES.ID);
 		public static Identity<ReviewsRecord, Integer> IDENTITY_REVIEWS = createIdentity(Reviews.REVIEWS, Reviews.REVIEWS.ID);
+		public static Identity<UsageStatisticsRecord, Integer> IDENTITY_USAGE_STATISTICS = createIdentity(UsageStatistics.USAGE_STATISTICS, UsageStatistics.USAGE_STATISTICS.ID);
 		public static Identity<UsersRecord, Integer> IDENTITY_USERS = createIdentity(Users.USERS, Users.USERS.ID);
 		public static Identity<UsersPicturesVotesRecord, Integer> IDENTITY_USERS_PICTURES_VOTES = createIdentity(UsersPicturesVotes.USERS_PICTURES_VOTES, UsersPicturesVotes.USERS_PICTURES_VOTES.ID);
 	}
@@ -114,6 +119,7 @@ public class Keys {
 		public static final UniqueKey<PicturesRecord> KEY_PICTURES_PRIMARY = createUniqueKey(Pictures.PICTURES, Pictures.PICTURES.ID);
 		public static final UniqueKey<ReviewsRecord> KEY_REVIEWS_PRIMARY = createUniqueKey(Reviews.REVIEWS, Reviews.REVIEWS.ID);
 		public static final UniqueKey<ReviewsRecord> KEY_REVIEWS_FKUSER = createUniqueKey(Reviews.REVIEWS, Reviews.REVIEWS.FK_USER, Reviews.REVIEWS.FK_LOCATION);
+		public static final UniqueKey<UsageStatisticsRecord> KEY_USAGE_STATISTICS_PRIMARY = createUniqueKey(UsageStatistics.USAGE_STATISTICS, UsageStatistics.USAGE_STATISTICS.ID);
 		public static final UniqueKey<UsersRecord> KEY_USERS_PRIMARY = createUniqueKey(Users.USERS, Users.USERS.ID);
 		public static final UniqueKey<UsersPicturesVotesRecord> KEY_USERS_PICTURES_VOTES_PRIMARY = createUniqueKey(UsersPicturesVotes.USERS_PICTURES_VOTES, UsersPicturesVotes.USERS_PICTURES_VOTES.ID);
 		public static final UniqueKey<UsersPicturesVotesRecord> KEY_USERS_PICTURES_VOTES_UNIQUE_USER_PICTURE_VOTE = createUniqueKey(UsersPicturesVotes.USERS_PICTURES_VOTES, UsersPicturesVotes.USERS_PICTURES_VOTES.FK_USER, UsersPicturesVotes.USERS_PICTURES_VOTES.FK_PICTURE);

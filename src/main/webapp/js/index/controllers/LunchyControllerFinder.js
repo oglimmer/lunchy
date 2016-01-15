@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('LunchyApp.controllers').
-controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'FinderDao', '$timeout', 'Authetication', 'OfficesDao', 'FinderSearchParameter', function($scope, TagService, UserDao, FinderDao, $timeout, Authetication, OfficesDao, FinderSearchParameter) {
+controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'FinderDao', '$timeout', 'Authetication', 'OfficesDao', 'FinderSearchParameter', 'UsageDao', function($scope, TagService, UserDao, FinderDao, $timeout, Authetication, OfficesDao, FinderSearchParameter, UsageDao) {
 	
 	// -- local functions
 	
@@ -57,12 +57,14 @@ controller('LunchyControllerFinder', ['$scope', 'TagService', 'UserDao', 'Finder
 		FinderDao.query(getRestParam(), function(result) {
 			$scope.resultData = result;
 		});
+		UsageDao.register({action: 'finder', context: 'search'});
 	};
 
 	$scope.searchRandom = function() {
 		FinderDao.queryRandom(getRestParam(), function(result) {
 			$scope.resultData = result;
 		});
+		UsageDao.register({action: 'finder', context: 'searchRandom'});
 	};
 
 	$scope.removeAll = function() {
