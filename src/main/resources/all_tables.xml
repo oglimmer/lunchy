@@ -642,5 +642,25 @@
         <addColumn tableName="users">
             <column name="list_view_col_prio" type="VARCHAR(255)"/>
         </addColumn>
-    </changeSet>        
+    </changeSet>    
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1452888757644-1">
+        <createTable tableName="usage_statistics">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="action" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="context" type="VARCHAR(255)"/>
+            <column defaultValue="0000-00-00 00:00:00" name="created_On" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ip" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user-agent" type="VARCHAR(255)"/>
+            <column name="user-id" type="INT"/>
+            <column name="user-cookie" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>    
 </databaseChangeLog>
