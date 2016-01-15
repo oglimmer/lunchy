@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('LunchyApp.controllers').
-controller('LunchyControllerUpdates', ['$scope', 'UpdatesDao', '$window', function($scope, UpdatesDao, $window) {
+controller('LunchyControllerUpdates', ['$scope', 'UpdatesDao', '$window', 'UsageDao', function($scope, UpdatesDao, $window, UsageDao) {
 
 	$scope.windowWidth = $window.innerWidth;
 	
@@ -11,5 +11,7 @@ controller('LunchyControllerUpdates', ['$scope', 'UpdatesDao', '$window', functi
 	    $scope.latestUpdates = updatesResponse.latestUpdates;
 	    $scope.latestPictures = updatesResponse.latestPictures;
 	});
+	
+	UsageDao.register({action: 'screenWidth', context: $scope.windowWidth});
 
 }]);
