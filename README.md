@@ -49,6 +49,8 @@ TIPS FOR DEV
 
 - install coffee-script (https://www.npmjs.org/package/coffee-script) and run `coffee -o webapp/js  -cw coffee/` from src/main
 
+- as the latest version of maven-release-plugin is only available on the Adobe maven repository, you need: https://repo.adobe.com to release a version
+
 
 HOW TO RE-CALC THE TURN_ROUND_TIMES ON LOCATION
 ===============================================
