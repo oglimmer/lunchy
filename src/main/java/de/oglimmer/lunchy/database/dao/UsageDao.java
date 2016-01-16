@@ -28,9 +28,17 @@ public enum UsageDao {
 		usage.setCreatedOn(DateCalcService.getNow());
 		Cookie ltsCookie = CookieService.INSTANCE.getLongTermSessionCookie(request);
 		usage.setUserCookie(ltsCookie != null ? ltsCookie.getValue() : null);
-		usage.setDomain(CommunityService.get(request));
+		usage.setDomain(getDomain(request));
 		usage.setUserId(getUserId(request, longTimeToken));
 		DB.store(usage);
+	}
+
+	private int getDomain(HttpServletRequest request) {
+		if (request.getAttribute("community") != null) {
+			return CommunityService.get(request);
+		} else {
+			return -1;
+		}
 	}
 
 	/**
