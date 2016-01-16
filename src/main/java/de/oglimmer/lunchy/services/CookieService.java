@@ -7,9 +7,11 @@ public enum CookieService {
 	INSTANCE;
 
 	public Cookie getLongTermSessionCookie(HttpServletRequest httpReq) {
-		for (Cookie coo : httpReq.getCookies()) {
-			if ("LTS".equals(coo.getName())) {
-				return coo;
+		if (httpReq != null && httpReq.getCookies() != null) {
+			for (Cookie coo : httpReq.getCookies()) {
+				if ("LTS".equals(coo.getName())) {
+					return coo;
+				}
 			}
 		}
 		return null;
