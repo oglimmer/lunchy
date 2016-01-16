@@ -1,3 +1,4 @@
+<%@ taglib prefix="lunchy" uri="http://oglimmer.de/lunchy/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" session="false" %>
 <!DOCTYPE html>
 <html lang="en" ng-app="LunchyApp" class="no-js" xmlns="http://www.w3.org/1999/xhtml" xmlns:ng="http://angularjs.org">
@@ -16,5 +17,7 @@
 
     <jsp:include page="partials/jsp-includes/body.jsp" />
 
+	<lunchy:log type="index" />
+	
 </body>
 </html>
