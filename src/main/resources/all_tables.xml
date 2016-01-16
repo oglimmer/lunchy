@@ -670,5 +670,19 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1452970345265-1">
+        <addColumn tableName="usage_statistics">
+            <column name="city" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1452970345265-2">
+        <addColumn tableName="usage_statistics">
+            <column name="country" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
     
 </databaseChangeLog>
