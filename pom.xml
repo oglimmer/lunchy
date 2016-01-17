@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.oglimmer</groupId>
 	<artifactId>lunchy</artifactId>
-	<version>0.36-SNAPSHOT</version>
+	<version>0.37-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<description>Lunchy not only makes lunch easier it also makes your life better! How does it do that? It collects and provides essential information about lunch places.</description>
 
