@@ -684,5 +684,10 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oli (generated)" id="1453037306051-1">
+        <addColumn tableName="usage_statistics">
+            <column name="referer" type="VARCHAR(2000)"/>
+        </addColumn>
+    </changeSet>
     
 </databaseChangeLog>
