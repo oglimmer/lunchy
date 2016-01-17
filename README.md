@@ -53,6 +53,8 @@ TIPS FOR DEV
 
 - run "mvn -DgenerateDBClasses=true compile" to (re-)generate the JOOQ DB beans/proxies
 
+- mysql and java should run in UTC. The angular FE converts to local (browser returned) time zones.
+
 HOW TO RE-CALC THE TURN_ROUND_TIMES ON LOCATION
 ===============================================
 update location set turn_around_time = (select ifnull(avg(travel_Time),0)+ifnull(avg(on_Site_Time),0) from reviews where reviews.fk_location=location.id);
