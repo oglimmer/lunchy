@@ -3,6 +3,7 @@ package de.oglimmer.lunchy.database.dao;
 import static de.oglimmer.lunchy.database.dao.DaoBackend.DB;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.sql.Timestamp;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,6 +19,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -88,11 +90,17 @@ public enum UsageDao {
 	private CountryCity getGeoData(String ip) throws IOException {
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 			try (CloseableHttpResponse response = httpclient.execute(new HttpGet("http://freegeoip.net/json/" + ip))) {
-				try (JsonReader jsonReader = Json.createReader(response.getEntity().getContent())) {
-					JsonObject jsonResponse = jsonReader.readObject();
-					String country = jsonResponse.getString("country_name");
-					String city = jsonResponse.getString("city");
-					return new CountryCity(country, city);
+				String resultString = EntityUtils.toString(response.getEntity(), "UTF-8");
+				try (JsonReader jsonReader = Json.createReader(new StringReader(resultString))) {
+					try {
+						JsonObject jsonResponse = jsonReader.readObject();
+						String country = jsonResponse.getString("country_name");
+						String city = jsonResponse.getString("city");
+						return new CountryCity(country, city);
+					} catch (javax.json.stream.JsonParsingException e) {
+						log.error("Failed to parse json from freegeoip.net/json. JSON: {}", resultString);
+						throw e;
+					}
 				}
 			}
 		}
