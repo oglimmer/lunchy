@@ -62,6 +62,7 @@ public enum UsageDao {
 		String userCookie = ltsCookie != null ? ltsCookie.getValue() : null;
 		int domain = getDomain(request);
 		Integer userId = getUserId(request, longTimeToken);
+		String referer = request.getHeader("referer");
 		execServ.submit(() -> {
 			UsageStatisticsRecord usage = new UsageStatisticsRecord();
 			usage.setAction(action);
@@ -72,6 +73,7 @@ public enum UsageDao {
 			usage.setUserCookie(userCookie);
 			usage.setDomain(domain);
 			usage.setUserId(userId);
+			usage.setReferer(referer);
 			try {
 				CountryCity cc = countryCityCache.get(ip);
 				usage.setCountry(cc.getCountry());

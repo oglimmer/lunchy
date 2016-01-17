@@ -51,6 +51,7 @@ TIPS FOR DEV
 
 - as the latest version of maven-release-plugin is only available on the Adobe maven repository, you need: https://repo.adobe.com to release a version
 
+- run "mvn -DgenerateDBClasses=true compile" to (re-)generate the JOOQ DB beans/proxies
 
 HOW TO RE-CALC THE TURN_ROUND_TIMES ON LOCATION
 ===============================================
