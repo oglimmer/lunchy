@@ -297,6 +297,7 @@
 						<source>webjars/ng-flow/2.6.1/ng-flow-standalone.js</source>
 						<source>webjars/ng-sortable/1.3.2/dist/ng-sortable.js</source>
 						<source>webjars/zxcvbn/4.2.0/dist/zxcvbn.js</source>
+						<source>http://maps.googleapis.com/maps/api/js</source>
 					</preloadSources>
 				</configuration>
 			</plugin>

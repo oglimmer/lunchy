@@ -25,6 +25,7 @@
         <script src="webjars/ng-flow/2.6.1/ng-flow-standalone.<%=DEBUG%>js"></script><!-- file upload -->
         <script src="webjars/ng-sortable/1.3.2/dist/ng-sortable.<%=DEBUG%>js"></script><!--  -->
         <script src="webjars/modernizr/2.8.3/modernizr.<%=DEBUG%>js"></script>              
+		<script src='//maps.googleapis.com/maps/api/js'></script><!-- google-maps -->
 
         <script>$(function() { $.ajax({ url: "webjars/zxcvbn/4.2.0/dist/zxcvbn.js", dataType: "script", cache: true }); });</script>
         
