@@ -5,15 +5,17 @@ import java.util.regex.Pattern;
 public enum BotDetectionService {
 	INSTANCE;
 
-	// as per https://support.google.com/webmasters/answer/1061943?hl=en
-	private static final String GOOGLEBOT_1 = RegExService.INSTANCE
-			.escape("Googlebot/2.1 (+http://www.google.com/bot.html)");
-	private static final String GOOGLEBOT_2 = RegExService.INSTANCE
-			.escape("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
+	static class Constancts {
+		// as per https://support.google.com/webmasters/answer/1061943?hl=en
+		private static final String GOOGLEBOT_1 = RegExService.INSTANCE
+				.escape("Googlebot/2.1 (+http://www.google.com/bot.html)");
+		private static final String GOOGLEBOT_2 = RegExService.INSTANCE
+				.escape("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
 
-	public static final String DEFAULT_BOT_REGEX = ".*(bot|crawler|spider|yahoo! slurp).*";
-	public static final String DEFAULT_NO_BOT_REGEX = ".*(" + BotDetectionService.GOOGLEBOT_1 + "|"
-			+ BotDetectionService.GOOGLEBOT_2 + ").*";
+		public static final String DEFAULT_BOT_REGEX = ".*(bot|crawler|spider|yahoo! slurp).*";
+		public static final String DEFAULT_NO_BOT_REGEX = ".*(" + BotDetectionService.Constancts.GOOGLEBOT_1 + "|"
+				+ BotDetectionService.Constancts.GOOGLEBOT_2 + ").*";
+	}
 
 	private Pattern patBot;
 	private Pattern patNoBot;

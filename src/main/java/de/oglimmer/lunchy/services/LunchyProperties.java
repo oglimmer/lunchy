@@ -206,7 +206,7 @@ public class LunchyProperties implements LunchyReloadableProperties {
 		if (array != null) {
 			return getRegExFromJsonArray(array);
 		} else {
-			return BotDetectionService.DEFAULT_BOT_REGEX;
+			return BotDetectionService.Constancts.DEFAULT_BOT_REGEX;
 		}
 	}
 
@@ -215,7 +215,7 @@ public class LunchyProperties implements LunchyReloadableProperties {
 		if (array != null) {
 			return getRegExFromJsonArray(array);
 		} else {
-			return BotDetectionService.DEFAULT_NO_BOT_REGEX;
+			return BotDetectionService.Constancts.DEFAULT_NO_BOT_REGEX;
 		}
 	}
 
