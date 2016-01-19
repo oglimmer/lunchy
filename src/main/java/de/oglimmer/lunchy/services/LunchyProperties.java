@@ -45,25 +45,17 @@ public class LunchyProperties implements LunchyReloadableProperties {
 	private boolean running = true;
 	private Thread propertyFileWatcherThread;
 	private List<Runnable> reloadables = new ArrayList<>();
-	private final String sourceLocation;
+	private String sourceLocation;
 
 	private LunchyProperties() {
-		sourceLocation = System.getProperty(LUNCHY_PROPERTIES);
 		init();
-		if (sourceLocation != null && !isInMemoryConfig()) {
-			propertyFileWatcherThread = new Thread(new PropertyFileWatcher());
-			propertyFileWatcherThread.start();
-		}
-	}
-
-	private boolean isInMemoryConfig() {
-		return sourceLocation.startsWith("memory:");
 	}
 
 	private void init() {
+		sourceLocation = System.getProperty(LUNCHY_PROPERTIES);
 		if (sourceLocation != null) {
 			try {
-				if (isInMemoryConfig()) {
+				if (sourceLocation.startsWith("memory:")) {
 					try (InputStream is = new ByteArrayInputStream(
 							sourceLocation.substring("memory:".length()).getBytes(StandardCharsets.UTF_8))) {
 						readJson(is);
@@ -71,6 +63,10 @@ public class LunchyProperties implements LunchyReloadableProperties {
 				} else {
 					try (InputStream fis = new FileInputStream(sourceLocation)) {
 						readJson(fis);
+					}
+					if (propertyFileWatcherThread == null) {
+						propertyFileWatcherThread = new Thread(new PropertyFileWatcher());
+						propertyFileWatcherThread.start();
 					}
 				}
 			} catch (IOException e) {
@@ -244,7 +240,7 @@ public class LunchyProperties implements LunchyReloadableProperties {
 		reloadables.add(toCall);
 	}
 
-	private void reload() {
+	void reload() {
 		init();
 		reloadables.forEach(c -> c.run());
 	}

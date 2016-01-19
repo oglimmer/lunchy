@@ -12,6 +12,7 @@ public class ConfigBotDetectionServiceTest {
 	public static void startup() {
 		System.setProperty("lunchy.properties", "memory:{\"app.bots\":[\"bot\",\"crawler\",\"spider\"],"
 				+ "\"app.no-bots\":[\"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)\"]}");
+		LunchyProperties.INSTANCE.reload();
 	}
 
 	@Test
