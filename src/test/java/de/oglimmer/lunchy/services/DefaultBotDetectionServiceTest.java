@@ -3,9 +3,16 @@ package de.oglimmer.lunchy.services;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class DefaultBotDetectionServiceTest {
+
+	@BeforeClass
+	public static void startup() {
+		System.setProperty("lunchy.properties", "memory:{}");
+		LunchyProperties.INSTANCE.reload();
+	}
 
 	@Test
 	public void googleDefault1() {
