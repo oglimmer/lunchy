@@ -15,8 +15,18 @@ public enum BotDetectionService {
 	public static final String DEFAULT_NO_BOT_REGEX = ".*(" + BotDetectionService.GOOGLEBOT_1 + "|"
 			+ BotDetectionService.GOOGLEBOT_2 + ").*";
 
-	private final Pattern patBot = Pattern.compile(LunchyProperties.INSTANCE.getIsBot());
-	private final Pattern patNoBot = Pattern.compile(LunchyProperties.INSTANCE.getIsNoBot());
+	private Pattern patBot;
+	private Pattern patNoBot;
+
+	private BotDetectionService() {
+		initRegEx();
+		LunchyProperties.INSTANCE.registerOnReload(this::initRegEx);
+	}
+
+	private void initRegEx() {
+		patBot = Pattern.compile(LunchyProperties.INSTANCE.getReloadable().getIsBot());
+		patNoBot = Pattern.compile(LunchyProperties.INSTANCE.getReloadable().getIsNoBot());
+	}
 
 	public boolean isBot(String userAgent) {
 		if (userAgent == null || userAgent.isEmpty()) {
@@ -24,7 +34,7 @@ public enum BotDetectionService {
 		}
 		String lowerCaseUserAgent = userAgent.toLowerCase().trim();
 
-		// Some bots can understand Angular, we don't treat it as a bot and show the regular page
+		// Some bots (e.g. google) can understand Angular, we don't treat it as a bot and show the regular page
 		if (patNoBot.matcher(lowerCaseUserAgent).matches()) {
 			return false;
 		}

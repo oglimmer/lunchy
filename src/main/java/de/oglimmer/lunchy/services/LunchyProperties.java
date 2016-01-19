@@ -1,12 +1,21 @@
 package de.oglimmer.lunchy.services;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -22,29 +31,50 @@ import javax.json.stream.JsonGenerator;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
-public enum LunchyProperties {
-	INSTANCE;
+@Slf4j
+public class LunchyProperties implements LunchyReloadableProperties {
+	public static final LunchyProperties INSTANCE = new LunchyProperties();
 
 	private static final boolean DEBUG = false;
 
 	private static final String LUNCHY_PROPERTIES = "lunchy.properties";
-	private JsonObject json = Json.createObjectBuilder().build();
 
-	@SneakyThrows(value = IOException.class)
+	private JsonObject json = Json.createObjectBuilder().build();
+	private boolean running = true;
+	private Thread propertyFileWatcherThread;
+	private List<Runnable> reloadables = new ArrayList<>();
+	private final String sourceLocation;
+
 	private LunchyProperties() {
-		String sourceLocation = System.getProperty(LUNCHY_PROPERTIES);
+		sourceLocation = System.getProperty(LUNCHY_PROPERTIES);
+		init();
+		if (sourceLocation != null && !isInMemoryConfig()) {
+			propertyFileWatcherThread = new Thread(new PropertyFileWatcher());
+			propertyFileWatcherThread.start();
+		}
+	}
+
+	private boolean isInMemoryConfig() {
+		return sourceLocation.startsWith("memory:");
+	}
+
+	private void init() {
 		if (sourceLocation != null) {
-			if (sourceLocation.startsWith("memory:")) {
-				try (InputStream is = new ByteArrayInputStream(
-						sourceLocation.substring("memory:".length()).getBytes(StandardCharsets.UTF_8))) {
-					readJson(sourceLocation, is);
+			try {
+				if (isInMemoryConfig()) {
+					try (InputStream is = new ByteArrayInputStream(
+							sourceLocation.substring("memory:".length()).getBytes(StandardCharsets.UTF_8))) {
+						readJson(is);
+					}
+				} else {
+					try (InputStream fis = new FileInputStream(sourceLocation)) {
+						readJson(fis);
+					}
 				}
-			} else {
-				try (InputStream fis = new FileInputStream(sourceLocation)) {
-					readJson(sourceLocation, fis);
-				}
+			} catch (IOException e) {
+				log.error("Failed to load properties file " + sourceLocation, e);
 			}
 		}
 		if (json.getString("runtime.password", null) == null) {
@@ -54,6 +84,10 @@ public enum LunchyProperties {
 		if (DEBUG) {
 			System.out.println("Used config: " + prettyPrint(json));
 		}
+	}
+
+	public LunchyReloadableProperties getReloadable() {
+		return this;
 	}
 
 	private String prettyPrint(JsonObject json) {
@@ -69,7 +103,7 @@ public enum LunchyProperties {
 		return sw.toString();
 	}
 
-	private void readJson(String sourceLocation, InputStream is) {
+	private void readJson(InputStream is) {
 		try (JsonReader rdr = Json.createReader(is)) {
 			json = rdr.readObject();
 			System.out.println("Successfully loaded " + LUNCHY_PROPERTIES + " from " + sourceLocation);
@@ -191,13 +225,66 @@ public enum LunchyProperties {
 		}
 		StringBuilder buff = new StringBuilder();
 		for (int i = 0; i < array.size(); i++) {
-			String s = array.getString(i);
-			if (buff.length() > 0) {
-				buff.append("|");
+			String element = array.getString(i);
+			if (!element.trim().isEmpty()) {
+				if (buff.length() > 0) {
+					buff.append("|");
+				}
+				buff.append(RegExService.INSTANCE.escape(element));
 			}
-			buff.append(RegExService.INSTANCE.escape(s));
 		}
-		return ".*(" + buff.toString() + ").*";
+		if (buff.length() > 0) {
+			return ".*(" + buff.toString() + ").*";
+		} else {
+			return "";
+		}
+	}
+
+	public void registerOnReload(Runnable toCall) {
+		reloadables.add(toCall);
+	}
+
+	private void reload() {
+		init();
+		reloadables.forEach(c -> c.run());
+	}
+
+	public void shutdown() {
+		running = false;
+		propertyFileWatcherThread.interrupt();
+	}
+
+	class PropertyFileWatcher implements Runnable {
+
+		public void run() {
+			File toWatch = new File(sourceLocation);
+			log.info("PropertyFileWatcher started");
+			try {
+				final Path path = FileSystems.getDefault().getPath(toWatch.getParent());
+				try (final WatchService watchService = FileSystems.getDefault().newWatchService()) {
+					path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
+					while (running) {
+						final WatchKey wk = watchService.take();
+						for (WatchEvent<?> event : wk.pollEvents()) {
+							// we only register "ENTRY_MODIFY" so the context is always a Path.
+							final Path changed = (Path) event.context();
+							if (changed.endsWith(toWatch.getName())) {
+								log.debug("{} changed => reload", toWatch.getAbsolutePath());
+								reload();
+							}
+						}
+						boolean valid = wk.reset();
+						if (!valid) {
+							log.warn("The PropertyFileWatcher's key has been unregistered.");
+						}
+					}
+				}
+			} catch (InterruptedException e) {
+			} catch (Exception e) {
+				log.error("PropertyFileWatcher failed", e);
+			}
+			log.info("PropertyFileWatcher ended");
+		}
 	}
 
 }

@@ -25,7 +25,8 @@ public class BotFilter implements Filter {
 		HttpServletRequest httpReq = (HttpServletRequest) request;
 
 		String userAgent = httpReq.getHeader("User-Agent");
-
+		log.trace("UA: " + userAgent);
+		
 		if (isBot(userAgent)) {
 			log.info("Bot found: " + userAgent);
 			RequestDispatcher view = httpReq.getRequestDispatcher("/static_portal.html");

@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebListener;
 import de.oglimmer.lunchy.database.connection.DBConn;
 import de.oglimmer.lunchy.email.EmailProvider;
 import de.oglimmer.lunchy.email.EmailUpdatesNotifier;
+import de.oglimmer.lunchy.services.LunchyProperties;
 import de.oglimmer.lunchy.services.LunchyVersion;
 
 @WebListener
@@ -24,6 +25,7 @@ public class LunchyServletContextListener implements ServletContextListener {
 		EmailProvider.INSTANCE.shutdown();
 		DBConn.INSTANCE.shutdownDriver();
 		EmailUpdatesNotifier.INSTANCE.shutdown();
+		LunchyProperties.INSTANCE.shutdown();
 	}
 
 }
