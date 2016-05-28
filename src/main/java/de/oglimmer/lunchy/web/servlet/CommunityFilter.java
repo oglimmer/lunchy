@@ -117,6 +117,9 @@ public class CommunityFilter implements Filter {
 
 		private CommunitiesRecord getCommunity() {
 			String subdomain = domain.indexOf('.') > -1 ? domain.substring(0, domain.indexOf('.')) : domain;
+			if ("adtech".equalsIgnoreCase(subdomain)) {
+				subdomain = "aol";
+			}
 			return CommunityDao.INSTANCE.getByDomain(subdomain);
 		}
 
