@@ -1,7 +1,7 @@
-<form class="form-horizontal hidden-xs">
+<form class="form-horizontal">
     <fieldset>
         <div class="row">
-            <label for="selectedOffice" class="col-sm-1 control-label">Office</label>
+            <label for="selectedOffice" class="col-sm-1 control-label hidden-xs">Office</label>
             <div class="col-sm-11">
                 <select class="form-control" id="selectedOffice" ng-model="selectedOffice">
                     <option ng-repeat="office in offices" value="{{office.id}}" ng-selected="office.id==selectedOffice">{{office.name}}</option>

@@ -57,7 +57,7 @@ controller('LunchyControllerBrowseLocations', [ '$scope', '$stateParams', '$loca
 	});
 		
 	$scope.mapCreated = function() {
-        var topArea = angular.element($window).width()<768 ? 75 : 110;
+        var topArea = angular.element($window).width()<768 ? 110 : 110;
 		$("#browseMap .angular-google-map-container").height(angular.element($window).height()-topArea);
 	};
 	
