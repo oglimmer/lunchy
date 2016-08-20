@@ -1,14 +1,8 @@
 package de.oglimmer.lunchy.services;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
-
 import javax.servlet.ServletContext;
 
+import de.oglimmer.utils.VersionFromManifest;
 import lombok.Getter;
 
 public enum LunchyVersion {
@@ -17,30 +11,13 @@ public enum LunchyVersion {
 	@Getter
 	private String version;
 	@Getter
-	private String commit;
-	@Getter
-	private String lunchyVersion;
-	@Getter
-	private String creationDate;
-	@Getter
 	private boolean runsOnDev;
 
 	public void init(ServletContext context) {
-		try (InputStream is = new FileInputStream(context.getRealPath("/META-INF/MANIFEST.MF"))) {
-			Manifest mf = new Manifest(is);
-			Attributes attr = mf.getMainAttributes();
-			commit = attr.getValue("Git-Commit");
-			lunchyVersion = attr.getValue("Lunchy-Version");
-			long time = Long.parseLong(attr.getValue("Creation-Date"));
-			creationDate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date(time));
-		} catch (Exception e) {
-			commit = "?";
-			creationDate = "?";
-			lunchyVersion = "?";
-			runsOnDev = true;
-		}
-
-		version = "V" + lunchyVersion + " [Commit#" + commit + "] build " + creationDate;
+		VersionFromManifest vfm = new VersionFromManifest();
+		vfm.initFromFile(context.getRealPath("/META-INF/MANIFEST.MF"));
+		version = vfm.getLongVersion();
+		runsOnDev = vfm.isInitFailed();
 	}
 
 }
