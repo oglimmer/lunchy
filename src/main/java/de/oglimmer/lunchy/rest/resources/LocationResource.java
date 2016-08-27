@@ -20,10 +20,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 import org.jooq.Record;
 
 import com.google.code.geocoder.Geocoder;
@@ -54,6 +50,12 @@ import de.oglimmer.lunchy.security.Permission;
 import de.oglimmer.lunchy.security.SecurityProvider;
 import de.oglimmer.lunchy.services.CommunityService;
 import de.oglimmer.lunchy.services.DateCalcService;
+import de.oglimmer.lunchy.services.EmailListService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Path("locations")
@@ -78,6 +80,34 @@ public class LocationResource extends BaseResource {
 	@Path("{id}/locationStatusForCurrentUser")
 	public LocationStatusResponse locationStatusForCurrentUser(@Context HttpServletRequest request, @PathParam("id") int id) {
 		return new LocationStatusForCurrentUserLogic(request, id).status();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}/emailList")
+	public EmailListResponse emailList(@Context HttpServletRequest request, @PathParam("id") int id) {
+		if (!EmailListService.INSTANCE.isLocationAvailable(id)) {
+			return new EmailListResponse(false, false, null);
+		}
+		String description = EmailListService.INSTANCE.getDescription(id);
+		Integer userId = SessionProvider.INSTANCE.getLoggedInUserId(request);
+		boolean result = false;
+		if (userId != null) {
+			result = EmailListService.INSTANCE.isUserEnabled(id, userId);
+			return new EmailListResponse(true, result, description);
+		}
+		return new EmailListResponse(true, false, description);
+	}
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("{id}/emailList")
+	public void emailList(@Context HttpServletRequest request, @PathParam("id") int id, EmailListResponse data) {
+		if (data.isEnabledForUser()) {
+			EmailListService.INSTANCE.add(id, SessionProvider.INSTANCE.getLoggedInUserId(request));
+		} else {
+			EmailListService.INSTANCE.remove(id, SessionProvider.INSTANCE.getLoggedInUserId(request));
+		}
 	}
 
 	@GET
@@ -138,6 +168,15 @@ public class LocationResource extends BaseResource {
 	public static class LocationPositionUpdate {
 		private Double lat;
 		private Double lng;
+	}
+
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class EmailListResponse {
+		private boolean enabledForLocation;
+		private boolean enabledForUser;
+		private String desciption;
 	}
 
 	@RequiredArgsConstructor

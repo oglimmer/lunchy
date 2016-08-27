@@ -51,6 +51,8 @@
         <button type="button" class="btn btn-default" ng-click="modifyReviewStart()">{{childScopeHolder.reviewButton}}</button>
 
         <button type="button" class="btn btn-default" ng-click="addPictureStart()">Add Picture</button>
+        
+        <input type="checkbox" ng-show="specialOption.enabledForLocation" ng-model="specialOption.enabledForUser" ng-change="specialOptionChanged()" /> {{specialOption.desciption}} 
 
         <button ng-show="childScopeHolder.marker.pinMoved" type="button" class="btn btn-default pull-right" ng-click="saveMovedPin()">Save Pin</button>
 	</div>

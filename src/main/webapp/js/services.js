@@ -97,6 +97,14 @@ factory('LocationsDao', ['$resource', function($resource) {
         'updatePosition': {
             method: 'POST',
             url: 'rest/locations/:id/updatePosition'
+        },
+        'readEmailList': {
+            method: 'GET',
+            url: 'rest/locations/:id/emailList'
+        },
+        'saveEmailList': {
+            method: 'POST',
+            url: 'rest/locations/:id/emailList'
         }
     });
 }]).

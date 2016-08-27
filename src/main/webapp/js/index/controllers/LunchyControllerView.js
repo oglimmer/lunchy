@@ -22,6 +22,11 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
     $scope.modifyReviewMode = false;
     $scope.addPictureMode = false;
     $scope.childScopeHolder.reviewButton = "Add Review";
+    $scope.specialOption = {
+    		enabledForLocation: false,
+    		enabledForUser: false,
+    		desciption: "not loaded", 
+    };
     
     // vote for current picture
     $scope.childScopeHolder.currentPicVoted = false;
@@ -71,6 +76,10 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
             $scope.allowedChangeCaption = result.allowedChangeCaption;
             onSlideChanged();
         });
+        
+        LocationsDao.readEmailList({ "id": $stateParams.locationId }, function(loadLocationResponse) {
+            $scope.specialOption = loadLocationResponse;
+        } );
     }                 
 
     /* ### SCOPE BUTTON METHODS ### */
@@ -161,6 +170,11 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
         	});
         })
     };
+    
+    $scope.specialOptionChanged = function() {
+    	console.log("s="+$scope.specialOption.enabledForUser);
+   		LocationsDao.saveEmailList({ "id": $stateParams.locationId }, { "enabledForUser": $scope.specialOption.enabledForUser } );
+    }
 
     /* ### Scope watches ### */          
     
