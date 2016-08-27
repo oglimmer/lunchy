@@ -103,10 +103,13 @@ public class LocationResource extends BaseResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("{id}/emailList")
 	public void emailList(@Context HttpServletRequest request, @PathParam("id") int id, EmailListResponse data) {
-		if (data.isEnabledForUser()) {
-			EmailListService.INSTANCE.add(id, SessionProvider.INSTANCE.getLoggedInUserId(request));
+		Integer loggedInUserId = SessionProvider.INSTANCE.getLoggedInUserId(request);
+		boolean enabledForUser = data.isEnabledForUser();
+		log.debug("emailList called for loc:{},user:{} to {}", id, loggedInUserId, enabledForUser);
+		if (enabledForUser) {
+			EmailListService.INSTANCE.add(id, loggedInUserId);
 		} else {
-			EmailListService.INSTANCE.remove(id, SessionProvider.INSTANCE.getLoggedInUserId(request));
+			EmailListService.INSTANCE.remove(id, loggedInUserId);
 		}
 	}
 

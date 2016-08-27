@@ -172,7 +172,6 @@ controller('LunchyControllerView', ['$scope', '$stateParams', 'LocationsDao', 'R
     };
     
     $scope.specialOptionChanged = function() {
-    	console.log("s="+$scope.specialOption.enabledForUser);
    		LocationsDao.saveEmailList({ "id": $stateParams.locationId }, { "enabledForUser": $scope.specialOption.enabledForUser } );
     }
 

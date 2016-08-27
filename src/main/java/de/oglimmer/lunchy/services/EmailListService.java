@@ -57,6 +57,7 @@ public class EmailListService extends AbstractProperties {
 			JsonObject locationJson = getJson().getJsonObject("location." + locationId);
 			if (locationJson != null) {
 				String location = locationJson.getString("usersFile");
+				log.debug("Appending {} to {}", location, userId);
 				try (FileOutputStream fos = new FileOutputStream(location, true)) {
 					fos.write((Integer.toString(userId) + "\n").getBytes());
 				}
