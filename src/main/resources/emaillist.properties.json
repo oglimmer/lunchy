@@ -1,10 +1,18 @@
 {
 	"location.313": {
 		"description": "Subscribe weekly menu",
-		"usersFile": "/etc/stadtgefluester-mail-users"
+		"usersFile": "/usr/local/etc/stadtgefluester-mail-users"
 	},
 	"location.321": {
 		"description": "Subscribe weekly menu",
 		"usersFile": "/etc/bmwkantine-mail-users"
+	},
+	"location.14": {
+		"description": "Subscribe weekly menu",
+		"usersFile": "/usr/local/etc/daluigi-mail-users"
+	},
+	"location.53": {
+		"description": "Subscribe weekly menu",
+		"usersFile": "/usr/local/etc/sbar-mail-users"
 	}
 }
