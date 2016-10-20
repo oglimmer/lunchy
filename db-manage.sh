@@ -6,18 +6,19 @@ DIFF_FILE=/tmp/liquibase_diff.xml
 UPDATE_FILE=/tmp/liquibase_diff.sql
 CLASSPATH=$HOME/.m2/repository/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar
 
-usage="$(basename "$0") [-d] [-u] [-i] - liquibase wrapper
+usage="$(basename "$0") [-d] [-u] [-i] [-c] [-a] - liquibase wrapper
 
 where:
     -h  shows this help text
     -d  diffs dev to staging
     -u  updates staging
     -i  updates dev
+    -a  init dev
     -c  clear checksum on dev and staging"
 
 cd ${0%/*}
 
-while getopts ':hduic' option; do
+while getopts ':hduica' option; do
   case "$option" in
     h) echo "$usage"
        exit
@@ -29,6 +30,8 @@ while getopts ':hduic' option; do
     i) UPDATE_DEV=YES
        ;;
     c) CLEAR_CHECKSUM=YES
+	   ;;
+	a) INIT_DEV=YES
 	   ;;
     :) printf "missing argument for -%s\n" "$OPTARG" >&2
        echo "$usage" >&2
@@ -84,6 +87,18 @@ if [ -n "$UPDATE_DEV" ]; then
 		 
 	echo "$DEV.DATABASECHANGELOG was updated (no DDL was executed)." 
 fi 
+
+if [ -n "$INIT_DEV" ]; then
+	
+	echo "Init $DEV"
+	
+	liquibase --driver=com.mysql.jdbc.Driver --classpath=$CLASSPATH --changeLogFile=./src/main/resources/all_tables.xml --url=jdbc:mysql://127.0.0.1/$DEV?useSSL=false --username=root updateSQL >$UPDATE_FILE
+		 
+	mysql -uroot -e "source $UPDATE_FILE"
+
+	echo "$DEV.DATABASECHANGELOG was updated (schema created)." 
+fi 
+
 
 if [ -n "$CLEAR_CHECKSUM" ]; then
 
