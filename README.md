@@ -112,7 +112,7 @@ Changing the schema
 
 4.) mvn -DgenerateDBClasses=true generate-sources
 
-### Update the staging schema
+### Update the staging & prod schemas
 
 5.) ./db-manage.sh -u
 
