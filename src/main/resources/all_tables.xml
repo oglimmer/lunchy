@@ -299,12 +299,14 @@
     <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408311973443-6">
         <dropNotNullConstraint columnDataType="int(10)" columnName="turnAroundTime" tableName="location"/>
     </changeSet>
+    <!--
     <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="custom-7" author="oli (generated)">
 		<preConditions onFail="MARK_RAN">
 			<dbms type="mysql"/>
  		</preConditions>
     	<sql>update reviews set onSiteTime = (select turnAroundTime/2 from location where location.id=fkLocation), travelTime = (select turnAroundTime/2 from location where location.id=fkLocation)</sql>
     </changeSet>    
+    -->
 
 	<changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  author="oli (generated)" id="1408653848650-1">
 		<renameColumn tableName="communities" columnDataType="VARCHAR(255)"
