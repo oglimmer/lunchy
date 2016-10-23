@@ -92,7 +92,7 @@ if [ -n "$INIT_DEV" ]; then
 	
 	echo "Init $DEV"
 	
-	liquibase --driver=com.mysql.jdbc.Driver --classpath=$CLASSPATH --changeLogFile=./src/main/resources/all_tables.xml --url=jdbc:mysql://127.0.0.1/$DEV?useSSL=false --username=root updateSQL >$UPDATE_FILE
+	liquibase --driver=com.mysql.jdbc.Driver --classpath=$CLASSPATH --changeLogFile=./src/main/resources/init-db.xml --url=jdbc:mysql://127.0.0.1/$DEV?useSSL=false --username=root updateSQL >$UPDATE_FILE
 		 
 	mysql -uroot -e "source $UPDATE_FILE"
 
