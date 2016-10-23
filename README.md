@@ -72,6 +72,13 @@ SET SESSION ...
 HOW TO EXTEND THE DB DATA MODEL
 ===============================
 
+Preperation
+-----------
+
+- brew install liquibase
+
+- Either add a user/password to all following mysql commands or put it into ~/.my.cnf
+
 Initial setup
 -------------
 
