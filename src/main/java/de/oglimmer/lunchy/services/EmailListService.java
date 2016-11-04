@@ -1,17 +1,9 @@
 package de.oglimmer.lunchy.services;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import javax.json.JsonObject;
 
+import de.oglimmer.lunchy.database.dao.LocationUsersEmailDao;
+import de.oglimmer.lunchy.database.generated.tables.records.LocationUsersEmailRecord;
 import de.oglimmer.utils.AbstractProperties;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,51 +28,33 @@ public class EmailListService extends AbstractProperties {
 	}
 
 	public boolean isUserEnabled(int locationId, int userId) {
-		try {
-			JsonObject locationJson = getJson().getJsonObject("location." + locationId);
-			if (locationJson != null) {
-				String usersFile = locationJson.getString("usersFile");
-				if (usersFile != null && new File(usersFile).exists()) {
-					try (Stream<String> stream = Files.lines(Paths.get(usersFile))) {
-						return stream.anyMatch(s -> s.equals(Integer.toString(userId)));
-					}
-				}
-			}
-		} catch (IOException e) {
-			log.error("Failed to get EmailListService", e);
+		JsonObject locationJson = getJson().getJsonObject("location." + locationId);
+		if (locationJson != null) {
+			LocationUsersEmailRecord rec = LocationUsersEmailDao.INSTANCE.getByLocationUser(locationId, userId);
+			return rec != null;
 		}
 		return false;
 	}
 
 	public synchronized void add(int locationId, int userId) {
-		try {
-			JsonObject locationJson = getJson().getJsonObject("location." + locationId);
-			if (locationJson != null) {
-				String location = locationJson.getString("usersFile");
-				log.debug("Appending {} to {}", location, userId);
-				try (FileOutputStream fos = new FileOutputStream(location, true)) {
-					fos.write((Integer.toString(userId) + "\n").getBytes());
-				}
-			}
-		} catch (IOException e) {
-			log.error("Failed to add to EmailListService", e);
+		JsonObject locationJson = getJson().getJsonObject("location." + locationId);
+		if (locationJson != null) {
+			log.debug("Appending {} to {}", locationId, userId);
+			LocationUsersEmailRecord rec = new LocationUsersEmailRecord();
+			rec.setFkLocation(locationId);
+			rec.setFkUser(userId);
+			rec.setLocalName(locationJson.getString("local-name"));
+			LocationUsersEmailDao.INSTANCE.store(rec);
 		}
 	}
 
 	public synchronized void remove(int locationId, int userId) {
-		try {
-			JsonObject locationJson = getJson().getJsonObject("location." + locationId);
-			if (locationJson != null) {
-				String location = locationJson.getString("usersFile");
-				try (Stream<String> stream = Files.lines(Paths.get(location))) {
-					Collection<String> c = stream.collect(Collectors.toList());
-					try (PrintWriter pw = new PrintWriter(Files.newBufferedWriter(Paths.get(location)))) {
-						c.stream().filter(s -> !s.equals(Integer.toString(userId))).forEach(pw::println);
-					}
-				}
+		JsonObject locationJson = getJson().getJsonObject("location." + locationId);
+		if (locationJson != null) {
+			LocationUsersEmailRecord rec = LocationUsersEmailDao.INSTANCE.getByLocationUser(locationId, userId);
+			if (rec != null) {
+				LocationUsersEmailDao.INSTANCE.delete(rec.getId());
 			}
-		} catch (IOException e) {
-			log.error("Failed to remove from EmailListService", e);
 		}
 	}
 

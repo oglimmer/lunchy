@@ -8,6 +8,7 @@ import de.oglimmer.lunchy.database.generated.tables.Communities;
 import de.oglimmer.lunchy.database.generated.tables.Databasechangelog;
 import de.oglimmer.lunchy.database.generated.tables.Databasechangeloglock;
 import de.oglimmer.lunchy.database.generated.tables.Location;
+import de.oglimmer.lunchy.database.generated.tables.LocationUsersEmail;
 import de.oglimmer.lunchy.database.generated.tables.Offices;
 import de.oglimmer.lunchy.database.generated.tables.Pictures;
 import de.oglimmer.lunchy.database.generated.tables.Reviews;
@@ -38,7 +39,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class OliLunchy extends SchemaImpl {
 
-	private static final long serialVersionUID = -2043436604;
+	private static final long serialVersionUID = 1686184091;
 
 	/**
 	 * The reference instance of <code>oli_lunchy</code>
@@ -65,6 +66,7 @@ public class OliLunchy extends SchemaImpl {
 			Databasechangelog.DATABASECHANGELOG,
 			Databasechangeloglock.DATABASECHANGELOGLOCK,
 			Location.LOCATION,
+			LocationUsersEmail.LOCATION_USERS_EMAIL,
 			Offices.OFFICES,
 			Pictures.PICTURES,
 			Reviews.REVIEWS,

@@ -8,6 +8,7 @@ import de.oglimmer.lunchy.database.generated.tables.Communities;
 import de.oglimmer.lunchy.database.generated.tables.Databasechangelog;
 import de.oglimmer.lunchy.database.generated.tables.Databasechangeloglock;
 import de.oglimmer.lunchy.database.generated.tables.Location;
+import de.oglimmer.lunchy.database.generated.tables.LocationUsersEmail;
 import de.oglimmer.lunchy.database.generated.tables.Offices;
 import de.oglimmer.lunchy.database.generated.tables.Pictures;
 import de.oglimmer.lunchy.database.generated.tables.Reviews;
@@ -50,6 +51,11 @@ public class Tables {
 	 * The table oli_lunchy.location
 	 */
 	public static final Location LOCATION = de.oglimmer.lunchy.database.generated.tables.Location.LOCATION;
+
+	/**
+	 * The table oli_lunchy.location_users_email
+	 */
+	public static final LocationUsersEmail LOCATION_USERS_EMAIL = de.oglimmer.lunchy.database.generated.tables.LocationUsersEmail.LOCATION_USERS_EMAIL;
 
 	/**
 	 * The table oli_lunchy.offices

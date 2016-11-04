@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsageStatistics extends TableImpl<UsageStatisticsRecord> {
 
-	private static final long serialVersionUID = 287549562;
+	private static final long serialVersionUID = -837129340;
 
 	/**
 	 * The reference instance of <code>oli_lunchy.usage_statistics</code>
@@ -66,9 +66,9 @@ public class UsageStatistics extends TableImpl<UsageStatisticsRecord> {
 	public final TableField<UsageStatisticsRecord, String> CONTEXT = createField("context", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.usage_statistics.created_On</code>.
+	 * The column <code>oli_lunchy.usage_statistics.created_on</code>.
 	 */
-	public final TableField<UsageStatisticsRecord, Timestamp> CREATED_ON = createField("created_On", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+	public final TableField<UsageStatisticsRecord, Timestamp> CREATED_ON = createField("created_on", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.usage_statistics.ip</code>.
@@ -96,14 +96,14 @@ public class UsageStatistics extends TableImpl<UsageStatisticsRecord> {
 	public final TableField<UsageStatisticsRecord, Integer> DOMAIN = createField("domain", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
 	/**
-	 * The column <code>oli_lunchy.usage_statistics.country</code>.
-	 */
-	public final TableField<UsageStatisticsRecord, String> COUNTRY = createField("country", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
-
-	/**
 	 * The column <code>oli_lunchy.usage_statistics.city</code>.
 	 */
 	public final TableField<UsageStatisticsRecord, String> CITY = createField("city", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
+
+	/**
+	 * The column <code>oli_lunchy.usage_statistics.country</code>.
+	 */
+	public final TableField<UsageStatisticsRecord, String> COUNTRY = createField("country", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
 
 	/**
 	 * The column <code>oli_lunchy.usage_statistics.referer</code>.

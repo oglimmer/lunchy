@@ -691,5 +691,40 @@
             <column name="referer" type="VARCHAR(2000)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oliverkurt (generated)" id="1478279828425-1">
+        <createTable tableName="location_users_email">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="fk_location" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fk_user" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oliverkurt (generated)" id="1478279828425-2">
+        <createIndex indexName="fk_location_users_email_location" tableName="location_users_email">
+            <column name="fk_location"/>
+        </createIndex>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oliverkurt (generated)" id="1478279828425-3">
+        <createIndex indexName="fk_location_users_email_user" tableName="location_users_email">
+            <column name="fk_user"/>
+        </createIndex>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oliverkurt (generated)" id="1478279828425-4">
+        <addForeignKeyConstraint baseColumnNames="fk_location" baseTableName="location_users_email" constraintName="fk_location_users_email_location" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="location"/>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oliverkurt (generated)" id="1478279828425-5">
+        <addForeignKeyConstraint baseColumnNames="fk_user" baseTableName="location_users_email" constraintName="fk_location_users_email_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oliverkurt (generated)" id="1478299357515-1">
+        <addColumn tableName="location_users_email">
+            <column name="local_name" type="VARCHAR(255 BYTE)"/>
+        </addColumn>
+    </changeSet>
     
 </databaseChangeLog>

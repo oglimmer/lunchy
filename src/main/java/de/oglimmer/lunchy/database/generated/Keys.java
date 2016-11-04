@@ -7,6 +7,7 @@ package de.oglimmer.lunchy.database.generated;
 import de.oglimmer.lunchy.database.generated.tables.Communities;
 import de.oglimmer.lunchy.database.generated.tables.Databasechangeloglock;
 import de.oglimmer.lunchy.database.generated.tables.Location;
+import de.oglimmer.lunchy.database.generated.tables.LocationUsersEmail;
 import de.oglimmer.lunchy.database.generated.tables.Offices;
 import de.oglimmer.lunchy.database.generated.tables.Pictures;
 import de.oglimmer.lunchy.database.generated.tables.Reviews;
@@ -16,6 +17,7 @@ import de.oglimmer.lunchy.database.generated.tables.UsersPicturesVotes;
 import de.oglimmer.lunchy.database.generated.tables.records.CommunitiesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.DatabasechangeloglockRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.LocationRecord;
+import de.oglimmer.lunchy.database.generated.tables.records.LocationUsersEmailRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.OfficesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.PicturesRecord;
 import de.oglimmer.lunchy.database.generated.tables.records.ReviewsRecord;
@@ -51,6 +53,7 @@ public class Keys {
 
 	public static final Identity<CommunitiesRecord, Integer> IDENTITY_COMMUNITIES = Identities0.IDENTITY_COMMUNITIES;
 	public static final Identity<LocationRecord, Integer> IDENTITY_LOCATION = Identities0.IDENTITY_LOCATION;
+	public static final Identity<LocationUsersEmailRecord, Integer> IDENTITY_LOCATION_USERS_EMAIL = Identities0.IDENTITY_LOCATION_USERS_EMAIL;
 	public static final Identity<OfficesRecord, Integer> IDENTITY_OFFICES = Identities0.IDENTITY_OFFICES;
 	public static final Identity<PicturesRecord, Integer> IDENTITY_PICTURES = Identities0.IDENTITY_PICTURES;
 	public static final Identity<ReviewsRecord, Integer> IDENTITY_REVIEWS = Identities0.IDENTITY_REVIEWS;
@@ -66,6 +69,7 @@ public class Keys {
 	public static final UniqueKey<CommunitiesRecord> KEY_COMMUNITIES_UNIQ_DOMAIN = UniqueKeys0.KEY_COMMUNITIES_UNIQ_DOMAIN;
 	public static final UniqueKey<DatabasechangeloglockRecord> KEY_DATABASECHANGELOGLOCK_PRIMARY = UniqueKeys0.KEY_DATABASECHANGELOGLOCK_PRIMARY;
 	public static final UniqueKey<LocationRecord> KEY_LOCATION_PRIMARY = UniqueKeys0.KEY_LOCATION_PRIMARY;
+	public static final UniqueKey<LocationUsersEmailRecord> KEY_LOCATION_USERS_EMAIL_PRIMARY = UniqueKeys0.KEY_LOCATION_USERS_EMAIL_PRIMARY;
 	public static final UniqueKey<OfficesRecord> KEY_OFFICES_PRIMARY = UniqueKeys0.KEY_OFFICES_PRIMARY;
 	public static final UniqueKey<PicturesRecord> KEY_PICTURES_PRIMARY = UniqueKeys0.KEY_PICTURES_PRIMARY;
 	public static final UniqueKey<ReviewsRecord> KEY_REVIEWS_PRIMARY = UniqueKeys0.KEY_REVIEWS_PRIMARY;
@@ -82,6 +86,8 @@ public class Keys {
 	public static final ForeignKey<LocationRecord, UsersRecord> FK_LOC_USR = ForeignKeys0.FK_LOC_USR;
 	public static final ForeignKey<LocationRecord, OfficesRecord> FK_LOC_OFF = ForeignKeys0.FK_LOC_OFF;
 	public static final ForeignKey<LocationRecord, CommunitiesRecord> FK_LOC_COM = ForeignKeys0.FK_LOC_COM;
+	public static final ForeignKey<LocationUsersEmailRecord, LocationRecord> FK_LOCATION_USERS_EMAIL_LOCATION = ForeignKeys0.FK_LOCATION_USERS_EMAIL_LOCATION;
+	public static final ForeignKey<LocationUsersEmailRecord, UsersRecord> FK_LOCATION_USERS_EMAIL_USER = ForeignKeys0.FK_LOCATION_USERS_EMAIL_USER;
 	public static final ForeignKey<OfficesRecord, CommunitiesRecord> FK_OFF_COM = ForeignKeys0.FK_OFF_COM;
 	public static final ForeignKey<PicturesRecord, LocationRecord> FK_PIC_LOC = ForeignKeys0.FK_PIC_LOC;
 	public static final ForeignKey<PicturesRecord, UsersRecord> FK_PIC_USR = ForeignKeys0.FK_PIC_USR;
@@ -102,6 +108,7 @@ public class Keys {
 	private static class Identities0 extends AbstractKeys {
 		public static Identity<CommunitiesRecord, Integer> IDENTITY_COMMUNITIES = createIdentity(Communities.COMMUNITIES, Communities.COMMUNITIES.ID);
 		public static Identity<LocationRecord, Integer> IDENTITY_LOCATION = createIdentity(Location.LOCATION, Location.LOCATION.ID);
+		public static Identity<LocationUsersEmailRecord, Integer> IDENTITY_LOCATION_USERS_EMAIL = createIdentity(LocationUsersEmail.LOCATION_USERS_EMAIL, LocationUsersEmail.LOCATION_USERS_EMAIL.ID);
 		public static Identity<OfficesRecord, Integer> IDENTITY_OFFICES = createIdentity(Offices.OFFICES, Offices.OFFICES.ID);
 		public static Identity<PicturesRecord, Integer> IDENTITY_PICTURES = createIdentity(Pictures.PICTURES, Pictures.PICTURES.ID);
 		public static Identity<ReviewsRecord, Integer> IDENTITY_REVIEWS = createIdentity(Reviews.REVIEWS, Reviews.REVIEWS.ID);
@@ -115,6 +122,7 @@ public class Keys {
 		public static final UniqueKey<CommunitiesRecord> KEY_COMMUNITIES_UNIQ_DOMAIN = createUniqueKey(Communities.COMMUNITIES, Communities.COMMUNITIES.DOMAIN);
 		public static final UniqueKey<DatabasechangeloglockRecord> KEY_DATABASECHANGELOGLOCK_PRIMARY = createUniqueKey(Databasechangeloglock.DATABASECHANGELOGLOCK, Databasechangeloglock.DATABASECHANGELOGLOCK.ID);
 		public static final UniqueKey<LocationRecord> KEY_LOCATION_PRIMARY = createUniqueKey(Location.LOCATION, Location.LOCATION.ID);
+		public static final UniqueKey<LocationUsersEmailRecord> KEY_LOCATION_USERS_EMAIL_PRIMARY = createUniqueKey(LocationUsersEmail.LOCATION_USERS_EMAIL, LocationUsersEmail.LOCATION_USERS_EMAIL.ID);
 		public static final UniqueKey<OfficesRecord> KEY_OFFICES_PRIMARY = createUniqueKey(Offices.OFFICES, Offices.OFFICES.ID);
 		public static final UniqueKey<PicturesRecord> KEY_PICTURES_PRIMARY = createUniqueKey(Pictures.PICTURES, Pictures.PICTURES.ID);
 		public static final UniqueKey<ReviewsRecord> KEY_REVIEWS_PRIMARY = createUniqueKey(Reviews.REVIEWS, Reviews.REVIEWS.ID);
@@ -129,6 +137,8 @@ public class Keys {
 		public static final ForeignKey<LocationRecord, UsersRecord> FK_LOC_USR = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_USERS_PRIMARY, Location.LOCATION, Location.LOCATION.FK_USER);
 		public static final ForeignKey<LocationRecord, OfficesRecord> FK_LOC_OFF = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_OFFICES_PRIMARY, Location.LOCATION, Location.LOCATION.FK_OFFICE);
 		public static final ForeignKey<LocationRecord, CommunitiesRecord> FK_LOC_COM = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_COMMUNITIES_PRIMARY, Location.LOCATION, Location.LOCATION.FK_COMMUNITY);
+		public static final ForeignKey<LocationUsersEmailRecord, LocationRecord> FK_LOCATION_USERS_EMAIL_LOCATION = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_LOCATION_PRIMARY, LocationUsersEmail.LOCATION_USERS_EMAIL, LocationUsersEmail.LOCATION_USERS_EMAIL.FK_LOCATION);
+		public static final ForeignKey<LocationUsersEmailRecord, UsersRecord> FK_LOCATION_USERS_EMAIL_USER = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_USERS_PRIMARY, LocationUsersEmail.LOCATION_USERS_EMAIL, LocationUsersEmail.LOCATION_USERS_EMAIL.FK_USER);
 		public static final ForeignKey<OfficesRecord, CommunitiesRecord> FK_OFF_COM = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_COMMUNITIES_PRIMARY, Offices.OFFICES, Offices.OFFICES.FK_COMMUNITY);
 		public static final ForeignKey<PicturesRecord, LocationRecord> FK_PIC_LOC = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_LOCATION_PRIMARY, Pictures.PICTURES, Pictures.PICTURES.FK_LOCATION);
 		public static final ForeignKey<PicturesRecord, UsersRecord> FK_PIC_USR = createForeignKey(de.oglimmer.lunchy.database.generated.Keys.KEY_USERS_PRIMARY, Pictures.PICTURES, Pictures.PICTURES.FK_USER);

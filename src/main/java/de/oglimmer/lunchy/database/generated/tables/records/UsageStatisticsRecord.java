@@ -30,7 +30,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UsageStatisticsRecord extends UpdatableRecordImpl<UsageStatisticsRecord> implements Record12<Integer, String, String, Timestamp, String, String, Integer, String, Integer, String, String, String> {
 
-	private static final long serialVersionUID = -1704297767;
+	private static final long serialVersionUID = 935720997;
 
 	/**
 	 * Setter for <code>oli_lunchy.usage_statistics.id</code>.
@@ -75,14 +75,14 @@ public class UsageStatisticsRecord extends UpdatableRecordImpl<UsageStatisticsRe
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.usage_statistics.created_On</code>.
+	 * Setter for <code>oli_lunchy.usage_statistics.created_on</code>.
 	 */
 	public void setCreatedOn(Timestamp value) {
 		setValue(3, value);
 	}
 
 	/**
-	 * Getter for <code>oli_lunchy.usage_statistics.created_On</code>.
+	 * Getter for <code>oli_lunchy.usage_statistics.created_on</code>.
 	 */
 	public Timestamp getCreatedOn() {
 		return (Timestamp) getValue(3);
@@ -159,30 +159,30 @@ public class UsageStatisticsRecord extends UpdatableRecordImpl<UsageStatisticsRe
 	}
 
 	/**
-	 * Setter for <code>oli_lunchy.usage_statistics.country</code>.
-	 */
-	public void setCountry(String value) {
-		setValue(9, value);
-	}
-
-	/**
-	 * Getter for <code>oli_lunchy.usage_statistics.country</code>.
-	 */
-	public String getCountry() {
-		return (String) getValue(9);
-	}
-
-	/**
 	 * Setter for <code>oli_lunchy.usage_statistics.city</code>.
 	 */
 	public void setCity(String value) {
-		setValue(10, value);
+		setValue(9, value);
 	}
 
 	/**
 	 * Getter for <code>oli_lunchy.usage_statistics.city</code>.
 	 */
 	public String getCity() {
+		return (String) getValue(9);
+	}
+
+	/**
+	 * Setter for <code>oli_lunchy.usage_statistics.country</code>.
+	 */
+	public void setCountry(String value) {
+		setValue(10, value);
+	}
+
+	/**
+	 * Getter for <code>oli_lunchy.usage_statistics.country</code>.
+	 */
+	public String getCountry() {
 		return (String) getValue(10);
 	}
 
@@ -309,7 +309,7 @@ public class UsageStatisticsRecord extends UpdatableRecordImpl<UsageStatisticsRe
 	 */
 	@Override
 	public Field<String> field10() {
-		return UsageStatistics.USAGE_STATISTICS.COUNTRY;
+		return UsageStatistics.USAGE_STATISTICS.CITY;
 	}
 
 	/**
@@ -317,7 +317,7 @@ public class UsageStatisticsRecord extends UpdatableRecordImpl<UsageStatisticsRe
 	 */
 	@Override
 	public Field<String> field11() {
-		return UsageStatistics.USAGE_STATISTICS.CITY;
+		return UsageStatistics.USAGE_STATISTICS.COUNTRY;
 	}
 
 	/**
@@ -405,7 +405,7 @@ public class UsageStatisticsRecord extends UpdatableRecordImpl<UsageStatisticsRe
 	 */
 	@Override
 	public String value10() {
-		return getCountry();
+		return getCity();
 	}
 
 	/**
@@ -413,7 +413,7 @@ public class UsageStatisticsRecord extends UpdatableRecordImpl<UsageStatisticsRe
 	 */
 	@Override
 	public String value11() {
-		return getCity();
+		return getCountry();
 	}
 
 	/**
@@ -510,7 +510,7 @@ public class UsageStatisticsRecord extends UpdatableRecordImpl<UsageStatisticsRe
 	 */
 	@Override
 	public UsageStatisticsRecord value10(String value) {
-		setCountry(value);
+		setCity(value);
 		return this;
 	}
 
@@ -519,7 +519,7 @@ public class UsageStatisticsRecord extends UpdatableRecordImpl<UsageStatisticsRe
 	 */
 	@Override
 	public UsageStatisticsRecord value11(String value) {
-		setCity(value);
+		setCountry(value);
 		return this;
 	}
 
@@ -566,7 +566,7 @@ public class UsageStatisticsRecord extends UpdatableRecordImpl<UsageStatisticsRe
 	/**
 	 * Create a detached, initialised UsageStatisticsRecord
 	 */
-	public UsageStatisticsRecord(Integer id, String action, String context, Timestamp createdOn, String ip, String userAgent, Integer userId, String userCookie, Integer domain, String country, String city, String referer) {
+	public UsageStatisticsRecord(Integer id, String action, String context, Timestamp createdOn, String ip, String userAgent, Integer userId, String userCookie, Integer domain, String city, String country, String referer) {
 		super(UsageStatistics.USAGE_STATISTICS);
 
 		setValue(0, id);
@@ -578,8 +578,8 @@ public class UsageStatisticsRecord extends UpdatableRecordImpl<UsageStatisticsRe
 		setValue(6, userId);
 		setValue(7, userCookie);
 		setValue(8, domain);
-		setValue(9, country);
-		setValue(10, city);
+		setValue(9, city);
+		setValue(10, country);
 		setValue(11, referer);
 	}
 }
