@@ -43,7 +43,9 @@ public class EmailListService extends AbstractProperties {
 			LocationUsersEmailRecord rec = new LocationUsersEmailRecord();
 			rec.setFkLocation(locationId);
 			rec.setFkUser(userId);
-			rec.setLocalName(locationJson.getString("local-name"));
+			if (locationJson.containsKey("local-name")) {
+				rec.setLocalName(locationJson.getString("local-name"));
+			}
 			LocationUsersEmailDao.INSTANCE.store(rec);
 		}
 	}

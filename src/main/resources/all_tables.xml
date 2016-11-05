@@ -723,7 +723,7 @@
     </changeSet>
     <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS" author="oliverkurt (generated)" id="1478299357515-1">
         <addColumn tableName="location_users_email">
-            <column name="local_name" type="VARCHAR(255 BYTE)"/>
+            <column name="local_name" type="VARCHAR(255)"/>
         </addColumn>
     </changeSet>
     
