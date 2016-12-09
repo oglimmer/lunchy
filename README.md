@@ -39,7 +39,7 @@ TESTING THE PORTAL PAGE
 RUNNING THE E2E TESTS
 ===================== 
 
-1.) install protractor http://angular.github.io/protractor/#/
+1.) install protractor http://angular.github.io/protractor/#/ (e.g. npm -g install protractor && webdriver-manager update)
 
 2.) run e2e-test.sh
 
