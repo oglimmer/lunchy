@@ -39,6 +39,14 @@ TESTING THE PORTAL PAGE
 RUNNING THE E2E TESTS
 ===================== 
 
+DOCKER
+
+1.) install docker
+
+2.) cd docker-e2e-test && ./run.sh
+
+LOCAL
+
 1.) install protractor http://angular.github.io/protractor/#/ (e.g. npm -g install protractor && webdriver-manager update)
 
 2.) run e2e-test.sh
