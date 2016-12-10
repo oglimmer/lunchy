@@ -8,6 +8,7 @@ controller('LunchyControllerSettings', [ '$scope', 'UserDao', 'OfficesDao', 'Aut
 	
 	$scope.data = {};
 	$scope.data.selectedOffice = null;
+	$scope.data.showChangePassword = false;
 	
 	UserDao.current(function(loadData) {
 		$scope.data = loadData;

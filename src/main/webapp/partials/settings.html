@@ -32,14 +32,15 @@
                     <span class="help-block">When checked Lunchy will provide a weekly email update.</span>
                 </div>
             </div>
+            
             <div class="row form-group">
-                <label for="currentpassword" class="col-md-2 control-label">Current password</label>
+            	<label for="password" class="col-md-2 control-label">Change password</label>
                 <div class="col-md-10">
-                    <input type="password" id="currentpassword" class="form-control" ng-model="data.currentpassword" required>
-                    <span class="help-block">Always needed.</span>
+                	<input type="checkbox" ng-model="data.showChangePassword"/>
                 </div>
             </div>
-            <div class="row form-group">
+            
+            <div class="row form-group" ng-show="data.showChangePassword">
                 <label for="password" class="col-md-2 control-label">New password</label>
                 <div class="col-md-10">
                     <input type="password" id="password" class="form-control" ng-model="data.password" >
@@ -48,10 +49,18 @@
                     </span>
                 </div>
             </div>
-            <div class="row form-group">
+            <div class="row form-group" ng-show="data.showChangePassword">
                 <label for="newpasswordverification" class="col-md-2 control-label">Password verification</label>
                 <div class="col-md-10">
                     <input type="password" id="newpasswordverification" class="form-control" ng-model="data.newpasswordverification" ui-validate=" '$value==data.password' " ui-validate-watch=" 'data.password' ">
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="currentpassword" class="col-md-2 control-label">Current password</label>
+                <div class="col-md-10">
+                    <input type="password" id="currentpassword" class="form-control" ng-model="data.currentpassword" required>
+                    <span class="help-block">For any change on email, nickname, your office, email updates or to set a new password, this is always needed.</span>
                 </div>
             </div>
 
