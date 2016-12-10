@@ -41,7 +41,7 @@ sleep 1
 
 # execute e2e-test
 cd src/integration/js
-protractor protractor-conf.js
+protractor protractor.conf.js
 cd ../../..
 
 # stop webdriver and jetty

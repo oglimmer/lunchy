@@ -31,7 +31,7 @@ describe('Lunchy', function() {
 
 	it('Create user', function() {		
 
-		browser.get('http://localhost:8080/#/updates');
+		browser.get('/#/updates');
 		
 		var login = element(by.linkText('Login/Register'));
 		login.click();
@@ -52,7 +52,7 @@ describe('Lunchy', function() {
 		element(by.buttonText('Register')).click();
 		
 		logout(function () {
-			browser.get('http://localhost:8080/#/updates');
+			browser.get('/#/updates');
 		
 			element.all(by.repeater('update in rows')).filter(function(elem, index) {
 				return elem.getText().then(function(text) {
@@ -67,7 +67,7 @@ describe('Lunchy', function() {
 	
 	
 	function login(followUp) {
-		browser.get('http://localhost:8080/#/updates');
+		browser.get('/#/updates');
 
 		logout(function () {
 			var login = element(by.linkText('Login/Register'));
@@ -106,8 +106,9 @@ describe('Lunchy', function() {
 			element(by.model('data.city')).sendKeys("Berlin")
 					
 			element(by.buttonText('Save')).click();
-			
-			browser.get('http://localhost:8080/#/updates');
+			//running this in docker can be very slow......better wait 5sec until the location is available in couchdb
+			browser.driver.sleep(5000);
+			browser.get('/#/updates');
 			
 			element.all(by.repeater('update in rows').column('update.text')).filter(function(elem){
 				return elem.getText().then(function(text) {

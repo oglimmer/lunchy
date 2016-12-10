@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd"
+                   objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="custom-1" author="oli (generated)">
+        <insert tableName="communities">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Foo"/>
+            <column name="domain" value="webe2e"/>
+            <column name="admin_Email" value="-"/>
+        </insert>
+    </changeSet>
+    <changeSet objectQuotingStrategy="QUOTE_ALL_OBJECTS"  id="2014-08-29-1" author="oli (generated)">
+        <insert tableName="offices">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Office No.1"/>
+            <column name="geo_Lat" value="52.5181449"/>
+            <column name="geo_Lng" value="13.406217"/>
+            <column name="zoomfactor" value="13"/>
+            <column name="fk_Community" value="1"/>
+            <column name="country" value="Germany"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
