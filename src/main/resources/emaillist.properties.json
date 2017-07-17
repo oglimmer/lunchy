@@ -16,7 +16,8 @@
 		"description": "Subscribe weekly menu"
 	},
 	"location.359": {
-		"description": "Subscribe weekly menu"
+		"description": "Subscribe weekly menu",
+		"local-name": "centrio"
 	},
 	"location.153": {
 		"description": "Subscribe weekly menu"
@@ -31,6 +32,7 @@
 		"description": "Subscribe weekly menu"
 	},
 	"location.375": {
-		"description": "Subscribe weekly menu"
+		"description": "Subscribe weekly menu",
+		"local-name": "soupsandsnacks"
 	}
 }
