@@ -95,6 +95,11 @@ config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRou
                     return Authetication.checkLoggedIn();
                 }]
             }
+        }).
+        state('dataprivacy', {
+            url: '/dataprivacy',
+            templateUrl: 'partials/dataprivacy.html',
+            controller: 'LunchyControllerDataprivacy'
         });
     $urlRouterProvider.otherwise('/updates');
 
