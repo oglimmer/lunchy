@@ -12,7 +12,7 @@ module.exports = {
         'npm install -g phantomjs-prebuilt'
       ]
     },
-    JavaVersion: [ "1.8" ]
+    JavaVersions: [ "1.8" ]
   },
 
   software: {
