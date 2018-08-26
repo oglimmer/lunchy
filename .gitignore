@@ -9,3 +9,4 @@ all_data.xml
 .idea
 hsql.properties
 lunchy.properties
+localrun/

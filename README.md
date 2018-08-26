@@ -3,6 +3,14 @@ LUNCHY
 
 Lunchy is an application to provide lunch location information.
 
+START LUNCHY (the easy way)
+===========================
+
+1.) Make sure you've java, mvn and docker installed
+
+2.) run `./run_local.sh -f`
+
+3.) Browse to http://localhost:8080 
 
 LET IT RUN AGAINST A LOCAL MYSQL
 ================================
