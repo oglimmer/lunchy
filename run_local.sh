@@ -118,6 +118,7 @@ where:
   -c [all|build]             clean local run directory, when a build is scheduled for execution it also does a full build
   -k [component]             keep comma sperarated list of components running
   -t [component:type:[path|version]] run component inside [docker] container, [download] component (default) or [local] use installed component from path
+  -V                         enable Verbose
   -v                         start VirtualBox via vagrant, install all dependencies, ssh into the VM and run
   -b local|docker:version    build locally (default) or within a maven image on docker, the default image is 3-jdk-10
   -f                         tail the apache catalina log at the end
@@ -135,7 +136,7 @@ Details:
 cd $(cd "$(dirname "$0")";pwd -P)
 
 BUILD=local
-while getopts ':hsc:k:t:vb:f' option; do
+while getopts ':hsc:k:t:Vvb:f' option; do
   case "$option" in
     h) echo "$usage"
        exit;;
@@ -148,6 +149,7 @@ while getopts ':hsc:k:t:vb:f' option; do
        ;;
     k) KEEP_RUNNING=$OPTARG;;
     t) TYPE_SOURCE=$OPTARG;;
+    V) VERBOSE=YES;;
     v) VAGRANT=YES;;
     b) BUILD=$OPTARG;;
     f) TAIL=YES;;
@@ -256,8 +258,9 @@ if [ "$(uname)" == "Darwin" ]; then export JAVA_HOME=$(/usr/libexec/java_home -v
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# JavaPlugin
+# JavaPlugin // dependency
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if [ -n "$VERBOSE" ]; then echo "JavaPlugin // dependency"; fi
 
 
 #------------
@@ -332,8 +335,9 @@ if [ "$(uname)" == "Darwin" ]; then export JAVA_HOME=$(/usr/libexec/java_home -v
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# MvnPlugin
+# MvnPlugin // lunchy
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if [ -n "$VERBOSE" ]; then echo "MvnPlugin // lunchy"; fi
 
 
 #------------
@@ -368,6 +372,7 @@ if [ "$(uname)" == "Darwin" ]; then export JAVA_HOME=$(/usr/libexec/java_home -v
 
 if [ "$BUILD" == "local" ]; then
   f_build() {
+    if [ -n "$VERBOSE" ]; then echo "pwd=$(pwd)"; echo "mvn $MVN_CLEAN $MVN_OPTS package"; fi
     
     mvn $MVN_CLEAN $MVN_OPTS package
     
@@ -379,6 +384,7 @@ elif [[ "$BUILD" == docker* ]]; then
   fi
 
   f_build() {
+    if [ -n "$VERBOSE" ]; then echo "pwd=$(pwd)"; echo "docker run --rm -v $(pwd):/usr/src/build -v $(pwd)/localrun/.m2:/root/.m2 -w /usr/src/build maven:$dockerVersion mvn $MVN_CLEAN $MVN_OPTS package"; fi
     
     docker run --rm -v "$(pwd)":/usr/src/build -v "$(pwd)/localrun/.m2":/root/.m2 -w /usr/src/build maven:$dockerVersion mvn $MVN_CLEAN $MVN_OPTS package
     
@@ -437,8 +443,9 @@ fi
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# MysqlPlugin
+# MysqlPlugin // mysql
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if [ -n "$VERBOSE" ]; then echo "MysqlPlugin // mysql"; fi
 
 
 #------------
@@ -522,13 +529,13 @@ if [ "$TYPE_SOURCE_MYSQL" == "docker" ]; then
   if [ ! -f ".mysql" ]; then
     
     mkdir -p localrun/a85d01fa
-    cat <<EOT > localrun/a85d01fa/my.cnf
+    cat <<EOTa85d01fa > localrun/a85d01fa/my.cnf
 [mysqld]
 collation-server = utf8_unicode_ci
 init-connect='SET NAMES utf8'
 character-set-server = utf8
 sql-mode="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
-EOT
+EOTa85d01fa
       
     dockerContainerIDmysql=$(docker run --rm -d -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=true \
       -v $(pwd)/localrun/a85d01fa:/etc/mysql/conf.d mysql:$TYPE_SOURCE_MYSQL_VERSION)
@@ -559,9 +566,10 @@ while ! mysql -uroot --protocol=tcp -e "select 1" 1>/dev/null 2>&1; do
   sleep 3
 done
 
-mysql -uroot --protocol=tcp -NB -e "create database if not exists oli_lunchy"
-
 mvn -DcreateTables=true process-resources
+
+
+mysql -uroot --protocol=tcp -NB -e "create database if not exists oli_lunchy"
 
 
 
@@ -575,8 +583,9 @@ mvn -DcreateTables=true process-resources
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# TomcatPlugin
+# TomcatPlugin // tomcat
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if [ -n "$VERBOSE" ]; then echo "TomcatPlugin // tomcat"; fi
 
 
 #------------
@@ -678,6 +687,29 @@ fi
 
 
 
+    
+            if [ "$TYPE_SOURCE_TOMCAT" == "docker" ]; then
+              mkdir -p localrun/webapps
+              targetPath=localrun/webapps/
+            fi
+          
+
+            if [ "$TYPE_SOURCE_TOMCAT" == "download" ]; then
+              targetPath=localrun/apache-tomcat-$TOMCAT_VERSION/webapps/
+            fi
+          
+
+            if [ "$TYPE_SOURCE_TOMCAT" == "local" ]; then
+              targetPath=$TYPE_SOURCE_TOMCAT_PATH/webapps/
+            fi
+          
+    f_deploy() {
+      cp target/lunchy##001.war $targetPath
+    }
+    f_deploy
+    
+
+
 
 
 #------------
@@ -693,7 +725,9 @@ if [ "$TYPE_SOURCE_TOMCAT" == "docker" ]; then
   fi
   if [ ! -f ".tomcat" ]; then
     
-    dockerContainerIDtomcat=$(docker run --rm -d $dockerCouchRef ${dockerFixRef[@]} -p 8080:8080  -v "$(pwd)/localrun/webapps":/usr/local/tomcat/webapps tomcat:$TYPE_SOURCE_TOMCAT_VERSION)
+    dockerContainerIDtomcat=$(docker run --rm -d $dockerCouchRef ${dockerFixRef[@]} -p 8080:8080 \
+         \
+        -v "$(pwd)/localrun/webapps":/usr/local/tomcat/webapps tomcat:$TYPE_SOURCE_TOMCAT_VERSION)
     echo "$dockerContainerIDtomcat">.tomcat
   else
     dockerContainerIDtomcat=$(<.tomcat)
@@ -731,29 +765,6 @@ fi
 # PoststartBuilder
 #------------
 
-
-
-    
-            if [ "$TYPE_SOURCE_TOMCAT" == "docker" ]; then
-              mkdir -p localrun/webapps
-              targetPath=localrun/webapps/
-            fi
-          
-
-            if [ "$TYPE_SOURCE_TOMCAT" == "download" ]; then
-              targetPath=localrun/apache-tomcat-$TOMCAT_VERSION/webapps/
-            fi
-          
-
-            if [ "$TYPE_SOURCE_TOMCAT" == "local" ]; then
-              targetPath=$TYPE_SOURCE_TOMCAT_PATH/webapps/
-            fi
-          
-    f_deploy() {
-      cp target/lunchy##001.war $targetPath
-    }
-    f_deploy
-    
 
 
 
