@@ -1,16 +1,11 @@
 module.exports = {
 
   config: {
+    SchemaVersion: "1.0.0",
     Name: "Lunchy",
     Vagrant: {
       Box: 'ubuntu/xenial64',
-      Install: 'maven openjdk-8-jdk-headless mysql-server-5.7 docker.io npm',
-      BeforeInstall: [
-        "debconf-set-selections <<< 'mysql-server mysql-server/root_password password \"\"'",
-        "debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password \"\"'",
-        'ln -s /usr/bin/nodejs /usr/bin/node',
-        'npm install -g phantomjs-prebuilt'
-      ]
+      Install: 'maven openjdk-8-jdk-headless mysql-client-5.7 docker.io nodejs'
     },
     JavaVersions: [ "1.8" ]
   },
