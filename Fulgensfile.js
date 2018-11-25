@@ -6,8 +6,21 @@ module.exports = {
     Vagrant: {
       Box: 'ubuntu/xenial64',
       Install: 'maven openjdk-8-jdk-headless mysql-client-5.7 docker.io nodejs'
+    }
+  },
+
+  versions: {
+    lunchy: {
+      JavaLocal: "1.8",
+      KnownMax: "Java 1.8"
     },
-    JavaVersions: [ "1.8" ]
+    mysql: {
+      Docker: "5",
+      KnownMax: "Mysql 5.x"
+    },
+    tomcat: {
+      TestedWith: "7 & 9"
+    }
   },
 
   software: {
@@ -25,11 +38,11 @@ module.exports = {
       configFile: {
         Name: "my.cnf",
         Content: [
-          "[mysqld]",
-          "collation-server = utf8_unicode_ci",
-          "init-connect='SET NAMES utf8'",
-          "character-set-server = utf8",
-          "sql-mode=\"ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION\""
+          { Line: "[mysqld]" },
+          { Line: "collation-server = utf8_unicode_ci" },
+          { Line: "init-connect='SET NAMES utf8'" },
+          { Line: "character-set-server = utf8" },
+          { Line: "sql-mode=\"ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION\" " }
         ],
         AttachIntoDocker: "/etc/mysql/conf.d" 
       },
