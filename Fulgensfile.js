@@ -34,14 +34,9 @@ module.exports = {
         Name: "lunchy.properties",
         Content: [
           { Line: "{" },
-          { Line: "\"db.url\": \"\"" },
+          { Line: "\"db.url\": \"jdbc:mysql://$$VALUE$$/\"", Source: "mysql" },
           { Line: "}" }
         ],
-        Connections: [{
-          Source: "mysql",
-          Regexp: "\"db.url\": \"\"",
-          Line: "\"db.url\": \"jdbc:mysql://$$VALUE$$/\"",
-        }],
         AttachAsEnvVar: ["JAVA_OPTS", "-Dlunchy.properties=$$SELF_NAME$$"]
       }
     },
