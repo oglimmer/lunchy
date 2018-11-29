@@ -148,12 +148,12 @@ Details for components:
 lunchy {Source:\"mvn\", Default-Type:\"local\", Version-Info: \"Max Java 1.8\"}
   -t lunchy:local #On macOS: Java version overwritten to 1.8
   -t lunchy:local #build local and respect -j
-  -t lunchy:docker:[TAG] #docker based build, default tag: latest, uses image https://hub.docker.com/_/maven
+  -t lunchy:docker:[TAG] #docker based build, default tag: 3-jdk-8, uses image https://hub.docker.com/_/maven
 mysql {Source:\"mysql\", Default-Type:\"docker:5\", Version-Info: \"Max Mysql 5.x\"}
   -t mysql:local #reuse a local, running MySQL installation, does not start/stop this MySQL
   -t mysql:docker:[TAG] #start docker, default tag 5, uses image https://hub.docker.com/_/mysql
-tomcat {Source:\"tomcat\", Default-Type:\"download:9\", Version-Info: \"Tested with 7 & 9\"}
-  -t tomcat:docker:[TAG] #start docker, default tag docker:7-jre8, uses image https://hub.docker.com/_/tomcat
+tomcat {Source:\"tomcat\", Default-Type:\"download:9\", Version-Info: \"Tested with 7 & 9. Java 8.\"}
+  -t tomcat:docker:[TAG] #start docker, default tag tomcat9-openjdk8-openj9, uses image https://hub.docker.com/r/oglimmer/adoptopenjdk-tomcat
   -t tomcat:download:[7|8|9] #start fresh downloaded tomcat, default version 9 and respect -j
   -t tomcat:local:TOMCAT_HOME_PATH #reuse tomcat installation from TOMCAT_HOME_PATH, does not start/stop this tomcat
 "
@@ -235,7 +235,7 @@ fi
 
 if [ "$SKIP_HASH_CHECK" != "YES" ]; then
 	if which md5 1>/dev/null; then
-		declare SELF_HASH_MD5="348cb636785bcea09f53603e02cfc8b1"
+		declare SELF_HASH_MD5="24f68398634159472bfde01f41084876"
 		declare SOURCE_FILES=(Fulgensfile Fulgensfile.js)
 		for SOURCE_FILE in ${SOURCE_FILES[@]}; do
 			declare SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
@@ -385,7 +385,7 @@ if [ "$START_LUNCHY" = "YES" ]; then
 
 	if [ "$TYPE_SOURCE_LUNCHY" == "docker" ]; then
 		if [ -z "$TYPE_SOURCE_LUNCHY_VERSION" ]; then
-			TYPE_SOURCE_LUNCHY_VERSION=latest
+			TYPE_SOURCE_LUNCHY_VERSION=3-jdk-8
 		fi
 
 	fi
@@ -507,11 +507,11 @@ sql-mode="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_A
 
 EOTa85d01fa
 
-			verbosePrint "docker run --rm -d -p 3306:3306  -e MYSQL_ALLOW_EMPTY_PASSWORD=true   --net=lunchynet --name=mysql  -v "$(pwd)/localrun/a85d01fa:/etc/mysql/conf.d" mysql:$TYPE_SOURCE_MYSQL_VERSION"
+			verbosePrint "docker run --rm -d -p 3306:3306  -e MYSQL_ALLOW_EMPTY_PASSWORD=true  -m 150M --net=lunchynet --name=mysql  -v "$(pwd)/localrun/a85d01fa:/etc/mysql/conf.d" mysql:$TYPE_SOURCE_MYSQL_VERSION"
 			dockerContainerIDmysql=$(docker run --rm -d -p 3306:3306 \
 				-e MYSQL_ALLOW_EMPTY_PASSWORD=true \
-				--net=lunchynet \
-				--name=mysql $ADD_HOST_INTERNAL \
+				-m 150M \
+				--net=lunchynet --name=mysql $ADD_HOST_INTERNAL \
 				-v \
 				"$(pwd)/localrun/a85d01fa:/etc/mysql/conf.d" mysql:$TYPE_SOURCE_MYSQL_VERSION)
 			echo "$dockerContainerIDmysql" >.mysqlPid
@@ -571,7 +571,7 @@ if [ "$START_TOMCAT" = "YES" ]; then
 
 	if [ "$TYPE_SOURCE_TOMCAT" == "docker" ]; then
 		if [ -z "$TYPE_SOURCE_TOMCAT_VERSION" ]; then
-			TYPE_SOURCE_TOMCAT_VERSION=docker:7-jre8
+			TYPE_SOURCE_TOMCAT_VERSION=tomcat9-openjdk8-openj9
 		fi
 
 	fi
@@ -650,7 +650,7 @@ EOTba444787
 
 			export JAVA_OPTS="-Dlunchy.properties=localrun/ba444787/lunchy.properties"
 
-			export JAVA_OPTS="$JAVA_OPTS "
+			export JAVA_OPTS="$JAVA_OPTS -DJAVA_OPTS=-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dlunchy.properties=/tmp/ba444787/lunchy.properties"
 			./localrun/apache-tomcat-$TOMCAT_VERSION/bin/startup.sh
 			echo "download" >.tomcatPid
 		else
@@ -685,12 +685,12 @@ EOTba444787
 
 EOTba444787
 
-			verbosePrint "docker run --rm -d ${dockerAddLibRefs[@]} -p 8080:8080  --net=lunchynet --name=tomcat $ADD_HOST_INTERNAL -v "$(pwd)/localrun/ba444787:/tmp/ba444787" -e JAVA_OPTS="-Dlunchy.properties=/tmp/ba444787/lunchy.properties"  -v "$(pwd)/localrun/webapps":/usr/local/tomcat/webapps tomcat:$TYPE_SOURCE_TOMCAT_VERSION"
+			verbosePrint "docker run --rm -d ${dockerAddLibRefs[@]} -p 8080:8080 -m 150M --net=lunchynet --name=tomcat $ADD_HOST_INTERNAL -v "$(pwd)/localrun/ba444787:/tmp/ba444787" -e JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dlunchy.properties=/tmp/ba444787/lunchy.properties" -v "$(pwd)/localrun/webapps":/usr/local/tomcat/webapps oglimmer/adoptopenjdk-tomcat:$TYPE_SOURCE_TOMCAT_VERSION"
 			dockerContainerIDtomcat=$(docker run --rm -d ${dockerAddLibRefs[@]} -p 8080:8080 \
-				--net=lunchynet \
-				--name=tomcat $ADD_HOST_INTERNAL \
-				-v "$(pwd)/localrun/ba444787:/tmp/ba444787" -e JAVA_OPTS="-Dlunchy.properties=/tmp/ba444787/lunchy.properties" \
-				-v "$(pwd)/localrun/webapps":/usr/local/tomcat/webapps tomcat:$TYPE_SOURCE_TOMCAT_VERSION)
+				-m 150M \
+				--net=lunchynet --name=tomcat $ADD_HOST_INTERNAL \
+				-v "$(pwd)/localrun/ba444787:/tmp/ba444787" -e JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dlunchy.properties=/tmp/ba444787/lunchy.properties" \
+				-v "$(pwd)/localrun/webapps":/usr/local/tomcat/webapps oglimmer/adoptopenjdk-tomcat:$TYPE_SOURCE_TOMCAT_VERSION)
 			echo "$dockerContainerIDtomcat" >.tomcatPid
 		else
 			dockerContainerIDtomcat=$(<.tomcatPid)

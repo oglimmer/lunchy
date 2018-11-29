@@ -11,6 +11,7 @@ module.exports = {
 
   versions: {
     lunchy: {
+      Docker: "3-jdk-8",
       JavaLocal: "1.8",
       KnownMax: "Java 1.8"
     },
@@ -19,9 +20,8 @@ module.exports = {
       KnownMax: "Mysql 5.x"
     },
     tomcat: {
-      //Docker: "tomcat9-openjdk11-openj9",
-      Docker: "docker:7-jre8",
-      TestedWith: "7 & 9"
+      Docker: "tomcat9-openjdk8-openj9", // tomcat:7-jre8
+      TestedWith: "7 & 9. Java 8."
     }
   },
 
@@ -48,7 +48,7 @@ module.exports = {
 
     mysql: {
       Source: "mysql",
-      //DockerMemory: "350M",
+      DockerMemory: "150M",
       Mysql: {
         Schema: "oli_lunchy"
       },
@@ -70,9 +70,12 @@ module.exports = {
 
     tomcat: {
       Source: "tomcat",
-      //DockerImage: "oglimmer/adoptopenjdk-tomcat",
-      //DockerMemory: "300M",
-      Deploy: "lunchy"
+      DockerImage: "oglimmer/adoptopenjdk-tomcat",
+      DockerMemory: "150M",
+      Deploy: "lunchy",
+      EnvVars: [
+        { Name: "JAVA_OPTS", Value: "-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"}
+      ]
     }
   }
 
