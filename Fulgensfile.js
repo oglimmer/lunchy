@@ -19,6 +19,8 @@ module.exports = {
       KnownMax: "Mysql 5.x"
     },
     tomcat: {
+      //Docker: "tomcat9-openjdk11-openj9",
+      Docker: "docker:7-jre8",
       TestedWith: "7 & 9"
     }
   },
@@ -28,10 +30,25 @@ module.exports = {
     lunchy: {
       Source: "mvn",
       Artifact: "target/lunchy##001.war",
+      config: {
+        Name: "lunchy.properties",
+        Content: [
+          { Line: "{" },
+          { Line: "\"db.url\": \"\"" },
+          { Line: "}" }
+        ],
+        Connections: [{
+          Source: "mysql",
+          Regexp: "\"db.url\": \"\"",
+          Line: "\"db.url\": \"jdbc:mysql://$$VALUE$$/\"",
+        }],
+        AttachAsEnvVar: ["JAVA_OPTS", "-Dlunchy.properties=$$SELF_NAME$$"]
+      }
     },
 
     mysql: {
       Source: "mysql",
+      //DockerMemory: "350M",
       Mysql: {
         Schema: "oli_lunchy"
       },
@@ -53,6 +70,8 @@ module.exports = {
 
     tomcat: {
       Source: "tomcat",
+      //DockerImage: "oglimmer/adoptopenjdk-tomcat",
+      //DockerMemory: "300M",
       Deploy: "lunchy"
     }
   }
