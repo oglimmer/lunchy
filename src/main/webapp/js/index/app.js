@@ -128,6 +128,11 @@ config(['flowFactoryProvider', function (flowFactoryProvider) {
   // Can be used with different implementations of Flow.js
   // flowFactoryProvider.factory = fustyFlowFactory;
 }]).
+config(function(uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+      key: 'INSERT-GOOGLE-API-KEY-HERE'
+    });
+}).
 run(['$rootScope', 'Authetication', 'LoginDao', '$window', '$interval', '$state', 'UsageDao', '$cookies', function($rootScope, Authetication, LoginDao, $window, $interval, $state, UsageDao, $cookies) {
 
     $rootScope.$on('$stateChangeError', function(event, toState, toParams, fromState, fromParams, eventObj) {
