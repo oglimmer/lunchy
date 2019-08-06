@@ -22,12 +22,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.jooq.Record;
 
-import com.google.code.geocoder.Geocoder;
-import com.google.code.geocoder.GeocoderRequestBuilder;
-import com.google.code.geocoder.model.GeocodeResponse;
-import com.google.code.geocoder.model.GeocoderRequest;
-import com.google.code.geocoder.model.GeocoderResult;
-import com.google.code.geocoder.model.LatLng;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 
 import de.oglimmer.lunchy.beanMapping.BeanMappingProvider;
 import de.oglimmer.lunchy.database.dao.LocationDao;
@@ -249,21 +248,24 @@ public class LocationResource extends BaseResource {
 					String address = locationRec.getAddress() + "," + (locationRec.getZip() != null ? locationRec.getZip() : "")
 							+ " " + locationRec.getCity() + "," + locationRec.getCountry();
 
-					final Geocoder geocoder = new Geocoder();
-					GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(address).getGeocoderRequest();
-					GeocodeResponse geocoderResponse = geocoder.geocode(geocoderRequest);
+					final GeoApiContext context = new GeoApiContext.Builder()
+							.apiKey("INSERT-GOOGLE-API-KEY-HERE")
+							.build();
+					GeocodingResult[] geocoderResponse = GeocodingApi.geocode(context, address).await();
 
-					if (geocoderResponse.getResults().size() != 1) {
-						log.error("Failed to get one result for " + address + " got " + geocoderResponse.getResults());
+					if (geocoderResponse.length != 1) {
+						log.error("Failed to get one result for " + address + " got " + geocoderResponse);
 					}
 
-					for (GeocoderResult gr : geocoderResponse.getResults()) {
-						LatLng latLng = gr.getGeometry().getLocation();
-						locationRec.setGeoLat(latLng.getLat().doubleValue());
-						locationRec.setGeoLng(latLng.getLng().doubleValue());
+					for (int i = 0; i < geocoderResponse.length; i++) {
+						GeocodingResult gr = geocoderResponse[i];
+						
+						LatLng latLng = gr.geometry.location;
+						locationRec.setGeoLat(latLng.lat);
+						locationRec.setGeoLng(latLng.lng);
 
 					}
-				} catch (IOException e) {
+				} catch (IOException|InterruptedException|ApiException e) {
 					log.error("Error accessing Geocoder API", e);
 				}
 			}
