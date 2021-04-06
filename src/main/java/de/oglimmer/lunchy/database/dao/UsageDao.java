@@ -94,6 +94,8 @@ public enum UsageDao {
 					LunchyProperties.INSTANCE.getIpStackApiKey());
 			try (CloseableHttpResponse response = httpclient.execute(new HttpGet(uri))) {
 				String resultString = EntityUtils.toString(response.getEntity(), "UTF-8");
+				System.out.println(resultString);
+				log.error(resultString);
 				try (JsonReader jsonReader = Json.createReader(new StringReader(resultString))) {
 					try {
 						JsonObject jsonResponse = jsonReader.readObject();
