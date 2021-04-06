@@ -78,9 +78,9 @@ public enum UsageDao {
 			usage.setUserId(userId);
 			usage.setReferer(referer);
 			try {
-				CountryCity cc = countryCityCache.get(ip);
-				usage.setCountry(cc.getCountry());
-				usage.setCity(cc.getCity());
+//				CountryCity cc = countryCityCache.get(ip);
+//				usage.setCountry(cc.getCountry());
+//				usage.setCity(cc.getCity());
 			} catch (Exception e) {
 				log.error("Failed to get CountryCity from cache", e);
 			}
