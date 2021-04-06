@@ -78,9 +78,9 @@ public enum UsageDao {
 			usage.setUserId(userId);
 			usage.setReferer(referer);
 			try {
-//				CountryCity cc = countryCityCache.get(ip);
-//				usage.setCountry(cc.getCountry());
-//				usage.setCity(cc.getCity());
+				CountryCity cc = countryCityCache.get(ip);
+				usage.setCountry(cc.getCountry());
+				usage.setCity(cc.getCity());
 			} catch (Exception e) {
 				log.error("Failed to get CountryCity from cache", e);
 			}
@@ -92,6 +92,7 @@ public enum UsageDao {
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 			final String uri = String.format("http://api.ipstack.com/%s?access_key=%s", ip,
 					LunchyProperties.INSTANCE.getIpStackApiKey());
+			System.out.println(uri);
 			try (CloseableHttpResponse response = httpclient.execute(new HttpGet(uri))) {
 				String resultString = EntityUtils.toString(response.getEntity(), "UTF-8");
 				System.out.println(resultString);
