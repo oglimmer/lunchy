@@ -215,6 +215,10 @@ public class LunchyProperties implements LunchyReloadableProperties {
 		}
 	}
 
+	public String getIpStackApiKey() {
+		return json.getString("app.apiStackApiKey", System.getProperty("lunchy.apiStackApiKey", "no_key"));
+	}
+
 	private String getRegExFromJsonArray(JsonArray array) {
 		if (array.isEmpty()) {
 			return "";

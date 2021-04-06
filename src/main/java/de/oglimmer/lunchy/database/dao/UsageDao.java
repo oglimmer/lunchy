@@ -15,6 +15,7 @@ import javax.json.JsonReader;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import de.oglimmer.lunchy.services.LunchyProperties;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -44,7 +45,7 @@ public enum UsageDao {
 
 	private LoadingCache<String, CountryCity> countryCityCache;
 
-	private UsageDao() {
+	UsageDao() {
 		countryCityCache = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS)
 				.build(new CacheLoader<String, CountryCity>() {
 					@Override
@@ -89,7 +90,9 @@ public enum UsageDao {
 
 	private CountryCity getGeoData(String ip) throws IOException {
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-			try (CloseableHttpResponse response = httpclient.execute(new HttpGet("http://freegeoip.net/json/" + ip))) {
+			final String uri = String.format("http://api.ipstack.com/%s?access_key=%s", ip,
+					LunchyProperties.INSTANCE.getIpStackApiKey());
+			try (CloseableHttpResponse response = httpclient.execute(new HttpGet(uri))) {
 				String resultString = EntityUtils.toString(response.getEntity(), "UTF-8");
 				try (JsonReader jsonReader = Json.createReader(new StringReader(resultString))) {
 					try {
@@ -98,7 +101,7 @@ public enum UsageDao {
 						String city = jsonResponse.getString("city");
 						return new CountryCity(country, city);
 					} catch (javax.json.stream.JsonParsingException e) {
-						log.error("Failed to parse json from freegeoip.net/json. JSON: {}", resultString);
+						log.error("Failed to parse json from api.ipstack.com. JSON: {}", resultString);
 						throw e;
 					}
 				}
