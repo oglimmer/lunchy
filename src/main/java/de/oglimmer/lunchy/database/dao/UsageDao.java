@@ -30,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.StringReader;
 import java.sql.Timestamp;
-import java.util.Enumeration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -56,13 +55,13 @@ public enum UsageDao {
 	private ExecutorService execServ = Executors.newSingleThreadExecutor();
 
 	public void store(String action, String context, HttpServletRequest request, LongTimeToken longTimeToken) {
-		Timestamp timestamp = DateCalcService.getNow();
-		String ip = getRemoteIP(request);
 		String userAgent = request.getHeader("User-Agent");
 		if(userAgent != null && userAgent.startsWith("kube-probe/")) {
 			// do not log the health-check
 			return;
 		}
+		Timestamp timestamp = DateCalcService.getNow();
+		String ip = getRemoteIP(request);
 		Cookie ltsCookie = CookieService.INSTANCE.getLongTermSessionCookie(request);
 		String userCookie = ltsCookie != null ? ltsCookie.getValue() : null;
 		int domain = getDomain(request);
@@ -91,6 +90,7 @@ public enum UsageDao {
 	}
 
 	private CountryCity getGeoData(String ip) throws IOException {
+		log.info("Looking up {} in geo-service", ip);
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 			final String uri = String.format("http://api.ipstack.com/%s?access_key=%s", ip,
 					LunchyProperties.INSTANCE.getIpStackApiKey());
@@ -127,26 +127,34 @@ public enum UsageDao {
 	 * @return
 	 */
 	private String getRemoteIP(HttpServletRequest request) {
-		final String remoteAddr;
-
-		System.out.println("*****************" + request.getRemoteAddr());
-		for(Enumeration<String> headerNames = request.getHeaderNames() ; headerNames.hasMoreElements(); ) {
-			String headerName = headerNames.nextElement();
-			System.out.println(headerName + "=" + request.getHeader(headerName));
-		}
-
-		String httpXForwardedFor = request.getHeader("HTTP_X_FORWARDED_FOR");
-		if (httpXForwardedFor != null) {
-			remoteAddr = httpXForwardedFor;
-		} else {
-			String xForwardedFor = request.getHeader("X-Forwarded-For");
-			if (xForwardedFor != null) {
-				remoteAddr = xForwardedFor;
-			} else {
-				remoteAddr = request.getRemoteAddr();
+//		System.out.println("*****************" + request.getRemoteAddr());
+//		for(Enumeration<String> headerNames = request.getHeaderNames() ; headerNames.hasMoreElements(); ) {
+//			String headerName = headerNames.nextElement();
+//			System.out.println(headerName + "=" + request.getHeader(headerName));
+//		}
+		String xForwardedFor = request.getHeader("X-Forwarded-For");
+		// This is a real world example="::ffff:87.122.115.85, 10.244.0.0"
+		if (xForwardedFor != null) {
+			// if there is a X-Forwarded-For, we return this instead of the RemoteAdd
+			if (!xForwardedFor.contains(",")) {
+				return xForwardedFor;
 			}
+			// this means the xForwardedFor contains more than one IP (comma separated)
+			String[] xForwardedForArray = xForwardedFor.split(",");
+			for (String xForwardedForArrayElement : xForwardedForArray) {
+				String tmp = xForwardedForArrayElement.trim();
+				if (!tmp.startsWith("10.")) { // ignore 10.0.0.0/8
+					if (tmp.startsWith("::ffff:")) {
+						// we might get a IPv4 wrapped in IPv6 -> unwrap it
+						tmp = tmp.substring("::ffff:".length());
+					}
+					return tmp;
+				}
+			}
+			// fallback if there was no valid X-Forwarded-For
+			return request.getRemoteAddr();
 		}
-		return remoteAddr;
+		return request.getRemoteAddr();
 	}
 
 	private Integer getUserId(HttpServletRequest request, LongTimeToken longTimeToken) {
