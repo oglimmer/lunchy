@@ -59,6 +59,10 @@ public enum UsageDao {
 		Timestamp timestamp = DateCalcService.getNow();
 		String ip = getRemoteIP(request);
 		String userAgent = request.getHeader("User-Agent");
+		if(userAgent != null && userAgent.startsWith("kube-probe/")) {
+			// do not log the health-check
+			return;
+		}
 		Cookie ltsCookie = CookieService.INSTANCE.getLongTermSessionCookie(request);
 		String userCookie = ltsCookie != null ? ltsCookie.getValue() : null;
 		int domain = getDomain(request);
@@ -125,9 +129,10 @@ public enum UsageDao {
 	private String getRemoteIP(HttpServletRequest request) {
 		final String remoteAddr;
 
+		System.out.println("*****************" + request.getRemoteAddr());
 		for(Enumeration<String> headerNames = request.getHeaderNames() ; headerNames.hasMoreElements(); ) {
 			String headerName = headerNames.nextElement();
-			System.out.println(request.getHeader(headerName));
+			System.out.println(headerName + "=" + request.getHeader(headerName));
 		}
 
 		String httpXForwardedFor = request.getHeader("HTTP_X_FORWARDED_FOR");
