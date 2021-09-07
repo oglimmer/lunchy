@@ -51,7 +51,7 @@ controller('LunchyControllerPortalCreateCommunity', ['$scope', '$location', 'Com
 
         $scope.saveCommunity = function() {
             CommunityDao.save($scope.data, function() {
-                var targetUrl = "http://"+$scope.data.domain+"."+getDomain()+"/"+getContextPath();
+                var targetUrl = "https://"+$scope.data.domain+"."+getDomain()+"/"+getContextPath();
                 $window.location.href= targetUrl;
             }, function(error) {
                 $scope.alerts= [{type:'danger', msg: 'Error while saving user: ' + error.statusText}];
